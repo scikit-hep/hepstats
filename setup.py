@@ -22,7 +22,6 @@ setup(
 	install_requires = [],
 	setup_requires = [], 
 	tests_require = [],
-	extras_require = [],
 	keywords = [
 		'HEP', 'statistics',
 	],
