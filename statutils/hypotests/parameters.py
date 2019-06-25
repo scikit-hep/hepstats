@@ -51,7 +51,7 @@ class POI(object):
         return self._values_tuple
 
     def __repr__(self):
-        return "POI('{0}', value={1})".format(self.name, self.values_tuple)
+        return "POI('{0}', value={1})".format(self.name, self.value)
 
     def __getitem__(self, i):
         return POI(self.parameter, self.values_tuple[i])
