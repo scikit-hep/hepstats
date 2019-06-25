@@ -19,8 +19,9 @@ setup(
 	url = 'https://github.com/scikit-hep/statutils',
 	license='BSD 3-Clause License',
 	packages = find_packages(),
+    test_suite="tests",
 	install_requires = [],
-	setup_requires = [], 
+	setup_requires = [],
 	tests_require = [],
 	keywords = [
 		'HEP', 'statistics',
