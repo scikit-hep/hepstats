@@ -1,0 +1,6 @@
+*.pyc
+*checkpoint*
+*egg*
+build/
+dist/
+.pytest_cache/
