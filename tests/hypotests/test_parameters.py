@@ -7,6 +7,7 @@ import numpy as np
 
 mean = zfit.Parameter("mu", 1.2, 0.1, 2)
 
+
 def test_pois():
 
     p = POI(mean, 0)
@@ -35,6 +36,4 @@ def test_pois():
         pass
 
     # test hash for single value POI
-    {p: "p", p1: "p1"}
-    with pytest.raises(NotImplementedError):
-        {pn: "pn"}
+    {p: "p", p1: "p1", pn: "pn"}

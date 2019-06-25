@@ -19,13 +19,13 @@ def convert_to_container(value: Any, container: Callable = list) -> Iterable:
 
 class POI(object):
 
-    def __init__(self, parameter: Parameter, value: Union[float, List[float], np.array]):
+    def __init__(self, parameter: Parameter, values: Union[float, List[float], np.array]):
         """
         Class for parameters of interest:
 
             Args:
                 parameter (`zfit.Parameter`): the parameter of interest
-                value (`float`,`list(float)`,`numpy.array`): value of the parameter of interest
+                values (`float`,`list(float)`,`numpy.array`): values of the parameter of interest
 
             Example:
                 Nsig = zfit.Parameter("Nsig")
@@ -37,37 +37,39 @@ class POI(object):
 
         self.parameter = parameter
         self.name = parameter.name
-        self._value = convert_to_container(value, list)
+        self._values_tuple = convert_to_container(values, tuple)
 
     @property
     def value(self):
         if len(self) > 1:
-            return self._value
+            return self.values_tuple
         else:
-            return self._value[0]
+            return self.values_tuple[0]
+
+    @property
+    def values_tuple(self):
+        return self._values_tuple
 
     def __repr__(self):
-        return "POI('{0}', value={1})".format(self.name, self._value)
+        return "POI('{0}', value={1})".format(self.name, self.values_tuple)
 
     def __getitem__(self, i):
-        return POI(self.parameter, self._value[i])
+        return POI(self.parameter, self.values_tuple[i])
 
     def __iter__(self):
-        for v in self._value:
+        for v in self.values_tuple:
             yield POI(self.parameter, v)
 
     def __len__(self):
-        return len(self._value)
+        return len(self.values_tuple)
 
     def __eq__(self, other):
         if not isinstance(other, POI):
             return NotImplemented
 
-        value_equal = self._value == other._value
+        value_equal = self.values_tuple == other.values_tuple
         name_equal = self.name == other.name
         return value_equal and name_equal
 
     def __hash__(self):
-        if len(self) > 1:
-            raise NotImplementedError("Only single value `POI` hashable.")
         return hash((self.name, self.value))
