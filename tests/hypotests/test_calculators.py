@@ -59,3 +59,17 @@ def test_base_calculator():
         calc_loss.expected_pvalue(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
     with pytest.raises(NotImplementedError):
         calc_loss.expected_poi(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
+
+    model = calc_loss.model[0]
+    sampler = model.create_sampler(n=10000)
+
+    calc_loss.loss_builder(model=[model], data=[sampler], weights=None)
+
+    with pytest.raises(ValueError):
+        calc_loss.loss_builder(model=[model, model], data=[sampler])
+    with pytest.raises(ValueError):
+        calc_loss.loss_builder(model=[model], data=[sampler, calc_loss.data])
+    with pytest.raises(ValueError):
+        calc_loss.loss_builder(model=[model], data=[sampler], weights=[])
+    with pytest.raises(ValueError):
+        calc_loss.loss_builder(model=[model], data=[sampler], weights=[np.ones(10000), np.ones(10000)])

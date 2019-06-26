@@ -4,6 +4,7 @@ from typing import Dict, Union, Optional, Tuple, List
 import numpy as np
 from .parameters import POI
 from zfit.core.loss import BaseLoss
+from zfit.data import Data
 from zfit.minimizers.minimizer_minuit import MinuitMinimizer
 from zfit.minimizers.fitresult import FitResult
 from zfit.minimizers.baseminimizer import BaseMinimizer
@@ -108,8 +109,44 @@ class BaseCalculator(object):
         return self.loss.model
 
     @property
+    def data(self):
+        return self.loss.data
+
+    @property
     def constraints(self):
         return self.loss.constraints
+
+    def loss_builder(self, model, data, weights=None):
+
+        msg = "{0} must have the same number of components as {1}"
+        if len(data) != len(self.data):
+            raise ValueError(msg.format("data", "`self.data"))
+        if len(model) != len(self.model):
+            raise ValueError(msg.format("model", "`self.model"))
+        if weights is not None and len(weights) != len(self.data):
+            raise ValueError(msg.format("weights", "`self.data`"))
+
+        fit_range = self.loss.fit_range
+
+        if all(isinstance(d, (Data)) for d in data):
+            if weights is not None:
+                for d, w in zip(data, weights):
+                    d.set_weights(w)
+        elif all(isinstance(d, (np.ndarray)) for d in data):
+            data_converted = []
+            if weights is None:
+                weights = [None]*len(data)
+            for d, w in zip(data, weights):
+                data_zfit = Data.from_numpy(obs=fit_range, array=d, weights=w)
+                data_converted.append(data_zfit)
+            data = data_converted
+        else:
+            raise ValueError("data must be `zfit.data.Data` or a numpy array")
+
+        loss = type(self.loss)(model=model, data=data, fit_range=fit_range)
+        loss.add_constraints(self.constraints)
+
+        return loss
 
     def obs_nll(self, pois: List[POI]) -> np.array:
         """ Compute observed negative log-likelihood values."""
