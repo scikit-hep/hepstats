@@ -211,7 +211,7 @@ class BaseCalculator(object):
             poinull (Iterable[`hypotests.POI`]): parameters of interest for the null hypothesis
             poialt (Iterable[`hypotests.POI`], optionnal): parameters of interest for the alternative hypothesis
             nsigma (`numpy.array`): array of values of $$\\sigma$$ to compute the expected pvalue
-            CLs (bool, optionnal): if `True` computes pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{cls}$$
+            CLs (bool, optionnal): if `True` computes pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}$$
                 else as $$p_{clsb} = p_{null}$
 
         Returns:
@@ -231,7 +231,7 @@ class BaseCalculator(object):
             poinull (Iterable[`hypotests.POI`]): parameters of interest for the null hypothesis
             poialt (Iterable[`hypotests.POI`], optionnal): parameters of interest for the alternative hypothesis
             nsigma (`numpy.array`): array of values of $$\\sigma$$ to compute the expected pvalue
-            CLs (bool, optionnal): if `True` computes pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{cls}$$
+            CLs (bool, optionnal): if `True` uses pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}$$
                 else as $$p_{clsb} = p_{null}$
 
         """
