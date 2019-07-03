@@ -1,1 +1,0 @@
-/Users/brianpollack/.pyenv/versions/3.5.6
