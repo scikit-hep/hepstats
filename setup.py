@@ -2,7 +2,7 @@
 # Copyright (c) 2018-2019.
 #
 # Distributed under the 3-clause BSD license, see accompanying file LICENSE
-# or https://github.com/scikit-hep/statutils for details.
+# or https://github.com/scikit-hep/scikit-stats for details.
 
 from setuptools import setup
 from setuptools import find_packages
@@ -11,7 +11,7 @@ install_requires = ["scipy", "numpy", "zfit"]
 tests_requires = ["pytest"]
 
 setup(
-    name='statutils',
+    name='scikit-stats',
     author='Matthieu Marinangeli',
     author_email='matthieu.marinangeli@cern.ch',
     maintainer='The Scikit-HEP admins',
