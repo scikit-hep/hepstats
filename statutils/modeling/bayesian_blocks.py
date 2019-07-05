@@ -1,9 +1,10 @@
-# Licensed under a 3-clause BSD style license, see LICENSE.
+# Licensed under a 3-clause BSD style license, see LICENSE and LICENSE_ASTROML
 """
 Bayesian Block implementation
 =============================
 
-Dynamic programming algorithm for finding the optimal adaptive-width histogram.
+Dynamic programming algorithm for finding the optimal adaptive-width histogram.  Modified from the
+bayesian blocks python implementation found in astroML [3]_.
 
 * Based on Scargle et al 2012 [1]_
 * Initial Python Implementation [2]_
