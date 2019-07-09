@@ -4,3 +4,6 @@
 build/
 dist/
 .pytest_cache/
+.tox/
+.python-version
+

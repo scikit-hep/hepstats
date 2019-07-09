@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import pytest
+import numpy as np
 
 
 def pytest_addoption(parser):
@@ -11,3 +12,12 @@ def pytest_addoption(parser):
 @pytest.fixture
 def cmdopt(request):
     return request.config.getoption("--cmdopt")
+
+
+@pytest.fixture(scope="session")
+def data_gen():
+    np.random.seed(111)
+    data1 = np.random.normal(size=1000)
+    data2 = np.random.normal(2, 1, size=1000)
+    weights = np.random.uniform(1, 2, size=1000)
+    return data1, data2, weights
