@@ -1,9 +1,9 @@
 import os
 import numpy as np
-import statutils
-from statutils.modeling import bayesian_blocks
+import skstats
+from skstats.modeling import bayesian_blocks
 
-answer_dir = os.path.dirname(statutils.__file__)+'/../tests/data/modeling'
+answer_dir = os.path.dirname(skstats.__file__)+'/../tests/data/modeling'
 
 
 def test_bayesian_blocks(cmdopt, data_gen):

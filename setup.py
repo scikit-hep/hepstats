@@ -11,7 +11,7 @@ install_requires = ["scipy", "numpy", "zfit"]
 tests_requires = ["pytest"]
 
 setup(
-    name='statutils',
+    name='skstats',
     author='Matthieu Marinangeli',
     author_email='matthieu.marinangeli@cern.ch',
     maintainer='The Scikit-HEP admins',

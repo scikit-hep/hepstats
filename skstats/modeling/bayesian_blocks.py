@@ -20,7 +20,6 @@ References
 """
 from __future__ import absolute_import
 from __future__ import division
-# from skhep.utils.py23 import *
 import numpy as np
 import pandas as pd
 
