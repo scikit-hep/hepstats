@@ -1,13 +1,14 @@
 #!/usr/bin/python
 import pytest
 
-from statutils.hypotests.basecalculator import BaseCalculator
-from statutils.hypotests.parameters import POI
+from skstats.hypotests.basecalculator import BaseCalculator
+from skstats.hypotests.parameters import POI
 import numpy as np
 
 import zfit
 from zfit.core.testing import setup_function #allows redefinition of zfit.Parameter
 from zfit.core.loss import UnbinnedNLL
+from zfit.minimize import MinuitMinimizer
 
 true_mu = 1.2
 true_sigma = 0.1
@@ -33,9 +34,9 @@ def test_base_calculator():
 
     loss, (mean, sigma) = create_loss()
 
-    calc_loss = BaseCalculator(loss)
+    calc_loss = BaseCalculator(loss, MinuitMinimizer())
     bestfit = calc_loss.bestfit
-    calc_fitresult = BaseCalculator(bestfit)
+    calc_fitresult = BaseCalculator(bestfit, calc_loss.minimizer)
 
     assert calc_loss.bestfit == calc_fitresult.bestfit
     assert calc_loss.loss == calc_fitresult.loss
