@@ -233,10 +233,10 @@ class BaseCalculator(object):
         Returns:
             Tuple(`numpy.array`, `numpy.array`): pnull, palt
         """
-        return self._pvalue(poinull=poinull, poialt=poialt, qtilde=qtilde, onesided=onesided,
-                            onesideddiscovery=onesideddiscovery)
+        return self._pvalue_(poinull=poinull, poialt=poialt, qtilde=qtilde, onesided=onesided,
+                             onesideddiscovery=onesideddiscovery)
 
-    def _pvalue(self, poinull, poialt, qtilde, onesided, onesideddiscovery):
+    def _pvalue_(self, poinull, poialt, qtilde, onesided, onesideddiscovery):
 
         raise NotImplementedError
 
@@ -253,9 +253,9 @@ class BaseCalculator(object):
         Returns:
             Dict($$\\sigma$$, `numpy.array`): dictionnary of pvalue arrays for each $$\\sigma$$ value
         """
-        return self._expected_pvalue(poinull=poinull, poialt=poialt, nsigma=nsigma, CLs=CLs)
+        return self._expected_pvalue_(poinull=poinull, poialt=poialt, nsigma=nsigma, CLs=CLs)
 
-    def _expected_pvalue(self, poinull, poialt, nsigma, CLs):
+    def _expected_pvalue_(self, poinull, poialt, nsigma, CLs):
 
         raise NotImplementedError
 
@@ -271,8 +271,8 @@ class BaseCalculator(object):
                 else as $$p_{clsb} = p_{null}$
 
         """
-        return self._expected_poi(poinull=poinull, poialt=poialt, nsigma=nsigma, alpha=alpha, CLs=CLs)
+        return self._expected_poi_(poinull=poinull, poialt=poialt, nsigma=nsigma, alpha=alpha, CLs=CLs)
 
-    def _expected_poi(self, poinull, poialt, nsigma, alpha, CLs):
+    def _expected_poi_(self, poinull, poialt, nsigma, alpha, CLs):
 
         raise NotImplementedError
