@@ -7,11 +7,11 @@
 from setuptools import setup
 from setuptools import find_packages
 
-install_requires = ["scipy", "numpy", "zfit"]
-tests_requires = ["pytest"]
+install_requires = ["scipy", "numpy"]
+tests_requires = ["pytest", "zfit"]
 
 setup(
-    name='statutils',
+    name='scikit-stats',
     author='Matthieu Marinangeli',
     author_email='matthieu.marinangeli@cern.ch',
     maintainer='The Scikit-HEP admins',
