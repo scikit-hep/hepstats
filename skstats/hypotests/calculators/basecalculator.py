@@ -184,7 +184,7 @@ class BaseCalculator(object):
             Example:
                 mean = zfit.Parameter("mu", 1.2)
                 poi = POI(mean, [1.1, 1.2, 1.0])
-                nll = calc.qobs([poi])
+                q = calc.qobs([poi])
         """
         print("Compute qobs for the null hypothesis!")
 
@@ -227,7 +227,7 @@ class BaseCalculator(object):
             mean = zfit.Parameter("mu", 1.2)
             poinull = POI(mean, [1.1, 1.2, 1.0])
             poialt = POI(mean, 1.2)
-            nll = calc.pavalue([poinull], [poialt])
+            pvalues = calc.pavalue([poinull], [poialt])
         """
         self.checkpois(poinull)
         if poialt:
@@ -240,7 +240,8 @@ class BaseCalculator(object):
     def _pvalue_(self, poinull, poialt, qtilde, onesided, onesideddiscovery):
         raise NotImplementedError
 
-    def expected_pvalue(self, poinull: List[POI], poialt: List[POI], nsigma, CLs=False) -> Dict[int, np.array]:
+    def expected_pvalue(self, poinull: List[POI], poialt: List[POI], nsigma, CLs=False, qtilde=False,
+                        onesided=True, onesideddiscovery=False) -> Dict[int, np.array]:
         """Computes the expected pvalues and error bands for different values of $$\\sigma$$ (0=expected/median)
 
         Args:
@@ -249,6 +250,10 @@ class BaseCalculator(object):
             nsigma (`numpy.array`): array of values of $$\\sigma$$ to compute the expected pvalue
             CLs (bool, optionnal): if `True` computes pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}$$
                 else as $$p_{clsb} = p_{null}$
+            qtilde (bool, optionnal): if `True` use the $$\tilde{q}$$ test statistics else (default) use
+                the $$q$$ test statistic
+            onesided (bool, optionnal): if `True` (default) computes onesided pvalues
+            onesideddiscovery (bool, optionnal): if `True` (default) computes onesided pvalues for a discovery
 
         Returns:
             `numpy.array`: array of expected pvalues for each $$\\sigma$$ value
@@ -264,12 +269,14 @@ class BaseCalculator(object):
             self.checkpois(poialt)
             self.checkpoiscompatibility(poinull, poialt)
 
-        return self._expected_pvalue_(poinull=poinull, poialt=poialt, nsigma=nsigma, CLs=CLs)
+        return self._expected_pvalue_(poinull=poinull, poialt=poialt, nsigma=nsigma, CLs=CLs, qtilde=qtilde,
+                                      onesided=onesided, onesideddiscovery=onesideddiscovery)
 
-    def _expected_pvalue_(self, poinull, poialt, nsigma, CLs):
+    def _expected_pvalue_(self, poinull, poialt, nsigma, CLs, qtilde, onesided, onesideddiscovery):
         raise NotImplementedError
 
-    def expected_poi(self, poinull: List[POI], poialt: List[POI], nsigma, alpha=0.05, CLs=False):
+    def expected_poi(self, poinull: List[POI], poialt: List[POI], nsigma, alpha=0.05, CLs=False,
+                     onesided=True, onesideddiscovery=False):
         """Computes the expected parameter of interest values such that the expected p_values == $$\alpha$$
         for different values of $$\\sigma$$ (0=expected/median)
 
@@ -279,6 +286,8 @@ class BaseCalculator(object):
             nsigma (`numpy.array`): array of values of $$\\sigma$$ to compute the expected pvalue
             CLs (bool, optionnal): if `True` uses pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}$$
                 else as $$p_{clsb} = p_{null}$
+            onesided (bool, optionnal): if `True` (default) computes onesided pvalues
+            onesideddiscovery (bool, optionnal): if `True` (default) computes onesided pvalues for a discovery
 
         Returns:
             `numpy.array`: array of expected POI values for each $$\\sigma$$ value
@@ -294,9 +303,10 @@ class BaseCalculator(object):
             self.checkpois(poialt)
             self.checkpoiscompatibility(poinull, poialt)
 
-        return self._expected_poi_(poinull=poinull, poialt=poialt, nsigma=nsigma, alpha=alpha, CLs=CLs)
+        return self._expected_poi_(poinull=poinull, poialt=poialt, nsigma=nsigma, alpha=alpha, CLs=CLs,
+                                   onesided=onesided, onesideddiscovery=onesideddiscovery)
 
-    def _expected_poi_(self, poinull, poialt, nsigma, alpha, CLs):
+    def _expected_poi_(self, poinull, poialt, nsigma, alpha, CLs, onesided, onesideddiscovery):
         raise NotImplementedError
 
     @staticmethod
