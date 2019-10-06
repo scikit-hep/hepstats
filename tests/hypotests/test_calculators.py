@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import pytest
 
-from skstats.hypotests.basecalculator import BaseCalculator
+from skstats.hypotests.calculators.basecalculator import BaseCalculator
 from skstats.hypotests.parameters import POI
 import numpy as np
 

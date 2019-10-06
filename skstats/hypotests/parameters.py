@@ -1,18 +1,10 @@
 #!/usr/bin/python
 from typing import Union, List, Iterable, Any, Callable
 import numpy as np
-
-
-def is_valid_parameter(object):
-    has_value = hasattr(object, "value")
-    has_set_value = hasattr(object, "set_value")
-    has_floating = hasattr(object, "floating")
-
-    return has_value and has_set_value and has_floating
+from .fit_utils.api_check import is_valid_parameter
 
 
 def convert_to_container(value: Any, container: Callable = list) -> Iterable:
-
     if not isinstance(value, container):
         try:
             if isinstance(value, (str)):
