@@ -99,4 +99,16 @@ def test_asymptotic_calculator():
 
     pnull, palt = calc.pvalue([poi_null], [poi_alt])
     with pytest.raises(NotImplementedError):
-        pnull, palt = calc.pvalue([poi_null]*2, [poi_alt]*2)
+        calc.pvalue([poi_null]*2, [poi_alt]*2)
+    with pytest.raises(NotImplementedError):
+        calc.expected_pvalue(poinull=[poi_null]*2, poialt=[poi_alt]*2, nsigma=np.arange(-2, 3, 1))
+    with pytest.raises(NotImplementedError):
+        calc.expected_poi(poinull=[poi_null]*2, poialt=[poi_alt]*2, nsigma=np.arange(-2, 3, 1))
+
+    calc.asymov_dataset(poi_alt)
+    calc.asymov_loss(poi_alt)
+
+    null_nll = calc.asymov_nll(pois=[poi_null], poialt=[poi_alt])
+
+    assert null_nll[0] >= null_nll[1]
+    assert null_nll[2] >= null_nll[1]

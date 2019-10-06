@@ -5,7 +5,7 @@ import numpy as np
 from scipy.stats import norm
 
 
-def generate_asymov_hist(model, params, nbins=100):
+def generate_asymov_dataset(model, params, nbins=100):
 
     space = model.space
     bounds = space.limit1d
@@ -52,7 +52,7 @@ class AsymptoticCalculator(BaseCalculator):
 
         super(AsymptoticCalculator, self).__init__(input, minimizer)
         self._asymov_bins = asymov_bins
-        self._asymov_hist = {}
+        self._asymov_dataset = {}
         self._asymov_loss = {}
         # cache of nll values computed with the asymov dataset
         self._asymov_nll = {}
@@ -68,25 +68,24 @@ class AsymptoticCalculator(BaseCalculator):
             msg = "Tests using the asymptotic calcultor can only be used with one parameter of interest."
             raise NotImplementedError(msg)
 
-    def asymov_hist(self, poi) -> (np.array, np.array):
-        """ Generate the asymov histogram a given alternative hypothesis.
+    def asymov_dataset(self, poi) -> (np.array, np.array):
+        """ Generate the asymov dataset a given alternative hypothesis.
 
             Args:
-                poi (List[`hypotests.POI`]): parameter of interest of the alternative hypothesis
+                poi (`hypotests.POI`): parameter of interest of the alternative hypothesis
 
             Returns:
-                 Tuple('np.array', 'np.array'): hist, bin_edges
+                 Dataset
 
             Example:
                 poialt = POI(mean, [1.2])
-                hist, bin_edges = calc.asymov_hist([poialt])
+                hist, bin_edges = calc.asymov_dataset([poialt])
 
         """
-        self.checkpois(poi)
-        poi = poi[0]
 
-        if poi not in self._asymov_hist.keys():
+        if poi not in self._asymov_dataset.keys():
             model = self.model
+            data = self.data
             minimizer = self.minimizer
             oldverbose = minimizer.verbosity
             minimizer.verbosity = 5
@@ -108,17 +107,20 @@ class AsymptoticCalculator(BaseCalculator):
             values = minimum.params
             values[poiparam] = {"value": poivalue}
 
-            datasets = [generate_asymov_hist(m, values, self._asymov_bins) for m in model]
+            asymov_data = []
+            for i, ad in enumerate([generate_asymov_dataset(m, values, self._asymov_bins) for m in model]):
+                bin_centers, weights = ad
+                asymov_data.append(array2dataset(type(data[i]), data[i].obs, bin_centers, weights))
 
-            self._asymov_hist[poi] = datasets
+            self._asymov_dataset[poi] = asymov_data
 
-        return self._asymov_hist[poi]
+        return self._asymov_dataset[poi]
 
     def asymov_loss(self, poi):
         """ Construct a loss function using the asymov dataset for a given alternative hypothesis.
 
             Args:
-                poi (List[`hypotests.POI`]): parameter of interest of the alternative hypothesis
+                poi (`hypotests.POI`): parameter of interest of the alternative hypothesis
 
             Returns:
                  Loss function
@@ -128,24 +130,13 @@ class AsymptoticCalculator(BaseCalculator):
                 loss = calc.asymov_loss([poialt])
 
         """
-        self.checkpois(poi)
+        if poi not in self._asymov_loss.keys():
+            loss = self.lossbuilder(self.model, self.asymov_dataset(poi))
+            self._asymov_loss[poi] = loss
 
-        if poi[0] not in self._asymov_loss.keys():
-            model = self.model
-            data = self.data
-            asymov_data = []
+        return self._asymov_loss[poi]
 
-            for i, ad in enumerate(self.asymov_hist(poi)):
-                bin_centers, weights = ad
-                asymov_data.append(array2dataset(type(data[i]), data[i].obs, bin_centers, weights))
-
-            loss = self.lossbuilder(model, asymov_data)
-
-            self._asymov_loss[poi[0]] = loss
-
-        return self._asymov_loss[poi[0]]
-
-    def asymov_nll(self, poi, poialt) -> np.array:
+    def asymov_nll(self, pois, poialt) -> np.array:
         """ Compute negative log-likelihood values for given parameters of interest using the asymov dataset
             generated with a given alternative hypothesis.
 
@@ -163,14 +154,14 @@ class AsymptoticCalculator(BaseCalculator):
                 nll = calc.asymov_nll([poinull], [poialt])
 
         """
-        self.checkpois(poi)
+        self.checkpois(pois)
         self.checkpois(poialt)
 
         minimizer = self.minimizer
-        ret = np.empty(len(poi[0]))
-        for i, p in enumerate(poi[0]):
+        ret = np.empty(len(pois[0]))
+        for i, p in enumerate(pois[0]):
             if p not in self._asymov_nll.keys():
-                loss = self.asymov_loss(poialt)
+                loss = self.asymov_loss(poialt[0])
                 nll = pll(minimizer, loss, p)
                 self._asymov_nll[p] = nll
             ret[i] = self._asymov_nll[p]
