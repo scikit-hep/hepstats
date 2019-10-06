@@ -3,16 +3,26 @@ from typing import Dict, Union, Tuple, List
 
 import numpy as np
 from ..parameters import POI
-from ..fit_utilities.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
-from ..fit_utilities.utils import pll
+from ..fit_utils.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
+from ..fit_utils.utils import pll
 
 # nll = negative log-likelihood
 # obs = observed
 
 
-def q(cls, nll1: np.array, nll2: np.array, bestfit, poival, onesided=True,
-      onesideddiscovery=False) -> np.array:
+def q(nll1: np.array, nll2: np.array, bestfit: Union[np.array, float], poival: Union[np.array, float],
+      onesided=True, onesideddiscovery=False) -> np.array:
     """ Compute difference between log-likelihood values."""
+
+    assert not isinstance(poival, POI)
+    assert not isinstance(bestfit, POI)
+
+    if len(poival) > 1 and len(bestfit) > 1:
+        raise NotImplementedError("Tests with more that one parameter of interest are not yet implemented.")
+    else:
+        poival = poival[0].value
+        bestfit = bestfit[0].value
+
     q = nll1 - nll2
     filter_non_nan = ~(np.isnan(q) | np.isinf(q))
     q = q[filter_non_nan]
@@ -49,10 +59,10 @@ class BaseCalculator(object):
             self._loss = input
             self._bestfit = None
         else:
-            raise ValueError(input + " is not a valid loss funtion or fit result!")
+            raise ValueError("{} is not a valid loss funtion or fit result!".format(input))
 
         if not is_valid_minimizer(minimizer):
-            raise ValueError(minimizer + " is not a valid minimizer !")
+            raise ValueError("{} is not a valid minimizer !".format(minimizer))
 
         self._minimizer = minimizer
         self.minimizer.verbosity = 0
@@ -107,7 +117,7 @@ class BaseCalculator(object):
     def constraints(self):
         return self.loss.constraints
 
-    def loss_builder(self, model, data, weights=None):
+    def lossbuilder(self, model, data, weights=None):
 
         msg = "{0} must have the same number of components as {1}"
         if len(data) != len(self.data):
@@ -153,12 +163,12 @@ class BaseCalculator(object):
             else:
                 bestfitpoi.append(POI(param, bf))
                 if len(poinull) == 1:
-                    self._obs_nll[bestfitpoi] = self.bestfit.fmin
+                    self._obs_nll[POI(param, bf)] = self.bestfit.fmin
 
         nll_poinull_obs = self.obs_nll(poinull)
         nll_bestfitpoi_obs = self.obs_nll(bestfitpoi)
-        qobs = q(nll1=nll_poinull_obs, nll2=nll_bestfitpoi_obs, bestfit=bestfitpoi.value,
-                 poival=poinull.value, onesided=onesided, onesideddiscovery=onesideddiscovery)
+        qobs = q(nll1=nll_poinull_obs, nll2=nll_bestfitpoi_obs, bestfit=bestfitpoi,
+                 poival=poinull, onesided=onesided, onesideddiscovery=onesideddiscovery)
 
         return qobs
 

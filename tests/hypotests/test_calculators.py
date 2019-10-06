@@ -2,6 +2,7 @@
 import pytest
 
 from skstats.hypotests.calculators.basecalculator import BaseCalculator
+from skstats.hypotests.calculators.asymptotic_calculator import AsymptoticCalculator
 from skstats.hypotests.parameters import POI
 import numpy as np
 
@@ -28,15 +29,16 @@ def create_loss():
     return loss, (mean, sigma)
 
 
-def test_base_calculator():
+@pytest.mark.parametrize("calculator", [BaseCalculator, AsymptoticCalculator])
+def test_base_calculator(calculator):
     with pytest.raises(TypeError):
-        BaseCalculator()
+        calculator()
 
     loss, (mean, sigma) = create_loss()
 
-    calc_loss = BaseCalculator(loss, MinuitMinimizer())
+    calc_loss = calculator(loss, MinuitMinimizer())
     bestfit = calc_loss.bestfit
-    calc_fitresult = BaseCalculator(bestfit, calc_loss.minimizer)
+    calc_fitresult = calculator(bestfit, calc_loss.minimizer)
 
     assert calc_loss.bestfit == calc_fitresult.bestfit
     assert calc_loss.loss == calc_fitresult.loss
@@ -54,23 +56,41 @@ def test_base_calculator():
 
     mean_poialt = POI(mean, 1.2)
 
-    with pytest.raises(NotImplementedError):
-        calc_loss.pvalue(poinull=mean_poi, poialt=mean_poialt)
-    with pytest.raises(NotImplementedError):
-        calc_loss.expected_pvalue(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
-    with pytest.raises(NotImplementedError):
-        calc_loss.expected_poi(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
+    if calculator == BaseCalculator:
+        with pytest.raises(NotImplementedError):
+            calc_loss.pvalue(poinull=[mean_poi], poialt=[mean_poialt])
+        with pytest.raises(NotImplementedError):
+            calc_loss.expected_pvalue(poinull=[mean_poi], poialt=[mean_poialt], nsigma=np.arange(-2, 3, 1))
+        with pytest.raises(NotImplementedError):
+            calc_loss.expected_poi(poinull=[mean_poi], poialt=[mean_poialt], nsigma=np.arange(-2, 3, 1))
+    else:
+        calc_loss.pvalue(poinull=[mean_poi], poialt=[mean_poialt])
+        calc_loss.expected_pvalue(poinull=[mean_poi], poialt=[mean_poialt], nsigma=np.arange(-2, 3, 1))
+        calc_loss.expected_poi(poinull=[mean_poi], poialt=[mean_poialt], nsigma=np.arange(-2, 3, 1))
 
     model = calc_loss.model[0]
     sampler = model.create_sampler(n=10000)
 
-    calc_loss.loss_builder(model=[model], data=[sampler], weights=None)
+    calc_loss.lossbuilder(model=[model], data=[sampler], weights=None)
 
     with pytest.raises(ValueError):
-        calc_loss.loss_builder(model=[model, model], data=[sampler])
+        calc_loss.lossbuilder(model=[model, model], data=[sampler])
     with pytest.raises(ValueError):
-        calc_loss.loss_builder(model=[model], data=[sampler, calc_loss.data])
+        calc_loss.lossbuilder(model=[model], data=[sampler, calc_loss.data])
     with pytest.raises(ValueError):
-        calc_loss.loss_builder(model=[model], data=[sampler], weights=[])
+        calc_loss.lossbuilder(model=[model], data=[sampler], weights=[])
     with pytest.raises(ValueError):
-        calc_loss.loss_builder(model=[model], data=[sampler], weights=[np.ones(10000), np.ones(10000)])
+        calc_loss.lossbuilder(model=[model], data=[sampler], weights=[np.ones(10000), np.ones(10000)])
+
+
+def test_asymptotic_calculator():
+    with pytest.raises(TypeError):
+        AsymptoticCalculator()
+
+    loss, (mean, sigma) = create_loss()
+    calc = AsymptoticCalculator(loss, MinuitMinimizer())
+
+    poi_null = POI(mean, [1.15, 1.2, 1.25])
+    poi_alt = POI(mean, 1.2)
+
+    pnull, palt = calc.pvalue([poi_null], [poi_alt])

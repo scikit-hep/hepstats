@@ -7,7 +7,7 @@ from scipy.stats import norm
 def generate_asymov_dataset(model, params, nbins=100):
 
     space = model.space
-    bounds = model.limit1d
+    bounds = space.limit1d
     bin_edges = np.linspace(*bounds, nbins+1)
     bin_centers = bin_edges[0: -1] + np.diff(bin_edges)/2
 
@@ -50,8 +50,6 @@ class AsymptoticCalculator(BaseCalculator):
             oldverbose = minimizer.verbosity
             minimizer.verbosity = 5
 
-            loss = self.loss()
-
             poiparam = poi.parameter
             poivalue = poi.value
 
@@ -61,7 +59,7 @@ class AsymptoticCalculator(BaseCalculator):
 
             with poiparam.set_value(poivalue):
                 poiparam.floating = False
-                minimum = minimizer.minimize(loss=loss)
+                minimum = minimizer.minimize(loss=self.loss)
                 poiparam.floating = True
 
             minimizer.verbosity = oldverbose
@@ -97,7 +95,7 @@ class AsymptoticCalculator(BaseCalculator):
         for i, p in enumerate(poi):
             if p not in self._asymov_nll.keys():
                 loss = self.asymov_loss(poialt)
-                nll = pll(minimizer, loss, p.parameter, p.value)
+                nll = pll(minimizer, loss, p)
                 self._asymov_nll[p] = nll
             ret[i] = self._asymov_nll[p]
         return ret
@@ -129,7 +127,7 @@ class AsymptoticCalculator(BaseCalculator):
         """
         nll_poinull_asy = self.asymov_nll(poinull, poialt)
         nll_poialt_asy = self.asymov_nll(poialt, poialt)
-        return q(nll1=nll_poinull_asy, nll2=nll_poialt_asy, bestfit=poialt.value, poival=poinull.value,
+        return q(nll1=nll_poinull_asy, nll2=nll_poialt_asy, bestfit=[poialt], poival=[poinull],
                  onesided=onesided, onesideddiscovery=onesideddiscovery)
 
     def palt(self, qobs, qalt, onesided=True, onesideddiscovery=False, qtilde=False):
@@ -159,6 +157,8 @@ class AsymptoticCalculator(BaseCalculator):
         qobs = self.qobs(poinull, onesided=onesided, qtilde=qtilde,
                          onesideddiscovery=onesideddiscovery)
 
+        poinull, poialt = poinull[0], poialt[0]
+
         needpalt = poialt is not None
 
         if needpalt:
@@ -177,6 +177,8 @@ class AsymptoticCalculator(BaseCalculator):
     def _expected_pvalue_(self, poinull, poialt, nsigma, CLs, onesided=True, onesideddiscovery=False,
                           qtilde=False):
 
+        poinull, poialt = poinull[0], poialt[0]
+
         qalt = self.qalt(poinull, poialt, onesided=onesided, onesideddiscovery=onesideddiscovery)  # TO CHECK
         qalt = np.where(qalt < 0, 0, qalt)
 
@@ -194,6 +196,8 @@ class AsymptoticCalculator(BaseCalculator):
         return expected_pvalues
 
     def _expected_poi_(self, poinull, poialt, nsigma, alpha, CLs, onesided=True, onesideddiscovery=False):
+
+        poinull, poialt = poinull[0], poialt[0]
 
         qalt = self.qalt(poinull, poialt, onesided=True, onesideddiscovery=False)  # TO CHECK
         qalt = np.where(qalt < 0, 0, qalt)

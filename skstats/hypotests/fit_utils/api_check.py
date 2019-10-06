@@ -12,19 +12,20 @@ def is_valid_data(object):
 
 
 def is_valid_pdf(object):
-    has_params = hasattr(object, "params")
-    if not has_params:
+    has_get_dependents = hasattr(object, "get_dependents")
+    if not has_get_dependents:
         return False
     else:
-        params = object.params
+        params = object.get_dependents()
 
     all_valid_params = all(is_valid_parameter(p) for p in params)
     has_pdf = hasattr(object, "pdf")
     has_integrate = hasattr(object, "integrate")
     has_sample = hasattr(object, "sample")
     has_space = hasattr(object, "space")
+    has_get_yield = hasattr(object, "get_yield")
 
-    return all_valid_params and has_pdf and has_integrate and has_sample and has_space
+    return all_valid_params and has_pdf and has_integrate and has_sample and has_space and has_get_yield
 
 
 def is_valid_loss(object):

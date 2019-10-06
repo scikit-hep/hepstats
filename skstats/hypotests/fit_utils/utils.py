@@ -3,20 +3,21 @@ from contextlib import ExitStack
 
 def eval_pdf(model, x, params):
     """ Compute pdf of model at a given point x and for given parameters values """
+
+    def _pdf(model, x):
+        if model.is_extended:
+            return model.pdf(x) * model.get_yield()
+        else:
+            return model.pdf(x)
+
     if "zfit" in str(model.__class__):
         import zfit
-
-        def pdf(model, x):
-            ret = zfit.run(model.pdf(x) * model.get_yield())
-            return ret
+        pdf = lambda m, x: zfit.run(_pdf(m, x))
     else:
-        def pdf(model, x):
-            return model.pdf(x) * model.get_yield()
-
-    dependents = list(model.get_dependents())
+        pdf = _pdf
 
     with ExitStack() as stack:
-        for param in dependents:
+        for param in model.get_dependents():
             value = params[param]["value"]
             stack.enter_context(param.set_value(value))
         return pdf(model, x)

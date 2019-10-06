@@ -4,17 +4,6 @@ import numpy as np
 from .fit_utils.api_check import is_valid_parameter
 
 
-def convert_to_container(value: Any, container: Callable = list) -> Iterable:
-    if not isinstance(value, container):
-        try:
-            if isinstance(value, (str)):
-                raise TypeError
-            value = container(value)
-        except TypeError:
-            value = container((value,))
-    return value
-
-
 class POI(object):
 
     def __init__(self, parameter, values: Union[float, List[float], np.array]):
@@ -35,39 +24,39 @@ class POI(object):
 
         self.parameter = parameter
         self.name = parameter.name
-        self._values_tuple = convert_to_container(values, tuple)
+        self._values_array = np.atleast_1d(values)
 
     @property
     def value(self):
         if len(self) > 1:
-            return self.values_tuple
+            return self.values_array
         else:
-            return self.values_tuple[0]
+            return self.values_array[0]
 
     @property
-    def values_tuple(self):
-        return self._values_tuple
+    def values_array(self):
+        return self._values_array
 
     def __repr__(self):
         return "POI('{0}', value={1})".format(self.name, self.value)
 
     def __getitem__(self, i):
-        return POI(self.parameter, self.values_tuple[i])
+        return POI(self.parameter, self.values_array[i])
 
     def __iter__(self):
-        for v in self.values_tuple:
+        for v in self.values_array:
             yield POI(self.parameter, v)
 
     def __len__(self):
-        return len(self.values_tuple)
+        return len(self.values_array)
 
     def __eq__(self, other):
         if not isinstance(other, POI):
             return NotImplemented
 
-        value_equal = self.values_tuple == other.values_tuple
+        value_equal = self.values_array == other.values_array
         name_equal = self.name == other.name
-        return value_equal and name_equal
+        return value_equal.all() and name_equal
 
     def __hash__(self):
-        return hash((self.name, self.value))
+        return hash((self.name, self.value.tostring()))
