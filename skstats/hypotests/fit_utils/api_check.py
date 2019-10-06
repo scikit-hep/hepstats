@@ -8,7 +8,7 @@ def is_valid_parameter(object):
 
 
 def is_valid_data(object):
-    pass
+    return True
 
 
 def is_valid_pdf(object):

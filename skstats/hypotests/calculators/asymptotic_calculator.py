@@ -139,7 +139,7 @@ class AsymptoticCalculator(BaseCalculator):
         """
         nll_poinull_asy = self.asymov_nll(poinull, poialt)
         nll_poialt_asy = self.asymov_nll(poialt, poialt)
-        return self.q(nll1=nll_poinull_asy, nll2=nll_poialt_asy, bestfit=[poialt], poival=[poinull],
+        return self.q(nll1=nll_poinull_asy, nll2=nll_poialt_asy, poi1=[poinull], poi2=[poialt],
                       onesided=onesided, onesideddiscovery=onesideddiscovery)
 
     def palt(self, qobs, qalt, onesided=True, onesideddiscovery=False, qtilde=False):

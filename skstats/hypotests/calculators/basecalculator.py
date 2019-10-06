@@ -4,6 +4,7 @@ from typing import Dict, Union, Tuple, List
 import numpy as np
 from ..parameters import POI
 from ..fit_utils.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
+from ..fit_utils.api_check import is_valid_data, is_valid_pdf
 from ..fit_utils.utils import pll
 
 # nll = negative log-likelihood
@@ -18,6 +19,20 @@ class BaseCalculator(object):
             Args:
                 input : loss or fit result
                 minimizer : minimizer to use to find the minimum of the loss function
+
+            Example:
+                import zfit
+                from zfit.core.loss import UnbinnedNLL
+                from zfit.minimize import MinuitMinimizer
+
+                obs = zfit.Space('x', limits=(0.1, 2.0))
+                data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
+                mean = zfit.Parameter("mu", 1.2)
+                sigma = zfit.Parameter("sigma", 0.1)
+                model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+                loss = UnbinnedNLL(model=[model], data=[data], fit_range=[obs])
+
+                calc = BaseCalculator(input=loss, minimizer=MinuitMinimizer())
         """
 
         if is_valid_fitresult(input):
@@ -34,7 +49,6 @@ class BaseCalculator(object):
 
         self._minimizer = minimizer
         self.minimizer.verbosity = 0
-
         # cache of the observed nll values
         self._obs_nll = {}
 
@@ -49,7 +63,7 @@ class BaseCalculator(object):
     @property
     def bestfit(self):
         """
-        Returns the best fit values.
+        Returns the best fit values of the model parameters.
         """
         if getattr(self, "_bestfit", None):
             return self._bestfit
@@ -64,7 +78,7 @@ class BaseCalculator(object):
     @bestfit.setter
     def bestfit(self, value):
         """
-        Set the best fit values.
+        Set the best fit values  of the model parameters.
 
             Args:
                 value: fit result
@@ -86,6 +100,27 @@ class BaseCalculator(object):
         return self.loss.constraints
 
     def lossbuilder(self, model, data, weights=None):
+        """ Method to build a new loss function.
+
+            Args:
+                model (List): The model or models to evaluate the data on
+                data (List): Data to use
+                weights (optionnal, List): the data weights
+
+            Example:
+                data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
+                mean = zfit.Parameter("mu", 1.2)
+                sigma = zfit.Parameter("sigma", 0.1)
+                model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+                loss = calc.lossbuilder(model, data)
+
+            Returns:
+                Loss function
+
+        """
+
+        assert all(is_valid_pdf(m) for m in model)
+        assert all(is_valid_data(d) for d in data)
 
         msg = "{0} must have the same number of components as {1}"
         if len(data) != len(self.data):
@@ -107,7 +142,20 @@ class BaseCalculator(object):
         return loss
 
     def obs_nll(self, pois: List[POI]) -> np.array:
-        """ Compute observed negative log-likelihood values."""
+        """ Compute observed negative log-likelihood values for given parameters of interest.
+
+            Args:
+                pois (List[`hypotests.POI`]): parameters of interest
+
+            Returns:
+                 numpy.array`: observed nll values
+
+            Example:
+                mean = zfit.Parameter("mu", 1.2)
+                poi = POI(mean, [1.1, 1.2, 1.0])
+                nll = calc.obs_nll([poi])
+
+        """
         self.checkpois(pois)
         grid = np.array([g.ravel() for g in np.meshgrid(*pois)]).T
         ret = np.empty(len(grid))
@@ -120,7 +168,24 @@ class BaseCalculator(object):
         return ret
 
     def qobs(self, poinull: List[POI], onesided=True, onesideddiscovery=False, qtilde=False):
-        """ Compute observed $$\\Delta$$ log-likelihood values."""
+        """ Compute observed values of the $$\\Delta$$ log-likelihood test statistic.
+
+            Args:
+                poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
+                qtilde (bool, optionnal): if `True` use the $$\tilde{q}$$ test statistics else (default) use
+                    the $$q$$ test statistic
+                onesided (bool, optionnal): if `True` (default) computes onesided pvalues
+                onesideddiscovery (bool, optionnal): if `True` (default) computes onesided pvalues for a discovery
+                    test
+
+            Returns:
+                `numpy.array`: observed values of q
+
+            Example:
+                mean = zfit.Parameter("mu", 1.2)
+                poi = POI(mean, [1.1, 1.2, 1.0])
+                nll = calc.qobs([poi])
+        """
         print("Compute qobs for the null hypothesis!")
 
         self.checkpois(poinull)
@@ -137,8 +202,8 @@ class BaseCalculator(object):
 
         nll_poinull_obs = self.obs_nll(poinull)
         nll_bestfitpoi_obs = self.obs_nll(bestfitpoi)
-        qobs = self.q(nll1=nll_poinull_obs, nll2=nll_bestfitpoi_obs, bestfit=bestfitpoi,
-                      poival=poinull, onesided=onesided, onesideddiscovery=onesideddiscovery)
+        qobs = self.q(nll1=nll_poinull_obs, nll2=nll_bestfitpoi_obs, poi1=poinull, poi2=bestfitpoi,
+                      onesided=onesided, onesideddiscovery=onesideddiscovery)
 
         return qobs
 
@@ -147,15 +212,22 @@ class BaseCalculator(object):
         """Computes pvalues for the null and alternative hypothesis.
 
         Args:
-            poinull (Iterable[`hypotests.POI`]): parameters of interest for the null hypothesis
-            poialt (Iterable[`hypotests.POI`], optionnal): parameters of interest for the alternative hypothesis
+            poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
+            poialt (List[`hypotests.POI`], optionnal): parameters of interest for the alternative hypothesis
             qtilde (bool, optionnal): if `True` use the $$\tilde{q}$$ test statistics else (default) use
                 the $$q$$ test statistic
             onesided (bool, optionnal): if `True` (default) computes onesided pvalues
             onesideddiscovery (bool, optionnal): if `True` (default) computes onesided pvalues for a discovery
                 test
+
         Returns:
             Tuple(`numpy.array`, `numpy.array`): pnull, palt
+
+        Example:
+            mean = zfit.Parameter("mu", 1.2)
+            poinull = POI(mean, [1.1, 1.2, 1.0])
+            poialt = POI(mean, 1.2)
+            nll = calc.pavalue([poinull], [poialt])
         """
         self.checkpois(poinull)
         if poialt:
@@ -166,21 +238,26 @@ class BaseCalculator(object):
                              onesideddiscovery=onesideddiscovery)
 
     def _pvalue_(self, poinull, poialt, qtilde, onesided, onesideddiscovery):
-
         raise NotImplementedError
 
     def expected_pvalue(self, poinull: List[POI], poialt: List[POI], nsigma, CLs=False) -> Dict[int, np.array]:
         """Computes the expected pvalues and error bands for different values of $$\\sigma$$ (0=expected/median)
 
         Args:
-            poinull (Iterable[`hypotests.POI`]): parameters of interest for the null hypothesis
-            poialt (Iterable[`hypotests.POI`], optionnal): parameters of interest for the alternative hypothesis
+            poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
+            poialt (List[`hypotests.POI`], optionnal): parameters of interest for the alternative hypothesis
             nsigma (`numpy.array`): array of values of $$\\sigma$$ to compute the expected pvalue
             CLs (bool, optionnal): if `True` computes pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}$$
                 else as $$p_{clsb} = p_{null}$
 
         Returns:
-            Dict($$\\sigma$$, `numpy.array`): dictionnary of pvalue arrays for each $$\\sigma$$ value
+            `numpy.array`: array of expected pvalues for each $$\\sigma$$ value
+
+        Example:
+            mean = zfit.Parameter("mu", 1.2)
+            poinull = POI(mean, [1.1, 1.2, 1.0])
+            poialt = POI(mean, 1.2)
+            nll = calc.expected_pvalue([poinull], [poialt])
         """
         self.checkpois(poinull)
         if poialt:
@@ -190,7 +267,6 @@ class BaseCalculator(object):
         return self._expected_pvalue_(poinull=poinull, poialt=poialt, nsigma=nsigma, CLs=CLs)
 
     def _expected_pvalue_(self, poinull, poialt, nsigma, CLs):
-
         raise NotImplementedError
 
     def expected_poi(self, poinull: List[POI], poialt: List[POI], nsigma, alpha=0.05, CLs=False):
@@ -198,12 +274,20 @@ class BaseCalculator(object):
         for different values of $$\\sigma$$ (0=expected/median)
 
         Args:
-            poinull (Iterable[`hypotests.POI`]): parameters of interest for the null hypothesis
-            poialt (Iterable[`hypotests.POI`], optionnal): parameters of interest for the alternative hypothesis
+            poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
+            poialt (List[`hypotests.POI`], optionnal): parameters of interest for the alternative hypothesis
             nsigma (`numpy.array`): array of values of $$\\sigma$$ to compute the expected pvalue
             CLs (bool, optionnal): if `True` uses pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}$$
                 else as $$p_{clsb} = p_{null}$
 
+        Returns:
+            `numpy.array`: array of expected POI values for each $$\\sigma$$ value
+
+        Example:
+            mean = zfit.Parameter("mu", 1.2)
+            poinull = POI(mean, [1.1, 1.2, 1.0])
+            poialt = POI(mean, 1.2)
+            nll = calc.expected_poi([poinull], [poialt])
         """
         self.checkpois(poinull)
         if poialt:
@@ -213,7 +297,6 @@ class BaseCalculator(object):
         return self._expected_poi_(poinull=poinull, poialt=poialt, nsigma=nsigma, alpha=alpha, CLs=CLs)
 
     def _expected_poi_(self, poinull, poialt, nsigma, alpha, CLs):
-
         raise NotImplementedError
 
     @staticmethod
@@ -232,29 +315,45 @@ class BaseCalculator(object):
         assert len(poi1) == len(poi2)
         assert sorted([p.name for p in poi1]) == sorted([p.name for p in poi2])
 
-    def q(self, nll1: np.array, nll2: np.array, bestfit: List[POI], poival: List[POI],
+    def q(self, nll1: np.array, nll2: np.array, poi1: List[POI], poi2: List[POI],
           onesided=True, onesideddiscovery=False) -> np.array:
-        """ Compute difference between log-likelihood values."""
+        """ Compute value of the test statistic q defined as the difference between negative log-likelihood
+            values $$q = nll1 - nll2$$
 
-        self.checkpois(poival)
-        self.checkpois(bestfit)
-        self.checkpoiscompatibility(poival, bestfit)
+            Args:
+                nll1 (`numpy.array`): array of nll values #1, evaluated with poi1
+                nll2 (`numpy.array`): array of nll values #2, evaluated with poi2
+                poi1 ((List[`hypotests.POI`])): list of POI's #1
+                poi2 ((List[`hypotests.POI`])): list of POI's #2
+                onesided (bool, optionnal, default=True)
+                onesideddiscovery (bool, optionnal, default=True)
 
-        poival = poival[0].value
-        bestfit = bestfit[0].value
+            Returns:
+                `np.array`: array of q values
+        """
+
+        self.checkpois(poi1)
+        self.checkpois(poi2)
+        self.checkpoiscompatibility(poi1, poi2)
+
+        assert len(poi1[0]) == len(nll1)
+        assert len(poi2[0]) == len(nll2)
+
+        poi1 = poi1[0].value
+        poi2 = poi2[0].value
 
         q = nll1 - nll2
         filter_non_nan = ~(np.isnan(q) | np.isinf(q))
         q = q[filter_non_nan]
-        if isinstance(bestfit, np.ndarray):
-            bestfit = bestfit[filter_non_nan]
+        if isinstance(poi2, np.ndarray):
+            poi2 = poi2[filter_non_nan]
         zeros = np.zeros(q.shape)
 
         if onesideddiscovery:
-            condition = (bestfit < poival) | (q < 0)
+            condition = (poi2 < poi1) | (q < 0)
             q = np.where(condition, zeros, q)
         elif onesided:
-            condition = (bestfit > poival) | (q < 0)
+            condition = (poi2 > poi1) | (q < 0)
             q = np.where(condition, zeros, q)
         else:
             q = q

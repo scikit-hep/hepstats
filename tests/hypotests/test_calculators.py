@@ -19,11 +19,9 @@ def create_loss():
 
     obs = zfit.Space('x', limits=(0.1, 2.0))
     data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
-
     mean = zfit.Parameter("mu", true_mu)
     sigma = zfit.Parameter("sigma", true_sigma)
     model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
-
     loss = UnbinnedNLL(model=[model], data=[data], fit_range=[obs])
 
     return loss, (mean, sigma)
@@ -65,8 +63,14 @@ def test_base_calculator(calculator):
             calc_loss.expected_poi(poinull=[mean_poi], poialt=[mean_poialt], nsigma=np.arange(-2, 3, 1))
     else:
         calc_loss.pvalue(poinull=[mean_poi], poialt=[mean_poialt])
+        with pytest.raises(NotImplementedError):
+            calc_loss.pvalue(poinull=[mean_poi]*2, poialt=[mean_poialt]*2)
         calc_loss.expected_pvalue(poinull=[mean_poi], poialt=[mean_poialt], nsigma=np.arange(-2, 3, 1))
+        with pytest.raises(NotImplementedError):
+            calc_loss.expected_pvalue(poinull=[mean_poi]*2, poialt=[mean_poialt]*2, nsigma=np.arange(-2, 3, 1))
         calc_loss.expected_poi(poinull=[mean_poi], poialt=[mean_poialt], nsigma=np.arange(-2, 3, 1))
+        with pytest.raises(NotImplementedError):
+            calc_loss.expected_poi(poinull=[mean_poi]*2, poialt=[mean_poialt]*2, nsigma=np.arange(-2, 3, 1))
 
     model = calc_loss.model[0]
     sampler = model.create_sampler(n=10000)
@@ -94,4 +98,5 @@ def test_asymptotic_calculator():
     poi_alt = POI(mean, 1.2)
 
     pnull, palt = calc.pvalue([poi_null], [poi_alt])
-    pnull, palt = calc.pvalue([poi_null], [poi_alt])
+    with pytest.raises(NotImplementedError):
+        pnull, palt = calc.pvalue([poi_null]*2, [poi_alt]*2)
