@@ -1,2 +1,1 @@
-zfit
-tensorflow>=1.15
+-e git://github.com/zfit/zfit@develop#egg=zfit
