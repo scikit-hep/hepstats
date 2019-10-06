@@ -1,1 +1,2 @@
 zfit
+tensorflow>=1.15
