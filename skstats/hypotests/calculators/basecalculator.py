@@ -10,38 +10,6 @@ from ..fit_utils.utils import pll
 # obs = observed
 
 
-def q(nll1: np.array, nll2: np.array, bestfit: Union[np.array, float], poival: Union[np.array, float],
-      onesided=True, onesideddiscovery=False) -> np.array:
-    """ Compute difference between log-likelihood values."""
-
-    assert not isinstance(poival, POI)
-    assert not isinstance(bestfit, POI)
-
-    if len(poival) > 1 and len(bestfit) > 1:
-        raise NotImplementedError("Tests with more that one parameter of interest are not yet implemented.")
-    else:
-        poival = poival[0].value
-        bestfit = bestfit[0].value
-
-    q = nll1 - nll2
-    filter_non_nan = ~(np.isnan(q) | np.isinf(q))
-    q = q[filter_non_nan]
-    if isinstance(bestfit, np.ndarray):
-        bestfit = bestfit[filter_non_nan]
-    zeros = np.zeros(q.shape)
-
-    if onesideddiscovery:
-        condition = (bestfit < poival) | (q < 0)
-        q = np.where(condition, zeros, q)
-    elif onesided:
-        condition = (bestfit > poival) | (q < 0)
-        q = np.where(condition, zeros, q)
-    else:
-        q = q
-
-    return q
-
-
 class BaseCalculator(object):
 
     def __init__(self, input, minimizer):
@@ -140,6 +108,7 @@ class BaseCalculator(object):
 
     def obs_nll(self, pois: List[POI]) -> np.array:
         """ Compute observed negative log-likelihood values."""
+        self.checkpois(pois)
         grid = np.array([g.ravel() for g in np.meshgrid(*pois)]).T
         ret = np.empty(len(grid))
         for i, g in enumerate(grid):
@@ -154,6 +123,7 @@ class BaseCalculator(object):
         """ Compute observed $$\\Delta$$ log-likelihood values."""
         print("Compute qobs for the null hypothesis!")
 
+        self.checkpois(poinull)
         params = [p.parameter for p in poinull]
         bestfit = [self.bestfit.params[p]["value"] for p in params]
         bestfitpoi = []
@@ -167,8 +137,8 @@ class BaseCalculator(object):
 
         nll_poinull_obs = self.obs_nll(poinull)
         nll_bestfitpoi_obs = self.obs_nll(bestfitpoi)
-        qobs = q(nll1=nll_poinull_obs, nll2=nll_bestfitpoi_obs, bestfit=bestfitpoi,
-                 poival=poinull, onesided=onesided, onesideddiscovery=onesideddiscovery)
+        qobs = self.q(nll1=nll_poinull_obs, nll2=nll_bestfitpoi_obs, bestfit=bestfitpoi,
+                      poival=poinull, onesided=onesided, onesideddiscovery=onesideddiscovery)
 
         return qobs
 
@@ -187,6 +157,11 @@ class BaseCalculator(object):
         Returns:
             Tuple(`numpy.array`, `numpy.array`): pnull, palt
         """
+        self.checkpois(poinull)
+        if poialt:
+            self.checkpois(poialt)
+            self.checkpoiscompatibility(poinull, poialt)
+
         return self._pvalue_(poinull=poinull, poialt=poialt, qtilde=qtilde, onesided=onesided,
                              onesideddiscovery=onesideddiscovery)
 
@@ -207,6 +182,11 @@ class BaseCalculator(object):
         Returns:
             Dict($$\\sigma$$, `numpy.array`): dictionnary of pvalue arrays for each $$\\sigma$$ value
         """
+        self.checkpois(poinull)
+        if poialt:
+            self.checkpois(poialt)
+            self.checkpoiscompatibility(poinull, poialt)
+
         return self._expected_pvalue_(poinull=poinull, poialt=poialt, nsigma=nsigma, CLs=CLs)
 
     def _expected_pvalue_(self, poinull, poialt, nsigma, CLs):
@@ -225,8 +205,58 @@ class BaseCalculator(object):
                 else as $$p_{clsb} = p_{null}$
 
         """
+        self.checkpois(poinull)
+        if poialt:
+            self.checkpois(poialt)
+            self.checkpoiscompatibility(poinull, poialt)
+
         return self._expected_poi_(poinull=poinull, poialt=poialt, nsigma=nsigma, alpha=alpha, CLs=CLs)
 
     def _expected_poi_(self, poinull, poialt, nsigma, alpha, CLs):
 
         raise NotImplementedError
+
+    @staticmethod
+    def checkpois(pois):
+        msg = "A list of POIs is required."
+        if not isinstance(pois, (list, tuple)):
+            raise ValueError(msg)
+        if not all(isinstance(p, POI) for p in pois):
+            raise ValueError(msg)
+        if len(pois) > 1:
+            msg = "Tests with more that one parameter of interest are not yet implemented."
+            raise NotImplementedError(msg)
+
+    @staticmethod
+    def checkpoiscompatibility(poi1, poi2):
+        assert len(poi1) == len(poi2)
+        assert sorted([p.name for p in poi1]) == sorted([p.name for p in poi2])
+
+    def q(self, nll1: np.array, nll2: np.array, bestfit: List[POI], poival: List[POI],
+          onesided=True, onesideddiscovery=False) -> np.array:
+        """ Compute difference between log-likelihood values."""
+
+        self.checkpois(poival)
+        self.checkpois(bestfit)
+        self.checkpoiscompatibility(poival, bestfit)
+
+        poival = poival[0].value
+        bestfit = bestfit[0].value
+
+        q = nll1 - nll2
+        filter_non_nan = ~(np.isnan(q) | np.isinf(q))
+        q = q[filter_non_nan]
+        if isinstance(bestfit, np.ndarray):
+            bestfit = bestfit[filter_non_nan]
+        zeros = np.zeros(q.shape)
+
+        if onesideddiscovery:
+            condition = (bestfit < poival) | (q < 0)
+            q = np.where(condition, zeros, q)
+        elif onesided:
+            condition = (bestfit > poival) | (q < 0)
+            q = np.where(condition, zeros, q)
+        else:
+            q = q
+
+        return q

@@ -1,5 +1,6 @@
-from .basecalculator import BaseCalculator, q
+from .basecalculator import BaseCalculator
 from ..fit_utils.utils import eval_pdf, array2dataset, pll
+from ..parameters import POI
 import numpy as np
 from scipy.stats import norm
 
@@ -40,6 +41,17 @@ class AsymptoticCalculator(BaseCalculator):
         self._asymov_loss = {}
         # cache of nll values computed with the asymov dataset
         self._asymov_nll = {}
+
+    @staticmethod
+    def checkpois(pois):
+        msg = "A list of POIs is required."
+        if not isinstance(pois, (list, tuple)):
+            raise ValueError(msg)
+        if not all(isinstance(p, POI) for p in pois):
+            raise ValueError(msg)
+        if len(pois) > 1:
+            msg = "Tests using the asymptotic calcultor can only be used with one parameter of interest."
+            raise NotImplementedError(msg)
 
     def asymov_dataset(self, poi):
         assert len(poi) == 1
@@ -127,8 +139,8 @@ class AsymptoticCalculator(BaseCalculator):
         """
         nll_poinull_asy = self.asymov_nll(poinull, poialt)
         nll_poialt_asy = self.asymov_nll(poialt, poialt)
-        return q(nll1=nll_poinull_asy, nll2=nll_poialt_asy, bestfit=[poialt], poival=[poinull],
-                 onesided=onesided, onesideddiscovery=onesideddiscovery)
+        return self.q(nll1=nll_poinull_asy, nll2=nll_poialt_asy, bestfit=[poialt], poival=[poinull],
+                      onesided=onesided, onesideddiscovery=onesideddiscovery)
 
     def palt(self, qobs, qalt, onesided=True, onesideddiscovery=False, qtilde=False):
         sqrtqobs = np.sqrt(qobs)
@@ -157,11 +169,11 @@ class AsymptoticCalculator(BaseCalculator):
         qobs = self.qobs(poinull, onesided=onesided, qtilde=qtilde,
                          onesideddiscovery=onesideddiscovery)
 
-        poinull, poialt = poinull[0], poialt[0]
-
+        poinull = poinull[0]
         needpalt = poialt is not None
 
         if needpalt:
+            poialt = poialt[0]
             qalt = self.qalt(poinull, poialt, onesided, onesideddiscovery)
             palt = self.palt(qobs=qobs, qalt=qalt, onesided=onesided, qtilde=qtilde,
                              onesideddiscovery=onesideddiscovery)
@@ -177,7 +189,9 @@ class AsymptoticCalculator(BaseCalculator):
     def _expected_pvalue_(self, poinull, poialt, nsigma, CLs, onesided=True, onesideddiscovery=False,
                           qtilde=False):
 
-        poinull, poialt = poinull[0], poialt[0]
+        poinull = poinull[0]
+        if poialt is not None:
+            poialt = poialt[0]
 
         qalt = self.qalt(poinull, poialt, onesided=onesided, onesideddiscovery=onesideddiscovery)  # TO CHECK
         qalt = np.where(qalt < 0, 0, qalt)
@@ -197,7 +211,9 @@ class AsymptoticCalculator(BaseCalculator):
 
     def _expected_poi_(self, poinull, poialt, nsigma, alpha, CLs, onesided=True, onesideddiscovery=False):
 
-        poinull, poialt = poinull[0], poialt[0]
+        poinull = poinull[0]
+        if poialt is not None:
+            poialt = poialt[0]
 
         qalt = self.qalt(poinull, poialt, onesided=True, onesideddiscovery=False)  # TO CHECK
         qalt = np.where(qalt < 0, 0, qalt)

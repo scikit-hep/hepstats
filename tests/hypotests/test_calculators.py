@@ -50,9 +50,9 @@ def test_base_calculator(calculator):
     assert mean_nll[0] >= mean_nll[1]
     assert mean_nll[2] >= mean_nll[1]
 
-    assert calc_loss.obs_nll(mean_poi[0]) == mean_nll[0]
-    assert calc_loss.obs_nll(mean_poi[1]) == mean_nll[1]
-    assert calc_loss.obs_nll(mean_poi[2]) == mean_nll[2]
+    assert calc_loss.obs_nll([mean_poi[0]]) == mean_nll[0]
+    assert calc_loss.obs_nll([mean_poi[1]]) == mean_nll[1]
+    assert calc_loss.obs_nll([mean_poi[2]]) == mean_nll[2]
 
     mean_poialt = POI(mean, 1.2)
 
@@ -93,4 +93,5 @@ def test_asymptotic_calculator():
     poi_null = POI(mean, [1.15, 1.2, 1.25])
     poi_alt = POI(mean, 1.2)
 
+    pnull, palt = calc.pvalue([poi_null], [poi_alt])
     pnull, palt = calc.pvalue([poi_null], [poi_alt])
