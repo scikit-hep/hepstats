@@ -8,7 +8,21 @@ def is_valid_parameter(object):
 
 
 def is_valid_data(object):
-    return True
+    is_sampled_data = hasattr(object, "resample")
+
+    try:
+        has_nevents = hasattr(object, "nevents")
+    except RuntimeError:
+        if is_sampled_data:
+            object.resample()
+            has_nevents = hasattr(object, "nevents")
+        else:
+            has_nevents = False
+
+    has_weights = hasattr(object, "weights")
+    has_set_weights = hasattr(object, "set_weights")
+    has_space = hasattr(object, "space")
+    return has_nevents and has_weights and has_set_weights and has_space
 
 
 def is_valid_pdf(object):

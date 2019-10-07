@@ -4,6 +4,7 @@ import pytest
 from skstats.hypotests.calculators.basecalculator import BaseCalculator
 from skstats.hypotests.calculators.asymptotic_calculator import AsymptoticCalculator
 from skstats.hypotests.parameters import POI
+from skstats.hypotests.fit_utils.api_check import is_valid_loss, is_valid_data
 import numpy as np
 
 import zfit
@@ -74,13 +75,15 @@ def test_base_calculator(calculator):
 
     model = calc_loss.model[0]
     sampler = model.create_sampler(n=10000)
+    assert is_valid_data(sampler)
 
-    calc_loss.lossbuilder(model=[model], data=[sampler], weights=None)
+    loss = calc_loss.lossbuilder(model=[model], data=[sampler], weights=None)
+    assert is_valid_loss(loss)
 
     with pytest.raises(ValueError):
         calc_loss.lossbuilder(model=[model, model], data=[sampler])
     with pytest.raises(ValueError):
-        calc_loss.lossbuilder(model=[model], data=[sampler, calc_loss.data])
+        calc_loss.lossbuilder(model=[model], data=[sampler, calc_loss.data[0]])
     with pytest.raises(ValueError):
         calc_loss.lossbuilder(model=[model], data=[sampler], weights=[])
     with pytest.raises(ValueError):
@@ -105,8 +108,10 @@ def test_asymptotic_calculator():
     with pytest.raises(NotImplementedError):
         calc.expected_poi(poinull=[poi_null]*2, poialt=[poi_alt]*2, nsigma=np.arange(-2, 3, 1))
 
-    calc.asymov_dataset(poi_alt)
-    calc.asymov_loss(poi_alt)
+    dataset = calc.asymov_dataset(poi_alt)
+    assert all(is_valid_data(d) for d in dataset)
+    loss = calc.asymov_loss(poi_alt)
+    assert is_valid_loss(loss)
 
     null_nll = calc.asymov_nll(pois=[poi_null], poialt=[poi_alt])
 

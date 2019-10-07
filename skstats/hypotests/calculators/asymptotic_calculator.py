@@ -5,17 +5,34 @@ import numpy as np
 from scipy.stats import norm
 
 
-def generate_asymov_dataset(model, params, nbins=100):
+def generate_asymov_hist(model, params, nbins=100):
+    """ Generate the asymov histogram using a model and dictionnary of parameters.
+
+        Args:
+            model : model used to generate the dataset
+            params (Dict) : values of the paramters of the models
+            nbins (int, optionnal) : number of bins
+
+        Returns:
+             (`np.array`, `np.array`) : hist, bin_edges
+
+        Example:
+            obs = zfit.Space('x', limits=(0.1, 2.0))
+            mean = zfit.Parameter("mu", 1.2)
+            sigma = zfit.Parameter("sigma", 0.1)
+            model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+            hist, bin_edges = generate_asymov_hist(model, {"mean": 1.2, "sigma": 0.1})
+    """
 
     space = model.space
     bounds = space.limit1d
     bin_edges = np.linspace(*bounds, nbins+1)
     bin_centers = bin_edges[0: -1] + np.diff(bin_edges)/2
 
-    weights = eval_pdf(model, bin_centers, params)
-    weights *= (space.area() / nbins)
+    hist = eval_pdf(model, bin_centers, params)
+    hist *= (space.area() / nbins)
 
-    return bin_centers, weights
+    return hist, bin_edges
 
 
 class AsymptoticCalculator(BaseCalculator):
@@ -79,7 +96,7 @@ class AsymptoticCalculator(BaseCalculator):
 
             Example:
                 poialt = POI(mean, [1.2])
-                hist, bin_edges = calc.asymov_dataset([poialt])
+                dataset = calc.asymov_dataset([poialt])
 
         """
 
@@ -108,8 +125,9 @@ class AsymptoticCalculator(BaseCalculator):
             values[poiparam] = {"value": poivalue}
 
             asymov_data = []
-            for i, ad in enumerate([generate_asymov_dataset(m, values, self._asymov_bins) for m in model]):
-                bin_centers, weights = ad
+            for i, ad in enumerate([generate_asymov_hist(m, values, self._asymov_bins) for m in model]):
+                weights, bin_edges = ad
+                bin_centers = bin_edges[0: -1] + np.diff(bin_edges)/2
                 asymov_data.append(array2dataset(type(data[i]), data[i].obs, bin_centers, weights))
 
             self._asymov_dataset[poi] = asymov_data
