@@ -96,12 +96,6 @@ def test_asymptotic_calculator_one_poi():
     poi_alt = POI(mean, 1.2)
 
     pnull, palt = calc.pvalue([poi_null], [poi_alt])
-    with pytest.raises(NotImplementedError):
-        calc.pvalue([poi_null]*2, [poi_alt]*2)
-    with pytest.raises(NotImplementedError):
-        calc.expected_pvalue(poinull=[poi_null]*2, poialt=[poi_alt]*2, nsigma=np.arange(-2, 3, 1))
-    with pytest.raises(NotImplementedError):
-        calc.expected_poi(poinull=[poi_null]*2, poialt=[poi_alt]*2, nsigma=np.arange(-2, 3, 1))
 
     dataset = calc.asymov_dataset(poi_alt)
     assert all(is_valid_data(d) for d in dataset)
