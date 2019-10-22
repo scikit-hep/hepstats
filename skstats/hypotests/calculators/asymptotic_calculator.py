@@ -12,7 +12,7 @@ def generate_asimov_hist(model, params, nbins=100):
         Args:
             model : model used to generate the dataset
             params (Dict) : values of the paramters of the models
-            nbins (int, optionnal) : number of bins
+            nbins (int, optional) : number of bins
 
         Returns:
              (`np.array`, `np.array`) : hist, bin_edges
