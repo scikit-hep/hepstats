@@ -1,16 +1,17 @@
 #!/usr/bin/python
 import pytest
+import numpy as np
+
+import zfit
+from zfit.core.testing import setup_function  # allows redefinition of zfit.Parameter, needed for tests
+from zfit.core.loss import UnbinnedNLL
+from zfit.minimize import MinuitMinimizer
 
 from skstats.hypotests.calculators.basecalculator import BaseCalculator
 from skstats.hypotests.calculators.asymptotic_calculator import AsymptoticCalculator
 from skstats.hypotests.parameters import POI
-from skstats.hypotests.fit_utils.api_check import is_valid_loss, is_valid_data
-import numpy as np
+from skstats.hypotests.fitutils.api_check import is_valid_loss, is_valid_data
 
-import zfit
-from zfit.core.testing import setup_function #allows redefinition of zfit.Parameter
-from zfit.core.loss import UnbinnedNLL
-from zfit.minimize import MinuitMinimizer
 
 true_mu = 1.2
 true_sigma = 0.1
@@ -64,14 +65,8 @@ def test_base_calculator(calculator):
             calc_loss.expected_poi(poinull=[mean_poi], poialt=[mean_poialt], nsigma=np.arange(-2, 3, 1))
     else:
         calc_loss.pvalue(poinull=[mean_poi], poialt=[mean_poialt])
-        with pytest.raises(NotImplementedError):
-            calc_loss.pvalue(poinull=[mean_poi]*2, poialt=[mean_poialt]*2)
         calc_loss.expected_pvalue(poinull=[mean_poi], poialt=[mean_poialt], nsigma=np.arange(-2, 3, 1))
-        with pytest.raises(NotImplementedError):
-            calc_loss.expected_pvalue(poinull=[mean_poi]*2, poialt=[mean_poialt]*2, nsigma=np.arange(-2, 3, 1))
         calc_loss.expected_poi(poinull=[mean_poi], poialt=[mean_poialt], nsigma=np.arange(-2, 3, 1))
-        with pytest.raises(NotImplementedError):
-            calc_loss.expected_poi(poinull=[mean_poi]*2, poialt=[mean_poialt]*2, nsigma=np.arange(-2, 3, 1))
 
     model = calc_loss.model[0]
     sampler = model.create_sampler(n=10000)
@@ -90,7 +85,7 @@ def test_base_calculator(calculator):
         calc_loss.lossbuilder(model=[model], data=[sampler], weights=[np.ones(10000), np.ones(10000)])
 
 
-def test_asymptotic_calculator():
+def test_asymptotic_calculator_one_poi():
     with pytest.raises(TypeError):
         AsymptoticCalculator()
 
@@ -117,3 +112,21 @@ def test_asymptotic_calculator():
 
     assert null_nll[0] >= null_nll[1]
     assert null_nll[2] >= null_nll[1]
+
+
+def test_asymptotic_calculator_two_pois():
+
+    loss, (mean, sigma) = create_loss()
+    calc = AsymptoticCalculator(loss, MinuitMinimizer())
+
+    poi_null = [POI(mean, [1.15, 1.2, 1.25]), POI(sigma, [0.05, 0.1])]
+    poi_alt = [POI(mean, 1.2), POI(sigma, 0.1)]
+
+    with pytest.raises(NotImplementedError):
+        calc.check_pois(poi_null)
+    with pytest.raises(NotImplementedError):
+        calc.pvalue(poi_null, poi_alt)
+    with pytest.raises(NotImplementedError):
+        calc.expected_pvalue(poinull=poi_null, poialt=poi_alt, nsigma=np.arange(-2, 3, 1))
+    with pytest.raises(NotImplementedError):
+        calc.expected_poi(poinull=poi_null, poialt=poi_alt, nsigma=np.arange(-2, 3, 1))

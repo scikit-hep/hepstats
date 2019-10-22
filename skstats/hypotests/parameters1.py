@@ -1,8 +1,7 @@
 #!/usr/bin/python
-from typing import Union, List
+from typing import Union, List, Iterable, Any, Callable
 import numpy as np
-
-from .fitutils.api_check import is_valid_parameter
+from .fit_utils.api_check import is_valid_parameter
 
 
 class POI(object):

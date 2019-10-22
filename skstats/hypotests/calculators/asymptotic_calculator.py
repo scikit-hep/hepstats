@@ -1,12 +1,13 @@
-from .basecalculator import BaseCalculator
-from ..fit_utils.utils import eval_pdf, array2dataset, pll
-from ..parameters import POI
 import numpy as np
 from scipy.stats import norm
 
+from .basecalculator import BaseCalculator
+from ..fitutils.utils import eval_pdf, array2dataset, pll
+from ..parameters import POI
+
 
 def generate_asymov_hist(model, params, nbins=100):
-    """ Generate the asymov histogram using a model and dictionnary of parameters.
+    """ Generate the Asymov histogram using a model and dictionary of parameters.
 
         Args:
             model : model used to generate the dataset
@@ -37,7 +38,7 @@ def generate_asymov_hist(model, params, nbins=100):
 
 class AsymptoticCalculator(BaseCalculator):
     """
-    Class for for asymptotic calculators. Can be used only with one parameter
+    Class for asymptotic calculators. Can be used only with one parameter
     of interest.
 
     See G. Cowan, K. Cranmer, E. Gross and O. Vitells: Asymptotic formulae for
@@ -45,7 +46,7 @@ class AsymptoticCalculator(BaseCalculator):
     """
 
     def __init__(self, input, minimizer, asymov_bins=100):
-        """Base class for calculator.
+        """Asymptotic calculator class.
 
             Args:
                 input : loss or fit result
@@ -75,18 +76,22 @@ class AsymptoticCalculator(BaseCalculator):
         self._asymov_nll = {}
 
     @staticmethod
-    def checkpois(pois):
+    def check_pois(pois):
+        """
+        Check if the parameter of interest, only one allowed, is a `skstats.parameters.POI` instance.
+        """
+
         msg = "A list of POIs is required."
         if not isinstance(pois, (list, tuple)):
             raise ValueError(msg)
         if not all(isinstance(p, POI) for p in pois):
             raise ValueError(msg)
         if len(pois) > 1:
-            msg = "Tests using the asymptotic calcultor can only be used with one parameter of interest."
+            msg = "Tests using the asymptotic calculator can only be used with one parameter of interest."
             raise NotImplementedError(msg)
 
     def asymov_dataset(self, poi) -> (np.array, np.array):
-        """ Generate the asymov dataset a given alternative hypothesis.
+        """ Generate the asymov dataset for a given alternative hypothesis.
 
             Args:
                 poi (`hypotests.POI`): parameter of interest of the alternative hypothesis
@@ -172,8 +177,8 @@ class AsymptoticCalculator(BaseCalculator):
                 nll = calc.asymov_nll([poinull], [poialt])
 
         """
-        self.checkpois(pois)
-        self.checkpois(poialt)
+        self.check_pois(pois)
+        self.check_pois(poialt)
 
         minimizer = self.minimizer
         ret = np.empty(len(pois[0]))
@@ -222,7 +227,7 @@ class AsymptoticCalculator(BaseCalculator):
 
     def qalt(self, poinull, poialt, onesided, onesideddiscovery) -> np.array:
         """ Compute alternative values of the $$\\Delta$$ log-likelihood test statistic using the asymov
-            datset.
+            dataset.
 
             Args:
                 poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis

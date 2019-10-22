@@ -1,4 +1,23 @@
-# API checks
+"""
+Module for testing a fitting library validity with scikit-stats.
+
+A fitting library should provide six basic objects:
+
+    * model / probability density function
+    * parameters of the models
+    * data
+    * loss / likelihood function
+    * minimizer
+    * fitresult (optionnal)
+
+A function for each object is defined is this module, all should return `True` to work
+with scikit-stats.
+
+The `zfit` api is currently the standard fitting api in scikit-stats.
+
+"""
+
+
 def is_valid_parameter(object):
     has_value = hasattr(object, "value")
     has_set_value = hasattr(object, "set_value")

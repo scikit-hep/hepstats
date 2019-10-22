@@ -20,7 +20,7 @@ def test_pois():
     with pytest.raises(TypeError):
         POI(mean)
 
-    assert p.value == 0
+    assert p.value == [0]
     assert p.name == mean.name
     assert len(p) == 1
     assert p != p1
@@ -35,5 +35,5 @@ def test_pois():
     for p_ in p:
         pass
 
-    # test hash for single value POI
+    # test hash
     {p: "p", p1: "p1", pn: "pn"}

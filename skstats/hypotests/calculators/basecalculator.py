@@ -1,14 +1,24 @@
 #!/usr/bin/python
 from typing import Dict, Union, Tuple, List
-
 import numpy as np
-from ..parameters import POI
-from ..fit_utils.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
-from ..fit_utils.api_check import is_valid_data, is_valid_pdf
-from ..fit_utils.utils import pll
 
-# nll = negative log-likelihood
-# obs = observed
+from ..parameters import POI
+from ..fitutils.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
+from ..fitutils.api_check import is_valid_data, is_valid_pdf
+from ..fitutils.utils import pll
+
+"""
+Module defining the base class for the calculators for statistical tests based on the likelyhood ratio.
+
+Any calculator can be a subclass of `BaseCalculator`. Currently implemented:
+
+    * `AsymptoticCalculator`: calculator using the asymptotic formulaed of the likehood ratio.
+
+Acronyms used in the code:
+    * nll = negative log-likehood, the likehood being the `loss` attribute of a calculator;
+    * obs = observed, i.e. measured on provided data.
+
+"""
 
 
 class BaseCalculator(object):
@@ -21,18 +31,18 @@ class BaseCalculator(object):
                 minimizer : minimizer to use to find the minimum of the loss function
 
             Example:
-                import zfit
-                from zfit.core.loss import UnbinnedNLL
-                from zfit.minimize import MinuitMinimizer
+                >>> import zfit
+                >>> from zfit.core.loss import UnbinnedNLL
+                >>> from zfit.minimize import MinuitMinimizer
 
-                obs = zfit.Space('x', limits=(0.1, 2.0))
-                data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
-                mean = zfit.Parameter("mu", 1.2)
-                sigma = zfit.Parameter("sigma", 0.1)
-                model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
-                loss = UnbinnedNLL(model=[model], data=[data], fit_range=[obs])
+                >>> obs = zfit.Space('x', limits=(0.1, 2.0))
+                >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
+                >>> mean = zfit.Parameter("mu", 1.2)
+                >>> sigma = zfit.Parameter("sigma", 0.1)
+                >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+                >>> loss = UnbinnedNLL(model=[model], data=[data], fit_range=[obs])
 
-                calc = BaseCalculator(input=loss, minimizer=MinuitMinimizer())
+                >>> calc = BaseCalculator(input=loss, minimizer=MinuitMinimizer())
         """
 
         if is_valid_fitresult(input):
@@ -54,10 +64,16 @@ class BaseCalculator(object):
 
     @property
     def loss(self):
+        """
+        Returns the loss / likelihood function used in the calculator.
+        """
         return self._loss
 
     @property
     def minimizer(self):
+        """
+        Returns the minimzer used in the calculator.
+        """
         return self._minimizer
 
     @property
@@ -89,14 +105,23 @@ class BaseCalculator(object):
 
     @property
     def model(self):
+        """
+        Returns the model used in the calculator.
+        """
         return self.loss.model
 
     @property
     def data(self):
+        """
+        Returns the data used in the calculator.
+        """
         return self.loss.data
 
     @property
     def constraints(self):
+        """
+        Returns the constraints on the loss / likehood function used in the calculator.
+        """
         return self.loss.constraints
 
     def lossbuilder(self, model, data, weights=None):
@@ -108,11 +133,11 @@ class BaseCalculator(object):
                 weights (optionnal, List): the data weights
 
             Example:
-                data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
-                mean = zfit.Parameter("mu", 1.2)
-                sigma = zfit.Parameter("sigma", 0.1)
-                model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
-                loss = calc.lossbuilder(model, data)
+                >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
+                >>> mean = zfit.Parameter("mu", 1.2)
+                >>> sigma = zfit.Parameter("sigma", 0.1)
+                >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+                >>> loss = calc.lossbuilder(model, data)
 
             Returns:
                 Loss function
@@ -151,12 +176,12 @@ class BaseCalculator(object):
                  numpy.array`: observed nll values
 
             Example:
-                mean = zfit.Parameter("mu", 1.2)
-                poi = POI(mean, [1.1, 1.2, 1.0])
-                nll = calc.obs_nll([poi])
+                >>> mean = zfit.Parameter("mu", 1.2)
+                >>> poi = POI(mean, [1.1, 1.2, 1.0])
+                >>> nll = calc.obs_nll([poi])
 
         """
-        self.checkpois(pois)
+        self.check_pois(pois)
         grid = np.array([g.ravel() for g in np.meshgrid(*pois)]).T
         ret = np.empty(len(grid))
         for i, g in enumerate(grid):
@@ -182,13 +207,13 @@ class BaseCalculator(object):
                 `numpy.array`: observed values of q
 
             Example:
-                mean = zfit.Parameter("mu", 1.2)
-                poi = POI(mean, [1.1, 1.2, 1.0])
-                q = calc.qobs([poi])
+                >>> mean = zfit.Parameter("mu", 1.2)
+                >>> poi = POI(mean, [1.1, 1.2, 1.0])
+                >>> q = calc.qobs([poi])
         """
         print("Compute qobs for the null hypothesis!")
 
-        self.checkpois(poinull)
+        self.check_pois(poinull)
         params = [p.parameter for p in poinull]
         bestfit = [self.bestfit.params[p]["value"] for p in params]
         bestfitpoi = []
@@ -224,20 +249,23 @@ class BaseCalculator(object):
             Tuple(`numpy.array`, `numpy.array`): pnull, palt
 
         Example:
-            mean = zfit.Parameter("mu", 1.2)
-            poinull = POI(mean, [1.1, 1.2, 1.0])
-            poialt = POI(mean, 1.2)
-            pvalues = calc.pavalue([poinull], [poialt])
+            >>> mean = zfit.Parameter("mu", 1.2)
+            >>> poinull = POI(mean, [1.1, 1.2, 1.0])
+            >>> poialt = POI(mean, 1.2)
+            >>> pvalues = calc.pavalue([poinull], [poialt])
         """
-        self.checkpois(poinull)
+        self.check_pois(poinull)
         if poialt:
-            self.checkpois(poialt)
-            self.checkpoiscompatibility(poinull, poialt)
+            self.check_pois(poialt)
+            self.check_pois_compatibility(poinull, poialt)
 
         return self._pvalue_(poinull=poinull, poialt=poialt, qtilde=qtilde, onesided=onesided,
                              onesideddiscovery=onesideddiscovery)
 
     def _pvalue_(self, poinull, poialt, qtilde, onesided, onesideddiscovery):
+        """
+        To be overwritten in `BaseCalculator` subclasses.
+        """
         raise NotImplementedError
 
     def expected_pvalue(self, poinull: List[POI], poialt: List[POI], nsigma, CLs=False, qtilde=False,
@@ -259,20 +287,23 @@ class BaseCalculator(object):
             `numpy.array`: array of expected pvalues for each $$\\sigma$$ value
 
         Example:
-            mean = zfit.Parameter("mu", 1.2)
-            poinull = POI(mean, [1.1, 1.2, 1.0])
-            poialt = POI(mean, 1.2)
-            nll = calc.expected_pvalue([poinull], [poialt])
+            >>> mean = zfit.Parameter("mu", 1.2)
+            >>> poinull = POI(mean, [1.1, 1.2, 1.0])
+            >>> poialt = POI(mean, 1.2)
+            >>> nll = calc.expected_pvalue([poinull], [poialt])
         """
-        self.checkpois(poinull)
+        self.check_pois(poinull)
         if poialt:
-            self.checkpois(poialt)
-            self.checkpoiscompatibility(poinull, poialt)
+            self.check_pois(poialt)
+            self.check_pois_compatibility(poinull, poialt)
 
         return self._expected_pvalue_(poinull=poinull, poialt=poialt, nsigma=nsigma, CLs=CLs, qtilde=qtilde,
                                       onesided=onesided, onesideddiscovery=onesideddiscovery)
 
     def _expected_pvalue_(self, poinull, poialt, nsigma, CLs, qtilde, onesided, onesideddiscovery):
+        """
+        To be overwritten in `BaseCalculator` subclasses.
+        """
         raise NotImplementedError
 
     def expected_poi(self, poinull: List[POI], poialt: List[POI], nsigma, alpha=0.05, CLs=False,
@@ -293,24 +324,31 @@ class BaseCalculator(object):
             `numpy.array`: array of expected POI values for each $$\\sigma$$ value
 
         Example:
-            mean = zfit.Parameter("mu", 1.2)
-            poinull = POI(mean, [1.1, 1.2, 1.0])
-            poialt = POI(mean, 1.2)
-            nll = calc.expected_poi([poinull], [poialt])
+            >>> mean = zfit.Parameter("mu", 1.2)
+            >>> poinull = POI(mean, [1.1, 1.2, 1.0])
+            >>> poialt = POI(mean, 1.2)
+            >>> nll = calc.expected_poi([poinull], [poialt])
         """
-        self.checkpois(poinull)
+        self.check_pois(poinull)
         if poialt:
-            self.checkpois(poialt)
-            self.checkpoiscompatibility(poinull, poialt)
+            self.check_pois(poialt)
+            self.check_pois_compatibility(poinull, poialt)
 
         return self._expected_poi_(poinull=poinull, poialt=poialt, nsigma=nsigma, alpha=alpha, CLs=CLs,
                                    onesided=onesided, onesideddiscovery=onesideddiscovery)
 
     def _expected_poi_(self, poinull, poialt, nsigma, alpha, CLs, onesided, onesideddiscovery):
+        """
+        To be overwritten in `BaseCalculator` subclasses.
+        """
         raise NotImplementedError
 
     @staticmethod
-    def checkpois(pois):
+    def check_pois(pois):
+        """
+        Check if the parameters of interest are all `skstats.parameters.POI` instances.
+        """
+
         msg = "A list of POIs is required."
         if not isinstance(pois, (list, tuple)):
             raise ValueError(msg)
@@ -321,7 +359,11 @@ class BaseCalculator(object):
             raise NotImplementedError(msg)
 
     @staticmethod
-    def checkpoiscompatibility(poi1, poi2):
+    def check_pois_compatibility(poi1, poi2):
+        """
+        Check compatibility between two lists of `skstats.parameters.POI` instances.
+        """
+
         assert len(poi1) == len(poi2)
         assert sorted([p.name for p in poi1]) == sorted([p.name for p in poi2])
 
@@ -342,9 +384,9 @@ class BaseCalculator(object):
                 `np.array`: array of q values
         """
 
-        self.checkpois(poi1)
-        self.checkpois(poi2)
-        self.checkpoiscompatibility(poi1, poi2)
+        self.check_pois(poi1)
+        self.check_pois(poi2)
+        self.check_pois_compatibility(poi1, poi2)
 
         assert len(poi1[0]) == len(nll1)
         assert len(poi2[0]) == len(nll2)
