@@ -6,8 +6,8 @@ from ..fitutils.utils import eval_pdf, array2dataset, pll
 from ..parameters import POI
 
 
-def generate_asymov_hist(model, params, nbins=100):
-    """ Generate the Asymov histogram using a model and dictionary of parameters.
+def generate_asimov_hist(model, params, nbins=100):
+    """ Generate the Asimov histogram using a model and dictionary of parameters.
 
         Args:
             model : model used to generate the dataset
@@ -22,7 +22,7 @@ def generate_asymov_hist(model, params, nbins=100):
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> sigma = zfit.Parameter("sigma", 0.1)
             >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
-            >>> hist, bin_edges = generate_asymov_hist(model, {"mean": 1.2, "sigma": 0.1})
+            >>> hist, bin_edges = generate_asimov_hist(model, {"mean": 1.2, "sigma": 0.1})
     """
 
     space = model.space
@@ -45,13 +45,13 @@ class AsymptoticCalculator(BaseCalculator):
     likelihood- based tests of new physics. Eur. Phys. J., C71:1–19, 2011
     """
 
-    def __init__(self, input, minimizer, asymov_bins=100):
+    def __init__(self, input, minimizer, asimov_bins=100):
         """Asymptotic calculator class.
 
             Args:
                 input : loss or fit result
                 minimizer : minimizer to use to find the minimum of the loss function
-                asymov_bins (Optional, int) : number of bins of the asymov dataset
+                asimov_bins (Optional, int) : number of bins of the asimov dataset
 
             Example:
                 >>> import zfit
@@ -69,11 +69,11 @@ class AsymptoticCalculator(BaseCalculator):
         """
 
         super(AsymptoticCalculator, self).__init__(input, minimizer)
-        self._asymov_bins = asymov_bins
-        self._asymov_dataset = {}
-        self._asymov_loss = {}
-        # cache of nll values computed with the asymov dataset
-        self._asymov_nll = {}
+        self._asimov_bins = asimov_bins
+        self._asimov_dataset = {}
+        self._asimov_loss = {}
+        # cache of nll values computed with the asimov dataset
+        self._asimov_nll = {}
 
     @staticmethod
     def check_pois(pois):
@@ -90,8 +90,8 @@ class AsymptoticCalculator(BaseCalculator):
             msg = "Tests using the asymptotic calculator can only be used with one parameter of interest."
             raise NotImplementedError(msg)
 
-    def asymov_dataset(self, poi) -> (np.array, np.array):
-        """ Generate the asymov dataset for a given alternative hypothesis.
+    def asimov_dataset(self, poi) -> (np.array, np.array):
+        """ Generate the Asimov dataset for a given alternative hypothesis.
 
             Args:
                 poi (`hypotests.POI`): parameter of interest of the alternative hypothesis
@@ -101,11 +101,11 @@ class AsymptoticCalculator(BaseCalculator):
 
             Example:
                 >>> poialt = POI(mean, [1.2])
-                >>> dataset = calc.asymov_dataset([poialt])
+                >>> dataset = calc.asimov_dataset([poialt])
 
         """
 
-        if poi not in self._asymov_dataset.keys():
+        if poi not in self._asimov_dataset.keys():
             model = self.model
             data = self.data
             minimizer = self.minimizer
@@ -129,18 +129,18 @@ class AsymptoticCalculator(BaseCalculator):
             values = minimum.params
             values[poiparam] = {"value": poivalue}
 
-            asymov_data = []
-            for i, ad in enumerate([generate_asymov_hist(m, values, self._asymov_bins) for m in model]):
+            asimov_data = []
+            for i, ad in enumerate([generate_asimov_hist(m, values, self._asimov_bins) for m in model]):
                 weights, bin_edges = ad
                 bin_centers = bin_edges[0: -1] + np.diff(bin_edges)/2
-                asymov_data.append(array2dataset(type(data[i]), data[i].obs, bin_centers, weights))
+                asimov_data.append(array2dataset(type(data[i]), data[i].obs, bin_centers, weights))
 
-            self._asymov_dataset[poi] = asymov_data
+            self._asimov_dataset[poi] = asimov_data
 
-        return self._asymov_dataset[poi]
+        return self._asimov_dataset[poi]
 
-    def asymov_loss(self, poi):
-        """ Construct a loss function using the asymov dataset for a given alternative hypothesis.
+    def asimov_loss(self, poi):
+        """ Construct a loss function using the Asimov dataset for a given alternative hypothesis.
 
             Args:
                 poi (`hypotests.POI`): parameter of interest of the alternative hypothesis
@@ -150,17 +150,17 @@ class AsymptoticCalculator(BaseCalculator):
 
             Example:
                 >>> poialt = POI(mean, [1.2])
-                >>> loss = calc.asymov_loss([poialt])
+                >>> loss = calc.asimov_loss([poialt])
 
         """
-        if poi not in self._asymov_loss.keys():
-            loss = self.lossbuilder(self.model, self.asymov_dataset(poi))
-            self._asymov_loss[poi] = loss
+        if poi not in self._asimov_loss.keys():
+            loss = self.lossbuilder(self.model, self.asimov_dataset(poi))
+            self._asimov_loss[poi] = loss
 
-        return self._asymov_loss[poi]
+        return self._asimov_loss[poi]
 
-    def asymov_nll(self, pois, poialt) -> np.array:
-        """ Compute negative log-likelihood values for given parameters of interest using the asymov dataset
+    def asimov_nll(self, pois, poialt) -> np.array:
+        """ Compute negative log-likelihood values for given parameters of interest using the Asimov dataset
             generated with a given alternative hypothesis.
 
             Args:
@@ -174,7 +174,7 @@ class AsymptoticCalculator(BaseCalculator):
                 >>> mean = zfit.Parameter("mu", 1.2)
                 >>> poinull = POI(mean, [1.1, 1.2, 1.0])
                 >>> poialt = POI(mean, [1.2])
-                >>> nll = calc.asymov_nll([poinull], [poialt])
+                >>> nll = calc.asimov_nll([poinull], [poialt])
 
         """
         self.check_pois(pois)
@@ -183,11 +183,11 @@ class AsymptoticCalculator(BaseCalculator):
         minimizer = self.minimizer
         ret = np.empty(len(pois[0]))
         for i, p in enumerate(pois[0]):
-            if p not in self._asymov_nll.keys():
-                loss = self.asymov_loss(poialt[0])
+            if p not in self._asimov_nll.keys():
+                loss = self.asimov_loss(poialt[0])
                 nll = pll(minimizer, loss, p)
-                self._asymov_nll[p] = nll
-            ret[i] = self._asymov_nll[p]
+                self._asimov_nll[p] = nll
+            ret[i] = self._asimov_nll[p]
         return ret
 
     def pnull(self, qobs, qalt=None, onesided=True, onesideddiscovery=False, qtilde=False, nsigma=0) -> np.array:
@@ -195,7 +195,7 @@ class AsymptoticCalculator(BaseCalculator):
 
             Args:
                 qobs (`np.array`): observed values of the test-statistic q
-                qalt (`np.array`): alternative values of the test-statistic q using the asymov dataset
+                qalt (`np.array`): alternative values of the test-statistic q using the asimov dataset
                 onesided (bool, optionnal): if `True` (default) computes onesided pvalues
                 onesideddiscovery (bool, optionnal): if `True` (default) computes onesided pvalues for a discovery
                 qtilde (bool, optionnal): if `True` use the $$\tilde{q}$$ test statistics else (default) use
@@ -226,7 +226,7 @@ class AsymptoticCalculator(BaseCalculator):
         return pnull
 
     def qalt(self, poinull, poialt, onesided, onesideddiscovery) -> np.array:
-        """ Compute alternative values of the $$\\Delta$$ log-likelihood test statistic using the asymov
+        """ Compute alternative values of the $$\\Delta$$ log-likelihood test statistic using the asimov
             dataset.
 
             Args:
@@ -245,8 +245,8 @@ class AsymptoticCalculator(BaseCalculator):
                 >>> poialt = POI(mean, [1.2])
                 >>> q = calc.qalt([poinull], [poialt])
         """
-        nll_poinull_asy = self.asymov_nll(poinull, poialt)
-        nll_poialt_asy = self.asymov_nll(poialt, poialt)
+        nll_poinull_asy = self.asimov_nll(poinull, poialt)
+        nll_poialt_asy = self.asimov_nll(poialt, poialt)
         return self.q(nll1=nll_poinull_asy, nll2=nll_poialt_asy, poi1=poinull, poi2=poialt,
                       onesided=onesided, onesideddiscovery=onesideddiscovery)
 
@@ -255,7 +255,7 @@ class AsymptoticCalculator(BaseCalculator):
 
             Args:
                 qobs (`np.array`): observed values of the test-statistic q
-                qalt (`np.array`): alternative values of the test-statistic q using the asymov dataset
+                qalt (`np.array`): alternative values of the test-statistic q using the asimov dataset
                 onesided (bool, optionnal): if `True` (default) computes onesided pvalues
                 onesideddiscovery (bool, optionnal): if `True` (default) computes onesided pvalues for a discovery
                 qtilde (bool, optionnal): if `True` use the $$\tilde{q}$$ test statistics else (default) use
