@@ -51,7 +51,7 @@ class AsymptoticCalculator(BaseCalculator):
             Args:
                 input : loss or fit result
                 minimizer : minimizer to use to find the minimum of the loss function
-                asimov_bins (Optional, int) : number of bins of the asimov dataset
+                asimov_bins (Optional, int) : number of bins of the Asimov dataset
 
             Example:
                 >>> import zfit
@@ -255,7 +255,7 @@ class AsymptoticCalculator(BaseCalculator):
 
             Args:
                 qobs (`np.array`): observed values of the test-statistic q
-                qalt (`np.array`): alternative values of the test-statistic q using the asimov dataset
+                qalt (`np.array`): alternative values of the test-statistic q using the Asimov dataset
                 onesided (bool, optionnal): if `True` (default) computes onesided pvalues
                 onesideddiscovery (bool, optionnal): if `True` (default) computes onesided pvalues for a discovery
                 qtilde (bool, optionnal): if `True` use the $$\tilde{q}$$ test statistics else (default) use
