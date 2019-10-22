@@ -196,11 +196,11 @@ class AsymptoticCalculator(BaseCalculator):
             Args:
                 qobs (`np.array`): observed values of the test-statistic q
                 qalt (`np.array`): alternative values of the test-statistic q using the asimov dataset
-                onesided (bool, optionnal): if `True` (default) computes onesided pvalues
-                onesideddiscovery (bool, optionnal): if `True` (default) computes onesided pvalues for a discovery
-                qtilde (bool, optionnal): if `True` use the $$\tilde{q}$$ test statistics else (default) use
+                onesided (bool, optional): if `True` (default) computes onesided pvalues
+                onesideddiscovery (bool, optional): if `True` (default) computes onesided pvalues for a discovery
+                qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
                     the $$q$$ test statistic
-                nsigma (float, optionnal): significance shift
+                nsigma (float, optional): significance shift
 
             Returns:
                  `np.array` : array of the pvalues for the null hypothesis
@@ -232,8 +232,8 @@ class AsymptoticCalculator(BaseCalculator):
             Args:
                 poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
                 poialt (List[`hypotests.POI`]): parameters of interest for the alternative hypothesis
-                onesided (bool, optionnal): if `True` (default) computes onesided pvalues
-                onesideddiscovery (bool, optionnal): if `True` (default) computes onesided pvalues for a discovery
+                onesided (bool, optional): if `True` (default) computes onesided pvalues
+                onesideddiscovery (bool, optional): if `True` (default) computes onesided pvalues for a discovery
                     test
 
             Returns:
@@ -256,9 +256,9 @@ class AsymptoticCalculator(BaseCalculator):
             Args:
                 qobs (`np.array`): observed values of the test-statistic q
                 qalt (`np.array`): alternative values of the test-statistic q using the Asimov dataset
-                onesided (bool, optionnal): if `True` (default) computes onesided pvalues
-                onesideddiscovery (bool, optionnal): if `True` (default) computes onesided pvalues for a discovery
-                qtilde (bool, optionnal): if `True` use the $$\tilde{q}$$ test statistics else (default) use
+                onesided (bool, optional): if `True` (default) computes onesided pvalues
+                onesideddiscovery (bool, optional): if `True` (default) computes onesided pvalues for a discovery
+                qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
                     the $$q$$ test statistic
 
             Returns:

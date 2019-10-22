@@ -130,7 +130,7 @@ class BaseCalculator(object):
             Args:
                 model (List): The model or models to evaluate the data on
                 data (List): Data to use
-                weights (optionnal, List): the data weights
+                weights (optional, List): the data weights
 
             Example:
                 >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
@@ -197,10 +197,10 @@ class BaseCalculator(object):
 
             Args:
                 poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
-                qtilde (bool, optionnal): if `True` use the $$\tilde{q}$$ test statistics else (default) use
+                qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
                     the $$q$$ test statistic
-                onesided (bool, optionnal): if `True` (default) computes onesided pvalues
-                onesideddiscovery (bool, optionnal): if `True` (default) computes onesided pvalues for a discovery
+                onesided (bool, optional): if `True` (default) computes onesided pvalues
+                onesideddiscovery (bool, optional): if `True` (default) computes onesided pvalues for a discovery
                     test
 
             Returns:
@@ -238,11 +238,11 @@ class BaseCalculator(object):
 
         Args:
             poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
-            poialt (List[`hypotests.POI`], optionnal): parameters of interest for the alternative hypothesis
-            qtilde (bool, optionnal): if `True` use the $$\tilde{q}$$ test statistics else (default) use
+            poialt (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis
+            qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
                 the $$q$$ test statistic
-            onesided (bool, optionnal): if `True` (default) computes onesided pvalues
-            onesideddiscovery (bool, optionnal): if `True` (default) computes onesided pvalues for a discovery
+            onesided (bool, optional): if `True` (default) computes onesided pvalues
+            onesideddiscovery (bool, optional): if `True` (default) computes onesided pvalues for a discovery
                 test
 
         Returns:
@@ -274,14 +274,14 @@ class BaseCalculator(object):
 
         Args:
             poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
-            poialt (List[`hypotests.POI`], optionnal): parameters of interest for the alternative hypothesis
+            poialt (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis
             nsigma (`numpy.array`): array of values of $$\\sigma$$ to compute the expected pvalue
-            CLs (bool, optionnal): if `True` computes pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}$$
+            CLs (bool, optional): if `True` computes pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}$$
                 else as $$p_{clsb} = p_{null}$
-            qtilde (bool, optionnal): if `True` use the $$\tilde{q}$$ test statistics else (default) use
+            qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
                 the $$q$$ test statistic
-            onesided (bool, optionnal): if `True` (default) computes onesided pvalues
-            onesideddiscovery (bool, optionnal): if `True` (default) computes onesided pvalues for a discovery
+            onesided (bool, optional): if `True` (default) computes onesided pvalues
+            onesideddiscovery (bool, optional): if `True` (default) computes onesided pvalues for a discovery
 
         Returns:
             `numpy.array`: array of expected pvalues for each $$\\sigma$$ value
@@ -313,12 +313,12 @@ class BaseCalculator(object):
 
         Args:
             poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
-            poialt (List[`hypotests.POI`], optionnal): parameters of interest for the alternative hypothesis
+            poialt (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis
             nsigma (`numpy.array`): array of values of $$\\sigma$$ to compute the expected pvalue
-            CLs (bool, optionnal): if `True` uses pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}$$
+            CLs (bool, optional): if `True` uses pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}$$
                 else as $$p_{clsb} = p_{null}$
-            onesided (bool, optionnal): if `True` (default) computes onesided pvalues
-            onesideddiscovery (bool, optionnal): if `True` (default) computes onesided pvalues for a discovery
+            onesided (bool, optional): if `True` (default) computes onesided pvalues
+            onesideddiscovery (bool, optional): if `True` (default) computes onesided pvalues for a discovery
 
         Returns:
             `numpy.array`: array of expected POI values for each $$\\sigma$$ value
@@ -377,8 +377,8 @@ class BaseCalculator(object):
                 nll2 (`numpy.array`): array of nll values #2, evaluated with poi2
                 poi1 ((List[`hypotests.POI`])): list of POI's #1
                 poi2 ((List[`hypotests.POI`])): list of POI's #2
-                onesided (bool, optionnal, default=True)
-                onesideddiscovery (bool, optionnal, default=True)
+                onesided (bool, optional, default=True)
+                onesideddiscovery (bool, optional, default=True)
 
             Returns:
                 `np.array`: array of q values

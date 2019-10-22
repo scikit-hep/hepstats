@@ -8,7 +8,7 @@ A fitting library should provide six basic objects:
     * data
     * loss / likelihood function
     * minimizer
-    * fitresult (optionnal)
+    * fitresult (optional)
 
 A function for each object is defined in this module, all should return `True` to work
 with scikit-stats.
