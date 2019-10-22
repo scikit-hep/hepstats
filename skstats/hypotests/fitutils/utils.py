@@ -38,7 +38,7 @@ def pll(minimizer, loss, pois) -> float:
 
 def array2dataset(dataset_cls, obs, array, weights=None):
     """
-    dataset: only used to get the class in which array/weights will be
+    dataset_cls: only used to get the class in which array/weights will be
     converted.
     """
 

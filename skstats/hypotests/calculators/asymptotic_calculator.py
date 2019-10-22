@@ -18,11 +18,11 @@ def generate_asymov_hist(model, params, nbins=100):
              (`np.array`, `np.array`) : hist, bin_edges
 
         Example:
-            obs = zfit.Space('x', limits=(0.1, 2.0))
-            mean = zfit.Parameter("mu", 1.2)
-            sigma = zfit.Parameter("sigma", 0.1)
-            model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
-            hist, bin_edges = generate_asymov_hist(model, {"mean": 1.2, "sigma": 0.1})
+            >>> obs = zfit.Space('x', limits=(0.1, 2.0))
+            >>> mean = zfit.Parameter("mu", 1.2)
+            >>> sigma = zfit.Parameter("sigma", 0.1)
+            >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+            >>> hist, bin_edges = generate_asymov_hist(model, {"mean": 1.2, "sigma": 0.1})
     """
 
     space = model.space
@@ -54,18 +54,18 @@ class AsymptoticCalculator(BaseCalculator):
                 asymov_bins (Optional, int) : number of bins of the asymov dataset
 
             Example:
-                import zfit
-                from zfit.core.loss import UnbinnedNLL
-                from zfit.minimize import MinuitMinimizer
+                >>> import zfit
+                >>> from zfit.core.loss import UnbinnedNLL
+                >>> from zfit.minimize import MinuitMinimizer
 
-                obs = zfit.Space('x', limits=(0.1, 2.0))
-                data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
-                mean = zfit.Parameter("mu", 1.2)
-                sigma = zfit.Parameter("sigma", 0.1)
-                model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
-                loss = UnbinnedNLL(model=[model], data=[data], fit_range=[obs])
+                >>> obs = zfit.Space('x', limits=(0.1, 2.0))
+                >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
+                >>> mean = zfit.Parameter("mu", 1.2)
+                >>> sigma = zfit.Parameter("sigma", 0.1)
+                >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+                >>> loss = UnbinnedNLL(model=[model], data=[data], fit_range=[obs])
 
-                calc = AsymptoticCalculator(input=loss, minimizer=MinuitMinimizer(), nbins=100)
+                >>> calc = AsymptoticCalculator(input=loss, minimizer=MinuitMinimizer(), nbins=100)
         """
 
         super(AsymptoticCalculator, self).__init__(input, minimizer)
@@ -100,8 +100,8 @@ class AsymptoticCalculator(BaseCalculator):
                  Dataset
 
             Example:
-                poialt = POI(mean, [1.2])
-                dataset = calc.asymov_dataset([poialt])
+                >>> poialt = POI(mean, [1.2])
+                >>> dataset = calc.asymov_dataset([poialt])
 
         """
 
@@ -149,8 +149,8 @@ class AsymptoticCalculator(BaseCalculator):
                  Loss function
 
             Example:
-                poialt = POI(mean, [1.2])
-                loss = calc.asymov_loss([poialt])
+                >>> poialt = POI(mean, [1.2])
+                >>> loss = calc.asymov_loss([poialt])
 
         """
         if poi not in self._asymov_loss.keys():
@@ -171,10 +171,10 @@ class AsymptoticCalculator(BaseCalculator):
                  `numpy.array`: alternative nll values
 
             Example:
-                mean = zfit.Parameter("mu", 1.2)
-                poinull = POI(mean, [1.1, 1.2, 1.0])
-                poialt = POI(mean, [1.2])
-                nll = calc.asymov_nll([poinull], [poialt])
+                >>> mean = zfit.Parameter("mu", 1.2)
+                >>> poinull = POI(mean, [1.1, 1.2, 1.0])
+                >>> poialt = POI(mean, [1.2])
+                >>> nll = calc.asymov_nll([poinull], [poialt])
 
         """
         self.check_pois(pois)
@@ -240,10 +240,10 @@ class AsymptoticCalculator(BaseCalculator):
                 `numpy.array`: observed values of q
 
             Example:
-                mean = zfit.Parameter("mu", 1.2)
-                poinull = POI(mean, [1.1, 1.2, 1.0])
-                poialt = POI(mean, [1.2])
-                q = calc.qalt([poinull], [poialt])
+                >>> mean = zfit.Parameter("mu", 1.2)
+                >>> poinull = POI(mean, [1.1, 1.2, 1.0])
+                >>> poialt = POI(mean, [1.2])
+                >>> q = calc.qalt([poinull], [poialt])
         """
         nll_poinull_asy = self.asymov_nll(poinull, poialt)
         nll_poialt_asy = self.asymov_nll(poialt, poialt)

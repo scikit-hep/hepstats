@@ -10,7 +10,7 @@ A fitting library should provide six basic objects:
     * minimizer
     * fitresult (optionnal)
 
-A function for each object is defined is this module, all should return `True` to work
+A function for each object is defined in this module, all should return `True` to work
 with scikit-stats.
 
 The `zfit` api is currently the standard fitting api in scikit-stats.

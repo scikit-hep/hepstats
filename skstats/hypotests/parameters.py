@@ -16,9 +16,9 @@ class POI(object):
                 values (`float`,`list(float)`,`numpy.array`): values of the parameter of interest
 
             Example:
-                Nsig = zfit.Parameter("Nsig")
-                poi = POI(Nsig, value=0)
-                poi = POI(Nsig, value=np.linspace(0,10,10))
+                >>> Nsig = zfit.Parameter("Nsig")
+                >>> poi = POI(Nsig, value=0)
+                >>> poi = POI(Nsig, value=np.linspace(0,10,10))
         """
         if not is_valid_parameter(parameter):
             return NotImplementedError
@@ -29,6 +29,9 @@ class POI(object):
 
     @property
     def value(self):
+        """
+        Returns the value of the `POI`.
+        """
         if len(self) > 1:
             return self.values_array
         else:
@@ -36,12 +39,18 @@ class POI(object):
 
     @property
     def values_array(self):
+        """
+        Returns the array of values of the `POI`.
+        """
         return self._values_array
 
     def __repr__(self):
         return "POI('{0}', value={1})".format(self.name, self.value)
 
     def __getitem__(self, i):
+        """
+        Get the i th element the array of values of the `POI`.
+        """
         return POI(self.parameter, self.values_array[i])
 
     def __iter__(self):
