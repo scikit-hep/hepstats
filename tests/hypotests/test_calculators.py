@@ -97,12 +97,12 @@ def test_asymptotic_calculator_one_poi():
 
     pnull, palt = calc.pvalue([poi_null], [poi_alt])
 
-    dataset = calc.asymov_dataset(poi_alt)
+    dataset = calc.asimov_dataset(poi_alt)
     assert all(is_valid_data(d) for d in dataset)
-    loss = calc.asymov_loss(poi_alt)
+    loss = calc.asimov_loss(poi_alt)
     assert is_valid_loss(loss)
 
-    null_nll = calc.asymov_nll(pois=[poi_null], poialt=[poi_alt])
+    null_nll = calc.asimov_nll(pois=[poi_null], poialt=[poi_alt])
 
     assert null_nll[0] >= null_nll[1]
     assert null_nll[2] >= null_nll[1]
