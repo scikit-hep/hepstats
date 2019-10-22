@@ -20,7 +20,7 @@ def test_pois():
     with pytest.raises(TypeError):
         POI(mean)
 
-    assert p.value == [0]
+    assert p.value == 0
     assert p.name == mean.name
     assert len(p) == 1
     assert p != p1
