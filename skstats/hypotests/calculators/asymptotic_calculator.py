@@ -17,7 +17,7 @@ def generate_asimov_hist(model, params, nbins=100):
         Returns:
              (`np.array`, `np.array`) : hist, bin_edges
 
-        Example:
+        Example with `zfit`:
             >>> obs = zfit.Space('x', limits=(0.1, 2.0))
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> sigma = zfit.Parameter("sigma", 0.1)
@@ -53,7 +53,7 @@ class AsymptoticCalculator(BaseCalculator):
                 minimizer : minimizer to use to find the minimum of the loss function
                 asimov_bins (Optional, int) : number of bins of the Asimov dataset
 
-            Example:
+            Example with `zfit`:
                 >>> import zfit
                 >>> from zfit.core.loss import UnbinnedNLL
                 >>> from zfit.minimize import MinuitMinimizer
@@ -99,7 +99,7 @@ class AsymptoticCalculator(BaseCalculator):
             Returns:
                  Dataset
 
-            Example:
+            Example with `zfit`:
                 >>> poialt = POI(mean, [1.2])
                 >>> dataset = calc.asimov_dataset([poialt])
 
@@ -148,7 +148,7 @@ class AsymptoticCalculator(BaseCalculator):
             Returns:
                  Loss function
 
-            Example:
+            Example with `zfit`:
                 >>> poialt = POI(mean, [1.2])
                 >>> loss = calc.asimov_loss([poialt])
 
@@ -170,7 +170,7 @@ class AsymptoticCalculator(BaseCalculator):
             Returns:
                  `numpy.array`: alternative nll values
 
-            Example:
+            Example with `zfit`:
                 >>> mean = zfit.Parameter("mu", 1.2)
                 >>> poinull = POI(mean, [1.1, 1.2, 1.0])
                 >>> poialt = POI(mean, [1.2])
@@ -239,7 +239,7 @@ class AsymptoticCalculator(BaseCalculator):
             Returns:
                 `numpy.array`: observed values of q
 
-            Example:
+            Example with `zfit`:
                 >>> mean = zfit.Parameter("mu", 1.2)
                 >>> poinull = POI(mean, [1.1, 1.2, 1.0])
                 >>> poialt = POI(mean, [1.2])

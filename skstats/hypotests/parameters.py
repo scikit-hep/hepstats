@@ -15,7 +15,7 @@ class POI(object):
                 parameter: the parameter of interest
                 values (`float`,`list(float)`,`numpy.array`): values of the parameter of interest
 
-            Example:
+            Example with `zfit`:
                 >>> Nsig = zfit.Parameter("Nsig")
                 >>> poi = POI(Nsig, value=0)
                 >>> poi = POI(Nsig, value=np.linspace(0,10,10))

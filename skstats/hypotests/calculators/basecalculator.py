@@ -30,7 +30,7 @@ class BaseCalculator(object):
                 input : loss or fit result
                 minimizer : minimizer to use to find the minimum of the loss function
 
-            Example:
+            Example with `zfit`:
                 >>> import zfit
                 >>> from zfit.core.loss import UnbinnedNLL
                 >>> from zfit.minimize import MinuitMinimizer
@@ -132,7 +132,7 @@ class BaseCalculator(object):
                 data (List): Data to use
                 weights (optional, List): the data weights
 
-            Example:
+            Example with `zfit`:
                 >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
                 >>> mean = zfit.Parameter("mu", 1.2)
                 >>> sigma = zfit.Parameter("sigma", 0.1)
@@ -175,7 +175,7 @@ class BaseCalculator(object):
             Returns:
                  numpy.array`: observed nll values
 
-            Example:
+            Example with `zfit`:
                 >>> mean = zfit.Parameter("mu", 1.2)
                 >>> poi = POI(mean, [1.1, 1.2, 1.0])
                 >>> nll = calc.obs_nll([poi])
@@ -206,7 +206,7 @@ class BaseCalculator(object):
             Returns:
                 `numpy.array`: observed values of q
 
-            Example:
+            Example with `zfit`:
                 >>> mean = zfit.Parameter("mu", 1.2)
                 >>> poi = POI(mean, [1.1, 1.2, 1.0])
                 >>> q = calc.qobs([poi])
@@ -248,7 +248,7 @@ class BaseCalculator(object):
         Returns:
             Tuple(`numpy.array`, `numpy.array`): pnull, palt
 
-        Example:
+        Example with `zfit`:
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> poinull = POI(mean, [1.1, 1.2, 1.0])
             >>> poialt = POI(mean, 1.2)
@@ -286,7 +286,7 @@ class BaseCalculator(object):
         Returns:
             `numpy.array`: array of expected pvalues for each $$\\sigma$$ value
 
-        Example:
+        Example with `zfit`:
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> poinull = POI(mean, [1.1, 1.2, 1.0])
             >>> poialt = POI(mean, 1.2)
@@ -323,7 +323,7 @@ class BaseCalculator(object):
         Returns:
             `numpy.array`: array of expected POI values for each $$\\sigma$$ value
 
-        Example:
+        Example with `zfit`:
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> poinull = POI(mean, [1.1, 1.2, 1.0])
             >>> poialt = POI(mean, 1.2)
