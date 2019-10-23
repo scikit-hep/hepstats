@@ -7,7 +7,7 @@ from zfit.minimize import Minuit
 
 from skstats.hypotests.calculators.basecalculator import BaseCalculator
 from skstats.hypotests.calculators import AsymptoticCalculator
-from skstats.hypotests.core.discovery import Discovery
+from skstats.hypotests import Discovery
 from skstats.hypotests.parameters import POI
 
 

@@ -38,6 +38,10 @@ We give here a simple example of a discovery test, using zfit as backend, of gau
 >>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
 >>> loss = ExtendedUnbinnedNLL(model=[signal + background], data=[data], fit_range=[obs])
 
+>>> from skstats.hypotests.calculators import AsymptoticCalculator
+>>> from skstats.hypotests import Discovery
+>>> from skstats.hypotests.parameters import POI
+
 >>> calculator = AsymptoticCalculator(loss, Minuit())
 >>> poinull = POI(Nsig, 0)
 >>> discovery_test = Discovery(calculator, [poinull])
