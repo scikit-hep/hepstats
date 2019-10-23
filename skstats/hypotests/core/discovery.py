@@ -47,19 +47,17 @@ class Discovery(BaseTest):
 
             Args:
                 printlevel (int, default=1): if > 0 print the result
+
+            Returns:
+                Tuple(float, float): pnull, significance
         """
         pnull, _ = self.calculator.pvalue(self.poinull, onesideddiscovery=True)
         pnull = pnull[0]
 
-        Z = norm.ppf(1. - pnull)
+        significance = norm.ppf(1. - pnull)
 
         if printlevel > 0:
             print("\np_value for the Null hypothesis = {0}".format(pnull))
-            print("Significance = {0}".format(Z))
+            print("Significance = {0}".format(significance))
 
-        ret = {
-               "pnull": pnull,
-               "significance": Z,
-               }
-
-        return ret
+        return pnull, significance

@@ -19,7 +19,7 @@ We give here a simple example of a discovery test, using zfit as backend, of gau
 ```python
 >>> import zfit
 >>> from zfit.core.loss import ExtendedUnbinnedNLL
->>> from zfit.minimize import MinuitMinimizer
+>>> from zfit.minimize import Minuit
 
 >>> bounds = (0.1, 3.0)
 >>> zfit.Space('x', limits=bounds)
@@ -38,7 +38,7 @@ We give here a simple example of a discovery test, using zfit as backend, of gau
 >>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
 >>> loss = ExtendedUnbinnedNLL(model=[signal + background], data=[data], fit_range=[obs])
 
->>> calculator = AsymptoticCalculator(loss, MinuitMinimizer())
+>>> calculator = AsymptoticCalculator(loss, Minuit())
 >>> poinull = POI(Nsig, 0)
 >>> discovery_test = Discovery(calculator, [poinull])
 >>> discovery_test.result()

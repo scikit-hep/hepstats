@@ -3,7 +3,7 @@ import numpy as np
 import zfit
 from zfit.core.testing import setup_function  # allows redefinition of zfit.Parameter, needed for tests
 from zfit.core.loss import ExtendedUnbinnedNLL
-from zfit.minimize import MinuitMinimizer
+from zfit.minimize import Minuit
 
 from skstats.hypotests.calculators.basecalculator import BaseCalculator
 from skstats.hypotests.calculators import AsymptoticCalculator
@@ -45,7 +45,7 @@ def test_constructor():
         Discovery()
 
     loss, (Nsig, Nbkg) = create_loss()
-    calculator = BaseCalculator(loss, MinuitMinimizer())
+    calculator = BaseCalculator(loss, Minuit())
 
     poi_1 = POI(Nsig, [0.0])
     poi_2 = POI(Nsig, [2.0])
@@ -66,15 +66,13 @@ def test_constructor():
 def test_with_asymptotic_calculator():
 
     loss, (Nsig, Nbkg) = create_loss()
-    calculator = AsymptoticCalculator(loss, MinuitMinimizer())
+    calculator = AsymptoticCalculator(loss, Minuit())
 
     poinull = POI(Nsig, 0)
 
     discovery_test = Discovery(calculator, [poinull])
-    r = discovery_test.result()
+    pnull, significance = discovery_test.result()
 
-    print(r)
-
-    assert r["pnull"] == pytest.approx(0.0007571045089567185, abs=0.05)
-    assert r["significance"] == pytest.approx(3.1719464953752565, abs=0.05)
-    assert r["significance"] >= 3
+    assert pnull == pytest.approx(0.0007571045089567185, abs=0.05)
+    assert significance == pytest.approx(3.1719464953752565, abs=0.05)
+    assert significance >= 3

@@ -5,7 +5,7 @@ import numpy as np
 import zfit
 from zfit.core.testing import setup_function  # allows redefinition of zfit.Parameter, needed for tests
 from zfit.core.loss import UnbinnedNLL
-from zfit.minimize import MinuitMinimizer
+from zfit.minimize import Minuit
 
 from skstats.hypotests.calculators.basecalculator import BaseCalculator
 from skstats.hypotests.calculators.asymptotic_calculator import AsymptoticCalculator
@@ -36,7 +36,7 @@ def test_base_calculator(calculator):
 
     loss, (mean, sigma) = create_loss()
 
-    calc_loss = calculator(loss, MinuitMinimizer())
+    calc_loss = calculator(loss, Minuit())
     bestfit = calc_loss.bestfit
     calc_fitresult = calculator(bestfit, calc_loss.minimizer)
 
@@ -90,7 +90,7 @@ def test_asymptotic_calculator_one_poi():
         AsymptoticCalculator()
 
     loss, (mean, sigma) = create_loss()
-    calc = AsymptoticCalculator(loss, MinuitMinimizer())
+    calc = AsymptoticCalculator(loss, Minuit())
 
     poi_null = POI(mean, [1.15, 1.2, 1.25])
     poi_alt = POI(mean, 1.2)
@@ -111,7 +111,7 @@ def test_asymptotic_calculator_one_poi():
 def test_asymptotic_calculator_two_pois():
 
     loss, (mean, sigma) = create_loss()
-    calc = AsymptoticCalculator(loss, MinuitMinimizer())
+    calc = AsymptoticCalculator(loss, Minuit())
 
     poi_null = [POI(mean, [1.15, 1.2, 1.25]), POI(sigma, [0.05, 0.1])]
     poi_alt = [POI(mean, 1.2), POI(sigma, 0.1)]

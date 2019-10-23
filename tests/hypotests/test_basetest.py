@@ -3,7 +3,7 @@ import numpy as np
 import zfit
 from zfit.core.testing import setup_function  # allows redefinition of zfit.Parameter, needed for tests
 from zfit.core.loss import UnbinnedNLL
-from zfit.minimize import MinuitMinimizer
+from zfit.minimize import Minuit
 
 from skstats.hypotests.calculators.basecalculator import BaseCalculator
 from skstats.hypotests.core.basetest import BaseTest
@@ -27,7 +27,7 @@ def test_constructor():
         BaseTest()
 
     loss, (mean, sigma) = create_loss()
-    calculator = BaseCalculator(loss, MinuitMinimizer())
+    calculator = BaseCalculator(loss, Minuit())
 
     poimean_1 = POI(mean, [1.0, 1.1, 1.2, 1.3])
     poimean_2 = POI(mean, [1.2])
@@ -54,7 +54,7 @@ def test_constructor():
 def test_attributes():
 
     loss, (mean, sigma) = create_loss()
-    calculator = BaseCalculator(loss, MinuitMinimizer())
+    calculator = BaseCalculator(loss, Minuit())
 
     poimean_1 = POI(mean, [1.0, 1.1, 1.2, 1.3])
     poimean_2 = POI(mean, [1.2])
