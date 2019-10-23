@@ -315,6 +315,7 @@ class BaseCalculator(object):
             poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
             poialt (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis
             nsigma (`numpy.array`): array of values of $$\\sigma$$ to compute the expected pvalue
+            alpha (float, default=0.05): significance level
             CLs (bool, optional): if `True` uses pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}$$
                 else as $$p_{clsb} = p_{null}$
             onesided (bool, optional): if `True` (default) computes onesided pvalues
@@ -364,8 +365,17 @@ class BaseCalculator(object):
         Check compatibility between two lists of `skstats.parameters.POI` instances.
         """
 
-        assert len(poi1) == len(poi2)
-        assert sorted([p.name for p in poi1]) == sorted([p.name for p in poi2])
+        if len(poi1) != len(poi2):
+            msg = "Lists of parameters of interest should have the same length, poi1={0}, poi2={1}"
+            raise ValueError(msg.format(poi1, poi2))
+
+        names1 = sorted([p.name for p in poi1])
+        names2 = sorted([p.name for p in poi2])
+
+        if names1 != names2:
+            msg = "The variables used in the lists of parameters of interest should have the same names,"
+            msg += " poi1={0}, poi2={1}"
+            raise ValueError(msg.format(poi1, poi2))
 
     def q(self, nll1: np.array, nll2: np.array, poi1: List[POI], poi2: List[POI],
           onesided=True, onesideddiscovery=False) -> np.array:
@@ -394,7 +404,7 @@ class BaseCalculator(object):
         poi1 = poi1[0].value
         poi2 = poi2[0].value
 
-        q = nll1 - nll2
+        q = 2*(nll1 - nll2)
         filter_non_nan = ~(np.isnan(q) | np.isinf(q))
         q = q[filter_non_nan]
         if isinstance(poi2, np.ndarray):
