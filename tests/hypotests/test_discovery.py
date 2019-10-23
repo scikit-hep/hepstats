@@ -27,13 +27,11 @@ def create_loss():
     N = len(data)
     data = zfit.data.Data.from_numpy(obs=obs, array=data)
 
-    mean = zfit.Parameter("m", 1.2, 0.1, 2., floating=False)
-    sigma = zfit.Parameter("s", 0.1, floating=False)
-    lambda_ = zfit.Parameter("l", -2.0, -4.0, -1.0)
+    lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
     Nsig = zfit.Parameter("Ns", 20., -20., N)
     Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
 
-    signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+    signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)
     background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
     tot_model = signal + background
 
