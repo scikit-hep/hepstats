@@ -19,7 +19,7 @@ setup(
     version="0.0.0",
     description='statistics tools and utilities',
     long_description=open('README.md').read(),
-    url='https://github.com/scikit-hep/statutils',
+    url='https://github.com/scikit-hep/scikit-stats',
     license='BSD 3-Clause License',
     packages=find_packages(),
     test_suite="tests",
