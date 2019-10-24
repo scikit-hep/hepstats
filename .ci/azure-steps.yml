@@ -12,7 +12,7 @@ steps:
 
 - bash: |
     source activate scikit-stats-test
-    conda install --yes --quiet --name scikit-stats-test python=$PYTHON_VERSION
+    conda install --quiet --name scikit-stats-test python=$PYTHON_VERSION
   displayName: Install Anaconda packages
 
 - bash: |
