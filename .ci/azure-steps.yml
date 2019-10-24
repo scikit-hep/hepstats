@@ -15,11 +15,6 @@ steps:
 
 - bash: |
     source activate scikit-stats-test
-    conda install --yes --quiet --name scikit-stats-test python=$PYTHON_VERSION
-  displayName: Install Anaconda packages
-
-- bash: |
-    source activate scikit-stats-test
     pip install pytest pytest-azurepipelines pytest-cov pytest-runner
     python -m pytest ./tests --doctest-modules --cov=skstats --cov-report=html
   displayName: 'Test with pytest and collect coverage metrics'
