@@ -1,0 +1,11 @@
+name: scikit-stats-test
+channels:
+  - conda-forge
+dependencies:
+  - numpy
+  - scipy
+  - iminuit
+  - uproot
+  - tensorflow
+  - tensorflow-probability
+  - zfit
