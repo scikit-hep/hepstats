@@ -7,6 +7,7 @@ dependencies:
   - scipy
   - iminuit
   - uproot
+  - matplotlib
   - tensorflow=>1.14
   - tensorflow-probability
   - zfit
