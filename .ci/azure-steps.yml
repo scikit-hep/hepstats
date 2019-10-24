@@ -16,7 +16,7 @@ steps:
   displayName: Install Anaconda packages
 
 - bash: |
-    source activate myEnvironment
+    source activate scikit-stats-test
     pip install pytest pytest-azurepipelines pytest-cov pytest-runner
     python -m pytest ./tests --doctest-modules --cov=scikit-stats --cov-report=html
   displayName: 'Test with pytest and collect coverage metrics'
