@@ -1,4 +1,4 @@
-name: zfit_environnement
+name: scikit-stats-test
 channels:
   - defaults
   - conda-forge

@@ -6,28 +6,49 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
-strategy:
-  matrix:
-    Python36:
-      python.version: '3.6'
-    Python37:
-      python.version: '3.7'
+jobs:
 
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
+- job: 'Package'
+  pool:
+    vmImage: 'ubuntu-16.04'
+  steps:
+    - template: .ci/azure-wheel.yml
 
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-    pip install -r requirements_tests.txt
-  displayName: 'Install dependencies'
+- job: 'Linux'
+  pool:
+    vmImage: 'ubuntu-16.04'
+  strategy:
+    matrix:
+      Python36:
+        python.version: '3.6'
+      Python37:
+        python.version: '3.7'
 
-- script: |
-    pip install pytest pytest-azurepipelines
-    pytest
-  displayName: 'pytest'
+  steps:
+    - template: .ci/azure-steps.yml
+
+- job: 'Windows'
+  pool:
+    vmImage: 'vs2017-win2016'
+  strategy:
+    matrix:
+      Python36:
+        python.version: '3.6'
+      Python37:
+        python.version: '3.7'
+
+  steps:
+    - template: .ci/azure-steps.yml
+
+- job: 'macOS'
+  pool:
+    vmImage: 'macOS-10.13'
+  strategy:
+    matrix:
+      Python36:
+        python.version: '3.6'
+      Python37:
+        python.version: '3.7'
+
+  steps:
+    - template: .ci/azure-steps.yml

@@ -1,0 +1,22 @@
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '$(python.version)'
+    architecture: 'x64'
+
+- bash: echo "##vso[task.prependpath]$CONDA/bin"
+  displayName: Add conda to PATH
+
+- bash: conda create --yes --quiet --file environment.yml
+  displayName: Create Anaconda environment
+
+- bash: |
+  source activate scikit-stats-test
+  conda install --yes --quiet --name scikit-stats-test python=$PYTHON_VERSION
+  displayName: Install Anaconda packages
+
+- bash: |
+  source activate myEnvironment
+  pip install pytest pytest-azurepipelines pytest-cov pytest-runner
+  python -m pytest ./tests --doctest-modules --cov=scikit-stats --cov-report=html
+  displayName: 'Test with pytest and collect coverage metrics'
