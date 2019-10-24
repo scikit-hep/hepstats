@@ -1,2 +1,0 @@
-tensorflow_probability==0.7
-zfit

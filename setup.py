@@ -7,7 +7,7 @@
 from setuptools import setup
 from setuptools import find_packages
 
-install_requires = ["scipy", "numpy"]
+install_requires = ["scipy", "numpy", "pandas"]
 tests_requires = ["pytest", "zfit"]
 
 setup(
