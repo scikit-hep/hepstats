@@ -6,7 +6,7 @@
 
 ## Getting Started
 
-The scikit-stats module includes modeling and hypotests submodules. This a quick user  guide to each submodule.
+The `scikit-stats` module includes modeling and hypothesis tests submodules. This a quick user  guide to each submodule.
 
 ### modeling
 
@@ -16,7 +16,7 @@ To be done.
 
 This submodule provides tools to do hypothesis tests such as discovery test and computations of upper limits or confidence intervals. scikit-stats needs a fitting backend to perform computations such as [zfit](https://github.com/zfit/zfit). Any fitting library can be used if their API is compatible  with scikit-stats (see [api checks](https://github.com/scikit-hep/scikit-stats/blob/master/skstats/hypotests/fitutils/api_check.py)).
 
-We give here a simple example of a discovery test, using zfit as backend, of gaussian signal with known mean and sigma over an exponential background.
+We give here a simple example of a discovery test, using [zfit](https://github.com/zfit/zfit) as backend, of gaussian signal with known mean and sigma over an exponential background.
 
 ```python
 >>> import zfit
@@ -50,7 +50,7 @@ We give here a simple example of a discovery test, using zfit as backend, of gau
 >>> discovery_test.result()
 
 p_value for the Null hypothesis = 0.0007571045424956679
-Significance = 3.1719464825102244
+Significance (in units of sigma) = 3.1719464825102244
 ```
 
 The discovery test prints out the pvalue and the significance of the null hypothesis to be rejected.

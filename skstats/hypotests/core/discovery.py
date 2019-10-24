@@ -62,6 +62,6 @@ class Discovery(BaseTest):
 
         if printlevel > 0:
             print("\np_value for the Null hypothesis = {0}".format(pnull))
-            print("Significance = {0}".format(significance))
+            print("Significance (in units of sigma) = {0}".format(significance))
 
         return pnull, significance
