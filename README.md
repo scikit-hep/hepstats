@@ -11,7 +11,22 @@ The `scikit-stats` module includes modeling and hypothesis tests submodules. Thi
 
 ### modeling
 
-To be done.
+The modeling submodule includes the [Bayesian Block algorithm](https://arxiv.org/pdf/1207.5578.pdf) that can be used to improve the binning of histograms. The visual improvement can be dramatic, and more importantly, this algorithm produces histograms that accurately represent the underlying distribution while being robust to statistical fluctuations. Here is a small example of the algorithm applied on a Laplacian sampled data.
+
+```python
+>>> import numpy as np
+>>> import matplotlib.pyplot as plt
+>>> from skstats.modeling import bayesian_blocks
+
+>>> data = np.random.laplace(size=10000)
+>>> blocks = bayesian_blocks(data)
+
+>>> plt.hist(data, bins=1000, label='Fine Binning', density=True, alpha=0.6)
+>>> plt.hist(data, bins=blocks, label='Bayesian Blocks', histtype='step', density=True, linewidth=2)
+>>> plt.legend(loc=2)
+```
+
+![bayesian blocks example](./notebooks/modeling/bayesian_blocks_example.png)
 
 ### hypotests
 
