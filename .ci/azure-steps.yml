@@ -4,9 +4,6 @@ steps:
     versionSpec: '$(python.version)'
     architecture: 'x64'
 
-- bash: echo "##vso[task.prependpath]$CONDA/bin"
-  displayName: Add conda to PATH
-
 - bash: conda env create --quiet --file environment.yml
   displayName: Create Anaconda environment
 

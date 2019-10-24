@@ -19,6 +19,8 @@ jobs:
         python.version: '3.7'
 
   steps:
+    - bash: echo "##vso[task.prependpath]$CONDA/bin"
+      displayName: Add conda to PATH
     - template: .ci/azure-steps.yml
 
 - job: 'Windows'
@@ -32,6 +34,8 @@ jobs:
         python.version: '3.7'
 
   steps:
+    - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
+      displayName: Add conda to PATH
     - template: .ci/azure-steps.yml
 
 - job: 'macOS'
@@ -45,4 +49,6 @@ jobs:
         python.version: '3.7'
 
   steps:
+    - bash: echo "##vso[task.prependpath]$CONDA/bin"
+      displayName: Add conda to PATH
     - template: .ci/azure-steps.yml
