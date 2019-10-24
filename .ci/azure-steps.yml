@@ -5,10 +5,10 @@ steps:
     architecture: 'x64'
 
 - bash: |
-    if [ $(python.version) == 3.7 ];
-        then envfile="/.ci/environment_37.yml";
+    if [ $(python.version) == '3.7' ];
+        then envfile=".ci/environment_37.yml";
     else
-        envfile="/.ci/environment_36.yml"
+        envfile=".ci/environment_36.yml"
     fi
     conda env create --quiet --file ${envfile}
   displayName: Create Anaconda environment
