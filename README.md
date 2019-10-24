@@ -8,7 +8,7 @@
 
 The `scikit-stats` module includes modeling and hypothesis tests submodules. This a quick user  guide to each submodule.
 
-### modeling
+### modeling
 
 To be done.
 
