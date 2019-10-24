@@ -1,9 +1,9 @@
 #!/usr/bin/python
 import pytest
-
-import zfit
-from skstats.hypotests.parameters import POI
 import numpy as np
+import zfit
+
+from skstats.hypotests.parameters import POI
 
 mean = zfit.Parameter("mu", 1.2, 0.1, 2)
 
