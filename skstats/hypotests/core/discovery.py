@@ -41,7 +41,8 @@ class Discovery(BaseTest):
                 >>> poinull = POI(Nsig, 0)
                 >>> discovery_test = Discovery(calculator, [poinull])
                 >>> discovery_test.result()
-
+                p_value for the Null hypothesis = 0.0007571045424956679
+                Significance (in units of sigma) = 3.1719464825102244
         """
         super(Discovery, self).__init__(calculator, poinull)
 
