@@ -5,7 +5,7 @@ steps:
     architecture: 'x64'
 
 - bash: |
-    conda env create --quiet --file environment.yml
+    conda env create --quiet --force --file environment.yml
   displayName: Create Anaconda environment
 
 - bash: |
