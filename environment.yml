@@ -1,10 +1,12 @@
 name: scikit-stats-test
 channels:
+  - defaults
   - conda-forge
 dependencies:
   - numpy
   - scipy
   - iminuit
-  - tensorflow
+  - uproot
+  - tensorflow=>1.14
   - tensorflow-probability
   - zfit
