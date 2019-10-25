@@ -7,8 +7,7 @@
 ![PyPI](https://img.shields.io/pypi/v/scikit-stats)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/scikit-stats)
 
-
-## Installation
+## Installation
 
 Install `scikit-stats` like any other Python package:
 
