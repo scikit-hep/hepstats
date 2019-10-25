@@ -6,7 +6,7 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/scikit-hep/scikit-stats/master)
 ![PyPI](https://img.shields.io/pypi/v/scikit-stats)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/scikit-stats)
-
+[![DOI](https://zenodo.org/badge/191397511.svg)](https://zenodo.org/badge/latestdoi/191397511)
 
 ## Installation
 
