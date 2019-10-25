@@ -11,10 +11,12 @@ import os
 install_requires = ["scipy", "numpy", "pandas"]
 tests_requires = ["pytest", "zfit"]
 
+
 def get_version():
     g = {}
     exec(open(os.path.join("skstats", "version.py")).read(), g)
     return g["__version__"]
+
 
 setup(
     name='scikit-stats',
@@ -35,5 +37,17 @@ setup(
     keywords=[
             'HEP', 'statistics',
             ],
-    classifiers=[]
+    classifiers=[
+                'Topic :: Scientific/Engineering',
+                'Intended Audience :: Science/Research',
+                'Intended Audience :: Developers',
+                'Operating System :: OS Independent',
+                'License :: OSI Approved :: BSD License',
+                'Programming Language :: Python',
+                'Programming Language :: Python :: 3',
+                'Programming Language :: Python :: 3.6',
+                'Programming Language :: Python :: 3.7',
+                'Development Status :: 5 - Production/Stable',
+                ],
+    platforms="Any",
 )
