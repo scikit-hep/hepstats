@@ -49,25 +49,25 @@ We give here a simple example of a discovery test, using [zfit](https://github.c
 
 ```python
 >>> import zfit
->>> from zfit.core.loss import ExtendedUnbinnedNLL
+>>> from zfit.loss import ExtendedUnbinnedNLL
 >>> from zfit.minimize import Minuit
 
 >>> bounds = (0.1, 3.0)
->>> zfit.Space('x', limits=bounds)
+>>> obs = zfit.Space('x', limits=bounds)
 
 >>> bkg = np.random.exponential(0.5, 300)
 >>> peak = np.random.normal(1.2, 0.1, 25)
 >>> data = np.concatenate((bkg, peak))
 >>> data = data[(data > bounds[0]) & (data < bounds[1])]
 >>> N = data.size
->>> data = zfit.data.Data.from_numpy(obs=obs, array=data)
+>>> data = zfit.Data.from_numpy(obs=obs, array=data)
 
 >>> lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
 >>> Nsig = zfit.Parameter("Ns", 20., -20., N)
 >>> Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
 >>> signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)
 >>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
->>> loss = ExtendedUnbinnedNLL(model=[signal + background], data=[data], fit_range=[obs])
+>>> loss = ExtendedUnbinnedNLL(model=signal + background, data=data)
 
 >>> from skstats.hypotests.calculators import AsymptoticCalculator
 >>> from skstats.hypotests import Discovery
