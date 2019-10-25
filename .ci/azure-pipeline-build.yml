@@ -19,7 +19,7 @@ pr:
 
 # Either set these value here, or in the GUI
 variables:
-   package_name: skstats    # This is the output name, - is replaced by _
+   package_name: scikit-stats    # This is the output name, - is replaced by _
    many_linux_base: "quay.io/pypa/manylinux1_" # Should be quay.io/pypa/manylinux1_ or skhep/manylinuxgcc-
 
 jobs:
