@@ -16,8 +16,6 @@ trigger:
 # For a master-develop workflow:
 pr:
    - master
- trigger:
-   - master
 
 # Either set these value here, or in the GUI
 # variables:
