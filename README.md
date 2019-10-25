@@ -26,7 +26,7 @@ The modeling submodule includes the [Bayesian Block algorithm](https://arxiv.org
 >>> plt.legend(loc=2)
 ```
 
-![bayesian blocks example](./notebooks/modeling/bayesian_blocks_example.png)
+![bayesian blocks example](https://github.com/scikit-hep/scikit-stats/blob/master/notebooks/modeling/bayesian_blocks_example.png)
 
 ### hypotests
 
