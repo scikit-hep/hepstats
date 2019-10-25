@@ -6,7 +6,7 @@
 
 steps:
 - script: |
-    docker run -e NPY_NUM_BUILD_JOBS=4 -e PLAT=$(plat) -e package_name=$(package_name) --rm -v `pwd`:/io $(image) /io/.ci/azure-wheel-helpers/build-wheels.sh
+    docker run -e NPY_NUM_BUILD_JOBS=4 -e PLAT=$(plat) -e package_name=$(package_name) --rm -v `pwd`:/io $(image) /io/.ci/build-wheels.sh
   displayName: Build wheels
 
 - script: |

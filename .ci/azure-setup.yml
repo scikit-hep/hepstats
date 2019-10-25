@@ -9,7 +9,7 @@
 steps:
 
 - script: ./macos-install-python.sh '$(python.version)'
-  workingDirectory: .ci/azure-wheel-helpers
+  workingDirectory: .ci/
   displayName: Install Python.org Python
   condition: and(succeeded(), eq(variables['Agent.OS'], 'Darwin'))
 
