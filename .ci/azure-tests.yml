@@ -1,0 +1,12 @@
+# Copyright (c) 2019, Henry Schreiner.
+#
+# Distributed under the 3-clause BSD license, see accompanying file LICENSE
+# or https://github.com/scikit-hep/azure-wheel-helpers for details.
+
+steps:
+- bash: |
+    source activate scikit-stats-test
+    python -m pip install -U pytest pytest-cov pytest-azurepipelines
+    python -m pytest --cov $(project) --cov-report html
+  workingDirectory: tests
+  displayName: 'Test with pytest and collect coverage metrics'
