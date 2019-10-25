@@ -8,7 +8,7 @@
 
 #!/bin/bash
 
-source activate scikit-stats-test
+#source activate scikit-stats-test
 
 set -e -x
 

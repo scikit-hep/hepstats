@@ -30,7 +30,6 @@ steps:
 
 - script: |
     python -m pip install delocate
-    which delocate-wheel
-    /Library/Frameworks/Python.framework/Versions/$(python.version)/bin/delocate-wheel dist/$(package_name)*.whl
+    delocate-wheel dist/$(package_name)*.whl
   displayName: 'Delocate wheels'
   condition: and(succeeded(), eq(variables['Agent.OS'], 'Darwin'))
