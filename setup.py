@@ -10,13 +10,18 @@ from setuptools import find_packages
 install_requires = ["scipy", "numpy", "pandas"]
 tests_requires = ["pytest", "zfit"]
 
+def get_version():
+    g = {}
+    exec(open(os.path.join("skstats", "version.py")).read(), g)
+    return g["__version__"]
+
 setup(
     name='scikit-stats',
     author='Matthieu Marinangeli',
     author_email='matthieu.marinangeli@cern.ch',
     maintainer='The Scikit-HEP admins',
     maintainer_email='scikit-hep-admins@googlegroups.com',
-    version="0.0.0",
+    version=get_version(),
     description='statistics tools and utilities',
     long_description=open('README.md').read(),
     url='https://github.com/scikit-hep/scikit-stats',
