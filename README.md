@@ -7,7 +7,7 @@
 
 ## Getting Started
 
-The `scikit-stats` module includes modeling and hypothesis tests submodules. This a quick user  guide to each submodule.
+The `scikit-stats` module includes modeling and hypothesis tests submodules. This a quick user guide to each submodule. The [binder](https://mybinder.org/v2/gh/scikit-hep/scikit-stats/master) examples are also a good way to get started.
 
 ### modeling
 
