@@ -5,31 +5,29 @@
 
 steps:
 
-- script: |
-    call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" $(python.architecture)
-    set MSSdk=1
-    set DISTUTILS_USE_SDK=1
-    python -m pip wheel . -w wheelhouse/
-  displayName: 'Build wheel (Windows Python 2.7)'
-  condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'), eq(variables['python.version'], '2.7'))
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '$(python.version)'
+    architecture: 'x64'
 
-- script: |
-    python -m pip wheel . -w wheelhouse/
-  displayName: 'Build wheel'
-  condition: and(succeeded(), not(and(eq(variables['Agent.OS'], 'Windows_NT'), eq(variables['python.version'], '2.7'))))
+- bash: |
+    conda env create --quiet --force --file environment.yml
+  displayName: Create Anaconda environment
 
-- script: |
-    ls -lh wheelhouse
-    mkdir -p dist
-    cp wheelhouse/$(package_name)* dist/.
-  displayName: 'Show wheelhouse'
+- bash: |
+    source activate scikit-stats-test
+    pip install pytest pytest-azurepipelines pytest-cov pytest-runner
+    python -m pytest ./tests --doctest-modules --cov=skstats --cov-report=html
+  displayName: 'Test with pytest and collect coverage metrics'
 
-- script: |
-    python -m pip install $(package_name) --no-index -f wheelhouse
-  displayName: 'Install wheel'
+- task: PublishTestResults@2
+  inputs:
+    testResultsFiles: '**/test-*.xml'
+    testRunTitle: 'Publish test results for Python $(python.version)'
+  condition: succeededOrFailed()
 
-- script: |
-    python -m pip install delocate
-    delocate-wheel dist/$(package_name)*.whl
-  displayName: 'Delocate wheels'
-  condition: and(succeeded(), eq(variables['Agent.OS'], 'Darwin'))
+ - task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
