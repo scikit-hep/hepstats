@@ -4,6 +4,8 @@
 ![Azure DevOps tests](https://img.shields.io/azure-devops/tests/matthieumarinangeli/matthieumarinangeli/3)
 ![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/matthieumarinangeli/matthieumarinangeli/3)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/scikit-hep/scikit-stats/master)
+![PyPI](https://img.shields.io/pypi/v/scikit-stats)
+https://img.shields.io/pypi/pyversions/scikit-stats
 
 ## Getting Started
 
@@ -26,7 +28,7 @@ The modeling submodule includes the [Bayesian Block algorithm](https://arxiv.org
 >>> plt.legend(loc=2)
 ```
 
-![bayesian blocks example](https://github.com/scikit-hep/scikit-stats/blob/master/notebooks/modeling/bayesian_blocks_example.png)
+![bayesian blocks example](https://raw.githubusercontent.com/scikit-hep/scikit-stats/master/notebooks/modeling/bayesian_blocks_example.png)
 
 ### hypotests
 
