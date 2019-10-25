@@ -8,6 +8,8 @@
 
 #!/bin/bash
 
+source activate scikit-stats-test
+
 set -e -x
 
 # Collect the pythons
