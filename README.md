@@ -4,8 +4,17 @@
 ![Azure DevOps tests](https://img.shields.io/azure-devops/tests/matthieumarinangeli/matthieumarinangeli/3)
 ![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/matthieumarinangeli/matthieumarinangeli/3)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/scikit-hep/scikit-stats/master)
-![PyPI](https://img.shields.io/pypi/v/scikit-stats)
-https://img.shields.io/pypi/pyversions/scikit-stats
+![PyPI](https://img.shields.io/pypi/v/scikit-stats)](https://img.shields.io/pypi/pyversions/scikit-stats)
+
+## Installation
+
+Install `scikit-stats` like any other Python package:
+
+```
+pip install scikit-stats
+```
+
+or similar (use ``--user``, ``virtualenv``, etc. if you wish).
 
 ## Getting Started
 
