@@ -14,7 +14,7 @@ Install `scikit-stats` like any other Python package:
 pip install scikit-stats
 ```
 
-or similar (use ``--user``, ``virtualenv``, etc. if you wish).
+or similar (use `--user`, `virtualenv`, etc. if you wish).
 
 ## Getting Started
 
