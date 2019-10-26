@@ -1,8 +1,12 @@
+from scipy import interpolate
+
 from .basetest import BaseTest
+from ..calculators import AsymptoticCalculator
+from ..parameters import POI
 
 
 class UpperLimit(BaseTest):
-    def __init__(self, calculator, poinull, poialt=None, qtilde=False, alpha=0.05):
+    def __init__(self, calculator, poinull, poialt=None, qtilde=False):
         """Class for upper limit calculation.
 
             Args:
@@ -15,7 +19,6 @@ class UpperLimit(BaseTest):
 
         super(UpperLimit, self).__init__(calculator, poinull, poialt)
 
-        self._pvalues = {}
         self._qtilde = qtilde
 
     @property
@@ -25,106 +28,91 @@ class UpperLimit(BaseTest):
         """
         return self._qtilde
 
-    def pvalues(self):
+    def pvalues(self, CLs=True):
         """
         Returns p-values scanned for the values of the parameters of interest
         in the null hypothesis.
         """
-        if not self._pvalues:
+        pvalue_func = self.calculator.pvalue
 
-            pvalue_func = self.calculator.pvalue
+        pnull, palt = pvalue_func(poinull=self.poinull, poialt=self.poialt, qtilde=self.qtilde, onesided=True)
 
-            pnull, palt = pvalue_func(self.poinull, self.poialt, qtilde=self.qtilde, onesided=True)
+        pvalues = {"clsb": pnull, "clb": palt}
 
-            self._pvalues = {"clsb": pnull, "clb": palt}
+        sigmas = [0.0, 1.0, 2.0, -1.0, -2.0]
 
-            sigmas = [0.0, 1.0, 2.0, -1.0, -2.0]
+        exppvalue_func = self.calculator.expected_pvalue
 
-            exppvalue_func = self.calculator.expected_pvalue
+        result = exppvalue_func(poinull=self.poinull, poialt=self.poialt, nsigma=sigmas, CLs=CLs,
+                                qtilde=self.qtilde, onesided=True)
 
-            result = exppvalue_func(self.poinull, self.poialt, sigmas, self.CLs)
+        pvalues["expected"] = result[0]
+        pvalues["expected_p1"] = result[1]
+        pvalues["expected_p2"] = result[2]
+        pvalues["expected_m1"] = result[3]
+        pvalues["expected_m2"] = result[4]
 
-            self._pvalues["exp"] = result[0]
-            self._pvalues["exp_p1"] = result[1]
-            self._pvalues["exp_p2"] = result[2]
-            self._pvalues["exp_m1"] = result[3]
-            self._pvalues["exp_m2"] = result[4]
+        pvalues["cls"] = pnull / palt
 
-            self._pvalues["cls"] = pnull / palt
+        return pvalues
 
-        return self._pvalues
-
-    def upperlimit(self, alpha=0.05, CLs=False, printlevel=1):
+    def upperlimit(self, alpha=0.05, CLs=True, printlevel=1):
         """
         Returns the upper limit of the parameter of interest.
         """
 
-        pvalues = self.pvalues()
-        poinull = self.poinull
-        poivalues = poinull.value
-        poiname = poinull.name
-        poiparam = poinull.parameter
+        poinull = self.poinull[0]
 
-        bestfitpoi = self.calculator.config.bestfit.params[poiparam]["value"]
-        sel = poivalues > bestfitpoi
+        # create a filter for -1 and -2 sigma expected limits
+        bestfitpoi = self.calculator.bestfit.params[poinull.parameter]["value"]
+        filter = poinull.value > bestfitpoi
 
         if CLs:
-            k = "cls"
+            observed_key = "cls"
         else:
-            k = "clsb"
+            observed_key = "clsb"
 
-        values = {}
         if isinstance(self.calculator, AsymptoticCalculator):
-            keys = [k]
+            to_interpolate = [observed_key]
         else:
-            keys = [k, "exp", "exp_p1", "exp_m1", "exp_p2", "exp_m2"]
+            to_interpolate = [observed_key] + [f"expected{i}" for i in ["", "_p1", "_m1", "_p2", "_m2"]]
 
-        for k_ in keys:
-            p_ = pvalues[k_]
-            pvals = poivalues
-            if k_ not in ["exp_m1", "exp_m2"]:
-                p_ = p_[sel]
-                pvals = pvals[sel]
-            p_ = p_ - self.alpha
-
-            s = InterpolatedUnivariateSpline(pvals, p_)
-            val = s.roots()
-
-            if len(val) > 0:
-                poiul = val[0]
+        limits = {}
+        for k in to_interpolate:
+            if k not in ["expected_m1", "expected_m2"]:
+                pvalues = self.pvalues(CLs)[k][filter]
+                values = poinull.value[filter]
             else:
-                poiul = None
-            if k_ == k:
-                k_ = "observed"
+                pvalues = self.pvalues(CLs)[k]
+                values = poinull.value
 
-            values[k_] = poiul
+            tck = interpolate.splrep(values, pvalues-alpha, s=0)
+            root = interpolate.sproot(tck)
+
+            if k == observed_key:
+                k = "observed"
+
+            if len(root) > 1:
+                root = root[0]
+
+            limits[k] = float(root)
 
         if isinstance(self.calculator, AsymptoticCalculator):
-            poiul = POI(poiparam, poiul)
-            exp_poi = self.calculator.expected_poi
-            sigmas = [0.0, 1.0, 2.0, -1.0, -2.0]
-            kwargs = dict(poinull=poiul, poialt=self.poialt, nsigma=sigmas,
-                          alpha=self.alpha, CLs=self.CLs)
+            poiul = POI(poinull.parameter, limits["observed"])
+            exppoi_func = self.calculator.expected_poi
+            sigmas = [0.0, 1.0, -1.0, 2.0, -2.0]
 
-            results = exp_poi(**kwargs)
-            keys = ["exp", "exp_p1", "exp_p2", "exp_m1", "exp_m2"]
+            results = exppoi_func(poinull=[poiul], poialt=self.poialt, nsigma=sigmas, alpha=alpha, CLs=CLs)
+            keys = [f"expected{i}" for i in ["", "_p1", "_m1", "_p2", "_m2"]]
 
-            for r, k_ in zip(results, keys):
-                values[k_] = r
+            for r, k in zip(results, keys):
+                limits[k] = float(r)
 
         if printlevel > 0:
+            print(f"\nObserved upper limit: {poinull.name} = {limits['observed']}")
+            print(f"Expected upper limit: {poinull.name} = {limits['expected']}")
+            for sigma in ["+1", "-1", "+2", "-2"]:
+                key = sigma.replace("+", "p").replace("-", "m")
+                print(f"Expected upper limit {sigma} sigma: {poinull.name} = {limits[f'expected_{key}']}")
 
-            msg = "\nObserved upper limit: {0} = {1}"
-            print(msg.format(poiname, values["observed"]))
-            msg = "Expected upper limit: {0} = {1}"
-            print(msg.format(poiname, values["exp"]))
-            msg = "Expected upper limit +1 sigma: {0} = {1}"
-            print(msg.format(poiname, values["exp_p1"]))
-            msg = "Expected upper limit -1 sigma: {0} = {1}"
-            print(msg.format(poiname, values["exp_m1"]))
-            msg = "Expected upper limit +2 sigma: {0} = {1}"
-            print(msg.format(poiname, values["exp_p2"]))
-            msg = "Expected upper limit -2 sigma: {0} = {1}"
-            print(msg.format(poiname, values["exp_m2"]))
-
-        return values
+        return limits
