@@ -1,7 +1,7 @@
 """
-Module for plotting functions:
+Module for plotting utilities:
 
-    * plotlimit: plot pvalue scans (observed, expected and +/- sigma bands)
+    * plotlimit
 
 """
 
@@ -10,6 +10,20 @@ import matplotlib.pyplot as plt
 
 
 def plotlimit(poivalues, pvalues, alpha=0.05, CLs=True, ax=None):
+    """
+    plot pvalue scan for different values of a parameter of interest (observed, expected and +/- sigma bands)
+
+    Args:
+        poivalues (List, `np.array`): values of a parameter of interest used to compute p-values
+        pvalues (Dict): CLsb, CLs, expected (+/- sigma bands) p-values
+        alpha (float, default=0.05): significance level
+        CLs (bool, optional): if `True` uses pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}$$
+            else as $$p_{clsb} = p_{null}$
+        ax (matplotlib axis, optionnal)
+
+
+    """
+
 
     if ax is None:
         _, ax = plt.subplots()

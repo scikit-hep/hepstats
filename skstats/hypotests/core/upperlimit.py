@@ -107,9 +107,9 @@ class UpperLimit(BaseTest):
         Returns the upper limit of the parameter of interest.
 
         Args:
+            alpha (float, default=0.05): significance level
             CLs (bool, optional): if `True` uses pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}$$
                 else as $$p_{clsb} = p_{null}$
-            alpha (float, default=0.05): significance level
             printlevel (int, default=1): if > 0 print the result
 
         Returns:
