@@ -1,11 +1,54 @@
 from scipy import interpolate
 
 from .basetest import BaseTest
-from ..parameters import POI
 
 
 class ConfidenceInterval(BaseTest):
     def __init__(self, calculator, poinull, qtilde=False):
+        """Class for confidence interval calculation.
+
+            Args:
+                calculator (`sktats.hypotests.BaseCalculator`): calculator to use for computing the pvalues
+                poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
+                qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
+                    the $$q$$ test statistic
+
+            Example with `zfit`:
+                >>> import numpy as np
+                >>> import zfit
+                >>> from zfit.loss import ExtendedUnbinnedNLL
+                >>> from zfit.minimize import MinuitMinimizer
+
+                >>> bounds = (0.1, 3.0)
+                >>> zfit.Space('x', limits=bounds)
+
+                >>> bkg = np.random.exponential(0.5, 300)
+                >>> peak = np.random.normal(1.2, 0.1, 80)
+                >>> data = np.concatenate((bkg, peak))
+                >>> data = data[(data > bounds[0]) & (data < bounds[1])]
+                >>> N = data.size
+                >>> data = zfit.data.Data.from_numpy(obs=obs, array=data)
+
+                >>> mean = zfit.Parameter("mean", 1.2, 0.5, 2.0)
+                >>> sigma = zfit.Parameter("sigma", 0.1, 0.02, 0.2)
+                >>> lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
+                >>> Nsig = zfit.Parameter("Ns", 20., -20., N)
+                >>> Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
+                >>> signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+                >>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
+                >>> loss = ExtendedUnbinnedNLL(model=[signal + background], data=[data])
+
+                >>> from skstats.hypotests.calculators import AsymptoticCalculator
+                >>> from skstats.hypotests import ConfidenceInterval
+                >>> from skstats.hypotests.parameters import POI
+
+                >>> calculator = AsymptoticCalculator(loss, MinuitMinimizer())
+                >>> poinull = POI(mean, np.linspace(1.15, 1.26, 100))
+                >>> ci = ConfidenceInterval(calculator, [poinull])
+                >>> ci.interval()
+                Confidence interval on mean:
+                    1.1810371356602791 < mean < 1.2156701172321935 at 0.7% C.L.
+        """
 
         super(ConfidenceInterval, self).__init__(calculator, poinull)
 
@@ -22,6 +65,9 @@ class ConfidenceInterval(BaseTest):
         """
         Returns p-values scanned for the values of the parameters of interest
         in the null hypothesis.
+
+        Returns:
+            pvalues (`np.array`): CLsb, CLs, expected (+/- sigma bands) p-values
         """
 
         return self.calculator.pvalue(self.poinull, qtilde=self.qtilde, onesided=False)[0]
@@ -33,6 +79,9 @@ class ConfidenceInterval(BaseTest):
         Args:
             alpha (float, default=0.05): significance level
             printlevel (int, default=1): if > 0 print the result
+
+        Returns:
+            limits (Dict): central, upper and lower bounds on the parameter of interest
 
         """
 
