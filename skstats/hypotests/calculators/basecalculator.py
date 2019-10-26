@@ -211,7 +211,6 @@ class BaseCalculator(object):
                 >>> poi = POI(mean, [1.1, 1.2, 1.0])
                 >>> q = calc.qobs([poi])
         """
-        print("Compute qobs for the null hypothesis!")
 
         self.check_pois(poinull)
         params = [p.parameter for p in poinull]
