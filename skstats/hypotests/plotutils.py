@@ -23,8 +23,6 @@ def plotlimit(poivalues, pvalues, alpha=0.05, CLs=True, ax=None):
 
 
     """
-
-
     if ax is None:
         _, ax = plt.subplots()
 
