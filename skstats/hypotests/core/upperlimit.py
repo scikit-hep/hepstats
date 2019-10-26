@@ -6,13 +6,13 @@ from ..parameters import POI
 
 
 class UpperLimit(BaseTest):
-    def __init__(self, calculator, poinull, poialt=None, qtilde=False):
+    def __init__(self, calculator, poinull, poialt, qtilde=False):
         """Class for upper limit calculation.
 
             Args:
                 calculator (`sktats.hypotests.BaseCalculator`): calculator to use for computing the pvalues
                 poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
-                poialt (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis
+                poialt (List[`hypotests.POI`]): parameters of interest for the alternative hypothesis
                 qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
                     the $$q$$ test statistic
 
