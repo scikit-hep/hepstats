@@ -75,6 +75,9 @@ def test_with_asymptotic_calculator():
     ul_qtilde = UpperLimit(calculator, [poinull], [poialt], qtilde=True)
     limits = ul.upperlimit(alpha=0.05, CLs=True)
 
+    # np.savez("cls_pvalues.npz", poivalues=poinull.value, **ul.pvalues(True))
+    # np.savez("clsb_pvalues.npz", poivalues=poinull.value, **ul.pvalues(False))
+
     assert limits["observed"] == pytest.approx(15.725784747406346, rel=0.1)
     assert limits["expected"] == pytest.approx(11.927442041887158, rel=0.1)
     assert limits["expected_p1"] == pytest.approx(16.596396280677116, rel=0.1)
@@ -82,5 +85,5 @@ def test_with_asymptotic_calculator():
     assert limits["expected_m1"] == pytest.approx(8.592750403611896, rel=0.1)
     assert limits["expected_m2"] == pytest.approx(6.400549971360598, rel=0.1)
 
-    ul.pvalues(CLs=False)
+    ul.upperlimit(alpha=0.05, CLs=False)
     ul_qtilde.upperlimit(alpha=0.05, CLs=True)
