@@ -15,6 +15,45 @@ class UpperLimit(BaseTest):
                 poialt (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis
                 qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
                     the $$q$$ test statistic
+
+            Example with `zfit`:
+                >>> import numpy as np
+                >>> import zfit
+                >>> from zfit.loss import ExtendedUnbinnedNLL
+                >>> from zfit.minimize import MinuitMinimizer
+
+                >>> bounds = (0.1, 3.0)
+                >>> zfit.Space('x', limits=bounds)
+
+                >>> bkg = np.random.exponential(0.5, 300)
+                >>> peak = np.random.normal(1.2, 0.1, 10)
+                >>> data = np.concatenate((bkg, peak))
+                >>> data = data[(data > bounds[0]) & (data < bounds[1])]
+                >>> N = data.size
+                >>> data = zfit.data.Data.from_numpy(obs=obs, array=data)
+
+                >>> lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
+                >>> Nsig = zfit.Parameter("Ns", 20., -20., N)
+                >>> Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
+                >>> signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)
+                >>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
+                >>> loss = ExtendedUnbinnedNLL(model=[signal + background], data=[data])
+
+                >>> from skstats.hypotests.calculators import AsymptoticCalculator
+                >>> from skstats.hypotests import UpperLimit
+                >>> from skstats.hypotests.parameters import POI
+
+                >>> calculator = AsymptoticCalculator(loss, MinuitMinimizer())
+                >>> poinull = POI(Nsig, np.linspace(0.0, 25, 20))
+                >>> poialt = POI(Nsig, 0)
+                >>> ul = UpperLimit(calculator, [poinull], [poialt])
+                >>> ul.upperlimit(alpha=0.05, CLs=True)
+                Observed upper limit: Nsig = 15.725784747406346
+                Expected upper limit: Nsig = 11.927442041887158
+                Expected upper limit +1 sigma: Nsig = 16.596396280677116
+                Expected upper limit -1 sigma: Nsig = 8.592750403611896
+                Expected upper limit +2 sigma: Nsig = 22.24864429383046
+                Expected upper limit -2 sigma: Nsig = 6.400549971360598
         """
 
         super(UpperLimit, self).__init__(calculator, poinull, poialt)
@@ -24,7 +63,7 @@ class UpperLimit(BaseTest):
     @property
     def qtilde(self):
         """
-        Returns True if qtilde statistic is used, else False.
+        Returns True if qtilde test statistic is used, else False.
         """
         return self._qtilde
 
@@ -32,6 +71,13 @@ class UpperLimit(BaseTest):
         """
         Returns p-values scanned for the values of the parameters of interest
         in the null hypothesis.
+
+        Args:
+            CLs (bool, optional): if `True` uses pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}$$
+                else as $$p_{clsb} = p_{null}$
+
+        Returns:
+            pvalues (Dict): CLsb, CLs, expected (+/- sigma bands) p-values
         """
         pvalue_func = self.calculator.pvalue
 
@@ -59,6 +105,16 @@ class UpperLimit(BaseTest):
     def upperlimit(self, alpha=0.05, CLs=True, printlevel=1):
         """
         Returns the upper limit of the parameter of interest.
+
+        Args:
+            CLs (bool, optional): if `True` uses pvalues as $$p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}$$
+                else as $$p_{clsb} = p_{null}$
+            alpha (float, default=0.05): significance level
+            printlevel (int, default=1): if > 0 print the result
+
+        Returns:
+            limits (Dict): observed, expected (+/- sigma bands) upper limits
+
         """
 
         poinull = self.poinull[0]

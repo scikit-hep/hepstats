@@ -1,3 +1,11 @@
+"""
+Module for plotting functions:
+
+    * plotlimit: plot pvalue scans (observed, expected and +/- sigma bands)
+
+"""
+
+
 import matplotlib.pyplot as plt
 
 
