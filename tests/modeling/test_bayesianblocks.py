@@ -3,7 +3,7 @@ import numpy as np
 import skstats
 from skstats.modeling import bayesian_blocks
 
-answer_dir = os.path.dirname(skstats.__file__)+'/../tests/data/modeling'
+answer_dir = os.path.dirname(skstats.__file__)+'/../tests/modeling/data'
 
 
 def test_bayesian_blocks(cmdopt, data_gen):

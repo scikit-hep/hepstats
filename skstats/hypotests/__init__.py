@@ -1,1 +1,1 @@
-from .core import Discovery
+from .core import Discovery, UpperLimit
