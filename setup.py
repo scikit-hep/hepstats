@@ -8,7 +8,9 @@ from setuptools import setup
 from setuptools import find_packages
 import os
 
+python_requires = "!=2.*, >=3.6"
 install_requires = ["scipy", "numpy", "pandas"]
+setup_requires = ["pytest-runner"]
 tests_requires = ["pytest", "zfit"]
 
 
@@ -32,8 +34,9 @@ setup(
     license='BSD 3-Clause License',
     packages=find_packages(),
     test_suite="tests",
+    python_requires=python_requires,
     install_requires=install_requires,
-    setup_requires=["pytest-runner"],
+    setup_requires=setup_requires,
     tests_require=tests_requires,
     keywords=[
             'HEP', 'statistics',
@@ -48,7 +51,7 @@ setup(
                 'Programming Language :: Python :: 3',
                 'Programming Language :: Python :: 3.6',
                 'Programming Language :: Python :: 3.7',
-                'Development Status :: 5 - Production/Stable',
+                'Development Status :: 4 - Beta'
                 ],
     platforms="Any",
 )
