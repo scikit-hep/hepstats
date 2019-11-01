@@ -13,7 +13,7 @@ class Discovery(BaseTest):
 
             Example with `zfit`:
                 >>> import zfit
-                >>> from zfit.core.loss import ExtendedUnbinnedNLL
+                >>> from zfit.loss import ExtendedUnbinnedNLL
                 >>> from zfit.minimize import MinuitMinimizer
 
                 >>> bounds = (0.1, 3.0)
@@ -31,7 +31,7 @@ class Discovery(BaseTest):
                 >>> Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
                 >>> signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)
                 >>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
-                >>> loss = ExtendedUnbinnedNLL(model=[signal + background], data=[data], fit_range=[obs])
+                >>> loss = ExtendedUnbinnedNLL(model=[signal + background], data=[data])
 
                 >>> from skstats.hypotests.calculators import AsymptoticCalculator
                 >>> from skstats.hypotests import Discovery
