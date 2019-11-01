@@ -93,13 +93,13 @@ class ConfidenceInterval(BaseTest):
 
         bands = {}
         bands["observed"] = observed
-        bands["band_p"] = root[0]
-        bands["band_m"] = root[1]
+        bands["lower"] = root[0]
+        bands["upper"] = root[1]
 
         if printlevel > 0:
 
             msg = f"\nConfidence interval on {poinull.name}:\n"
-            msg += f"\t{root[0]} < {poinull.name} < {root[1]} at {1-alpha:.1f}% C.L."
+            msg += f"\t{root[0]} < {poinull.name} < {root[1]} at {(1-alpha)*100:.1f}% C.L."
             print(msg)
 
         return bands
