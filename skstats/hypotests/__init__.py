@@ -1,3 +1,1 @@
-from .core import Discovery
-
-from .core import ConfidenceInterval
+from .core import Discovery, UpperLimit, ConfidenceInterval

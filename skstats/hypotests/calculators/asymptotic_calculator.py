@@ -11,7 +11,7 @@ def generate_asimov_hist(model, params, nbins=100):
 
         Args:
             model : model used to generate the dataset
-            params (Dict) : values of the paramters of the models
+            params (Dict) : values of the parameters of the models
             nbins (int, optional) : number of bins
 
         Returns:
