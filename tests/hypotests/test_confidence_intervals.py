@@ -76,3 +76,18 @@ def test_with_asymptotic_calculator():
 
     assert interval["lower"] == pytest.approx(1.1810371356602791, rel=0.1)
     assert interval["upper"] == pytest.approx(1.2156701172321935, rel=0.1)
+
+    with pytest.raises(ValueError):
+        poinull = POI(mean, np.linspace(1.2, 1.205, 50))
+        ci = ConfidenceInterval(calculator, [poinull])
+        ci.interval()
+
+    with pytest.raises(ValueError):
+        poinull = POI(mean, np.linspace(1.2, 1.26, 50))
+        ci = ConfidenceInterval(calculator, [poinull])
+        ci.interval()
+
+    with pytest.raises(ValueError):
+        poinull = POI(mean, np.linspace(1.17, 1.205, 50))
+        ci = ConfidenceInterval(calculator, [poinull])
+        ci.interval()

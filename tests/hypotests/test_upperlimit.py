@@ -87,3 +87,10 @@ def test_with_asymptotic_calculator():
 
     ul.upperlimit(alpha=0.05, CLs=False)
     ul_qtilde.upperlimit(alpha=0.05, CLs=True)
+
+    # test error when scan range is too small
+
+    with pytest.raises(ValueError):
+        poinull = POI(Nsig, np.linspace(0.0, 12, 20))
+        ul = UpperLimit(calculator, [poinull], [poialt])
+        ul.upperlimit(alpha=0.05, CLs=True)
