@@ -88,13 +88,28 @@ class ConfidenceInterval(BaseTest):
         poinull = self.poinull[0]
         observed = self.calculator.bestfit.params[poinull.parameter]["value"]
 
+        if min(self.pvalues()) > alpha:
+            msg = f"The minimum of the scanned p-values is {min(self.pvalues())} which is larger than the"
+            msg += f" confidence level alpha = {alpha}. Try to increase the range of POI values."
+            raise ValueError(msg)
+
         tck = interpolate.splrep(poinull.value, self.pvalues()-alpha, s=0)
         root = interpolate.sproot(tck)
 
         bands = {}
         bands["observed"] = observed
-        bands["lower"] = root[0]
-        bands["upper"] = root[1]
+
+        if len(root) < 2:
+            msg = f" bound on the POI `{poinull.name}` cannot not be interpolated."
+            if root[0] < observed:
+                msg = "Upper" + msg + " Try to increase the maximum POI value."
+            else:
+                msg = "Low" + msg + " Try to decrease the minimum POI value."
+            raise ValueError(msg)
+
+        else:
+            bands["lower"] = root[0]
+            bands["upper"] = root[1]
 
         if printlevel > 0:
 

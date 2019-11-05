@@ -142,6 +142,11 @@ class UpperLimit(BaseTest):
                 pvalues = self.pvalues(CLs)[k]
                 values = poinull.value
 
+            if min(pvalues) > alpha:
+                msg = f"The minimum of the scanned p-values is {min(pvalues)} which is larger than the"
+                msg += f" confidence level alpha = {alpha}. Try to increase the maximum POI value."
+                raise ValueError(msg)
+
             tck = interpolate.splrep(values, pvalues-alpha, s=0)
             root = interpolate.sproot(tck)
 
