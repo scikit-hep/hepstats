@@ -47,7 +47,7 @@ class ConfidenceInterval(BaseTest):
                 >>> ci = ConfidenceInterval(calculator, [poinull])
                 >>> ci.interval()
                 Confidence interval on mean:
-                    1.1810371356602791 < mean < 1.2156701172321935 at 0.7% C.L.
+                    1.1810371356602791 < mean < 1.2156701172321935 at 68.0% C.L.
         """
 
         super(ConfidenceInterval, self).__init__(calculator, poinull)
@@ -77,7 +77,7 @@ class ConfidenceInterval(BaseTest):
         Returns the confidence level on the parameter of interest.
 
         Args:
-            alpha (float, default=0.05): significance level
+            alpha (float, default=0.32/1 sigma): significance level,
             printlevel (int, default=1): if > 0 print the result
 
         Returns:
