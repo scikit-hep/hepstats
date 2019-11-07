@@ -222,7 +222,7 @@ class BaseCalculator(object):
             else:
                 bestfitpoi.append(POI(param, bf))
                 if len(poinull) == 1:
-                    self._obs_nll[POI(param, bf)] = self.bestfit.fmin
+                    self._obs_nll[tuple(bestfitpoi)] = self.bestfit.fmin
 
         nll_poinull_obs = self.obs_nll(poinull)
         nll_bestfitpoi_obs = self.obs_nll(bestfitpoi)
