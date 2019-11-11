@@ -3,6 +3,7 @@ from scipy import interpolate
 from .basetest import BaseTest
 from ..calculators import AsymptoticCalculator
 from ..parameters import POI
+from ..exceptions import POIRangeError
 
 
 class UpperLimit(BaseTest):
@@ -145,7 +146,7 @@ class UpperLimit(BaseTest):
             if min(pvalues) > alpha:
                 msg = f"The minimum of the scanned p-values is {min(pvalues)} which is larger than the"
                 msg += f" confidence level alpha = {alpha}. Try to increase the maximum POI value."
-                raise ValueError(msg)
+                raise POIRangeError(msg)
 
             tck = interpolate.splrep(values, pvalues-alpha, s=0)
             root = interpolate.sproot(tck)

@@ -9,6 +9,7 @@ from skstats.hypotests.calculators.basecalculator import BaseCalculator
 from skstats.hypotests.calculators import AsymptoticCalculator
 from skstats.hypotests import UpperLimit
 from skstats.hypotests.parameters import POI
+from skstats.hypotests.exceptions import POIRangeError
 
 
 def create_loss():
@@ -90,7 +91,7 @@ def test_with_asymptotic_calculator():
 
     # test error when scan range is too small
 
-    with pytest.raises(ValueError):
+    with pytest.raises(POIRangeError):
         poinull = POI(Nsig, np.linspace(0.0, 12, 20))
         ul = UpperLimit(calculator, [poinull], [poialt])
         ul.upperlimit(alpha=0.05, CLs=True)

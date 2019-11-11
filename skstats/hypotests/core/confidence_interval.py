@@ -1,6 +1,7 @@
 from scipy import interpolate
 
 from .basetest import BaseTest
+from ..exceptions import POIRangeError
 
 
 class ConfidenceInterval(BaseTest):
@@ -91,7 +92,7 @@ class ConfidenceInterval(BaseTest):
         if min(self.pvalues()) > alpha:
             msg = f"The minimum of the scanned p-values is {min(self.pvalues())} which is larger than the"
             msg += f" confidence level alpha = {alpha}. Try to increase the range of POI values."
-            raise ValueError(msg)
+            raise POIRangeError(msg)
 
         tck = interpolate.splrep(poinull.value, self.pvalues()-alpha, s=0)
         root = interpolate.sproot(tck)
@@ -105,7 +106,7 @@ class ConfidenceInterval(BaseTest):
                 msg = "Upper" + msg + " Try to increase the maximum POI value."
             else:
                 msg = "Low" + msg + " Try to decrease the minimum POI value."
-            raise ValueError(msg)
+            raise POIRangeError(msg)
 
         else:
             bands["lower"] = root[0]
