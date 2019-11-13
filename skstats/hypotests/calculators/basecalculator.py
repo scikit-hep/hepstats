@@ -12,7 +12,7 @@ Module defining the base class for the calculators for statistical tests based o
 
 Any calculator can be a subclass of `BaseCalculator`. Currently implemented:
 
-    * `AsymptoticCalculator`: calculator using the asymptotic formulaed of the likehood ratio.
+    * `AsymptoticCalculator`: calculator using the asymptotic formulae of the likehood ratio.
 
 Acronyms used in the code:
     * nll = negative log-likehood, the likehood being the `loss` attribute of a calculator;
@@ -123,6 +123,14 @@ class BaseCalculator(object):
         Returns the constraints on the loss / likehood function used in the calculator.
         """
         return self.loss.constraints
+
+    def set_dependents_to_bestfit(self):
+        """
+        Set the values of the parameters in the models to the best fit values
+        """
+        for m in self.model:
+            for d in m.get_dependents():
+                d.set_value(self.bestfit.params[d]["value"])
 
     def lossbuilder(self, model, data, weights=None):
         """ Method to build a new loss function.
