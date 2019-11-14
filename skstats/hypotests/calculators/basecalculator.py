@@ -2,7 +2,7 @@
 from typing import Dict, Union, Tuple, List
 import numpy as np
 
-from ..parameters import POI
+from ..parameters import POI, POIarray
 from ..fitutils.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
 from ..fitutils.api_check import is_valid_data, is_valid_pdf
 from ..fitutils.utils import pll
@@ -166,7 +166,7 @@ class BaseCalculator(object):
 
         return loss
 
-    def obs_nll(self, pois: List[POI]) -> np.array:
+    def obs_nll(self, pois) -> np.array:
         """ Compute observed negative log-likelihood values for given parameters of interest.
 
             Args:
@@ -181,15 +181,12 @@ class BaseCalculator(object):
                 >>> nll = calc.obs_nll([poi])
 
         """
-        self.check_pois(pois)
-        grid = np.array([g.ravel() for g in np.meshgrid(*pois)]).T
-        ret = np.empty(len(grid))
-        for i, g in enumerate(grid):
-            k = tuple(g)
-            if k not in self._obs_nll.keys():
-                nll = pll(minimizer=self.minimizer, loss=self.loss, pois=g)
-                self._obs_nll[k] = nll
-            ret[i] = self._obs_nll[k]
+        ret = np.empty(pois.shape)
+        for i, p in enumerate(pois):
+            if p not in self._obs_nll.keys():
+                nll = pll(minimizer=self.minimizer, loss=self.loss, pois=p)
+                self._obs_nll[p] = nll
+            ret[i] = self._obs_nll[p]
         return ret
 
     def qobs(self, poinull: List[POI], onesided=True, onesideddiscovery=False, qtilde=False):
@@ -213,16 +210,15 @@ class BaseCalculator(object):
         """
 
         self.check_pois(poinull)
-        params = [p.parameter for p in poinull]
-        bestfit = [self.bestfit.params[p]["value"] for p in params]
-        bestfitpoi = []
-        for param, bf in zip(params, bestfit):
-            if qtilde and len(poinull) == 1:
-                bestfitpoi.append(POI(param, 0))
-            else:
-                bestfitpoi.append(POI(param, bf))
-                if len(poinull) == 1:
-                    self._obs_nll[tuple(bestfitpoi)] = self.bestfit.fmin
+
+        param = poinull.parameter
+        bestfit = self.bestfit.params[param]["value"]
+        if qtilde and poinull.ndim == 1:
+            bestfitpoi = POI(param, 0)
+        else:
+            bestfitpoi = POI(param, bestfit)
+            if len(poinull) == 1:
+                self._obs_nll[bestfitpoi] = self.bestfit.fmin
 
         nll_poinull_obs = self.obs_nll(poinull)
         nll_bestfitpoi_obs = self.obs_nll(bestfitpoi)
@@ -346,37 +342,34 @@ class BaseCalculator(object):
     @staticmethod
     def check_pois(pois):
         """
-        Check if the parameters of interest are all `skstats.parameters.POI` instances.
+        Check if the parameters of interest are all `skstats.parameters.POI/POIarray` instances.
         """
 
-        msg = "A list of POIs is required."
-        if not isinstance(pois, (list, tuple)):
-            raise ValueError(msg)
-        if not all(isinstance(p, POI) for p in pois):
-            raise ValueError(msg)
-        if len(pois) > 1:
+        msg = "POI/POIarray is required."
+        if not isinstance(pois, POIarray):
+            raise TypeError(msg)
+        if pois.ndim > 1:
             msg = "Tests with more that one parameter of interest are not yet implemented."
             raise NotImplementedError(msg)
 
     @staticmethod
     def check_pois_compatibility(poi1, poi2):
         """
-        Check compatibility between two lists of `skstats.parameters.POI` instances.
+        Check compatibility between two lists of `skstats.parameters.POIarray` instances.
         """
 
-        if len(poi1) != len(poi2):
-            msg = "Lists of parameters of interest should have the same length, poi1={0}, poi2={1}"
-            raise ValueError(msg.format(poi1, poi2))
+        if poi1.ndim != poi2.ndim:
+            msg = f"POIs should have the same dimensions, poi1={poi1.ndim}, poi2={poi2.ndim}"
+            raise ValueError(msg)
 
-        names1 = sorted([p.name for p in poi1])
-        names2 = sorted([p.name for p in poi2])
+        if poi1.ndim == 1:
 
-        if names1 != names2:
-            msg = "The variables used in the lists of parameters of interest should have the same names,"
-            msg += " poi1={0}, poi2={1}"
-            raise ValueError(msg.format(poi1, poi2))
+            if poi1.name != poi2.name:
+                msg = "The variables used in the parameters of interest should have the same names,"
+                msg += f" poi1={poi1.name}, poi2={poi2.name}"
+                raise ValueError(msg)
 
-    def q(self, nll1: np.array, nll2: np.array, poi1: List[POI], poi2: List[POI],
+    def q(self, nll1: np.array, nll2: np.array, poi1, poi2,
           onesided=True, onesideddiscovery=False) -> np.array:
         """ Compute value of the test statistic q defined as the difference between negative log-likelihood
             values $$q = nll1 - nll2$$
@@ -397,17 +390,18 @@ class BaseCalculator(object):
         self.check_pois(poi2)
         self.check_pois_compatibility(poi1, poi2)
 
-        assert len(poi1[0]) == len(nll1)
-        assert len(poi2[0]) == len(nll2)
+        assert len(nll1) == len(poi1)
+        assert len(nll2) == len(poi2)
 
-        poi1 = poi1[0].value
-        poi2 = poi2[0].value
+        poi1 = poi1.values
+        poi2 = poi2.values
 
         q = 2*(nll1 - nll2)
-        filter_non_nan = ~(np.isnan(q) | np.isinf(q))
-        q = q[filter_non_nan]
-        if isinstance(poi2, np.ndarray):
-            poi2 = poi2[filter_non_nan]
+        # filter_non_nan = ~(np.isnan(q) | np.isinf(q))
+        # q = q[filter_non_nan]
+        #
+        # if isinstance(poi2, np.ndarray):
+        #     poi2 = poi2[filter_non_nan]
         zeros = np.zeros(q.shape)
 
         if onesideddiscovery:
