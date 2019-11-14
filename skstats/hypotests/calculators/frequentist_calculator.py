@@ -5,7 +5,8 @@ from ..fitutils.utils import pll
 from ..fitutils.sampling import base_sampler, base_sample
 from ..parameters import POI
 
-#TODO Think of other cases with more than one POI, only one can be ran now
+# TODO Think of other cases with more than one POI, only one can be ran now
+
 
 class FrequentistCalculator(BaseCalculator):
     """
@@ -59,18 +60,10 @@ class FrequentistCalculator(BaseCalculator):
         return self._printlevel
 
     def sampler(self, floatting_params=None, *args, **kwargs):
-
-        if self._sampler is None:
-            return base_sampler(self.model, floatting_params, *args, **kwargs)
-        else:
-            return self._sampler(self.model, floatting_params, *args, **kwargs)
+        return self._sampler(self.model, floatting_params, *args, **kwargs)
 
     def sample(self, sampler, ntoys, param=None, value=None):
-
-        if self._sample is None:
-            return base_sample(sampler, ntoys, param, value)
-        else:
-            return self._sample(sampler, ntoys, param, value)
+        return self._sample(sampler, ntoys, param, value)
 
     def _generate_fit_toys(self, poigen, ntoys, poieval, printfreq=0.2):
         minimizer = self.minimizer
