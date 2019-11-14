@@ -1,17 +1,18 @@
 import numpy as np
 
 from .basecalculator import BaseCalculator
-from ..fitutils.utils import eval_pdf, array2dataset, pll
+from ..fitutils.utils import pll
 from ..fitutils.sampling import base_sampler, base_sample
 from ..parameters import POI
 
+#TODO Think of other cases with more than one POI, only one can be ran now
 
 class FrequentistCalculator(BaseCalculator):
     """
     Class for frequentist calculators.
     """
 
-    def __init__(self, input, minimizer, ntoysnull=1000, ntoysalt=1000):
+    def __init__(self, input, minimizer, ntoysnull=1000, ntoysalt=1000, sampler=base_sampler, sample=base_sample):
         """Frequentist calculator class.
 
             Args:
@@ -36,15 +37,26 @@ class FrequentistCalculator(BaseCalculator):
         """
 
         super(FrequentistCalculator, self).__init__(input, minimizer)
+
         self._toysresults = {}
-        self._ntoysnull = ntoysnull
-        self._ntoysalt = ntoysalt
-
-        self._samplers = {}
+        self._ntoysnull = int(ntoysnull)
+        self._ntoysalt = int(ntoysalt)
+        self._sampler = sampler
+        self._sample = sample
         self._loss_toys = {}
+        self._printlevel = 1
 
-        self._sampler = None
-        self._sample = None
+    @property
+    def ntoysnull(self):
+        return self._ntoysnull
+
+    @property
+    def ntoysalt(self):
+        return self._ntoysalt
+
+    @property
+    def printlevel(self):
+        return self._printlevel
 
     def sampler(self, floatting_params=None, *args, **kwargs):
 
@@ -60,31 +72,26 @@ class FrequentistCalculator(BaseCalculator):
         else:
             return self._sample(sampler, ntoys, param, value)
 
-    def dotoys(self, poigen, ntoys, poieval, printfreq=0.2):
+    def _generate_fit_toys(self, poigen, ntoys, poieval, printfreq=0.2):
         minimizer = self.minimizer
 
-        poigen_param = poigen.parameter
-        poigen_value = poigen.value
+        param = poigen.parameter
+        gen_value = poigen.value
+
+        sampler = self.sampler(floatting_params=[param])
 
         try:
-            sampler = self._samplers[poigen_param]
-        except KeyError:
-            sampler = self.sampler(floatting_params=[poigen_param])
-            self._samplers[poigen_param] = sampler
-
-        try:
-            loss_toys = self._loss_toys[poigen_param]
+            loss_toys = self._loss_toys[param]
         except KeyError:
             loss_toys = self.lossbuilder(self.model, sampler)
-            self.loss_toys[poigen_param] = loss_toys
+            self._loss_toys[param] = loss_toys
 
-        result = {"bestfit": {"values": np.empty(ntoys), "nll": np.empty(ntoys)}}
-
-        result["nll"] = {p: np.empty(ntoys) for p in poieval}
+        result = {"bestfit": {"values": np.empty(ntoys), "nll": np.empty(ntoys)},
+                  "nll": {p: np.empty(ntoys) for p in poieval}}
 
         printfreq = ntoys * printfreq
 
-        toys = self.sample(sampler, int(ntoys*1.2), poigen_param, poigen_value)
+        toys = self.sample(sampler, int(ntoys*1.2), param, gen_value)
 
         for i in range(ntoys):
             converged = False
@@ -94,25 +101,23 @@ class FrequentistCalculator(BaseCalculator):
                     next(toys)
                 except StopIteration:
                     to_gen = ntoys - i
-                    toys = self.config.sample(sampler, int(to_gen*1.2), poigen_param, poigen_value)
+                    toys = self.sample(sampler, int(to_gen*1.2), param, gen_value)
                     next(toys)
 
-                bestfit = minimizer.minimize(loss=loss_toys)
-                converged = bf.converged
+                minimum = minimizer.minimize(loss=loss_toys)
+                converged = minimum.converged
 
                 if not converged:
-                    config.deps_to_bestfit()
+                    self.set_dependents_to_bestfit()
                     continue
 
-                bestfit = bestfit.params[g_param]["value"]
+                bestfit = minimum.params[param]["value"]
                 result["bestfit"]["values"][i] = bestfit
-                nll = config.pll(minimizer, loss_toys, g_param, bestfit)
+                nll = pll(minimizer, loss_toys, POI(param, bestfit))
                 result["bestfit"]["nll"][i] = nll
 
                 for p in poieval:
-                    param_ = p.parameter
-                    val_ = p.value
-                    nll = config.pll(minimizer, loss_toys, param_, val_)
+                    nll = pll(minimizer, loss_toys, p)
                     result["nll"][p][i] = nll
 
             if toprint:
@@ -124,46 +129,102 @@ class FrequentistCalculator(BaseCalculator):
 
         return result
 
-    def dotoys_null(self, poinull, poialt=None, qtilde=False, printlevel=1):
+    def _gettoys(self, poigen, poieval=None, qtilde=False, hypotesis="null"):
 
-        ntoys = self._ntoysnull
+        assert hypotesis in ["null", "alternative"]
 
-        for p in poinull:
-            if p in self._toysresults.keys():
-                continue
-            msg = "Generating null hypothesis toys for {0}."
-            if printlevel >= 0:
-                print(msg.format(p))
+        if hypotesis == "null":
+            ntoys = self.ntoysnull
+        else:
+            ntoys = self.ntoysalt
 
-            toeval = [p]
-            if poialt is not None:
-                for palt in poialt:
-                    toeval.append(palt)
-            if qtilde:
-                poi0 = POI(poinull.parameter, 0.)
-                if poi0 not in toeval:
-                    toeval.append(poi0)
+        for p in poigen:
+            if p not in self._toysresults:
+                ntogen = ntoys
+            else:
+                ngenerated = self._toysresults[p]["bestfit"]["values"].size
+                if ngenerated < ntoys:
+                    ntogen = ntoys - ngenerated
+                else:
+                    ntogen = 0
 
-            toyresult = self.dotoys(p, ntoys, toeval)
+            if ntogen > 0:
+                if self.printlevel >= 0:
+                    print(f"Generating {hypotesis} hypothesis toys for {p}.")
 
-            self._toysresults[p] = toyresult
+                eval_values = [p.value]
+                if poieval:
+                    eval_values += poieval.values_array.tolist()
+                if qtilde:
+                    eval_values.append(0.)
+                poieval = POI(poigen.parameter, eval_values)
+
+                toyresult = self._generate_fit_toys(p, ntogen, poieval)
+
+                if p in self._toysresults:
+                    self._toysresults[p].update(toyresult)
+                else:
+                    self._toysresults[p] = toyresult
+
+            return self._toysresults[p]
+
+    def gettoys_null(self, poigen, poieval=None, qtilde=False):
+        return self._gettoys(poigen, poieval=poieval, qtilde=qtilde, hypotesis="null")
+
+    def gettoys_alt(self, poigen, poieval=None, qtilde=False):
+        return self._gettoys(poigen, poieval=poieval, qtilde=qtilde, hypotesis="alternative")
+
+    def qnull(self, poinull, poialt, onesided, onesideddiscovery, qtilde=False):
+        toysresult = self.gettoys_null(poinull, poialt, qtilde)
+
+        nll1 = toysresult["nll"][poinull[0]]
+        nll2 = toysresult["bestfit"]["nll"]
+        bestfit = toysresult["bestfit"]["values"]
+
+        if qtilde:
+            nllat0 = toysresult["nll"][0]
+            nll2 = np.where(bestfit < 0, nllat0, nll2)
+            bestfit = np.where(bestfit < 0, 0, bestfit)
+
+        poi1 = POI(poinull.parameter, np.full(self.ntoysnull, poinull.value))
+        poi2 = POI(poinull.parameter, bestfit)
+
+        return self.q(nll1=nll1, nll2=nll2, poi1=[poi1], poi2=[poi2],
+                      onesided=onesided, onesideddiscovery=onesideddiscovery)
+
+    def qalt(self, poinull, poialt, onesided, onesideddiscovery, qtilde=False):
+        toysresult = self.gettoys_null(poialt, poinull, qtilde)
+
+        # 1 POI
+        nll1 = toysresult["nll"][poinull[0]]
+        nll2 = toysresult["bestfit"]["nll"]
+
+        if qtilde:
+            nllat0 = toysresult["nll"][0]
+            bestfit = toysresult["bestfit"]["values"]
+            nll2 = np.where(bestfit < 0, nllat0, nll2)
+
+        poi1 = POI(poialt.parameter, np.full(self.ntoysnull, poialt.value))
+        poi2 = POI(poialt.parameter, bestfit)
+
+        return self.q(nll1=nll1, nll2=nll2, poi1=[poi1], poi2=[poi2],
+                      onesided=onesided, onesideddiscovery=onesideddiscovery)
 
     def _pvalue_(self, poinull, poialt, qtilde, onesided, onesideddiscovery):
 
         qobs = self.qobs(poinull, onesided=onesided, qtilde=qtilde,
                          onesideddiscovery=onesideddiscovery)
 
-        def pvalue_i(qdist, qobs):
+        def compute_pvalue(qdist, qobs):
             qdist = qdist[~(np.isnan(qdist) | np.isinf(qdist))]
             p = len(qdist[qdist >= qobs])/len(qdist)
             return p
 
-        self.dotoys_null(poinull, poialt, qtilde)
-
         needpalt = poialt is not None
 
+        poinull = poinull[0]
         if needpalt:
-            self.dotoys_alt(poialt, poinull, qtilde)
+            poialt = poialt[0]
 
         pnull = np.empty(len(poinull))
         if needpalt:
@@ -172,18 +233,11 @@ class FrequentistCalculator(BaseCalculator):
             palt = None
 
         for i, p in enumerate(poinull):
-            qnulldist = self.qnull(p, qtilde)
-            bestfitnull = self.poi_bestfit(p, qtilde)
-            qnulldist = self.qdist(qnulldist, bestfitnull, p.value,
-                                   onesided=onesided,
-                                   onesideddiscovery=onesideddiscovery)
-            pnull[i] = pvalue_i(qnulldist, qobs[i])
+            qnulldist = self.qnull(p, poialt, onesided, onesideddiscovery, qtilde)
+            pnull[i] = compute_pvalue(qnulldist, qobs[i])
+
             if needpalt:
-                qaltdist = self.qalt(p, poialt, qtilde)
-                bestfitalt = self.poi_bestfit(poialt, qtilde)
-                qaltdist = self.qdist(qaltdist, bestfitalt, p.value,
-                                      onesided=onesided,
-                                      onesideddiscovery=onesideddiscovery)
-                palt[i] = pvalue_i(qaltdist, qobs[i])
+                qaltdist = self.qalt(p, poialt, onesided, onesideddiscovery, qtilde)
+                palt[i] = compute_pvalue(qaltdist, qobs[i])
 
         return pnull, palt

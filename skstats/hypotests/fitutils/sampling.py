@@ -11,20 +11,20 @@ def base_sampler(models, floatting_params=None, *args, **kwargs):
     samplers = []
     fixed_params = []
     for m in models:
-        def cond(p):
+        def to_fix(p):
             if floatting_params:
                 return p.name in floatting_params
             else:
                 return False
-        fixed = [p for p in m.get_dependents() if not cond(p)]
+        fixed = [p for p in m.get_dependents() if not to_fix(p)]
         fixed_params.append(fixed)
 
     for m, p in zip(models, fixed_params):
-        n_ = kwargs.get("n", None)
-        if n_ is None:
+        n = kwargs.get("n", None)
+        if n is None:
             if m.is_extended:
-                n_ = "extended"
-        sampler = m.create_sampler(n=n_, fixed_params=p)
+                n = "extended"
+        sampler = m.create_sampler(n=n, fixed_params=p)
         samplers.append(sampler)
 
     return samplers
