@@ -10,7 +10,7 @@ class ConfidenceInterval(BaseTest):
 
             Args:
                 calculator (`sktats.hypotests.BaseCalculator`): calculator to use for computing the pvalues
-                poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
+                poinull (`POIarray`): parameters of interest for the null hypothesis
                 qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
                     the $$q$$ test statistic
 
@@ -41,10 +41,10 @@ class ConfidenceInterval(BaseTest):
 
                 >>> from skstats.hypotests.calculators import AsymptoticCalculator
                 >>> from skstats.hypotests import ConfidenceInterval
-                >>> from skstats.hypotests.parameters import POI
+                >>> from skstats.hypotests.parameters import POI, POIarray
 
                 >>> calculator = AsymptoticCalculator(loss, MinuitMinimizer())
-                >>> poinull = POI(mean, np.linspace(1.15, 1.26, 100))
+                >>> poinull = POIarray(mean, np.linspace(1.15, 1.26, 100))
                 >>> ci = ConfidenceInterval(calculator, [poinull])
                 >>> ci.interval()
                 Confidence interval on mean:

@@ -92,13 +92,13 @@ class AsymptoticCalculator(BaseCalculator):
         """ Generate the Asimov dataset for a given alternative hypothesis.
 
             Args:
-                poi (`hypotests.POI`): parameter of interest of the alternative hypothesis
+                poi (`POI`): parameter of interest of the alternative hypothesis
 
             Returns:
                  Dataset
 
             Example with `zfit`:
-                >>> poialt = POI(mean, [1.2])
+                >>> poialt = POI(mean, 1.2)
                 >>> dataset = calc.asimov_dataset([poialt])
 
         """
@@ -141,13 +141,13 @@ class AsymptoticCalculator(BaseCalculator):
         """ Construct a loss function using the Asimov dataset for a given alternative hypothesis.
 
             Args:
-                poi (`hypotests.POI`): parameter of interest of the alternative hypothesis
+                poi (`POI`): parameter of interest of the alternative hypothesis
 
             Returns:
                  Loss function
 
             Example with `zfit`:
-                >>> poialt = POI(mean, [1.2])
+                >>> poialt = POI(mean, 1.2)
                 >>> loss = calc.asimov_loss([poialt])
 
         """
@@ -162,16 +162,16 @@ class AsymptoticCalculator(BaseCalculator):
             generated with a given alternative hypothesis.
 
             Args:
-                pois (List[`hypotests.POI`]): parameters of interest
-                poialt (List[`hypotests.POI`]): parameter of interest of the alternative hypothesis
+                pois (`POIarray`): parameters of interest
+                poialt (`POIarray`): parameter of interest of the alternative hypothesis
 
             Returns:
                  `numpy.array`: alternative nll values
 
             Example with `zfit`:
                 >>> mean = zfit.Parameter("mu", 1.2)
-                >>> poinull = POI(mean, [1.1, 1.2, 1.0])
-                >>> poialt = POI(mean, [1.2])
+                >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
+                >>> poialt = POI(mean, 1.2)
                 >>> nll = calc.asimov_nll([poinull], [poialt])
 
         """
@@ -228,8 +228,8 @@ class AsymptoticCalculator(BaseCalculator):
             dataset.
 
             Args:
-                poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
-                poialt (List[`hypotests.POI`]): parameters of interest for the alternative hypothesis
+                poinull (`POIarray`): parameters of interest for the null hypothesis
+                poialt (`POIarray`): parameters of interest for the alternative hypothesis
                 onesided (bool, optional): if `True` (default) computes onesided pvalues
                 onesideddiscovery (bool, optional): if `True` (default) computes onesided pvalues for a discovery
                     test

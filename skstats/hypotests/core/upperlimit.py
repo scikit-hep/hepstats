@@ -42,10 +42,10 @@ class UpperLimit(BaseTest):
 
                 >>> from skstats.hypotests.calculators import AsymptoticCalculator
                 >>> from skstats.hypotests import UpperLimit
-                >>> from skstats.hypotests.parameters import POI
+                >>> from skstats.hypotests.parameters import POI, POIarray
 
                 >>> calculator = AsymptoticCalculator(loss, MinuitMinimizer())
-                >>> poinull = POI(Nsig, np.linspace(0.0, 25, 20))
+                >>> poinull = POIarray(Nsig, np.linspace(0.0, 25, 20))
                 >>> poialt = POI(Nsig, 0)
                 >>> ul = UpperLimit(calculator, [poinull], [poialt])
                 >>> ul.upperlimit(alpha=0.05, CLs=True)
