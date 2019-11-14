@@ -3,7 +3,7 @@ from scipy.stats import norm
 
 from .basecalculator import BaseCalculator
 from ..fitutils.utils import eval_pdf, array2dataset, pll
-from ..parameters import POI
+from ..parameters import POI, POIarray
 
 
 def generate_asimov_hist(model, params, nbins=100):
@@ -78,15 +78,13 @@ class AsymptoticCalculator(BaseCalculator):
     @staticmethod
     def check_pois(pois):
         """
-        Check if the parameter of interest, only one allowed, is a `skstats.parameters.POI` instance.
+        Check if the parameters of interest are all `skstats.parameters.POI/POIarray` instances.
         """
 
-        msg = "A list of POIs is required."
-        if not isinstance(pois, (list, tuple)):
-            raise ValueError(msg)
-        if not all(isinstance(p, POI) for p in pois):
-            raise ValueError(msg)
-        if len(pois) > 1:
+        msg = "POI/POIarray is required."
+        if not isinstance(pois, POIarray):
+            raise TypeError(msg)
+        if pois.ndim > 1:
             msg = "Tests using the asymptotic calculator can only be used with one parameter of interest."
             raise NotImplementedError(msg)
 
@@ -181,10 +179,10 @@ class AsymptoticCalculator(BaseCalculator):
         self.check_pois(poialt)
 
         minimizer = self.minimizer
-        ret = np.empty(len(pois[0]))
-        for i, p in enumerate(pois[0]):
+        ret = np.empty(pois.shape)
+        for i, p in enumerate(pois):
             if p not in self._asimov_nll.keys():
-                loss = self.asimov_loss(poialt[0])
+                loss = self.asimov_loss(poialt)
                 nll = pll(minimizer, loss, p)
                 self._asimov_nll[p] = nll
             ret[i] = self._asimov_nll[p]

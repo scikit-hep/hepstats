@@ -3,37 +3,43 @@ import pytest
 import numpy as np
 import zfit
 
-from skstats.hypotests.parameters import POI
+from skstats.hypotests.parameters import POI, POIarray
 
 mean = zfit.Parameter("mu", 1.2, 0.1, 2)
 
 
 def test_pois():
 
-    p = POI(mean, 0)
+    p0 = POI(mean, 0)
     p1 = POI(mean, 1.)
     values = np.linspace(0., 1.0, 10)
-    pn = POI(mean, values)
+    pn = POIarray(mean, values)
+
+    for cls in [POI, POIarray]:
+        with pytest.raises(ValueError):
+            cls("mean", 0)
+        with pytest.raises(TypeError):
+            cls(mean)
 
     with pytest.raises(TypeError):
-        POI("mean", 0)
+        POI(mean, values)
     with pytest.raises(TypeError):
-        POI(mean)
+        POIarray(mean, 0)
 
-    assert p.value == 0
-    assert p.name == mean.name
-    assert len(p) == 1
-    assert p != p1
+    print(p0)
 
-    assert all(pn.value == values)
+    assert p0.value == 0
+    assert p0.name == mean.name
+    assert p0 != p1
+
+    assert all(pn.values == values)
+    assert pn.name == mean.name
     assert len(pn) == len(values)
-    assert pn != p
-    assert pn != p1
-    assert pn[0] == p
+    iter(pn)
+
+    assert pn[0] == p0
+    assert pn[1] != p0
     assert pn[-1] == p1
 
-    for p_ in p:
-        pass
-
     # test hash
-    {p: "p", p1: "p1", pn: "pn"}
+    {p0: "p0", p1: "p1", pn: "pn"}

@@ -1,72 +1,109 @@
 #!/usr/bin/python
-from typing import Union, List
 import numpy as np
+from collections.abc import Iterable
 
 from .fitutils.api_check import is_valid_parameter
 
 
-class POI(object):
+class POIarray(object):
 
-    def __init__(self, parameter, values: Union[float, List[float], np.array]):
+    def __init__(self, parameter, values):
         """
-        Class for parameters of interest:
+        Class for parameters of interest with multiple values:
 
             Args:
                 parameter: the parameter of interest
-                values (`float`,`list(float)`,`numpy.array`): values of the parameter of interest
+                values (list(float)`,`numpy.array`): values of the parameter of interest
+
+            Example with `zfit`:
+                >>> Nsig = zfit.Parameter("Nsig")
+                >>> poi = POIarray(Nsig, value=np.linspace(0,10,10))
+        """
+
+        if not is_valid_parameter(parameter):
+            raise ValueError(f"{parameter} is not a valid parameter!")
+
+        if not isinstance(values, Iterable):
+            raise TypeError("A list/array of values of the POI is required.")
+
+        self.parameter = parameter
+        self.name = parameter.name
+        self._values = np.array(values)
+        self._ndim = 1
+        self._shape = (len(values),)
+
+    @property
+    def values(self):
+        """
+        Returns the values of the `POIarray`.
+        """
+        return self._values
+
+    def __repr__(self):
+        return "POIarray('{0}', values={1})".format(self.name, self.values)
+
+    def __getitem__(self, i):
+        """
+        Get the i th element the array of values of the `POIarray`.
+        """
+        return POI(self.parameter, self.values[i])
+
+    def __iter__(self):
+        for v in self.values:
+            yield POI(self.parameter, v)
+
+    def __len__(self):
+        return len(self.values)
+
+    def __eq__(self, other):
+        if not isinstance(other, POI):
+            return NotImplemented
+
+        values_equal = self.values == other.values
+        name_equal = self.name == other.name
+        return values_equal.all() and name_equal
+
+    def __hash__(self):
+        return hash((self.name, self.values.tostring()))
+
+    @property
+    def ndim(self):
+        return self._ndim
+
+    @property
+    def shape(self):
+        return self._shape
+
+
+class POI(POIarray):
+
+    def __init__(self, parameter, value):
+        """
+        Class for single value parameters of interest:
+
+            Args:
+                parameter: the parameter of interest
+                values (`float`,`int?): value of the parameter of interest
 
             Example with `zfit`:
                 >>> Nsig = zfit.Parameter("Nsig")
                 >>> poi = POI(Nsig, value=0)
-                >>> poi = POI(Nsig, value=np.linspace(0,10,10))
         """
-        if not is_valid_parameter(parameter):
-            return NotImplementedError
+        if isinstance(value, Iterable):
+            raise TypeError("A single value for the POI is required.")
 
-        self.parameter = parameter
-        self.name = parameter.name
-        self._values_array = np.atleast_1d(values)
+        super(POI, self).__init__(parameter=parameter, values=[value])
+        self._value = value
 
     @property
     def value(self):
         """
         Returns the value of the `POI`.
         """
-        if len(self) > 1:
-            return self.values_array
-        else:
-            return self.values_array[0]
-
-    @property
-    def values_array(self):
-        """
-        Returns the array of values of the `POI`.
-        """
-        return self._values_array
+        return self._value
 
     def __repr__(self):
         return "POI('{0}', value={1})".format(self.name, self.value)
 
-    def __getitem__(self, i):
-        """
-        Get the i th element the array of values of the `POI`.
-        """
-        return POI(self.parameter, self.values_array[i])
-
-    def __iter__(self):
-        for v in self.values_array:
-            yield POI(self.parameter, v)
-
-    def __len__(self):
-        return len(self.values_array)
-
-    def __eq__(self, other):
-        if not isinstance(other, POI):
-            return NotImplemented
-
-        value_equal = self.values_array == other.values_array
-        name_equal = self.name == other.name
-        return value_equal.all() and name_equal
-
     def __hash__(self):
-        return hash((self.name, self.value.tostring()))
+        return hash((self.name, self.value))

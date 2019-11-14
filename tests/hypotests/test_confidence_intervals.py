@@ -8,7 +8,7 @@ from zfit.minimize import Minuit
 from skstats.hypotests.calculators.basecalculator import BaseCalculator
 from skstats.hypotests.calculators import AsymptoticCalculator
 from skstats.hypotests import ConfidenceInterval
-from skstats.hypotests.parameters import POI
+from skstats.hypotests.parameters import POI, POIarray
 from skstats.hypotests.exceptions import POIRangeError
 
 
@@ -50,14 +50,11 @@ def test_constructor():
     loss, mean = create_loss()
     calculator = BaseCalculator(loss, Minuit())
 
-    poi_1 = POI(mean, [1.5])
-    poi_2 = POI(mean, [1.2])
+    poi_1 = POI(mean, 1.5)
+    poi_2 = POI(mean, 1.2)
 
     with pytest.raises(TypeError):
         ConfidenceInterval(calculator)
-
-    with pytest.raises(ValueError):
-        ConfidenceInterval(calculator, poi_1)
 
     with pytest.raises(TypeError):
         ConfidenceInterval(calculator, [poi_1], poi_2, qtilde=True)
@@ -71,24 +68,24 @@ def test_with_asymptotic_calculator():
     loss, mean = create_loss()
     calculator = AsymptoticCalculator(loss, Minuit())
 
-    poinull = POI(mean, np.linspace(1.15, 1.26, 100))
-    ci = ConfidenceInterval(calculator, [poinull])
+    poinull = POIarray(mean, np.linspace(1.15, 1.26, 100))
+    ci = ConfidenceInterval(calculator, poinull)
     interval = ci.interval()
 
     assert interval["lower"] == pytest.approx(1.1810371356602791, rel=0.1)
     assert interval["upper"] == pytest.approx(1.2156701172321935, rel=0.1)
 
     with pytest.raises(POIRangeError):
-        poinull = POI(mean, np.linspace(1.2, 1.205, 50))
-        ci = ConfidenceInterval(calculator, [poinull])
+        poinull = POIarray(mean, np.linspace(1.2, 1.205, 50))
+        ci = ConfidenceInterval(calculator, poinull)
         ci.interval()
 
     with pytest.raises(POIRangeError):
-        poinull = POI(mean, np.linspace(1.2, 1.26, 50))
-        ci = ConfidenceInterval(calculator, [poinull])
+        poinull = POIarray(mean, np.linspace(1.2, 1.26, 50))
+        ci = ConfidenceInterval(calculator, poinull)
         ci.interval()
 
     with pytest.raises(POIRangeError):
-        poinull = POI(mean, np.linspace(1.17, 1.205, 50))
-        ci = ConfidenceInterval(calculator, [poinull])
+        poinull = POIarray(mean, np.linspace(1.17, 1.205, 50))
+        ci = ConfidenceInterval(calculator, poinull)
         ci.interval()
