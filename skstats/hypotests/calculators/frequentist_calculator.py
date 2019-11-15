@@ -3,10 +3,7 @@ import numpy as np
 from .basecalculator import BaseCalculator
 from ..fitutils.utils import pll
 from ..fitutils.sampling import base_sampler, base_sample
-from ..parameters import POI
-
-# TODO Think of other cases with more than one POI, only one can be ran now
-
+from ..parameters import POI, POIarray
 
 class FrequentistCalculator(BaseCalculator):
     """
@@ -150,7 +147,7 @@ class FrequentistCalculator(BaseCalculator):
                     eval_values += poieval.values_array.tolist()
                 if qtilde:
                     eval_values.append(0.)
-                poieval = POI(poigen.parameter, eval_values)
+                poieval = POIarray(poigen.parameter, eval_values)
 
                 toyresult = self._generate_fit_toys(p, ntogen, poieval)
 
@@ -179,10 +176,10 @@ class FrequentistCalculator(BaseCalculator):
             nll2 = np.where(bestfit < 0, nllat0, nll2)
             bestfit = np.where(bestfit < 0, 0, bestfit)
 
-        poi1 = POI(poinull.parameter, np.full(self.ntoysnull, poinull.value))
-        poi2 = POI(poinull.parameter, bestfit)
+        poi1 = POIarray(poinull.parameter, np.full(self.ntoysnull, poinull.value))
+        poi2 = POIarray(poinull.parameter, bestfit)
 
-        return self.q(nll1=nll1, nll2=nll2, poi1=[poi1], poi2=[poi2],
+        return self.q(nll1=nll1, nll2=nll2, poi1=poi1, poi2=poi2,
                       onesided=onesided, onesideddiscovery=onesideddiscovery)
 
     def qalt(self, poinull, poialt, onesided, onesideddiscovery, qtilde=False):
@@ -197,10 +194,10 @@ class FrequentistCalculator(BaseCalculator):
             bestfit = toysresult["bestfit"]["values"]
             nll2 = np.where(bestfit < 0, nllat0, nll2)
 
-        poi1 = POI(poialt.parameter, np.full(self.ntoysnull, poialt.value))
-        poi2 = POI(poialt.parameter, bestfit)
+        poi1 = POIarray(poialt.parameter, np.full(self.ntoysnull, poialt.value))
+        poi2 = POIarray(poialt.parameter, bestfit)
 
-        return self.q(nll1=nll1, nll2=nll2, poi1=[poi1], poi2=[poi2],
+        return self.q(nll1=nll1, nll2=nll2, poi1=poi1, poi2=poi2,
                       onesided=onesided, onesideddiscovery=onesideddiscovery)
 
     def _pvalue_(self, poinull, poialt, qtilde, onesided, onesideddiscovery):
@@ -214,10 +211,6 @@ class FrequentistCalculator(BaseCalculator):
             return p
 
         needpalt = poialt is not None
-
-        poinull = poinull[0]
-        if needpalt:
-            poialt = poialt[0]
 
         pnull = np.empty(len(poinull))
         if needpalt:
