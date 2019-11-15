@@ -3,7 +3,7 @@ from scipy.stats import norm
 
 from .basecalculator import BaseCalculator
 from ..fitutils.utils import eval_pdf, array2dataset, pll
-from ..parameters import POI
+from ..parameters import POI, POIarray
 
 
 def generate_asimov_hist(model, params, nbins=100):
@@ -78,15 +78,13 @@ class AsymptoticCalculator(BaseCalculator):
     @staticmethod
     def check_pois(pois):
         """
-        Check if the parameter of interest, only one allowed, is a `skstats.parameters.POI` instance.
+        Check if the parameters of interest are all `skstats.parameters.POI/POIarray` instances.
         """
 
-        msg = "A list of POIs is required."
-        if not isinstance(pois, (list, tuple)):
-            raise ValueError(msg)
-        if not all(isinstance(p, POI) for p in pois):
-            raise ValueError(msg)
-        if len(pois) > 1:
+        msg = "POI/POIarray is required."
+        if not isinstance(pois, POIarray):
+            raise TypeError(msg)
+        if pois.ndim > 1:
             msg = "Tests using the asymptotic calculator can only be used with one parameter of interest."
             raise NotImplementedError(msg)
 
@@ -94,13 +92,13 @@ class AsymptoticCalculator(BaseCalculator):
         """ Generate the Asimov dataset for a given alternative hypothesis.
 
             Args:
-                poi (`hypotests.POI`): parameter of interest of the alternative hypothesis
+                poi (`POI`): parameter of interest of the alternative hypothesis
 
             Returns:
                  Dataset
 
             Example with `zfit`:
-                >>> poialt = POI(mean, [1.2])
+                >>> poialt = POI(mean, 1.2)
                 >>> dataset = calc.asimov_dataset([poialt])
 
         """
@@ -143,13 +141,13 @@ class AsymptoticCalculator(BaseCalculator):
         """ Construct a loss function using the Asimov dataset for a given alternative hypothesis.
 
             Args:
-                poi (`hypotests.POI`): parameter of interest of the alternative hypothesis
+                poi (`POI`): parameter of interest of the alternative hypothesis
 
             Returns:
                  Loss function
 
             Example with `zfit`:
-                >>> poialt = POI(mean, [1.2])
+                >>> poialt = POI(mean, 1.2)
                 >>> loss = calc.asimov_loss([poialt])
 
         """
@@ -164,16 +162,16 @@ class AsymptoticCalculator(BaseCalculator):
             generated with a given alternative hypothesis.
 
             Args:
-                pois (List[`hypotests.POI`]): parameters of interest
-                poialt (List[`hypotests.POI`]): parameter of interest of the alternative hypothesis
+                pois (`POIarray`): parameters of interest
+                poialt (`POIarray`): parameter of interest of the alternative hypothesis
 
             Returns:
                  `numpy.array`: alternative nll values
 
             Example with `zfit`:
                 >>> mean = zfit.Parameter("mu", 1.2)
-                >>> poinull = POI(mean, [1.1, 1.2, 1.0])
-                >>> poialt = POI(mean, [1.2])
+                >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
+                >>> poialt = POI(mean, 1.2)
                 >>> nll = calc.asimov_nll([poinull], [poialt])
 
         """
@@ -181,10 +179,10 @@ class AsymptoticCalculator(BaseCalculator):
         self.check_pois(poialt)
 
         minimizer = self.minimizer
-        ret = np.empty(len(pois[0]))
-        for i, p in enumerate(pois[0]):
+        ret = np.empty(pois.shape)
+        for i, p in enumerate(pois):
             if p not in self._asimov_nll.keys():
-                loss = self.asimov_loss(poialt[0])
+                loss = self.asimov_loss(poialt)
                 nll = pll(minimizer, loss, p)
                 self._asimov_nll[p] = nll
             ret[i] = self._asimov_nll[p]
@@ -230,8 +228,8 @@ class AsymptoticCalculator(BaseCalculator):
             dataset.
 
             Args:
-                poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
-                poialt (List[`hypotests.POI`]): parameters of interest for the alternative hypothesis
+                poinull (`POIarray`): parameters of interest for the null hypothesis
+                poialt (`POIarray`): parameters of interest for the alternative hypothesis
                 onesided (bool, optional): if `True` (default) computes onesided pvalues
                 onesideddiscovery (bool, optional): if `True` (default) computes onesided pvalues for a discovery
                     test

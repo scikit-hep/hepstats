@@ -8,7 +8,7 @@ from zfit.minimize import Minuit
 from skstats.hypotests.calculators.basecalculator import BaseCalculator
 from skstats.hypotests.calculators import AsymptoticCalculator
 from skstats.hypotests import UpperLimit
-from skstats.hypotests.parameters import POI
+from skstats.hypotests.parameters import POI, POIarray
 from skstats.hypotests.exceptions import POIRangeError
 
 
@@ -48,8 +48,8 @@ def test_constructor():
     loss, (Nsig, Nbkg) = create_loss()
     calculator = BaseCalculator(loss, Minuit())
 
-    poi_1 = POI(Nsig, [0.0])
-    poi_2 = POI(Nsig, [2.0])
+    poi_1 = POI(Nsig, 0.0)
+    poi_2 = POI(Nsig, 2.0)
 
     with pytest.raises(TypeError):
         UpperLimit(calculator)
@@ -57,11 +57,8 @@ def test_constructor():
     with pytest.raises(TypeError):
         UpperLimit(calculator, poi_1)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         UpperLimit(calculator, [poi_1], poi_2)
-
-    with pytest.raises(ValueError):
-        UpperLimit(calculator, poi_1, [poi_2])
 
 
 def test_with_asymptotic_calculator():
@@ -69,11 +66,11 @@ def test_with_asymptotic_calculator():
     loss, (Nsig, Nbkg) = create_loss()
     calculator = AsymptoticCalculator(loss, Minuit())
 
-    poinull = POI(Nsig, np.linspace(0.0, 25, 20))
+    poinull = POIarray(Nsig, np.linspace(0.0, 25, 20))
     poialt = POI(Nsig, 0)
 
-    ul = UpperLimit(calculator, [poinull], [poialt])
-    ul_qtilde = UpperLimit(calculator, [poinull], [poialt], qtilde=True)
+    ul = UpperLimit(calculator, poinull, poialt)
+    ul_qtilde = UpperLimit(calculator, poinull, poialt, qtilde=True)
     limits = ul.upperlimit(alpha=0.05, CLs=True)
 
     # np.savez("cls_pvalues.npz", poivalues=poinull.value, **ul.pvalues(True))
@@ -92,6 +89,6 @@ def test_with_asymptotic_calculator():
     # test error when scan range is too small
 
     with pytest.raises(POIRangeError):
-        poinull = POI(Nsig, np.linspace(0.0, 12, 20))
-        ul = UpperLimit(calculator, [poinull], [poialt])
+        poinull = POIarray(Nsig, np.linspace(0.0, 12, 20))
+        ul = UpperLimit(calculator, poinull, poialt)
         ul.upperlimit(alpha=0.05, CLs=True)

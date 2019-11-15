@@ -47,14 +47,11 @@ def test_constructor():
     loss, (Nsig, Nbkg) = create_loss()
     calculator = BaseCalculator(loss, Minuit())
 
-    poi_1 = POI(Nsig, [0.0])
-    poi_2 = POI(Nsig, [2.0])
+    poi_1 = POI(Nsig, 0.0)
+    poi_2 = POI(Nsig, 2.0)
 
     with pytest.raises(TypeError):
         Discovery(calculator)
-
-    with pytest.raises(ValueError):
-        Discovery(calculator, poi_1)
 
     with pytest.raises(TypeError):
         Discovery(calculator, [poi_1], poi_2)
@@ -70,7 +67,7 @@ def test_with_asymptotic_calculator():
 
     poinull = POI(Nsig, 0)
 
-    discovery_test = Discovery(calculator, [poinull])
+    discovery_test = Discovery(calculator, poinull)
     pnull, significance = discovery_test.result()
 
     assert pnull == pytest.approx(0.0007571045089567185, abs=0.05)

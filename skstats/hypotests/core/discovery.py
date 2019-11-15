@@ -9,7 +9,7 @@ class Discovery(BaseTest):
 
             Args:
                 calculator (`sktats.hypotests.BaseCalculator`): calculator to use for computing the pvalues
-                poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
+                poinull (`POI`): parameter of interest for the null hypothesis
 
             Example with `zfit`:
                 >>> import zfit

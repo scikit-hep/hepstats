@@ -42,10 +42,10 @@ class UpperLimit(BaseTest):
 
                 >>> from skstats.hypotests.calculators import AsymptoticCalculator
                 >>> from skstats.hypotests import UpperLimit
-                >>> from skstats.hypotests.parameters import POI
+                >>> from skstats.hypotests.parameters import POI, POIarray
 
                 >>> calculator = AsymptoticCalculator(loss, MinuitMinimizer())
-                >>> poinull = POI(Nsig, np.linspace(0.0, 25, 20))
+                >>> poinull = POIarray(Nsig, np.linspace(0.0, 25, 20))
                 >>> poialt = POI(Nsig, 0)
                 >>> ul = UpperLimit(calculator, [poinull], [poialt])
                 >>> ul.upperlimit(alpha=0.05, CLs=True)
@@ -118,11 +118,11 @@ class UpperLimit(BaseTest):
 
         """
 
-        poinull = self.poinull[0]
+        poinull = self.poinull
 
         # create a filter for -1 and -2 sigma expected limits
-        bestfitpoi = self.calculator.bestfit.params[poinull.parameter]["value"]
-        filter = poinull.value > bestfitpoi
+        bestfit = self.calculator.bestfit.params[poinull.parameter]["value"]
+        filter = poinull.values > bestfit
 
         if CLs:
             observed_key = "cls"
@@ -136,12 +136,14 @@ class UpperLimit(BaseTest):
 
         limits = {}
         for k in to_interpolate:
+            print(self.pvalues(CLs)[k])
+
             if k not in ["expected_m1", "expected_m2"]:
                 pvalues = self.pvalues(CLs)[k][filter]
-                values = poinull.value[filter]
+                values = poinull.values[filter]
             else:
                 pvalues = self.pvalues(CLs)[k]
-                values = poinull.value
+                values = poinull.values
 
             if min(pvalues) > alpha:
                 msg = f"The minimum of the scanned p-values is {min(pvalues)} which is larger than the"
@@ -164,7 +166,7 @@ class UpperLimit(BaseTest):
             exppoi_func = self.calculator.expected_poi
             sigmas = [0.0, 1.0, -1.0, 2.0, -2.0]
 
-            results = exppoi_func(poinull=[poiul], poialt=self.poialt, nsigma=sigmas, alpha=alpha, CLs=CLs)
+            results = exppoi_func(poinull=poiul, poialt=self.poialt, nsigma=sigmas, alpha=alpha, CLs=CLs)
             keys = [f"expected{i}" for i in ["", "_p1", "_m1", "_p2", "_m2"]]
 
             for r, k in zip(results, keys):
