@@ -1,9 +1,12 @@
 import numpy as np
+from scipy.stats import norm
+from collections import OrderedDict
 
 from .basecalculator import BaseCalculator
 from ..fitutils.utils import pll
 from ..fitutils.sampling import base_sampler, base_sample
 from ..parameters import POI, POIarray
+
 
 class FrequentistCalculator(BaseCalculator):
     """
@@ -36,7 +39,8 @@ class FrequentistCalculator(BaseCalculator):
 
         super(FrequentistCalculator, self).__init__(input, minimizer)
 
-        self._toysresults = {}
+        self._toysnull = {}
+        self._toysalt = {}
         self._ntoysnull = int(ntoysnull)
         self._ntoysalt = int(ntoysalt)
         self._sampler = sampler
@@ -57,6 +61,7 @@ class FrequentistCalculator(BaseCalculator):
         return self._printlevel
 
     def sampler(self, floatting_params=None, *args, **kwargs):
+        self.set_dependents_to_bestfit()
         return self._sampler(self.model, floatting_params, *args, **kwargs)
 
     def sample(self, sampler, ntoys, param=None, value=None):
@@ -68,11 +73,11 @@ class FrequentistCalculator(BaseCalculator):
         param = poigen.parameter
         gen_value = poigen.value
 
-        sampler = self.sampler(floatting_params=[param])
-
         try:
             loss_toys = self._loss_toys[param]
+            sampler = loss_toys.data
         except KeyError:
+            sampler = self.sampler(floatting_params=[param])
             loss_toys = self.lossbuilder(self.model, sampler)
             self._loss_toys[param] = loss_toys
 
@@ -125,14 +130,16 @@ class FrequentistCalculator(BaseCalculator):
 
         if hypotesis == "null":
             ntoys = self.ntoysnull
+            toysdict = self._toysnull
         else:
             ntoys = self.ntoysalt
+            toysdict = self._toysalt
 
         for p in poigen:
-            if p not in self._toysresults:
+            if p not in toysdict:
                 ntogen = ntoys
             else:
-                ngenerated = self._toysresults[p]["bestfit"]["values"].size
+                ngenerated = toysdict[p]["bestfit"]["values"].size
                 if ngenerated < ntoys:
                     ntogen = ntoys - ngenerated
                 else:
@@ -143,62 +150,73 @@ class FrequentistCalculator(BaseCalculator):
                     print(f"Generating {hypotesis} hypothesis toys for {p}.")
 
                 eval_values = [p.value]
-                if poieval:
-                    eval_values += poieval.values_array.tolist()
                 if qtilde:
                     eval_values.append(0.)
-                poieval = POIarray(poigen.parameter, eval_values)
+                if poieval:
+                    eval_values += poieval.values.tolist()
+                eval_values = list(dict.fromkeys(eval_values))
 
-                toyresult = self._generate_fit_toys(p, ntogen, poieval)
+                toyresult = self._generate_fit_toys(p, ntogen, POIarray(poigen.parameter, eval_values))
 
-                if p in self._toysresults:
-                    self._toysresults[p].update(toyresult)
+                if p in toysdict:
+                    toysdict[p].update(toyresult)
                 else:
-                    self._toysresults[p] = toyresult
+                    toysdict[p] = toyresult
 
-            return self._toysresults[p]
+        return {p: toysdict[p] for p in poigen}
 
     def gettoys_null(self, poigen, poieval=None, qtilde=False):
-        return self._gettoys(poigen, poieval=poieval, qtilde=qtilde, hypotesis="null")
+        return self._gettoys(poigen=poigen, poieval=poieval, qtilde=qtilde, hypotesis="null")
 
     def gettoys_alt(self, poigen, poieval=None, qtilde=False):
-        return self._gettoys(poigen, poieval=poieval, qtilde=qtilde, hypotesis="alternative")
+        return self._gettoys(poigen=poigen, poieval=poieval, qtilde=qtilde, hypotesis="alternative")
 
     def qnull(self, poinull, poialt, onesided, onesideddiscovery, qtilde=False):
-        toysresult = self.gettoys_null(poinull, poialt, qtilde)
+        toysresults = self.gettoys_null(poinull, poialt, qtilde)
+        ret = {}
 
-        nll1 = toysresult["nll"][poinull[0]]
-        nll2 = toysresult["bestfit"]["nll"]
-        bestfit = toysresult["bestfit"]["values"]
+        for p in poinull:
+            toysresult = toysresults[p]
+            nll1 = toysresult["nll"][p]
+            nll2 = toysresult["bestfit"]["nll"]
+            bestfit = toysresult["bestfit"]["values"]
 
-        if qtilde:
-            nllat0 = toysresult["nll"][0]
-            nll2 = np.where(bestfit < 0, nllat0, nll2)
-            bestfit = np.where(bestfit < 0, 0, bestfit)
+            if qtilde:
+                nllat0 = toysresult["nll"][0]
+                nll2 = np.where(bestfit < 0, nllat0, nll2)
+                bestfit = np.where(bestfit < 0, 0, bestfit)
 
-        poi1 = POIarray(poinull.parameter, np.full(self.ntoysnull, poinull.value))
-        poi2 = POIarray(poinull.parameter, bestfit)
+            poi1 = POIarray(poinull.parameter, np.full(self.ntoysnull, p.value))
+            poi2 = POIarray(poinull.parameter, bestfit)
 
-        return self.q(nll1=nll1, nll2=nll2, poi1=poi1, poi2=poi2,
-                      onesided=onesided, onesideddiscovery=onesideddiscovery)
+            ret[p] = self.q(nll1=nll1, nll2=nll2, poi1=poi1, poi2=poi2, onesided=onesided,
+                            onesideddiscovery=onesideddiscovery)
+
+        return ret
 
     def qalt(self, poinull, poialt, onesided, onesideddiscovery, qtilde=False):
-        toysresult = self.gettoys_null(poialt, poinull, qtilde)
+        toysresults = self.gettoys_alt(poialt, poinull, qtilde)
+        ret = {}
 
-        # 1 POI
-        nll1 = toysresult["nll"][poinull[0]]
-        nll2 = toysresult["bestfit"]["nll"]
+        for p in poinull:
+            toysresult = toysresults[poialt]
 
-        if qtilde:
-            nllat0 = toysresult["nll"][0]
+            nll1 = toysresult["nll"][p]
+            nll2 = toysresult["bestfit"]["nll"]
             bestfit = toysresult["bestfit"]["values"]
-            nll2 = np.where(bestfit < 0, nllat0, nll2)
 
-        poi1 = POIarray(poialt.parameter, np.full(self.ntoysnull, poialt.value))
-        poi2 = POIarray(poialt.parameter, bestfit)
+            if qtilde:
+                nllat0 = toysresult["nll"][0]
+                nll2 = np.where(bestfit < 0, nllat0, nll2)
+                bestfit = np.where(bestfit < 0, 0, bestfit)
 
-        return self.q(nll1=nll1, nll2=nll2, poi1=poi1, poi2=poi2,
-                      onesided=onesided, onesideddiscovery=onesideddiscovery)
+            poi1 = POIarray(poialt.parameter, np.full(self.ntoysalt, p.value))
+            poi2 = POIarray(poialt.parameter, bestfit)
+
+            ret[p] = self.q(nll1=nll1, nll2=nll2, poi1=poi1, poi2=poi2, onesided=onesided,
+                            onesideddiscovery=onesideddiscovery)
+
+        return ret
 
     def _pvalue_(self, poinull, poialt, qtilde, onesided, onesideddiscovery):
 
@@ -210,20 +228,58 @@ class FrequentistCalculator(BaseCalculator):
             p = len(qdist[qdist >= qobs])/len(qdist)
             return p
 
-        needpalt = poialt is not None
-
+        qnulldist = self.qnull(poinull, poialt, onesided, onesideddiscovery, qtilde)
         pnull = np.empty(len(poinull))
-        if needpalt:
+        for i, p in enumerate(poinull):
+            pnull[i] = compute_pvalue(qnulldist[p], qobs[i])
+
+        if poialt is not None:
+            qaltdist = self.qalt(poinull, poialt, onesided, onesideddiscovery, qtilde)
             palt = np.empty(len(poinull))
+            for i, p in enumerate(poinull):
+                palt[i] = compute_pvalue(qaltdist[p], qobs[i])
         else:
             palt = None
 
-        for i, p in enumerate(poinull):
-            qnulldist = self.qnull(p, poialt, onesided, onesideddiscovery, qtilde)
-            pnull[i] = compute_pvalue(qnulldist, qobs[i])
-
-            if needpalt:
-                qaltdist = self.qalt(p, poialt, onesided, onesideddiscovery, qtilde)
-                palt[i] = compute_pvalue(qaltdist, qobs[i])
-
         return pnull, palt
+
+    def _expected_pvalue_(self, poinull, poialt, nsigma, CLs, onesided, onesideddiscovery, qtilde):
+
+        ps = {ns: {"p_clsb": np.empty(len(poinull)),
+                   "p_clb": np.empty(len(poinull))} for ns in nsigma}
+
+        qnulldist = self.qnull(poinull, poialt, onesided, onesideddiscovery, qtilde)
+        qaltdist = self.qalt(poinull, poialt, onesided, onesideddiscovery, qtilde)
+
+        filter_nan = lambda q: q[~(np.isnan(q) | np.isinf(q))]
+
+        for i, p in enumerate(poinull):
+
+            qaltdist_p = filter_nan(qaltdist[p])
+            lqaltdist = len(qaltdist_p)
+
+            qnulldist_p = filter_nan(qnulldist[p])
+            lqnulldist = len(qnulldist_p)
+
+            p_clsb_i = np.empty(lqaltdist)
+            p_clb_i = np.empty(lqaltdist)
+
+            for j, q in np.ndenumerate(qaltdist_p):
+                p_clsb_i[j] = (len(qnulldist_p[qnulldist_p >= q])/lqnulldist)
+                p_clb_i[j] = (len(qaltdist_p[qaltdist_p >= q])/lqaltdist)
+
+            for ns in nsigma:
+                frac = norm.cdf(ns)*100
+                ps[ns]["p_clsb"][i] = np.percentile(p_clsb_i, frac)
+                ps[ns]["p_clb"][i] = np.percentile(p_clb_i, frac)
+
+        expected_pvalues = []
+        for ns in nsigma:
+            if CLs:
+                p_cls = ps[ns]["p_clsb"] / ps[ns]["p_clb"]
+                expected_pvalues.append(np.where(p_cls < 0, 0, p_cls))
+            else:
+                p_clsb = ps[ns]["p_clsb"]
+                expected_pvalues.append(np.where(p_clsb < 0, 0, p_clsb))
+
+        return expected_pvalues
