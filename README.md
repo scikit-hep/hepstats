@@ -4,8 +4,8 @@
 ![Azure DevOps tests](https://img.shields.io/azure-devops/tests/matthieumarinangeli/matthieumarinangeli/4)
 ![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/matthieumarinangeli/matthieumarinangeli/4)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/scikit-hep/hepstats/master)
-[![PyPI](https://img.shields.io/pypi/v/scikit-stats)](https://pypi.org/project/scikit-stats/)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/scikit-stats)](https://pypi.org/project/scikit-stats/)
+[![PyPI](https://img.shields.io/pypi/v/hepstats)](https://pypi.org/project/hepstats/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hepstats)](https://pypi.org/project/hepstats/)
 [![DOI](https://zenodo.org/badge/191397511.svg)](https://zenodo.org/badge/latestdoi/191397511)
 
 ## Installation
