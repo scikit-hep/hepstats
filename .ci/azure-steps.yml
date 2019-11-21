@@ -15,9 +15,9 @@ steps:
   displayName: Create Anaconda environment
 
 - bash: |
-    source activate scikit-stats-test
+    source activate hepstats-test
     pip install pytest pytest-azurepipelines pytest-cov pytest-runner
-    python -m pytest ./tests --doctest-modules --cov=skstats --cov-report=html
+    python -m pytest ./tests --doctest-modules --cov=hepstats --cov-report=html
   displayName: 'Test with pytest and collect coverage metrics'
 
 - task: PublishTestResults@2

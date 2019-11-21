@@ -78,7 +78,7 @@ class AsymptoticCalculator(BaseCalculator):
     @staticmethod
     def check_pois(pois):
         """
-        Check if the parameters of interest are all `skstats.parameters.POI/POIarray` instances.
+        Check if the parameters of interest are all `hepstats.parameters.POI/POIarray` instances.
         """
 
         msg = "POI/POIarray is required."
