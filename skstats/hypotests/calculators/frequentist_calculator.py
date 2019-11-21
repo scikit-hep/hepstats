@@ -41,11 +41,11 @@ class FrequentistCalculator(BaseCalculator):
 
         self._toysnull = {}
         self._toysalt = {}
-        self._ntoysnull = int(ntoysnull)
-        self._ntoysalt = int(ntoysalt)
+        self._ntoysnull = ntoysnull
+        self._ntoysalt = ntoysalt
         self._sampler = sampler
         self._sample = sample
-        self._loss_toys = {}
+        self._loss_toys = None
         self._printlevel = 1
 
     @property
@@ -73,13 +73,13 @@ class FrequentistCalculator(BaseCalculator):
         param = poigen.parameter
         gen_value = poigen.value
 
-        try:
-            loss_toys = self._loss_toys[param]
+        if self._loss_toys is not None:
+            loss_toys = self._loss_toys
             sampler = loss_toys.data
-        except KeyError:
+        else:
             sampler = self.sampler(floatting_params=[param])
             loss_toys = self.lossbuilder(self.model, sampler)
-            self._loss_toys[param] = loss_toys
+            self._loss_toys = loss_toys
 
         result = {"bestfit": {"values": np.empty(ntoys), "nll": np.empty(ntoys)},
                   "nll": {p: np.empty(ntoys) for p in poieval}}
