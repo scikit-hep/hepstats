@@ -1,9 +1,9 @@
 # hepstats: statistics tools and utilities
 
-[![Build Status](https://dev.azure.com/matthieumarinangeli/matthieumarinangeli/_apis/build/status/scikit-hep.scikit-stats?branchName=master)](https://dev.azure.com/matthieumarinangeli/matthieumarinangeli/_build/latest?definitionId=3&branchName=master)
-![Azure DevOps tests](https://img.shields.io/azure-devops/tests/matthieumarinangeli/matthieumarinangeli/3)
-![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/matthieumarinangeli/matthieumarinangeli/3)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/scikit-hep/scikit-stats/master)
+[![Build Status](https://dev.azure.com/matthieumarinangeli/matthieumarinangeli/_apis/build/status/scikit-hep.hepstats?branchName=master)](https://dev.azure.com/matthieumarinangeli/matthieumarinangeli/_build/latest?definitionId=4&branchName=master)
+![Azure DevOps tests](https://img.shields.io/azure-devops/tests/matthieumarinangeli/matthieumarinangeli/4)
+![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/matthieumarinangeli/matthieumarinangeli/4)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/scikit-hep/hepstats/master)
 [![PyPI](https://img.shields.io/pypi/v/scikit-stats)](https://pypi.org/project/scikit-stats/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/scikit-stats)](https://pypi.org/project/scikit-stats/)
 [![DOI](https://zenodo.org/badge/191397511.svg)](https://zenodo.org/badge/latestdoi/191397511)
