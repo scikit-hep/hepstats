@@ -16,12 +16,12 @@ tests_requires = ["pytest", "zfit"]
 
 def get_version():
     g = {}
-    exec(open(os.path.join("skstats", "version.py")).read(), g)
+    exec(open(os.path.join("hepstats", "version.py")).read(), g)
     return g["__version__"]
 
 
 setup(
-    name='scikit-stats',
+    name='hepstats',
     author='Matthieu Marinangeli',
     author_email='matthieu.marinangeli@cern.ch',
     maintainer='The Scikit-HEP admins',

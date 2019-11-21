@@ -1,4 +1,4 @@
-name: scikit-stats-test
+name: hepstats-test
 channels:
   - defaults
   - conda-forge
