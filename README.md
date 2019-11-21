@@ -1,4 +1,4 @@
-# scikit-stats: statistics tools and utilities
+# hepstats: statistics tools and utilities
 
 [![Build Status](https://dev.azure.com/matthieumarinangeli/matthieumarinangeli/_apis/build/status/scikit-hep.scikit-stats?branchName=master)](https://dev.azure.com/matthieumarinangeli/matthieumarinangeli/_build/latest?definitionId=3&branchName=master)
 ![Azure DevOps tests](https://img.shields.io/azure-devops/tests/matthieumarinangeli/matthieumarinangeli/3)
@@ -10,17 +10,17 @@
 
 ## Installation
 
-Install `scikit-stats` like any other Python package:
+Install `hepstats` like any other Python package:
 
 ```
-pip install scikit-stats
+pip install hepstats
 ```
 
 or similar (use `--user`, `virtualenv`, etc. if you wish).
 
 ## Getting Started
 
-The `scikit-stats` module includes modeling and hypothesis tests submodules. This a quick user guide to each submodule. The [binder](https://mybinder.org/v2/gh/scikit-hep/scikit-stats/master) examples are also a good way to get started.
+The `hepstats` module includes modeling and hypothesis tests submodules. This a quick user guide to each submodule. The [binder](https://mybinder.org/v2/gh/scikit-hep/scikit-stats/master) examples are also a good way to get started.
 
 ### modeling
 
@@ -29,7 +29,7 @@ The modeling submodule includes the [Bayesian Block algorithm](https://arxiv.org
 ```python
 >>> import numpy as np
 >>> import matplotlib.pyplot as plt
->>> from skstats.modeling import bayesian_blocks
+>>> from hepstats.modeling import bayesian_blocks
 
 >>> data = np.random.laplace(size=10000)
 >>> blocks = bayesian_blocks(data)
@@ -43,7 +43,7 @@ The modeling submodule includes the [Bayesian Block algorithm](https://arxiv.org
 
 ### hypotests
 
-This submodule provides tools to do hypothesis tests such as discovery test and computations of upper limits or confidence intervals. scikit-stats needs a fitting backend to perform computations such as [zfit](https://github.com/zfit/zfit). Any fitting library can be used if their API is compatible  with scikit-stats (see [api checks](https://github.com/scikit-hep/scikit-stats/blob/master/skstats/hypotests/fitutils/api_check.py)).
+This submodule provides tools to do hypothesis tests such as discovery test and computations of upper limits or confidence intervals. scikit-stats needs a fitting backend to perform computations such as [zfit](https://github.com/zfit/zfit). Any fitting library can be used if their API is compatible  with scikit-stats (see [api checks](https://github.com/scikit-hep/scikit-stats/blob/master/hepstats/hypotests/fitutils/api_check.py)).
 
 We give here a simple example of a discovery test, using [zfit](https://github.com/zfit/zfit) as backend, of gaussian signal with known mean and sigma over an exponential background.
 
@@ -69,9 +69,9 @@ We give here a simple example of a discovery test, using [zfit](https://github.c
 >>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
 >>> loss = ExtendedUnbinnedNLL(model=signal + background, data=data)
 
->>> from skstats.hypotests.calculators import AsymptoticCalculator
->>> from skstats.hypotests import Discovery
->>> from skstats.hypotests.parameters import POI
+>>> from hepstats.hypotests.calculators import AsymptoticCalculator
+>>> from hepstats.hypotests import Discovery
+>>> from hepstats.hypotests.parameters import POI
 
 >>> calculator = AsymptoticCalculator(loss, Minuit())
 >>> poinull = POI(Nsig, 0)

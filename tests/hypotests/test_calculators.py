@@ -7,10 +7,10 @@ from zfit.core.testing import setup_function  # allows redefinition of zfit.Para
 from zfit.core.loss import UnbinnedNLL
 from zfit.minimize import Minuit
 
-from skstats.hypotests.calculators.basecalculator import BaseCalculator
-from skstats.hypotests.calculators.asymptotic_calculator import AsymptoticCalculator
-from skstats.hypotests.parameters import POI, POIarray
-from skstats.hypotests.fitutils.api_check import is_valid_loss, is_valid_data
+from hepstats.hypotests.calculators.basecalculator import BaseCalculator
+from hepstats.hypotests.calculators.asymptotic_calculator import AsymptoticCalculator
+from hepstats.hypotests.parameters import POI, POIarray
+from hepstats.hypotests.fitutils.api_check import is_valid_loss, is_valid_data
 
 
 true_mu = 1.2
