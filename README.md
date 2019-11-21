@@ -1,5 +1,6 @@
 # Scikit-HEP project `hepstats` package: statistics tools and utilities
 
+[![PyPI](https://img.shields.io/pypi/v/hepstats)](https://pypi.org/project/hepstats/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hepstats)](https://pypi.org/project/hepstats/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3519200.svg)](https://doi.org/10.5281/zenodo.3519200)
 [![Build Status](https://dev.azure.com/matthieumarinangeli/matthieumarinangeli/_apis/build/status/scikit-hep.hepstats?branchName=master)](https://dev.azure.com/matthieumarinangeli/matthieumarinangeli/_build/latest?definitionId=4&branchName=master)
