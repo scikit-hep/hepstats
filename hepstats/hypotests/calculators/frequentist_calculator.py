@@ -3,7 +3,7 @@ from scipy.stats import norm
 from collections import OrderedDict
 
 from .basecalculator import BaseCalculator
-from ..fitutils.utils import pll
+from ..fitutils.utils import pll, get_nevents
 from ..fitutils.sampling import base_sampler, base_sample
 from ..parameters import POI, POIarray
 
@@ -13,7 +13,7 @@ class FrequentistCalculator(BaseCalculator):
     Class for frequentist calculators.
     """
 
-    def __init__(self, input, minimizer, ntoysnull=1000, ntoysalt=1000, sampler=base_sampler, sample=base_sample):
+    def __init__(self, input, minimizer, ntoysnull=100, ntoysalt=100, sampler=base_sampler, sample=base_sample):
         """Frequentist calculator class.
 
             Args:
@@ -45,7 +45,7 @@ class FrequentistCalculator(BaseCalculator):
         self._ntoysalt = ntoysalt
         self._sampler = sampler
         self._sample = sample
-        self._loss_toys = None
+        self._toys_loss = {}
         self._printlevel = 1
 
     @property
@@ -62,24 +62,32 @@ class FrequentistCalculator(BaseCalculator):
 
     def sampler(self, floatting_params=None, *args, **kwargs):
         self.set_dependents_to_bestfit()
-        return self._sampler(self.model, floatting_params, *args, **kwargs)
+        nevents = []
+        for m, d in zip(self.model, self.data):
+            if m.is_extended:
+                nevents.append("extended")
+            else:
+                nevents.append(get_nevents(d))
+
+        return self._sampler(self.model,  nevents, floatting_params, *args, **kwargs)
 
     def sample(self, sampler, ntoys, param=None, value=None):
         return self._sample(sampler, ntoys, param, value)
 
-    def _generate_fit_toys(self, poigen, ntoys, poieval, printfreq=0.2):
+    def toys_loss(self, parameter):
+        if parameter.name not in self._toys_loss:
+            sampler = self.sampler(floatting_params=[parameter])
+            self._toys_loss[parameter.name] = self.lossbuilder(self.model, sampler)
+        return self._toys_loss[parameter.name]
+
+    def _generate_and_fit_toys(self, poigen, ntoys, poieval, printfreq=0.2):
         minimizer = self.minimizer
 
         param = poigen.parameter
         gen_value = poigen.value
 
-        if self._loss_toys is not None:
-            loss_toys = self._loss_toys
-            sampler = loss_toys.data
-        else:
-            sampler = self.sampler(floatting_params=[param])
-            loss_toys = self.lossbuilder(self.model, sampler)
-            self._loss_toys = loss_toys
+        toys_loss = self.toys_loss(param)
+        sampler = toys_loss.data
 
         result = {"bestfit": {"values": np.empty(ntoys), "nll": np.empty(ntoys)},
                   "nll": {p: np.empty(ntoys) for p in poieval}}
@@ -99,7 +107,7 @@ class FrequentistCalculator(BaseCalculator):
                     toys = self.sample(sampler, int(to_gen*1.2), param, gen_value)
                     next(toys)
 
-                minimum = minimizer.minimize(loss=loss_toys)
+                minimum = minimizer.minimize(loss=toys_loss)
                 converged = minimum.converged
 
                 if not converged:
@@ -108,11 +116,11 @@ class FrequentistCalculator(BaseCalculator):
 
                 bestfit = minimum.params[param]["value"]
                 result["bestfit"]["values"][i] = bestfit
-                nll = pll(minimizer, loss_toys, POI(param, bestfit))
+                nll = pll(minimizer, toys_loss, POI(param, bestfit))
                 result["bestfit"]["nll"][i] = nll
 
                 for p in poieval:
-                    nll = pll(minimizer, loss_toys, p)
+                    nll = pll(minimizer, toys_loss, p)
                     result["nll"][p][i] = nll
 
             if toprint:
@@ -156,7 +164,7 @@ class FrequentistCalculator(BaseCalculator):
                     eval_values += poieval.values.tolist()
                 eval_values = list(dict.fromkeys(eval_values))
 
-                toyresult = self._generate_fit_toys(p, ntogen, POIarray(poigen.parameter, eval_values))
+                toyresult = self._generate_and_fit_toys(p, ntogen, POIarray(poigen.parameter, eval_values))
 
                 if p in toysdict:
                     toysdict[p].update(toyresult)

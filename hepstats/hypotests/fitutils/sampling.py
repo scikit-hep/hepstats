@@ -1,9 +1,10 @@
 from .api_check import is_valid_pdf
 
 
-def base_sampler(models, floatting_params=None, *args, **kwargs):
+def base_sampler(models, nevents, floatting_params=None, *args, **kwargs):
 
     assert all(is_valid_pdf(m) for m in models)
+    assert len(nevents) == len(models)
 
     if floatting_params:
         floatting_params = [f.name for f in floatting_params]
@@ -19,12 +20,8 @@ def base_sampler(models, floatting_params=None, *args, **kwargs):
         fixed = [p for p in m.get_dependents() if not to_fix(p)]
         fixed_params.append(fixed)
 
-    for m, p in zip(models, fixed_params):
-        n = kwargs.get("n", None)
-        if n is None:
-            if m.is_extended:
-                n = "extended"
-        sampler = m.create_sampler(n=n, fixed_params=p)
+    for i, (m, p) in enumerate(zip(models, fixed_params)):
+        sampler = m.create_sampler(n=nevents[i], fixed_params=p)
         samplers.append(sampler)
 
     return samplers

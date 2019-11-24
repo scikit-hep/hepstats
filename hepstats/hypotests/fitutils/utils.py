@@ -1,4 +1,5 @@
 from contextlib import ExitStack
+import numbers
 
 
 def eval_pdf(model, x, params):
@@ -46,3 +47,15 @@ def array2dataset(dataset_cls, obs, array, weights=None):
         return dataset_cls.from_numpy(obs=obs, array=array, weights=weights)
     else:
         return dataset_cls(obs=obs, array=array, weights=weights)
+
+
+def get_nevents(dataset):
+    """ Returns the number of events in the dataset """
+
+    nevents = dataset.nevents
+
+    if not isinstance(nevents, numbers.Number) and "zfit" in str(dataset):
+        import zfit
+        nevents = zfit.run(nevents)
+
+    return nevents

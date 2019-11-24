@@ -8,9 +8,9 @@ from zfit.core.loss import UnbinnedNLL
 from zfit.minimize import Minuit
 
 from hepstats.hypotests.calculators.basecalculator import BaseCalculator
-from hepstats.hypotests.calculators.asymptotic_calculator import AsymptoticCalculator
+from hepstats.hypotests.calculators import AsymptoticCalculator, FrequentistCalculator
 from hepstats.hypotests.parameters import POI, POIarray
-from hepstats.hypotests.fitutils.api_check import is_valid_loss, is_valid_data
+from hepstats.hypotests.fitutils.api_check import is_valid_loss, is_valid_data, is_valid_pdf
 
 
 true_mu = 1.2
@@ -29,7 +29,7 @@ def create_loss():
     return loss, (mean, sigma)
 
 
-@pytest.mark.parametrize("calculator", [BaseCalculator, AsymptoticCalculator])
+@pytest.mark.parametrize("calculator", [BaseCalculator, AsymptoticCalculator, FrequentistCalculator])
 def test_base_calculator(calculator):
     with pytest.raises(TypeError):
         calculator()
@@ -47,8 +47,6 @@ def test_base_calculator(calculator):
     mean_nll = calc_loss.obs_nll(pois=mean_poi)
     calc_loss.obs_nll(pois=mean_poi)  # get from cache
 
-    print(mean_nll)
-
     assert mean_nll[0] >= mean_nll[1]
     assert mean_nll[2] >= mean_nll[1]
 
@@ -63,6 +61,7 @@ def test_base_calculator(calculator):
             calc_loss.pvalue(poinull=mean_poi, poialt=mean_poialt)
         with pytest.raises(NotImplementedError):
             calc_loss.expected_pvalue(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
+    elif calculator in [BaseCalculator, FrequentistCalculator]:
         with pytest.raises(NotImplementedError):
             calc_loss.expected_poi(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
     else:
@@ -97,8 +96,6 @@ def test_asymptotic_calculator_one_poi():
     poi_null = POIarray(mean, [1.15, 1.2, 1.25])
     poi_alt = POI(mean, 1.2)
 
-    pnull, palt = calc.pvalue(poi_null, poi_alt)
-
     dataset = calc.asimov_dataset(poi_alt)
     assert all(is_valid_data(d) for d in dataset)
     loss = calc.asimov_loss(poi_alt)
@@ -108,6 +105,22 @@ def test_asymptotic_calculator_one_poi():
 
     assert null_nll[0] >= null_nll[1]
     assert null_nll[2] >= null_nll[1]
+
+
+def test_frequentist_calculator_one_poi():
+    with pytest.raises(TypeError):
+        FrequentistCalculator()
+
+    loss, (mean, sigma) = create_loss()
+    calc = FrequentistCalculator(loss, Minuit(), ntoysnull=100, ntoysalt=100)
+
+    assert calc.ntoysnull == 100
+    assert calc.ntoysalt == 100
+
+    samplers = calc.sampler(floatting_params=[mean])
+    assert all(is_valid_data(s) for s in samplers)
+    loss = calc.toys_loss(mean)
+    assert is_valid_loss(loss)
 
 
 # def test_asymptotic_calculator_two_pois():
