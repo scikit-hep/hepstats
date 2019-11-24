@@ -350,7 +350,7 @@ class BaseCalculator(object):
     @staticmethod
     def check_pois(pois):
         """
-        Check if the parameters of interest are all `skstats.parameters.POI/POIarray` instances.
+        Check if the parameters of interest are all `hepstats.parameters.POI/POIarray` instances.
         """
 
         msg = "POI/POIarray is required."
@@ -363,7 +363,7 @@ class BaseCalculator(object):
     @staticmethod
     def check_pois_compatibility(poi1, poi2):
         """
-        Check compatibility between two lists of `skstats.parameters.POIarray` instances.
+        Check compatibility between two lists of `hepstats.parameters.POIarray` instances.
         """
 
         if poi1.ndim != poi2.ndim:

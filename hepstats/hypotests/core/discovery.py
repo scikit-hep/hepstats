@@ -33,9 +33,9 @@ class Discovery(BaseTest):
                 >>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
                 >>> loss = ExtendedUnbinnedNLL(model=[signal + background], data=[data])
 
-                >>> from skstats.hypotests.calculators import AsymptoticCalculator
-                >>> from skstats.hypotests import Discovery
-                >>> from skstats.hypotests.parameters import POI
+                >>> from hepstats.hypotests.calculators import AsymptoticCalculator
+                >>> from hepstats.hypotests import Discovery
+                >>> from hepstats.hypotests.parameters import POI
 
                 >>> calculator = AsymptoticCalculator(loss, MinuitMinimizer())
                 >>> poinull = POI(Nsig, 0)

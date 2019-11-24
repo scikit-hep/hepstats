@@ -1,5 +1,5 @@
 """
-Module for testing a fitting library validity with scikit-stats.
+Module for testing a fitting library validity with hepstats.
 
 A fitting library should provide six basic objects:
 
@@ -11,9 +11,9 @@ A fitting library should provide six basic objects:
     * fitresult (optional)
 
 A function for each object is defined in this module, all should return `True` to work
-with scikit-stats.
+with hepstats.
 
-The `zfit` api is currently the standard fitting api in scikit-stats.
+The `zfit` API is currently the standard fitting API in hepstats.
 
 """
 

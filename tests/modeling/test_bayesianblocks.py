@@ -1,9 +1,9 @@
 import os
 import numpy as np
-import skstats
-from skstats.modeling import bayesian_blocks
+import hepstats
+from hepstats.modeling import bayesian_blocks
 
-answer_dir = os.path.dirname(skstats.__file__)+'/../tests/modeling/data'
+answer_dir = os.path.dirname(hepstats.__file__)+'/../tests/modeling/data'
 
 
 def test_bayesian_blocks(cmdopt, data_gen):

@@ -40,9 +40,9 @@ class UpperLimit(BaseTest):
                 >>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
                 >>> loss = ExtendedUnbinnedNLL(model=[signal + background], data=[data])
 
-                >>> from skstats.hypotests.calculators import AsymptoticCalculator
-                >>> from skstats.hypotests import UpperLimit
-                >>> from skstats.hypotests.parameters import POI, POIarray
+                >>> from hepstats.hypotests.calculators import AsymptoticCalculator
+                >>> from hepstats.hypotests import UpperLimit
+                >>> from hepstats.hypotests.parameters import POI, POIarray
 
                 >>> calculator = AsymptoticCalculator(loss, MinuitMinimizer())
                 >>> poinull = POIarray(Nsig, np.linspace(0.0, 25, 20))

@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 import zfit
 
-from skstats.hypotests.parameters import POI, POIarray
+from hepstats.hypotests.parameters import POI, POIarray
 
 mean = zfit.Parameter("mu", 1.2, 0.1, 2)
 

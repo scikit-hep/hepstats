@@ -5,10 +5,10 @@ from zfit.core.testing import setup_function  # allows redefinition of zfit.Para
 from zfit.core.loss import ExtendedUnbinnedNLL
 from zfit.minimize import Minuit
 
-from skstats.hypotests.calculators.basecalculator import BaseCalculator
-from skstats.hypotests.calculators import AsymptoticCalculator
-from skstats.hypotests import Discovery
-from skstats.hypotests.parameters import POI
+from hepstats.hypotests.calculators.basecalculator import BaseCalculator
+from hepstats.hypotests.calculators import AsymptoticCalculator
+from hepstats.hypotests import Discovery
+from hepstats.hypotests.parameters import POI
 
 
 def create_loss():

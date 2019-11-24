@@ -2,7 +2,7 @@
 # Copyright (c) 2018-2019.
 #
 # Distributed under the 3-clause BSD license, see accompanying file LICENSE
-# or https://github.com/scikit-hep/scikit-stats for details.
+# or https://github.com/scikit-hep/hepstats for details.
 
 from setuptools import setup
 from setuptools import find_packages
@@ -16,12 +16,12 @@ tests_requires = ["pytest", "zfit"]
 
 def get_version():
     g = {}
-    exec(open(os.path.join("skstats", "version.py")).read(), g)
+    exec(open(os.path.join("hepstats", "version.py")).read(), g)
     return g["__version__"]
 
 
 setup(
-    name='scikit-stats',
+    name='hepstats',
     author='Matthieu Marinangeli',
     author_email='matthieu.marinangeli@cern.ch',
     maintainer='The Scikit-HEP admins',
@@ -30,7 +30,7 @@ setup(
     description='statistics tools and utilities',
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
-    url='https://github.com/scikit-hep/scikit-stats',
+    url='https://github.com/scikit-hep/hepstats',
     license='BSD 3-Clause License',
     packages=find_packages(),
     test_suite="tests",
