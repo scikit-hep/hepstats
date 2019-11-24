@@ -56,18 +56,24 @@ def test_base_calculator(calculator):
 
     mean_poialt = POI(mean, 1.2)
 
+    pvalue = lambda: calc_loss.pvalue(poinull=mean_poi, poialt=mean_poialt)
+    exp_pvalue = lambda: calc_loss.expected_pvalue(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
+    exp_poi = lambda: calc_loss.expected_pvalue(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
+
     if calculator == BaseCalculator:
         with pytest.raises(NotImplementedError):
-            calc_loss.pvalue(poinull=mean_poi, poialt=mean_poialt)
+            pvalue()
         with pytest.raises(NotImplementedError):
-            calc_loss.expected_pvalue(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
-    elif calculator in [BaseCalculator, FrequentistCalculator]:
-        with pytest.raises(NotImplementedError):
-            calc_loss.expected_poi(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
+            exp_pvalue()
     else:
-        calc_loss.pvalue(poinull=mean_poi, poialt=mean_poialt)
-        calc_loss.expected_pvalue(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
-        calc_loss.expected_poi(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
+        pvalue()
+        exp_pvalue()
+
+    if calculator in [BaseCalculator, FrequentistCalculator]:
+        with pytest.raises(NotImplementedError):
+            exp_poi()
+    else:
+        exp_poi()
 
     model = calc_loss.model[0]
     sampler = model.create_sampler(n=10000)
