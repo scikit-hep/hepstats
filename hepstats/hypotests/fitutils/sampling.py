@@ -27,10 +27,10 @@ def base_sampler(models, nevents, floatting_params=None, *args, **kwargs):
     return samplers
 
 
-def base_sample(sampler, ntoys, param=None, value=None, *args, **kwargs):
+def base_sample(sampler, ntoys, parameter=None, value=None, *args, **kwargs):
     for i in range(ntoys):
-        if not (param is None or value is None):
-            with param.set_value(value):
+        if not (parameter is None or value is None):
+            with parameter.set_value(value):
                 for s in sampler:
                     s.resample()
         else:

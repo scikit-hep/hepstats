@@ -224,7 +224,7 @@ class AsymptoticCalculator(BaseCalculator):
         return pnull
 
     def qalt(self, poinull, poialt, onesided, onesideddiscovery) -> np.array:
-        """ Compute alternative values of the $$\\Delta$$ log-likelihood test statistic using the asimov
+        """ Compute alternative hypotesis values of the $$\\Delta$$ log-likelihood test statistic using the asimov
             dataset.
 
             Args:
