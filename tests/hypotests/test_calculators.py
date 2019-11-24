@@ -58,7 +58,7 @@ def test_base_calculator(calculator):
 
     pvalue = lambda: calc_loss.pvalue(poinull=mean_poi, poialt=mean_poialt)
     exp_pvalue = lambda: calc_loss.expected_pvalue(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
-    exp_poi = lambda: calc_loss.expected_pvalue(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
+    exp_poi = lambda: calc_loss.expected_poi(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
 
     if calculator == BaseCalculator:
         with pytest.raises(NotImplementedError):
