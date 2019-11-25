@@ -21,8 +21,9 @@ class FrequentistCalculator(BaseCalculator):
                 ntoysnull (int, default=100): number of toys to generate for the null hypothesis
                 ntoysalt (int, default=100): number of toys to generate for the alternative hypothesis
                 sampler : function used to create sampler with models, number of events and
-                    floating parameters in the sample
-                sample : function used to get samples from the sampler
+                    floating parameters in the sample Default is `hepstats.fitutils.sampling.base_sampler`.
+                sample : function used to get samples from the sampler.
+                    Default is `hepstats.fitutils.sampling.base_sample`.
 
             Example with `zfit`:
                 >>> import zfit
