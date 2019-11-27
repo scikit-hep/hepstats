@@ -49,35 +49,30 @@ class FrequentistCalculator(BaseCalculator):
         self._sampler = sampler
         self._sample = sample
         self._toys_loss = {}
-        self._printlevel = 1
 
     @property
     def ntoysnull(self):
         """
-        Returns the number of toys loss for the null hypotesis.
+        Returns the number of toys loss for the null hypothesis.
         """
         return self._ntoysnull
 
     @property
     def ntoysalt(self):
         """
-        Returns the number of toys loss for the alternative hypotesis.
+        Returns the number of toys loss for the alternative hypothesis.
         """
         return self._ntoysalt
 
-    @property
-    def printlevel(self):
-        return self._printlevel
-
-    def sampler(self, floatting_params=None, *args, **kwargs):
+    def sampler(self, floating_params=None, *args, **kwargs):
         """
         Create sampler with models.
 
         Args:
-            floatting_params (list): floating parameter in the sampler
+            floating_params (list): floating parameters in the sampler
 
         Example with `zfit`:
-            >>> sampler = calc.sampler(floatting_params=[zfit.Parameter("mean")])
+            >>> sampler = calc.sampler(floating_params=[zfit.Parameter("mean")])
         """
         self.set_dependents_to_bestfit()
         nevents = []
@@ -87,7 +82,7 @@ class FrequentistCalculator(BaseCalculator):
             else:
                 nevents.append(get_nevents(d))
 
-        return self._sampler(self.model,  nevents, floatting_params, *args, **kwargs)
+        return self._sampler(self.model,  nevents, floating_params, *args, **kwargs)
 
     def sample(self, sampler, ntoys, parameter=None, value=None):
         """
@@ -96,12 +91,12 @@ class FrequentistCalculator(BaseCalculator):
         Args:
             sampler (list): generator of samples
             ntoys (int): number of samples to generate
-            parameter (optionnal): floating parameter in the sampler
-            value (optionnal): value of the parameter
+            parameter (optional): floating parameter in the sampler
+            value (optional): value of the parameter
 
         Example with `zfit`:
             >>> mean = zfit.Parameter("mean")
-            >>> sampler = calc.sampler(floatting_params=[mean])
+            >>> sampler = calc.sampler(floating_params=[mean])
             >>> sample = calc.sample(sampler, 1000, mean, 1.2)
         """
         return self._sample(sampler, ntoys, parameter, value)
@@ -119,17 +114,17 @@ class FrequentistCalculator(BaseCalculator):
             >>> loss = calc.toys_loss(zfit.Parameter("mean"))
         """
         if parameter.name not in self._toys_loss:
-            sampler = self.sampler(floatting_params=[parameter])
+            sampler = self.sampler(floating_params=[parameter])
             self._toys_loss[parameter.name] = self.lossbuilder(self.model, sampler)
         return self._toys_loss[parameter.name]
 
-    def _generate_and_fit_toys(self, poigen, ntoys, poieval, printfreq=0.2):
+    def _generate_and_fit_toys(self, ntoys, poigen, poieval, printfreq=0.2):
         """
         Generate and fit toys for a given POI.
 
         Args:
-            poigen (POI): POI used to generate the toys
             ntoys (int): number of toys to generate
+            poigen (POI): POI used to generate the toys
             poieval (POIarray): POI values to evaluate the loss function
             printfreq: print frequency of the toys generation
         """
@@ -185,22 +180,21 @@ class FrequentistCalculator(BaseCalculator):
 
         return result
 
-    def _gettoys(self, poigen, poieval=None, qtilde=False, hypotesis="null"):
+    def _get_toys(self, poigen, poieval=None, qtilde=False, hypothesis="null"):
         """
         Return the generated toys for a given POI.
 
         Args:
             poigen (POI): POI used to generate the toys
-            ntoys (int): number of toys to generate
             poieval (POIarray): POI values to evaluate the loss function
             qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
                 the $$q$$ test statistic
             hypothesis: `null` or `alternative`
         """
 
-        assert hypotesis in ["null", "alternative"]
+        assert hypothesis in ["null", "alternative"]
 
-        if hypotesis == "null":
+        if hypothesis == "null":
             ntoys = self.ntoysnull
             toysdict = self._toysnull
         else:
@@ -218,8 +212,7 @@ class FrequentistCalculator(BaseCalculator):
                     ntogen = 0
 
             if ntogen > 0:
-                if self.printlevel >= 0:
-                    print(f"Generating {hypotesis} hypothesis toys for {p}.")
+                print(f"Generating {hypothesis} hypothesis toys for {p}.")
 
                 eval_values = [p.value]
                 if qtilde:
@@ -237,7 +230,7 @@ class FrequentistCalculator(BaseCalculator):
 
         return {p: toysdict[p] for p in poigen}
 
-    def gettoys_null(self, poigen, poieval=None, qtilde=False):
+    def get_toys_null(self, poigen, poieval, qtilde=False):
         """
         Return the generated toys for the null hypothesis.
 
@@ -253,11 +246,11 @@ class FrequentistCalculator(BaseCalculator):
             >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
             >>> poialt = POI(mean, 1.2)
             >>> for p in poinull:
-            ...     calc.gettoys_alt(p, poieval=poialt)
+            ...     calc.get_toys_alt(p, poieval=poialt)
         """
-        return self._gettoys(poigen=poigen, poieval=poieval, qtilde=qtilde, hypotesis="null")
+        return self._get_toys(poigen=poigen, poieval=poieval, qtilde=qtilde, hypothesis="null")
 
-    def gettoys_alt(self, poigen, poieval=None, qtilde=False):
+    def get_toys_alt(self, poigen, poieval, qtilde=False):
         """
         Return the generated toys for the alternative hypothesis.
 
@@ -272,9 +265,9 @@ class FrequentistCalculator(BaseCalculator):
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
             >>> poialt = POI(mean, 1.2)
-            >>> calc.gettoys_alt(poialt, poieval=poinull)
+            >>> calc.get_toys_alt(poialt, poieval=poinull)
         """
-        return self._gettoys(poigen=poigen, poieval=poieval, qtilde=qtilde, hypotesis="alternative")
+        return self._get_toys(poigen=poigen, poieval=poieval, qtilde=qtilde, hypothesis="alternative")
 
     def qnull(self, poinull, poialt, onesided, onesideddiscovery, qtilde=False):
         """ Compute null hypothesis values of the $$\\Delta$$ log-likelihood test statistic.
@@ -282,10 +275,10 @@ class FrequentistCalculator(BaseCalculator):
             Args:
                 poinull (`POIarray`): parameters of interest for the null hypothesis
                 poialt (`POIarray`): parameters of interest for the alternative hypothesis
-                onesided (bool, optional): if `True` (default) computes onesided pvalues
-                onesideddiscovery (bool, optional): if `True` (default) computes onesided pvalues for a discovery
+                onesided (bool): if `True` computes onesided pvalues
+                onesideddiscovery (bool): if `True` computes onesided pvalues for a discovery
                     test
-                qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
+                qtilde (bool): if `True` use the $$\tilde{q}$$ test statistics else use
                     the $$q$$ test statistic
 
             Returns:
@@ -297,7 +290,7 @@ class FrequentistCalculator(BaseCalculator):
                 >>> poialt = POI(mean, 1.2)
                 >>> q = calc.qnull(poinull, poialt)
         """
-        toysresults = self.gettoys_null(poinull, poialt, qtilde)
+        toysresults = self.get_toys_null(poinull, poialt, qtilde)
         ret = {}
 
         for p in poinull:
@@ -320,15 +313,15 @@ class FrequentistCalculator(BaseCalculator):
         return ret
 
     def qalt(self, poinull, poialt, onesided, onesideddiscovery, qtilde=False):
-        """ Compute alternative hypotesis values of the $$\\Delta$$ log-likelihood test statistic.
+        """ Compute alternative hypothesis values of the $$\\Delta$$ log-likelihood test statistic.
 
             Args:
                 poinull (`POIarray`): parameters of interest for the null hypothesis
                 poialt (`POIarray`): parameters of interest for the alternative hypothesis
-                onesided (bool, optional): if `True` (default) computes onesided pvalues
+                onesided (bool): if `True` computes onesided pvalues
                 onesideddiscovery (bool, optional): if `True` (default) computes onesided pvalues for a discovery
                     test
-                qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
+                qtilde (bool): if `True` use the $$\tilde{q}$$ test statistics else use
                     the $$q$$ test statistic
 
             Returns:
@@ -340,7 +333,7 @@ class FrequentistCalculator(BaseCalculator):
                 >>> poialt = POI(mean, 1.2)
                 >>> q = calc.qalt(poinull, poialt)
         """
-        toysresults = self.gettoys_alt(poialt, poinull, qtilde)
+        toysresults = self.get_toys_alt(poialt, poinull, qtilde)
         ret = {}
 
         for p in poinull:

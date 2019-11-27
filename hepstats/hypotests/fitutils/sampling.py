@@ -5,28 +5,28 @@ Module providing basic sampling methods.
 """
 
 
-def base_sampler(models, nevents, floatting_params=None, *args, **kwargs):
+def base_sampler(models, nevents, floating_params=None, *args, **kwargs):
     """
     Creates a samplers from models.
 
     Args:
         models (list): models to sample
         nevents (list): number of in each sampler
-        floatting_params (list): floating parameter in the samplers
+        floating_params (list): floating parameter in the samplers
     """
 
     assert all(is_valid_pdf(m) for m in models)
     assert len(nevents) == len(models)
 
-    if floatting_params:
-        floatting_params = [f.name for f in floatting_params]
+    if floating_params:
+        floating_params = [f.name for f in floating_params]
 
     samplers = []
     fixed_params = []
     for m in models:
         def to_fix(p):
-            if floatting_params:
-                return p.name in floatting_params
+            if floating_params:
+                return p.name in floating_params
             else:
                 return False
         fixed = [p for p in m.get_dependents() if not to_fix(p)]
@@ -46,8 +46,8 @@ def base_sample(samplers, ntoys, parameter=None, value=None, *args, **kwargs):
     Args:
         samplers (list): generators of samples
         ntoys (int): number of samples to generate
-        parameter (optionnal): floating parameter in the sampler
-        value (optionnal): value of the parameter
+        parameter (optional): floating parameter in the sampler
+        value (optional): value of the parameter
     """
 
     for i in range(ntoys):
