@@ -221,7 +221,8 @@ class FrequentistCalculator(BaseCalculator):
                     eval_values += poieval.values.tolist()
                 eval_values = list(dict.fromkeys(eval_values))
 
-                toyresult = self._generate_and_fit_toys(p, ntogen, POIarray(poigen.parameter, eval_values))
+                toyresult = self._generate_and_fit_toys(ntoys=ntogen, poigen=p,
+                                                        poieval=POIarray(poigen.parameter, eval_values))
 
                 if p in toysdict:
                     toysdict[p].update(toyresult)
