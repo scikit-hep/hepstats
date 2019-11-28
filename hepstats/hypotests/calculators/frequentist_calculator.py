@@ -85,22 +85,21 @@ class FrequentistCalculator(BaseCalculator):
 
         return self._sampler(self.model,  nevents, floating_params)
 
-    def sample(self, sampler, ntoys, parameter=None, value=None):
+    def sample(self, sampler, ntoys, poi=None):
         """
-        Returns the samples generated from the sampler for a given value of a parameter
+        Returns the samples generated from the sampler for a given value of a parameter of interest
 
         Args:
             sampler (list): generator of samples
             ntoys (int): number of samples to generate
-            parameter (optional): floating parameter in the sampler
-            value (optional): value of the parameter
+            poi (POI, optional):  in the sampler
 
         Example with `zfit`:
             >>> mean = zfit.Parameter("mean")
             >>> sampler = calc.sampler(floating_params=[mean])
-            >>> sample = calc.sample(sampler, 1000, mean, 1.2)
+            >>> sample = calc.sample(sampler, 1000, POI(mean, 1.2))
         """
-        return self._sample(sampler, ntoys, parameter, value)
+        return self._sample(sampler, ntoys, parameter=poi.parameter, value=poi.value)
 
     def toys_loss(self, parameter):
         """
@@ -133,7 +132,6 @@ class FrequentistCalculator(BaseCalculator):
         minimizer = self.minimizer
 
         param = poigen.parameter
-        gen_value = poigen.value
 
         toys_loss = self.toys_loss(param)
         sampler = toys_loss.data
@@ -143,7 +141,7 @@ class FrequentistCalculator(BaseCalculator):
 
         printfreq = ntoys * printfreq
 
-        toys = self.sample(sampler, int(ntoys*1.2), param, gen_value)
+        toys = self.sample(sampler, int(ntoys*1.2), poigen)
 
         for i in range(ntoys):
             converged = False
@@ -153,7 +151,7 @@ class FrequentistCalculator(BaseCalculator):
                     next(toys)
                 except StopIteration:
                     to_gen = ntoys - i
-                    toys = self.sample(sampler, int(to_gen*1.2), param, gen_value)
+                    toys = self.sample(sampler, int(to_gen*1.2), poigen)
                     next(toys)
 
                 minimum = minimizer.minimize(loss=toys_loss)
