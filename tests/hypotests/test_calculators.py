@@ -91,6 +91,10 @@ def test_base_calculator(calculator):
     with pytest.raises(ValueError):
         calc_loss.lossbuilder(model=[model], data=[sampler], weights=[np.ones(10000), np.ones(10000)])
 
+    assert calc_loss.get_parameter(mean_poi.name) == mean
+    with pytest.raises(KeyError):
+        calc_loss.get_parameter("dummy_parameter")
+
 
 def test_asymptotic_calculator_one_poi():
     with pytest.raises(TypeError):
