@@ -101,19 +101,20 @@ class FrequentistCalculator(BaseCalculator):
         """
         return self._sample(sampler, ntoys, parameter=poi.parameter, value=poi.value)
 
-    def toys_loss(self, parameter):
+    def toys_loss(self, parameter_name):
         """
         Construct a loss function constructed with a sampler for a given floating parameter
 
         Args:
-            parameter: floating parameter in the sampler
+            parameter_name: name floating parameter in the sampler
         Returns:
              Loss function
 
         Example with `zfit`:
             >>> loss = calc.toys_loss(zfit.Parameter("mean"))
         """
-        if parameter.name not in self._toys_loss:
+        if parameter_name not in self._toys_loss:
+            parameter = self.get_parameter(parameter_name)
             sampler = self.sampler(floating_params=[parameter])
             self._toys_loss[parameter.name] = self.lossbuilder(self.model, sampler)
         return self._toys_loss[parameter.name]

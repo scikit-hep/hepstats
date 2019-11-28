@@ -62,6 +62,11 @@ class BaseCalculator(object):
         # cache of the observed nll values
         self._obs_nll = {}
 
+        self._parameters = {}
+        for m in self.model:
+            for d in m.get_dependents():
+                self._parameters[d.name] = d
+
     @property
     def loss(self):
         """
@@ -123,6 +128,15 @@ class BaseCalculator(object):
         Returns the constraints on the loss / likehood function used in the calculator.
         """
         return self.loss.constraints
+
+    def get_parameter(self, name):
+        """
+        Returns the parameter in loss function with given input name.
+
+        Args:
+            name (str): name of the parameter to return
+        """
+        return self._parameters[name]
 
     def set_dependents_to_bestfit(self):
         """
