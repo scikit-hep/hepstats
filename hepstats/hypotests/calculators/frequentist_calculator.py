@@ -134,7 +134,7 @@ class FrequentistCalculator(BaseCalculator):
 
         param = poigen.parameter
 
-        toys_loss = self.toys_loss(param)
+        toys_loss = self.toys_loss(poigen.name)
         sampler = toys_loss.data
 
         result = {"bestfit": {"values": np.empty(ntoys), "nll": np.empty(ntoys)},
