@@ -121,17 +121,17 @@ class FrequentistCalculator(BaseCalculator):
 
     def _generate_and_fit_toys(self, ntoys, poigen, poieval, printfreq=0.2):
         """
-        Generate and fit toys for a given POI.
+        Generate and fit toys for at a given POI (poigen). The toys are then fitted, and the likelihood
+        is profiled at the values of poigen and poieval.
 
         Args:
             ntoys (int): number of toys to generate
             poigen (POI): POI used to generate the toys
-            poieval (POIarray): POI values to evaluate the loss function
+            poieval (POIarray, optional): POI values to evaluate the loss function
             printfreq: print frequency of the toys generation
         """
 
         minimizer = self.minimizer
-
         param = poigen.parameter
 
         toys_loss = self.toys_loss(poigen.name)
