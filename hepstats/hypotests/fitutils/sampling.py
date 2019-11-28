@@ -5,7 +5,7 @@ Module providing basic sampling methods.
 """
 
 
-def base_sampler(models, nevents, floating_params=None, *args, **kwargs):
+def base_sampler(models, nevents, floating_params=None):
     """
     Creates a samplers from models.
 
@@ -39,7 +39,7 @@ def base_sampler(models, nevents, floating_params=None, *args, **kwargs):
     return samplers
 
 
-def base_sample(samplers, ntoys, parameter=None, value=None, *args, **kwargs):
+def base_sample(samplers, ntoys, parameter=None, value=None):
     """
     Sample from samplers.
 

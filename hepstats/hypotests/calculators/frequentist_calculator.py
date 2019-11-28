@@ -64,7 +64,7 @@ class FrequentistCalculator(BaseCalculator):
         """
         return self._ntoysalt
 
-    def sampler(self, floating_params=None, *args, **kwargs):
+    def sampler(self, floating_params=None):
         """
         Create sampler with models.
 
@@ -76,13 +76,14 @@ class FrequentistCalculator(BaseCalculator):
         """
         self.set_dependents_to_bestfit()
         nevents = []
+        # self.model and self.data defined in BaseCalculator
         for m, d in zip(self.model, self.data):
             if m.is_extended:
                 nevents.append("extended")
             else:
                 nevents.append(get_nevents(d))
 
-        return self._sampler(self.model,  nevents, floating_params, *args, **kwargs)
+        return self._sampler(self.model,  nevents, floating_params)
 
     def sample(self, sampler, ntoys, parameter=None, value=None):
         """
