@@ -117,7 +117,7 @@ class FrequentistCalculator(BaseCalculator):
             parameter = self.get_parameter(parameter_name)
             sampler = self.sampler(floating_params=[parameter])
             self._toys_loss[parameter.name] = self.lossbuilder(self.model, sampler)
-        return self._toys_loss[parameter.name]
+        return self._toys_loss[parameter_name]
 
     def _generate_and_fit_toys(self, ntoys, poigen, poieval, printfreq=0.2):
         """
