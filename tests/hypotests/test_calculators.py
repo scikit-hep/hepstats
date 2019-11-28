@@ -123,7 +123,7 @@ def test_frequentist_calculator_one_poi():
     assert calc.ntoysnull == 100
     assert calc.ntoysalt == 100
 
-    samplers = calc.sampler(floatting_params=[mean])
+    samplers = calc.sampler(floating_params=[mean])
     assert all(is_valid_data(s) for s in samplers)
     loss = calc.toys_loss(mean)
     assert is_valid_loss(loss)
