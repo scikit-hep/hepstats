@@ -189,7 +189,7 @@ class AsymptoticCalculator(BaseCalculator):
         return ret
 
     def pnull(self, qobs, qalt=None, onesided=True, onesideddiscovery=False, qtilde=False, nsigma=0) -> np.array:
-        """ Compute the pvalue for the null hypotesis.
+        """ Compute the pvalue for the null hypothesis.
 
             Args:
                 qobs (`np.array`): observed values of the test-statistic q
@@ -224,7 +224,7 @@ class AsymptoticCalculator(BaseCalculator):
         return pnull
 
     def qalt(self, poinull, poialt, onesided, onesideddiscovery) -> np.array:
-        """ Compute alternative values of the $$\\Delta$$ log-likelihood test statistic using the asimov
+        """ Compute alternative hypothesis values of the $$\\Delta$$ log-likelihood test statistic using the asimov
             dataset.
 
             Args:
@@ -249,7 +249,7 @@ class AsymptoticCalculator(BaseCalculator):
                       onesided=onesided, onesideddiscovery=onesideddiscovery)
 
     def palt(self, qobs, qalt, onesided=True, onesideddiscovery=False, qtilde=False) -> np.array:
-        """ Compute the pvalue for the alternative hypotesis.
+        """ Compute the pvalue for the alternative hypothesis.
 
             Args:
                 qobs (`np.array`): observed values of the test-statistic q

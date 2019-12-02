@@ -70,3 +70,14 @@ def plotlimit(poivalues, pvalues, alpha=0.05, CLs=True, ax=None):
     ax.legend(loc="best", fontsize=14)
 
     return ax
+
+def one_minus_cl_plot(x, pvalues, alpha=0.32, ax=None):
+    
+    if ax is None:
+        f, ax = plt.subplots()
+    
+    ax.plot(x, pvalues, ".--")
+    ax.axhline(alpha, color="red")
+    ax.set_ylabel("1-CL")
+    
+    return ax

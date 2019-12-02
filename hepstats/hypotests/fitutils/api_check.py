@@ -62,18 +62,22 @@ def is_valid_pdf(object):
 
 
 def is_valid_loss(object):
-    has_model = hasattr(object, "model")
-    if not has_model:
+    if not hasattr(object, "model"):
         return False
     else:
         model = object.model
 
-    has_data = hasattr(object, "data")
+    if not hasattr(object, "data"):
+        return False
+    else:
+        data = object.data
+
     has_constraints = hasattr(object, "constraints")
     has_fit_range = hasattr(object, "fit_range")
     all_valid_pdfs = all(is_valid_pdf(m) for m in model)
+    all_valid_datasets = all(is_valid_data(d) for d in data)
 
-    return all_valid_pdfs and has_data and has_constraints and has_fit_range
+    return all_valid_pdfs and all_valid_datasets and has_constraints and has_fit_range
 
 
 def is_valid_fitresult(object):

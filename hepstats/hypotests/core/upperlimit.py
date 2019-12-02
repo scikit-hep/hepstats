@@ -136,7 +136,6 @@ class UpperLimit(BaseTest):
 
         limits = {}
         for k in to_interpolate:
-            print(self.pvalues(CLs)[k])
 
             if k not in ["expected_m1", "expected_m2"]:
                 pvalues = self.pvalues(CLs)[k][filter]
