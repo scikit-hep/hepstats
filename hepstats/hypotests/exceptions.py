@@ -8,3 +8,10 @@ class POIRangeError(Exception):
 
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
+
+
+class ParameterNotFound(Exception):
+    """Exception class raised if a parameter with a given name is not found"""
+
+    def __init__(self, *args, **kwargs):
+        Exception.__init__(self, *args, **kwargs)

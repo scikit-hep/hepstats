@@ -2,6 +2,7 @@ import asdf
 import numpy as np
 
 from .parameters import POI, POIarray
+from .exceptions import ParameterNotFound
 
 
 class Toys(object):
@@ -57,17 +58,6 @@ class Toys(object):
         ret["nlls"]["bestfit"] = self.nll_bestfit
         return ret
 
-    @classmethod
-    def from_dict(cls, poigen, dict):
-        poieval = POIarray(poigen.parameter, dict["evalvalues"])
-        bestfit = dict["bestfit"]
-        nll_bestfit = dict["nll_bestfit"]
-        nlls = {p: dict["nlls"][p.value] for p in poieval}
-
-        t = cls.__init__(poigen, poieval)
-        t.add_entries(besfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
-        return t
-
 
 class ToysCollection(object):
 
@@ -81,42 +71,46 @@ class ToysCollection(object):
         poigen, poieval = index
 
         if not isinstance(poigen, POI):
-            raise NotImplementedError
+            raise TypeError("A `hepstats.parameters.POI` is required for poigen.")
         if not isinstance(poieval, POIarray):
-            raise NotImplementedError
+            raise TypeError("A `hepstats.parameters.POIarray` is required for poieval.")
         if not isinstance(toy, Toys):
-            raise NotImplementedError
+            raise TypeError("A `hepstats.toyutils.Toys` is required for toy.")
 
         self._toys[index] = toy
 
     def __contains__(self, index):
         return index in self._toys
 
-    def to_dict(self):
-        pass
-        return {(p, p.value): t.dict() for (pg, pe), t in self._toys.items()}
-
     def to_yaml(self, filename):
-        tree = {"toys": self.to_dict()}
+        tree = {"toys": [v.to_dict() for v in self._toys.values()]}
         af = asdf.AsdfFile(tree)
         af.write_to(filename)
 
     @classmethod
     def from_yaml(cls, filename, parameters):
-        dict_from_yaml = asdf.open(filename).tree["toys"]
+        toys = asdf.open(filename).tree["toys"]
         tc = cls.__init__()
 
-        for (n, v), t in dict_from_yaml.items():
+        for t in toys:
             poiparam = None
             for p in parameters:
-                if n == p.name:
+                if t["poi"] == p.name:
                     poiparam = p
 
             if poiparam is None:
-                raise NotImplementedError
+                raise ParameterNotFound(f"Parameter with name {t['poi']} is not found.")
 
-            poigen = POI(poiparam, v)
+            poigen = POI(poiparam, t["genvalue"])
+            poieval = POIarray(poiparam, t["evalvalues"])
 
-            tc._toys[poigen] = Toys.from_dict(poigen, t)
+            bestfit = t["bestfit"]
+            nll_bestfit = t["nll_bestfit"]
+            nlls = {p: t["nlls"][p.value] for p in poieval}
+
+            t = Toys.from_dict(poigen, t)
+            t.add_entries(besfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
+
+            tc._toys[poigen, poieval] = t
 
         return tc
