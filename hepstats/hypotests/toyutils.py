@@ -60,6 +60,19 @@ class Toys(object):
 
         self._nlls = {p: np.concatenate([v, nlls[p]]) for p, v in self.nlls.items()}
 
+    def __add__(self, toys):
+        if not isinstance(Toys):
+            raise TypeError("A `Toys` is required.")
+
+        assert self.poigen == toys.poigen
+        assert self.poieval == toys.poieval
+
+        toys = self.copy()
+        toys.add_entries(bestfit=toys.bestfit, nll_bestfit=toys.nll_bestfit,
+                         nlls=toys.nlls)
+
+        return toys
+
     def to_dict(self):
         ret = {"poi": self.poigen.name, "bestfit": self.bestfit}
         ret["nlls"] = {n: nll for n, nll in self.nlls.items()}
@@ -67,6 +80,12 @@ class Toys(object):
         ret["evalvalues"] = self.poieval.values
         ret["nlls"]["bestfit"] = self.nll_bestfit
         return ret
+
+    def copy(self):
+        toys = Toys(self.poigen, self.poieval)
+        toys.add_entries(bestfit=toys.bestfit, nll_bestfit=toys.nll_bestfit,
+                         nlls=toys.nlls)
+        return toys
 
 
 class ToysCollection(object):
@@ -110,8 +129,25 @@ class ToysCollection(object):
 
         self._toys[index] = toy
 
+    def items(self):
+        return self._toys.items()
+
     def __contains__(self, index):
         return index in self._toys
+
+    def __add__(self, toyscollection):
+        if not isinstance(ToysCollection):
+            raise TypeError("A `ToysCollection` is required.")
+
+        ntoyscollection = self.copy()
+
+        for index, toy in toyscollection.items():
+            if index not in ntoyscollection:
+                ntoyscollection[index] = toy
+            else:
+                ntoyscollection[index] = ntoyscollection[index] + toy
+
+        return ntoyscollection
 
     def to_yaml(self, filename):
         """
@@ -135,7 +171,7 @@ class ToysCollection(object):
             parameters (list): list of parameters
 
         Returns
-            `ToysCollection`
+            `Toys`
         """
 
         toys = asdf.open(filename).tree["toys"]
@@ -162,4 +198,9 @@ class ToysCollection(object):
 
             toyscollection._toys[poigen, poieval] = t
 
+        return toyscollection
+
+    def copy(self):
+        toyscollection = Toys()
+        toyscollection._toys = dict(self._toys)
         return toyscollection

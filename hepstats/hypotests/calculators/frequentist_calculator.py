@@ -19,8 +19,8 @@ class FrequentistCalculator(BaseCalculator):
             Args:
                 input : loss or fit result
                 minimizer : minimizer to use to find the minimum of the loss function
-                ntoysnull (int, default=100): number of toys to generate for the null hypothesis
-                ntoysalt (int, default=100): number of toys to generate for the alternative hypothesis
+                ntoysnull (int, default=100): minimum number of toys to generate for the null hypothesis
+                ntoysalt (int, default=100): minimum number of toys to generate for the alternative hypothesis
                 sampler : function used to create sampler with models, number of events and
                     floating parameters in the sample Default is `hepstats.fitutils.sampling.base_sampler`.
                 sample : function used to get samples from the sampler.
@@ -43,8 +43,6 @@ class FrequentistCalculator(BaseCalculator):
 
         super(FrequentistCalculator, self).__init__(input, minimizer)
 
-        self._toysnull = {}
-        self._toysalt = {}
         self._toyscollection = ToysCollection()
         self._ntoysnull = ntoysnull
         self._ntoysalt = ntoysalt
@@ -65,6 +63,17 @@ class FrequentistCalculator(BaseCalculator):
         Returns the number of toys loss for the alternative hypothesis.
         """
         return self._ntoysalt
+
+    @property
+    def toyscollection(self):
+        return self._toyscollection
+
+    def load_toys_from_yaml(self, filename):
+        parameters = self.loss.get_dependents()
+        self._toyscollection = self.toyscollection + ToysCollection.from_yaml(filename, parameters)
+
+    def save_toys_from_yaml(self, filename):
+        self.toyscollection.to_yaml(filename)
 
     def sampler(self, floating_params=None):
         """
@@ -215,17 +224,17 @@ class FrequentistCalculator(BaseCalculator):
             if qtilde and 0. not in poieval:
                 poieval = poieval.append(0.0)
 
-            if (p, poieval) not in self._toyscollection:
+            if (p, poieval) not in self.toyscollection:
                 ntogen = ntoys
                 toysresults = Toys(p, poieval)
-                self._toyscollection[p, poieval] = toysresults
+                self.toyscollection[p, poieval] = toysresults
             else:
-                ngenerated = self._toyscollection[p, poieval].ntoys
+                ngenerated = self.toyscollection[p, poieval].ntoys
                 if ngenerated < ntoys:
                     ntogen = ntoys - ngenerated
                 else:
                     ntogen = 0
-                toysresults = self._toyscollection[p, poieval]
+                toysresults = self.toyscollection[p, poieval]
 
             if ntogen > 0:
                 print(f"Generating {hypothesis} hypothesis toys for {p}.")
