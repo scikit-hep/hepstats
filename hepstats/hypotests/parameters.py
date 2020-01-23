@@ -74,6 +74,10 @@ class POIarray(object):
     def shape(self):
         return self._shape
 
+    def append(self, value):
+        values = np.concatenate([self.values, [value]])
+        return POIarray(parameter=self.parameter, values=values)
+
 
 class POI(POIarray):
 

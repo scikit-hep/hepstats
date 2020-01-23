@@ -5,6 +5,7 @@ from .basecalculator import BaseCalculator
 from ..fitutils.utils import pll, get_nevents
 from ..fitutils.sampling import base_sampler, base_sample
 from ..parameters import POI, POIarray
+from ..toyutils import Toys, ToysCollection
 
 
 class FrequentistCalculator(BaseCalculator):
@@ -44,6 +45,7 @@ class FrequentistCalculator(BaseCalculator):
 
         self._toysnull = {}
         self._toysalt = {}
+        self._toyscollection = ToysCollection()
         self._ntoysnull = ntoysnull
         self._ntoysalt = ntoysalt
         self._sampler = sampler
@@ -119,7 +121,7 @@ class FrequentistCalculator(BaseCalculator):
             self._toys_loss[parameter.name] = self.lossbuilder(self.model, sampler)
         return self._toys_loss[parameter_name]
 
-    def _generate_and_fit_toys(self, ntoys, poigen, poieval, printfreq=0.2):
+    def _generate_and_fit_toys(self, ntoys, toys, printfreq=0.2):
         """
         Generate and fit toys for at a given POI (poigen). The toys are then fitted, and the likelihood
         is profiled at the values of poigen and poieval.
@@ -131,29 +133,33 @@ class FrequentistCalculator(BaseCalculator):
             printfreq: print frequency of the toys generation
         """
 
+        poigen = toys.poigen
+        poieval = toys.poieval
+
         minimizer = self.minimizer
         param = poigen.parameter
 
         toys_loss = self.toys_loss(poigen.name)
         sampler = toys_loss.data
 
-        result = {"bestfit": {"values": np.empty(ntoys), "nll": np.empty(ntoys)},
-                  "nll": {p: np.empty(ntoys) for p in poieval}}
+        bestfit = np.empty(ntoys)
+        nll_bestfit = np.empty(ntoys)
+        nlls = {p: np.empty(ntoys) for p in poieval}
 
         printfreq = ntoys * printfreq
 
-        toys = self.sample(sampler, int(ntoys*1.2), poigen)
+        samples = self.sample(sampler, int(ntoys*1.2), poigen)
 
         for i in range(ntoys):
             converged = False
             toprint = i % printfreq == 0
             while converged is False:
                 try:
-                    next(toys)
+                    next(samples)
                 except StopIteration:
                     to_gen = ntoys - i
-                    toys = self.sample(sampler, int(to_gen*1.2), poigen)
-                    next(toys)
+                    samples = self.sample(sampler, int(to_gen*1.2), poigen)
+                    next(samples)
 
                 minimum = minimizer.minimize(loss=toys_loss)
                 converged = minimum.converged
@@ -162,14 +168,11 @@ class FrequentistCalculator(BaseCalculator):
                     self.set_dependents_to_bestfit()
                     continue
 
-                bestfit = minimum.params[param]["value"]
-                result["bestfit"]["values"][i] = bestfit
-                nll = pll(minimizer, toys_loss, POI(param, bestfit))
-                result["bestfit"]["nll"][i] = nll
+                bestfit[i] = minimum.params[param]["value"]
+                nll_bestfit[i] = pll(minimizer, toys_loss, POI(param, bestfit[i]))
 
                 for p in poieval:
-                    nll = pll(minimizer, toys_loss, p)
-                    result["nll"][p][i] = nll
+                    nlls[p][i] = pll(minimizer, toys_loss, p)
 
             if toprint:
                 print("{0} toys generated, fitted and scanned!".format(i))
@@ -178,7 +181,7 @@ class FrequentistCalculator(BaseCalculator):
                 break
             i += 1
 
-        return result
+        toys.add_entries(bestfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
 
     def _get_toys(self, poigen, poieval=None, qtilde=False, hypothesis="null"):
         """
@@ -196,40 +199,50 @@ class FrequentistCalculator(BaseCalculator):
 
         if hypothesis == "null":
             ntoys = self.ntoysnull
-            toysdict = self._toysnull
         else:
             ntoys = self.ntoysalt
-            toysdict = self._toysalt
+
+        ret = {}
 
         for p in poigen:
-            if p not in toysdict:
-                ntogen = ntoys
+
+            if poieval is None:
+                poieval = POIarray(poigen.parameter, p.value)
             else:
-                ngenerated = toysdict[p]["bestfit"]["values"].size
+                if p not in poieval:
+                    poieval = poieval.append(p.value)
+
+            if qtilde and 0. not in poieval:
+                poieval = poieval.append(0.0)
+
+            if (p, poieval) not in self._toyscollection:
+                ntogen = ntoys
+                toysresults = Toys(p, poieval)
+                self._toyscollection[p, poieval] = toysresults
+            else:
+                ngenerated = self._toyscollection[p, poieval].ntoys
                 if ngenerated < ntoys:
                     ntogen = ntoys - ngenerated
                 else:
                     ntogen = 0
+                toysresults = self._toyscollection[p, poieval]
 
             if ntogen > 0:
                 print(f"Generating {hypothesis} hypothesis toys for {p}.")
 
-                eval_values = [p.value]
-                if qtilde:
-                    eval_values.append(0.)
-                if poieval:
-                    eval_values += poieval.values.tolist()
-                eval_values = list(dict.fromkeys(eval_values))
+                assert all(p in toysresults.poieval for p in poieval)
 
-                toyresult = self._generate_and_fit_toys(ntoys=ntogen, poigen=p,
-                                                        poieval=POIarray(poigen.parameter, eval_values))
+                self._generate_and_fit_toys(ntoys=ntogen, toys=toysresults)
 
-                if p in toysdict:
-                    toysdict[p].update(toyresult)
-                else:
-                    toysdict[p] = toyresult
+                # if p in toysdict:
+                #    toysdict[p].update(toysresults)
+                # else:
+                #    toysdict[p] = toysresults
 
-        return {p: toysdict[p] for p in poigen}
+            ret[p] = toysresults
+
+        return ret
+        #return {p: toysdict[p] for p in poigen}
 
     def get_toys_null(self, poigen, poieval, qtilde=False):
         """
@@ -296,12 +309,12 @@ class FrequentistCalculator(BaseCalculator):
 
         for p in poinull:
             toysresult = toysresults[p]
-            nll1 = toysresult["nll"][p]
-            nll2 = toysresult["bestfit"]["nll"]
-            bestfit = toysresult["bestfit"]["values"]
+            nll1 = toysresult.nlls[p]
+            nll2 = toysresult.nll_bestfit
+            bestfit = toysresult.bestfit
 
             if qtilde:
-                nllat0 = toysresult["nll"][0]
+                nllat0 = toysresult.nlls[0]
                 nll2 = np.where(bestfit < 0, nllat0, nll2)
                 bestfit = np.where(bestfit < 0, 0, bestfit)
 
@@ -340,12 +353,12 @@ class FrequentistCalculator(BaseCalculator):
         for p in poinull:
             toysresult = toysresults[poialt]
 
-            nll1 = toysresult["nll"][p]
-            nll2 = toysresult["bestfit"]["nll"]
-            bestfit = toysresult["bestfit"]["values"]
+            nll1 = toysresult.nlls[p]
+            nll2 = toysresult.nll_bestfit
+            bestfit = toysresult.bestfit
 
             if qtilde:
-                nllat0 = toysresult["nll"][0]
+                nllat0 = toysresult.nll[0]
                 nll2 = np.where(bestfit < 0, nllat0, nll2)
                 bestfit = np.where(bestfit < 0, 0, bestfit)
 
