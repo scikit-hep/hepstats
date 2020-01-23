@@ -234,15 +234,9 @@ class FrequentistCalculator(BaseCalculator):
 
                 self._generate_and_fit_toys(ntoys=ntogen, toys=toysresults)
 
-                # if p in toysdict:
-                #    toysdict[p].update(toysresults)
-                # else:
-                #    toysdict[p] = toysresults
-
             ret[p] = toysresults
 
         return ret
-        #return {p: toysdict[p] for p in poigen}
 
     def get_toys_null(self, poigen, poieval, qtilde=False):
         """

@@ -8,6 +8,16 @@ from .exceptions import ParameterNotFound
 class Toys(object):
 
     def __init__(self, poigen, poieval):
+        """
+        Class to store the results of toys generated for a given value of a POI.
+        The best fit value of the POI, the NLL evaluate at the best fit, and the NLL evaluated
+        at several values of the POI are stored.
+
+        Args:
+            poigen (POI): POI used to generate the toys
+            poieval (POIarray): POI values to evaluate the loss function
+        """
+
         self._poigen = poigen
         self._bestfit = []
         self._nll_bestfit = []
@@ -60,22 +70,43 @@ class Toys(object):
 
 
 class ToysCollection(object):
+    """
+    Class containing instances of `Toys` in a dictionnary
+    """
 
     def __init__(self):
         self._toys = {}
 
     def __getitem__(self, index):
+        """
+        Getter function.
+
+        Args:
+            index (`POI`, `POIarray`): POI used to generate the toys and
+                POI values to evaluate the loss function
+
+        Returns:
+            `Toys`
+        """
         return self._toys[index]
 
     def __setitem__(self, index, toy):
+        """
+        Setter function.
+
+        Args:
+            index (`POI`, `POIarray`): POI used to generate the toys and
+                POI values to evaluate the loss function
+            toy: (`Toys`)
+        """
         poigen, poieval = index
 
         if not isinstance(poigen, POI):
-            raise TypeError("A `hepstats.parameters.POI` is required for poigen.")
+            raise TypeError("A `hypotests.parameters.POI` is required for poigen.")
         if not isinstance(poieval, POIarray):
-            raise TypeError("A `hepstats.parameters.POIarray` is required for poieval.")
+            raise TypeError("A `hypotests.parameters.POIarray` is required for poieval.")
         if not isinstance(toy, Toys):
-            raise TypeError("A `hepstats.toyutils.Toys` is required for toy.")
+            raise TypeError("A `hypotests.toyutils.Toys` is required for toy.")
 
         self._toys[index] = toy
 
@@ -83,14 +114,32 @@ class ToysCollection(object):
         return index in self._toys
 
     def to_yaml(self, filename):
+        """
+        Save the toys into a yaml file.
+
+        Args:
+            filename (str)
+        """
         tree = {"toys": [v.to_dict() for v in self._toys.values()]}
         af = asdf.AsdfFile(tree)
         af.write_to(filename)
 
     @classmethod
     def from_yaml(cls, filename, parameters):
+        """
+        Read the toys from a yaml file. At least one parameter in the argument `parameters` must have
+        the name of the parameter of interest save in the yaml file.
+
+        Args:
+            filename (str)
+            parameters (list): list of parameters
+
+        Returns
+            `ToysCollection`
+        """
+
         toys = asdf.open(filename).tree["toys"]
-        tc = cls.__init__()
+        toyscollection = cls.__init__()
 
         for t in toys:
             poiparam = None
@@ -111,6 +160,6 @@ class ToysCollection(object):
             t = Toys.from_dict(poigen, t)
             t.add_entries(besfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
 
-            tc._toys[poigen, poieval] = t
+            toyscollection._toys[poigen, poieval] = t
 
-        return tc
+        return toyscollection
