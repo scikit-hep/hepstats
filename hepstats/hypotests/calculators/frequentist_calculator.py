@@ -239,16 +239,21 @@ class FrequentistCalculator(BaseCalculator):
                 poieval = poieval.append(0.0)
 
             if (p, poieval) not in self.toyscollection:
+                print("AAAA")
                 ntogen = ntoys
                 toysresults = ToyResult(p, poieval)
                 self.toyscollection[p, poieval] = toysresults
             else:
+                print("BBBB")
                 ngenerated = self.toyscollection[p, poieval].ntoys
                 if ngenerated < ntoys:
                     ntogen = ntoys - ngenerated
                 else:
                     ntogen = 0
                 toysresults = self.toyscollection[p, poieval]
+
+            print(toysresults)
+            print(toysresults.ntoys)
 
             if ntogen > 0:
                 print(f"Generating {hypothesis} hypothesis toys for {p}.")
