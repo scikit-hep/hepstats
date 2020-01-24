@@ -88,7 +88,7 @@ class ToyResult(object):
         return toys
 
 
-class ToysCollection(object):
+class ToysManager(object):
     """
     Class containing instances of `Toys` in a dictionnary
     """
@@ -136,7 +136,7 @@ class ToysCollection(object):
         return index in self._toys
 
     def __add__(self, toyscollection):
-        if not isinstance(toyscollection, ToysCollection):
+        if not isinstance(toyscollection, ToysManager):
             raise TypeError("A `ToysCollection` is required.")
 
         ntoyscollection = self.copy()
@@ -201,6 +201,6 @@ class ToysCollection(object):
         return toyscollection
 
     def copy(self):
-        toyscollection = ToysCollection()
+        toyscollection = ToysManager()
         toyscollection._toys = dict(self._toys)
         return toyscollection

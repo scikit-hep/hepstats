@@ -5,7 +5,7 @@ from .basecalculator import BaseCalculator
 from ..fitutils.utils import pll, get_nevents
 from ..fitutils.sampling import base_sampler, base_sample
 from ..parameters import POI, POIarray
-from ..toyutils import ToyResult, ToysCollection
+from ..toyutils import ToyResult, ToysManager
 
 
 class FrequentistCalculator(BaseCalculator):
@@ -43,7 +43,7 @@ class FrequentistCalculator(BaseCalculator):
 
         super(FrequentistCalculator, self).__init__(input, minimizer)
 
-        self._toyscollection = ToysCollection()
+        self._toyscollection = ToysManager()
         self._ntoysnull = ntoysnull
         self._ntoysalt = ntoysalt
         self._sampler = sampler
@@ -88,7 +88,7 @@ class FrequentistCalculator(BaseCalculator):
             filename (str)
         """
         parameters = self.loss.get_dependents()
-        self._toyscollection = self.toyscollection + ToysCollection.from_yaml(filename, parameters)
+        self._toyscollection = self.toyscollection + ToysManager.from_yaml(filename, parameters)
 
     def sampler(self, floating_params=None):
         """
