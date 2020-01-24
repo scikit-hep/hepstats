@@ -1,4 +1,5 @@
 import asdf
+import os
 import numpy as np
 
 from .parameters import POI, POIarray
@@ -156,7 +157,12 @@ class ToysManager(object):
         Args:
             filename (str)
         """
-        tree = {"toys": [v.to_dict() for v in self._toys.values()]}
+        if os.path.isfile(filename):
+            tree = asdf.open(filename).tree
+        else:
+            tree = {}
+
+        tree["toys"]: [v.to_dict() for v in self._toys.values()]
         af = asdf.AsdfFile(tree)
         af.write_to(filename)
 

@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import zfit
-from zfit.core.testing import setup_function  # allows redefinition of zfit.Parameter, needed for tests
+from zfit.core.testing import teardown_function # allows redefinition of zfit.Parameter, needed for tests
 from zfit.loss import ExtendedUnbinnedNLL
 from zfit.minimize import Minuit
 
@@ -29,7 +29,7 @@ def create_loss():
     data = zfit.data.Data.from_numpy(obs=obs, array=data)
 
     lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
-    Nsig = zfit.Parameter("Ns", 20., -20., N)
+    Nsig = zfit.Parameter("Nsig", 20., -20., N)
     Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
 
     signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)
