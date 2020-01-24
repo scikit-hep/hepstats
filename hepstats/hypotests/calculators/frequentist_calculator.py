@@ -145,20 +145,19 @@ class FrequentistCalculator(BaseCalculator):
             self._toys_loss[parameter.name] = self.lossbuilder(self.model, sampler)
         return self._toys_loss[parameter_name]
 
-    def _generate_and_fit_toys(self, ntoys, toys, printfreq=0.2):
+    def _generate_and_fit_toys(self, ntoys, toysresult, printfreq=0.2):
         """
         Generate and fit toys for at a given POI (poigen). The toys are then fitted, and the likelihood
         is profiled at the values of poigen and poieval.
 
         Args:
             ntoys (int): number of toys to generate
-            poigen (POI): POI used to generate the toys
-            poieval (POIarray, optional): POI values to evaluate the loss function
+            toysresult (ToyResult): object where the result will be stored
             printfreq: print frequency of the toys generation
         """
 
-        poigen = toys.poigen
-        poieval = toys.poieval
+        poigen = toysresult.poigen
+        poieval = toysresult.poieval
 
         minimizer = self.minimizer
         param = poigen.parameter
@@ -205,7 +204,7 @@ class FrequentistCalculator(BaseCalculator):
                 break
             i += 1
 
-        toys.add_entries(bestfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
+        toysresult.add_entries(bestfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
 
     def _get_toys(self, poigen, poieval=None, qtilde=False, hypothesis="null"):
         """
@@ -256,7 +255,7 @@ class FrequentistCalculator(BaseCalculator):
 
                 assert all(p in toysresults.poieval for p in poieval)
 
-                self._generate_and_fit_toys(ntoys=ntogen, toys=toysresults)
+                self._generate_and_fit_toys(ntoys=ntogen, toysresult=toysresults)
 
             ret[p] = toysresults
 
@@ -336,7 +335,7 @@ class FrequentistCalculator(BaseCalculator):
                 nll2 = np.where(bestfit < 0, nllat0, nll2)
                 bestfit = np.where(bestfit < 0, 0, bestfit)
 
-            poi1 = POIarray(poinull.parameter, np.full(self.ntoysnull, p.value))
+            poi1 = POIarray(poinull.parameter, np.full(nll1.size, p.value))
             poi2 = POIarray(poinull.parameter, bestfit)
 
             ret[p] = self.q(nll1=nll1, nll2=nll2, poi1=poi1, poi2=poi2, onesided=onesided,
@@ -380,7 +379,7 @@ class FrequentistCalculator(BaseCalculator):
                 nll2 = np.where(bestfit < 0, nllat0, nll2)
                 bestfit = np.where(bestfit < 0, 0, bestfit)
 
-            poi1 = POIarray(poialt.parameter, np.full(self.ntoysalt, p.value))
+            poi1 = POIarray(poialt.parameter, np.full(nll1.size, p.value))
             poi2 = POIarray(poialt.parameter, bestfit)
 
             ret[p] = self.q(nll1=nll1, nll2=nll2, poi1=poi1, poi2=poi2, onesided=onesided,
