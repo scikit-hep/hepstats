@@ -61,7 +61,7 @@ class Toys(object):
         self._nlls = {p: np.concatenate([v, nlls[p]]) for p, v in self.nlls.items()}
 
     def __add__(self, toys):
-        if not isinstance(Toys):
+        if not isinstance(toys, Toys):
             raise TypeError("A `Toys` is required.")
 
         assert self.poigen == toys.poigen
@@ -75,7 +75,7 @@ class Toys(object):
 
     def to_dict(self):
         ret = {"poi": self.poigen.name, "bestfit": self.bestfit}
-        ret["nlls"] = {n: nll for n, nll in self.nlls.items()}
+        ret["nlls"] = {n.value: nll for n, nll in self.nlls.items()}
         ret["genvalue"] = self.poigen.value
         ret["evalvalues"] = self.poieval.values
         ret["nlls"]["bestfit"] = self.nll_bestfit
@@ -136,7 +136,7 @@ class ToysCollection(object):
         return index in self._toys
 
     def __add__(self, toyscollection):
-        if not isinstance(ToysCollection):
+        if not isinstance(toyscollection, ToysCollection):
             raise TypeError("A `ToysCollection` is required.")
 
         ntoyscollection = self.copy()
@@ -175,7 +175,7 @@ class ToysCollection(object):
         """
 
         toys = asdf.open(filename).tree["toys"]
-        toyscollection = cls.__init__()
+        toyscollection = cls()
 
         for t in toys:
             poiparam = None
@@ -187,20 +187,20 @@ class ToysCollection(object):
                 raise ParameterNotFound(f"Parameter with name {t['poi']} is not found.")
 
             poigen = POI(poiparam, t["genvalue"])
-            poieval = POIarray(poiparam, t["evalvalues"])
+            poieval = POIarray(poiparam, np.asarray(t["evalvalues"]))
 
             bestfit = t["bestfit"]
-            nll_bestfit = t["nll_bestfit"]
+            nll_bestfit = t["nlls"]["bestfit"]
             nlls = {p: t["nlls"][p.value] for p in poieval}
 
-            t = Toys.from_dict(poigen, t)
-            t.add_entries(besfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
+            t = Toys(poigen, poieval)
+            t.add_entries(bestfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
 
             toyscollection._toys[poigen, poieval] = t
 
         return toyscollection
 
     def copy(self):
-        toyscollection = Toys()
+        toyscollection = ToysCollection()
         toyscollection._toys = dict(self._toys)
         return toyscollection

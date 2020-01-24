@@ -66,14 +66,29 @@ class FrequentistCalculator(BaseCalculator):
 
     @property
     def toyscollection(self):
+        """
+        Returns the collection of toys.
+        """
         return self._toyscollection
 
+    def save_toys_to_yaml(self, filename):
+        """
+        Save the toys collection to a yaml file.
+
+        Args:
+            filename (str)
+        """
+        self.toyscollection.to_yaml(filename)
+
     def load_toys_from_yaml(self, filename):
+        """
+        Load the toys collection from a yaml file.
+
+        Args:
+            filename (str)
+        """
         parameters = self.loss.get_dependents()
         self._toyscollection = self.toyscollection + ToysCollection.from_yaml(filename, parameters)
-
-    def save_toys_from_yaml(self, filename):
-        self.toyscollection.to_yaml(filename)
 
     def sampler(self, floating_params=None):
         """
@@ -216,7 +231,7 @@ class FrequentistCalculator(BaseCalculator):
         for p in poigen:
 
             if poieval is None:
-                poieval = POIarray(poigen.parameter, p.value)
+                poieval = POIarray(poigen.parameter, [p.value])
             else:
                 if p not in poieval:
                     poieval = poieval.append(p.value)

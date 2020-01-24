@@ -56,7 +56,7 @@ class POIarray(object):
         return len(self.values)
 
     def __eq__(self, other):
-        if not isinstance(other, POI):
+        if not isinstance(other, POIarray):
             return NotImplemented
 
         values_equal = self.values == other.values
