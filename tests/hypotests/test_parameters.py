@@ -41,5 +41,13 @@ def test_pois():
     assert pn[1] != p0
     assert pn[-1] == p1
 
+    pn1 = pn.append(12)
+    assert pn1.values[-1] == 12
+    assert all(pn.values == values)
+    pn2 = pn.append([15, 20, 30])
+    assert pn2.values[-1] == 30
+    assert pn2.values[-2] == 20
+    assert pn2.values[-3] == 15
+
     # test hash
     {p0: "p0", p1: "p1", pn: "pn"}

@@ -5,7 +5,7 @@ from .parameters import POI, POIarray
 from .exceptions import ParameterNotFound
 
 
-class Toys(object):
+class ToyResult(object):
 
     def __init__(self, poigen, poieval):
         """
@@ -61,7 +61,7 @@ class Toys(object):
         self._nlls = {p: np.concatenate([v, nlls[p]]) for p, v in self.nlls.items()}
 
     def __add__(self, toys):
-        if not isinstance(toys, Toys):
+        if not isinstance(toys, ToyResult):
             raise TypeError("A `Toys` is required.")
 
         assert self.poigen == toys.poigen
@@ -82,7 +82,7 @@ class Toys(object):
         return ret
 
     def copy(self):
-        toys = Toys(self.poigen, self.poieval)
+        toys = ToyResult(self.poigen, self.poieval)
         toys.add_entries(bestfit=toys.bestfit, nll_bestfit=toys.nll_bestfit,
                          nlls=toys.nlls)
         return toys
@@ -124,7 +124,7 @@ class ToysCollection(object):
             raise TypeError("A `hypotests.parameters.POI` is required for poigen.")
         if not isinstance(poieval, POIarray):
             raise TypeError("A `hypotests.parameters.POIarray` is required for poieval.")
-        if not isinstance(toy, Toys):
+        if not isinstance(toy, ToyResult):
             raise TypeError("A `hypotests.toyutils.Toys` is required for toy.")
 
         self._toys[index] = toy
@@ -193,7 +193,7 @@ class ToysCollection(object):
             nll_bestfit = t["nlls"]["bestfit"]
             nlls = {p: t["nlls"][p.value] for p in poieval}
 
-            t = Toys(poigen, poieval)
+            t = ToyResult(poigen, poieval)
             t.add_entries(bestfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
 
             toyscollection._toys[poigen, poieval] = t

@@ -5,7 +5,7 @@ from .basecalculator import BaseCalculator
 from ..fitutils.utils import pll, get_nevents
 from ..fitutils.sampling import base_sampler, base_sample
 from ..parameters import POI, POIarray
-from ..toyutils import Toys, ToysCollection
+from ..toyutils import ToyResult, ToysCollection
 
 
 class FrequentistCalculator(BaseCalculator):
@@ -241,7 +241,7 @@ class FrequentistCalculator(BaseCalculator):
 
             if (p, poieval) not in self.toyscollection:
                 ntogen = ntoys
-                toysresults = Toys(p, poieval)
+                toysresults = ToyResult(p, poieval)
                 self.toyscollection[p, poieval] = toysresults
             else:
                 ngenerated = self.toyscollection[p, poieval].ntoys
