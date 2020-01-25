@@ -4,6 +4,9 @@ import numpy as np
 
 from .parameters import POI, POIarray
 from .exceptions import ParameterNotFound
+from .fitutils.utils import pll
+from .fitutils.sampling import base_sampler, base_sample
+from .hypotests_object import ToysObject
 
 
 class ToyResult(object):
@@ -97,15 +100,17 @@ class ToyResult(object):
         return newtoys
 
 
-class ToysManager(object):
+class ToysManager(ToysObject):
     """
-    Class containing instances of `Toys` in a dictionnary
+    Class handling the toy generation and fit.
     """
 
-    def __init__(self):
+    def __init__(self, loss, minimizer, sampler=base_sampler, sample=base_sample):
+
+        super(ToysManager, self).__init__(loss, minimizer, sampler, sample)
         self._toys = {}
 
-    def __getitem__(self, index):
+    def get_toyresult(self, poigen, poieval):
         """
         Getter function.
 
@@ -117,17 +122,19 @@ class ToysManager(object):
             `Toys`
         """
 
-        poigen, poieval = index
+        index = (poigen, poieval)
 
         if index not in self:
+            print("YOOO")
             for k in self.keys():
+                print(poieval.values, k, np.isin(poieval.values, k[-1].values))
                 if np.isin(poieval.values, k[-1].values).all():
                     index = k
                     break
 
         return self._toys[index]
 
-    def __setitem__(self, index, toy):
+    def set_toyresult(self, poigen, poieval, toy):
         """
         Setter function.
 
@@ -136,7 +143,7 @@ class ToysManager(object):
                 POI values to evaluate the loss function
             toy: (`Toys`)
         """
-        poigen, poieval = index
+        index = (poigen, poieval)
 
         if not isinstance(poigen, POI):
             raise TypeError("A `hypotests.parameters.POI` is required for poigen.")
@@ -146,6 +153,77 @@ class ToysManager(object):
             raise TypeError("A `hypotests.toyutils.Toys` is required for toy.")
 
         self._toys[index] = toy
+
+    def ntoys(self, poigen, poieval):
+        if (poigen, poieval) not in self:
+            return 0
+        else:
+            return self.get_toyresult(poigen, poieval).ntoys
+
+    def generate_and_fit_toys(self, ntoys, poigen, poieval, printfreq=0.2):
+        """
+        Generate and fit toys for at a given POI (poigen). The toys are then fitted, and the likelihood
+        is profiled at the values of poigen and poieval.
+
+        Args:
+            ntoys (int): number of toys to generate
+            poigen (POI): POI used to generate the toys
+            poieval (POIarray, optional): POI values to evaluate the loss function
+            printfreq: print frequency of the toys generation
+        """
+
+        minimizer = self.minimizer
+        param = poigen.parameter
+
+        toys_loss = self.toys_loss(poigen.name)
+        sampler = toys_loss.data
+
+        bestfit = np.empty(ntoys)
+        nll_bestfit = np.empty(ntoys)
+        nlls = {p: np.empty(ntoys) for p in poieval}
+
+        printfreq = ntoys * printfreq
+
+        samples = self.sample(sampler, int(ntoys*1.2), poigen)
+
+        for i in range(ntoys):
+            converged = False
+            toprint = i % printfreq == 0
+            while converged is False:
+                try:
+                    next(samples)
+                except StopIteration:
+                    to_gen = ntoys - i
+                    samples = self.sample(sampler, int(to_gen*1.2), poigen)
+                    next(samples)
+
+                minimum = minimizer.minimize(loss=toys_loss)
+                converged = minimum.converged
+
+                if not converged:
+                    self.set_dependents_to_bestfit()
+                    continue
+
+                bestfit[i] = minimum.params[param]["value"]
+                nll_bestfit[i] = pll(minimizer, toys_loss, POI(param, bestfit[i]))
+
+                for p in poieval:
+                    nlls[p][i] = pll(minimizer, toys_loss, p)
+
+            if toprint:
+                print("{0} toys generated, fitted and scanned!".format(i))
+
+            if i > ntoys:
+                break
+            i += 1
+
+        if (poigen, poieval) not in self:
+            toysresult = ToyResult(p, poieval)
+            self.set_toyresult(poigen, poieval, toysresult)
+        else:
+            toysresult = self.get_toyresult(poigen, poieval)
+
+        toysresult.add_entries(bestfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
 
     def keys(self):
         return self._toys.keys()
@@ -159,19 +237,8 @@ class ToysManager(object):
     def __contains__(self, index):
         return index in self._toys
 
-    def __add__(self, toyscollection):
-        if not isinstance(toyscollection, ToysManager):
-            raise TypeError("A `ToysCollection` is required.")
-
-        ntoyscollection = self.copy()
-
-        for index, toy in toyscollection.items():
-            if index not in ntoyscollection:
-                ntoyscollection[index] = toy
-            else:
-                ntoyscollection[index] = ntoyscollection[index] + toy
-
-        return ntoyscollection
+    def toyresults_to_dict(self):
+        return [v.to_dict() for v in self.values()]
 
     def to_yaml(self, filename):
         """
@@ -185,30 +252,18 @@ class ToysManager(object):
         else:
             tree = {}
 
-        tree["toys"] = [v.to_dict() for v in self.values()]
+        tree["toys"] = self.toyresults_to_dict()
         af = asdf.AsdfFile(tree)
         af.write_to(filename)
 
-    @classmethod
-    def from_yaml(cls, filename, parameters):
-        """
-        Read the toys from a yaml file. At least one parameter in the argument `parameters` must have
-        the name of the parameter of interest save in the yaml file.
-
-        Args:
-            filename (str)
-            parameters (list): list of parameters
-
-        Returns
-            `Toys`
-        """
+    def toysresults_from_yaml(self, filename):
+        ret = {}
 
         toys = asdf.open(filename).tree["toys"]
-        toyscollection = cls()
 
         for t in toys:
             poiparam = None
-            for p in parameters:
+            for p in self.loss.get_dependents():
                 if t["poi"] == p.name:
                     poiparam = p
 
@@ -225,11 +280,26 @@ class ToysManager(object):
             t = ToyResult(poigen, poieval)
             t.add_entries(bestfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
 
-            toyscollection[poigen, poieval] = t
+            ret[poigen, poieval]
 
-        return toyscollection
+        return ret
 
-    def copy(self):
-        toyscollection = ToysManager()
-        toyscollection._toys = dict(self._toys)
+    @classmethod
+    def from_yaml(cls, filename, loss, minimizer, sampler=base_sampler, sample=base_sample):
+        """
+        Read the toys from a yaml file.
+
+        Args:
+            filename (str)
+
+        Returns
+            `Toys`
+        """
+
+        toyscollection = cls(loss, minimizer, sampler, sample)
+        toysresults = cls.toysresults_from_yaml(filename)
+
+        for (poigen, poieval), t in toysresults.items():
+            toyscollection.set_toyresult(poigen, poieval, t)
+
         return toyscollection

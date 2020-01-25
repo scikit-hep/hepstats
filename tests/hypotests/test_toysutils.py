@@ -3,23 +3,61 @@ import numpy as np
 import zfit
 import os
 from zfit.core.testing import teardown_function # allows redefinition of zfit.Parameter, needed for tests
+from zfit.core.loss import ExtendedUnbinnedNLL, UnbinnedNLL
+from zfit.minimize import Minuit
 
 from hepstats.hypotests.parameters import POI, POIarray
 from hepstats.hypotests.exceptions import ParameterNotFound
 from hepstats.hypotests.toyutils import ToyResult, ToysManager
+from hepstats.hypotests.fitutils.api_check import is_valid_loss, is_valid_data
 
 pwd = os.path.dirname(__file__)
 
 
-def get_pois():
-    Nsig = zfit.Parameter("Nsig", 0)
+def create_loss():
+    bounds = (0.1, 3.0)
+    obs = zfit.Space('x', limits=bounds)
+
+    # Data and signal
+    np.random.seed(0)
+    tau = -2.0
+    beta = -1/tau
+    bkg = np.random.exponential(beta, 300)
+    peak = np.random.normal(1.2, 0.1, 25)
+    data = np.concatenate((bkg, peak))
+    data = data[(data > bounds[0]) & (data < bounds[1])]
+    N = len(data)
+    data = zfit.data.Data.from_numpy(obs=obs, array=data)
+
+    lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
+    Nsig = zfit.Parameter("Nsig", 20., -20., N)
+    Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
+
+    signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)
+    background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
+    tot_model = signal + background
+
+    loss = ExtendedUnbinnedNLL(model=tot_model, data=data)
+
     poigen = POI(Nsig, 0.)
     poieval = POIarray(Nsig, [0.])
-    return poigen, poieval
+
+    return loss, (Nsig, poigen, poieval)
+
+
+def create_loss_1():
+    obs = zfit.Space('x', limits=(0.1, 2.0))
+    data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
+    mean = zfit.Parameter("mu", 1.2)
+    sigma = zfit.Parameter("sigma", 0.1)
+    model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+    loss = UnbinnedNLL(model=model, data=data)
+
+    return loss
 
 
 def test_constructors():
-    poigen, poieval = get_pois()
+    loss, (Nsig, poigen, poieval) = create_loss()
     ToyResult(poigen, poieval)
 
     with pytest.raises(TypeError):
@@ -27,12 +65,12 @@ def test_constructors():
     with pytest.raises(TypeError):
         ToyResult(poieval, poieval)
 
-    ToysManager()
+    ToysManager(loss, Minuit())
 
 
 def test_toyresult_attributes():
 
-    poigen, poieval = get_pois()
+    _, (_, poigen, poieval) = create_loss()
     tr = ToyResult(poigen, poieval)
 
     assert tr.ntoys == 0
@@ -57,12 +95,12 @@ def test_toyresult_attributes():
 
 def test_toymanager_attributes():
 
-    poigen, poieval = get_pois()
+    loss, (Nsig, poigen, poieval) = create_loss()
 
-    tm = ToysManager.from_yaml(f"{pwd}/discovery_freq_zfit_toys.yaml", [poigen.parameter])
+    tm = ToysManager.from_yaml(loss, Minuit(), f"{pwd}/discovery_freq_zfit_toys.yaml")
 
     with pytest.raises(ParameterNotFound):
-        ToysManager.from_yaml(f"{pwd}/discovery_freq_zfit_toys.yaml", [])
+        ToysManager.from_yaml(create_loss_1(), Minuit(), f"{pwd}/discovery_freq_zfit_toys.yaml")
 
     tr = list(tm.values())[0]
     assert isinstance(tr, ToyResult)
@@ -76,5 +114,10 @@ def test_toymanager_attributes():
     assert tm[poigen, poieval.append(1)[-1]] == trc
 
     tm.to_yaml(f"{pwd}/test_toyutils.yml")
-    tmc = ToysManager.from_yaml(f"{pwd}/test_toyutils.yml", [poigen.parameter])
+    tmc = ToysManager.from_yaml(loss, Minuit(), f"{pwd}/test_toyutils.yml")
     assert tm[poigen, poieval].ntoys == tmc[poigen, poieval].ntoys
+
+    samplers = tm.sampler(floating_params=[poigen.parameter])
+    assert all(is_valid_data(s) for s in samplers)
+    loss = tm.toys_loss(poigen.name)
+    assert is_valid_loss(loss)

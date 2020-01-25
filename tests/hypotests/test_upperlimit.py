@@ -76,7 +76,7 @@ def freq_calc():
     return Nsig, calculator
 
 
-@pytest.mark.parametrize("calculator", [freq_calc])
+@pytest.mark.parametrize("calculator", [asy_calc, freq_calc])
 def test_with_gauss_exp_example(calculator):
 
     Nsig, calculator = calculator()
