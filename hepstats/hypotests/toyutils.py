@@ -130,6 +130,12 @@ class ToysManager(object):
 
         self._toys[index] = toy
 
+    def keys(self):
+        return self._toys.keys()
+
+    def values(self):
+        return self._toys.values()
+
     def items(self):
         return self._toys.items()
 

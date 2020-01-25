@@ -238,6 +238,9 @@ class FrequentistCalculator(BaseCalculator):
             if qtilde and 0. not in poieval:
                 poieval = poieval.append(0.0)
 
+            print(list(self.toyscollection.keys()))
+            print(p, poieval)
+
             if (p, poieval) not in self.toyscollection:
                 print("AAAA")
                 ntogen = ntoys
