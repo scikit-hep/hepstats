@@ -250,14 +250,16 @@ class FrequentistCalculator(BaseCalculator):
                 print(ptc == p)
                 print(poievaltc == poieval)
                 print((ptc, poievaltc) == (p, poieval))
+                print(self.toyscollection[p, poieval])
+                print(self.toyscollection[p, poieval].ntoys)
 
             if (p, poieval) not in self.toyscollection:
-                print(f"{(p, poieval)} in  toyscollection")
+                print(f"{(p, poieval)} NOT IN toyscollection")
                 ntogen = ntoys
                 toysresults = ToyResult(p, poieval)
                 self.toyscollection[p, poieval] = toysresults
             else:
-                print(f"{(p, poieval)} not in  toyscollection")
+                print(f"{(p, poieval)} IN toyscollection")
                 ngenerated = self.toyscollection[p, poieval].ntoys
                 if ngenerated < ntoys:
                     ntogen = ntoys - ngenerated
