@@ -19,11 +19,16 @@ class ToyResult(object):
             poieval (POIarray): POI values to evaluate the loss function
         """
 
+        if not isinstance(poigen, POI):
+            raise TypeError("A `hypotests.parameters.POI` is required for poigen.")
+        if not isinstance(poieval, POIarray):
+            raise TypeError("A `hypotests.parameters.POIarray` is required for poieval.")
+
         self._poigen = poigen
-        self._bestfit = []
-        self._nll_bestfit = []
+        self._bestfit = np.array([])
+        self._nll_bestfit = np.array([])
         self._poieval = poieval
-        self._nlls = {p: [] for p in poieval}
+        self._nlls = {p: np.array([]) for p in poieval}
 
     @property
     def poigen(self):
@@ -50,7 +55,9 @@ class ToyResult(object):
         return len(self.bestfit)
 
     def add_entries(self, bestfit, nll_bestfit, nlls):
-        assert all(k in self.poieval for k in nlls.keys())
+        if not all(k in nlls.keys() for k in self.poieval):
+            missing_keys = [k for k in self.poieval if k not in nlls.keys()]
+            raise ValueError(f"NLLs values for {missing_keys} are missing.")
 
         nentries = bestfit.size
         assert nll_bestfit.size == nentries
@@ -68,11 +75,12 @@ class ToyResult(object):
         assert self.poigen == toys.poigen
         assert self.poieval == toys.poieval
 
-        toys = self.copy()
-        toys.add_entries(bestfit=toys.bestfit, nll_bestfit=toys.nll_bestfit,
-                         nlls=toys.nlls)
+        newtoys = self.copy()
+        print(toys.bestfit)
+        newtoys.add_entries(bestfit=toys.bestfit, nll_bestfit=toys.nll_bestfit,
+                            nlls=toys.nlls)
 
-        return toys
+        return newtoys
 
     def to_dict(self):
         ret = {"poi": self.poigen.name, "bestfit": self.bestfit}
@@ -83,10 +91,10 @@ class ToyResult(object):
         return ret
 
     def copy(self):
-        toys = ToyResult(self.poigen, self.poieval)
-        toys.add_entries(bestfit=toys.bestfit, nll_bestfit=toys.nll_bestfit,
-                         nlls=toys.nlls)
-        return toys
+        newtoys = ToyResult(self.poigen, self.poieval)
+        newtoys.add_entries(bestfit=self.bestfit, nll_bestfit=self.nll_bestfit,
+                            nlls=self.nlls)
+        return newtoys
 
 
 class ToysManager(object):
@@ -168,7 +176,7 @@ class ToysManager(object):
         else:
             tree = {}
 
-        tree["toys"]: [v.to_dict() for v in self._toys.values()]
+        tree["toys"] = [v.to_dict() for v in self._toys.values()]
         af = asdf.AsdfFile(tree)
         af.write_to(filename)
 
