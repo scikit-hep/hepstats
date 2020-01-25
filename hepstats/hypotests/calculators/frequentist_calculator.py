@@ -240,23 +240,24 @@ class FrequentistCalculator(BaseCalculator):
 
             tckeys = list(self.toyscollection.keys())
 
+            print("\nStart of investigation")
             if tckeys:
                 print("IN", list(self.toyscollection.keys()))
                 print("Curent", p, poieval)
 
                 ptc, poievaltc = list(self.toyscollection.keys())[0]
+                print("IN 0 ", ptc, poievaltc)
                 print(ptc == p)
                 print(poievaltc == poieval)
                 print((ptc, poievaltc) == (p, poieval))
-                print("OOOOO")
 
             if (p, poieval) not in self.toyscollection:
-                print("AAAA")
+                print(f"{(p, poieval)} in  toyscollection")
                 ntogen = ntoys
                 toysresults = ToyResult(p, poieval)
                 self.toyscollection[p, poieval] = toysresults
             else:
-                print("BBBB")
+                print(f"{(p, poieval)} not in  toyscollection")
                 ngenerated = self.toyscollection[p, poieval].ntoys
                 if ngenerated < ntoys:
                     ntogen = ntoys - ngenerated
@@ -266,6 +267,7 @@ class FrequentistCalculator(BaseCalculator):
 
             print(toysresults)
             print(toysresults.ntoys)
+            print("End of investigation \n")
 
             if ntogen > 0:
                 print(f"Generating {hypothesis} hypothesis toys for {p}.")

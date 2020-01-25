@@ -14,6 +14,7 @@ def test_pois():
     p1 = POI(mean, 1.)
     values = np.linspace(0., 1.0, 10)
     pn = POIarray(mean, values)
+    pnc = POIarray(mean, values)
 
     for cls in [POI, POIarray]:
         with pytest.raises(ValueError):
@@ -36,6 +37,10 @@ def test_pois():
     assert pn.name == mean.name
     assert len(pn) == len(values)
     iter(pn)
+    assert pn == pnc
+
+    assert pn != p0
+    assert pn != p1
 
     assert pn[0] == p0
     assert pn[1] != p0
@@ -44,10 +49,12 @@ def test_pois():
     pn1 = pn.append(12)
     assert pn1.values[-1] == 12
     assert all(pn.values == values)
+    assert pn1 != pn
     pn2 = pn.append([15, 20, 30])
     assert pn2.values[-1] == 30
     assert pn2.values[-2] == 20
     assert pn2.values[-3] == 15
+    assert pn2 != pn
 
     # test hash
     {p0: "p0", p1: "p1", pn: "pn"}

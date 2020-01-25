@@ -59,6 +59,9 @@ class POIarray(object):
         if not isinstance(other, POIarray):
             return NotImplemented
 
+        if len(self) != len(other):
+            return False
+
         values_equal = self.values == other.values
         name_equal = self.name == other.name
         return values_equal.all() and name_equal
@@ -107,6 +110,14 @@ class POI(POIarray):
         Returns the value of the `POI`.
         """
         return self._value
+
+    def __eq__(self, other):
+        if not isinstance(other, POI):
+            return NotImplemented
+
+        value_equal = self.value == other.value
+        name_equal = self.name == other.name
+        return value_equal and name_equal
 
     def __repr__(self):
         return "POI('{0}', value={1})".format(self.name, self.value)
