@@ -108,14 +108,6 @@ class POI(POIarray):
         """
         return self._value
 
-    def __eq__(self, other):
-        if not isinstance(other, POI):
-            return NotImplemented
-
-        values_equal = self.value == other.value
-        name_equal = self.name == other.name
-        return values_equal and name_equal
-
     def __repr__(self):
         return "POI('{0}', value={1})".format(self.name, self.value)
 
