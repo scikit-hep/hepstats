@@ -238,58 +238,17 @@ class FrequentistCalculator(BaseCalculator):
             if qtilde and 0. not in poieval:
                 poieval = poieval.append(0.0)
 
-            tckeys = list(self.toyscollection.keys())
-
-            print("\nStart of investigation\n")
-            if tckeys:
-                print("IN: ", list(self.toyscollection.keys()))
-                print("Curent: ", p, poieval)
-                print("Current hash: ", hash(p), hash(poieval))
-                print("hash(poieval.name): ", hash(poieval.name))
-                print("hash(poieval.values.tostring()): ", hash(poieval.values.tostring()))
-                print("dtype(poieval.values): ", poieval.values.dtype)
-                print("poieval.values.tostring(): ", poieval.values.tostring(), "\n")
-
-                ptc, poievaltc = list(self.toyscollection.keys())[0]
-                print("IN 0: ", ptc, poievaltc)
-                print("IN 0 hash: ", hash(ptc), hash(poievaltc))
-                print("hash(poievaltc.name): ", hash(poievaltc.name))
-                print("hash(poievaltc.values.tostring()): ", hash(poievaltc.values.tostring()))
-                print("dtype(poievaltc.values): ", poievaltc.values.dtype)
-                print("poievaltc.values.tostring(): ", poievaltc.values.tostring(), "\n")
-
-                print("ptc == p: ", ptc == p)
-                print("poievaltc == poieval: ", poievaltc == poieval)
-                print("poievaltc.values.tostring() == poieval.values.tostring(): ",
-                      poievaltc.values.tostring() == poieval.values.tostring())
-                print("(ptc, poievaltc) == (p, poieval): ", (ptc, poievaltc) == (p, poieval))
-                print("Tuple hash: ", hash((ptc, poievaltc)), hash((p, poieval)))
-                print()
-
-                print(self.toyscollection[ptc, poievaltc])
-                print(self.toyscollection[ptc, poievaltc].ntoys)
-
-                if (ptc, poievaltc) == (p, poieval):
-                    print(self.toyscollection[p, poieval])
-                    print(self.toyscollection[p, poieval].ntoys)
-
             if (p, poieval) not in self.toyscollection:
-                print(f"{(p, poieval)} NOT IN toyscollection")
                 ntogen = ntoys
                 toysresults = ToyResult(p, poieval)
                 self.toyscollection[p, poieval] = toysresults
             else:
-                print(f"{(p, poieval)} IN toyscollection")
                 ngenerated = self.toyscollection[p, poieval].ntoys
                 if ngenerated < ntoys:
                     ntogen = ntoys - ngenerated
                 else:
                     ntogen = 0
                 toysresults = self.toyscollection[p, poieval]
-
-            print(toysresults)
-            print(toysresults.ntoys)
-            print("\nEnd of investigation \n")
 
             if ntogen > 0:
                 print(f"Generating {hypothesis} hypothesis toys for {p}.")
