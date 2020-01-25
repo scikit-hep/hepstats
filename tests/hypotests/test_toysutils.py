@@ -30,7 +30,7 @@ def test_constructors():
     ToysManager()
 
 
-def test_toyresult_attribute():
+def test_toyresult_attributes():
 
     poigen, poieval = get_pois()
     tr = ToyResult(poigen, poieval)
@@ -55,7 +55,7 @@ def test_toyresult_attribute():
     tr.to_dict()
 
 
-def test_toymanager_attribute():
+def test_toymanager_attributes():
 
     poigen, poieval = get_pois()
 

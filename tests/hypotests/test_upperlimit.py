@@ -1,15 +1,18 @@
 import pytest
 import numpy as np
 import zfit
+import os
 from zfit.core.testing import teardown_function # allows redefinition of zfit.Parameter, needed for tests
 from zfit.loss import ExtendedUnbinnedNLL
 from zfit.minimize import Minuit
 
 from hepstats.hypotests.calculators.basecalculator import BaseCalculator
-from hepstats.hypotests.calculators import AsymptoticCalculator
+from hepstats.hypotests.calculators import AsymptoticCalculator, FrequentistCalculator
 from hepstats.hypotests import UpperLimit
 from hepstats.hypotests.parameters import POI, POIarray
 from hepstats.hypotests.exceptions import POIRangeError
+
+pwd = os.path.dirname(__file__)
 
 
 def create_loss():
@@ -61,12 +64,24 @@ def test_constructor():
         UpperLimit(calculator, [poi_1], poi_2)
 
 
-def test_with_asymptotic_calculator():
-
+def asy_calc():
     loss, (Nsig, Nbkg) = create_loss()
-    calculator = AsymptoticCalculator(loss, Minuit())
+    return Nsig, AsymptoticCalculator(loss, Minuit())
 
-    poinull = POIarray(Nsig, np.linspace(0.0, 25, 20))
+
+def freq_calc():
+    loss, (Nsig, Nbkg) = create_loss()
+    calculator = FrequentistCalculator(loss, Minuit())
+    calculator.load_toys_from_yaml(f"{pwd}/upperlimit_freq_zfit_toys.yml")
+    return Nsig, calculator
+
+
+@pytest.mark.parametrize("calculator", [freq_calc])
+def test_with_gauss_exp_example(calculator):
+
+    Nsig, calculator = calculator()
+
+    poinull = POIarray(Nsig, np.linspace(0.0, 25, 15))
     poialt = POI(Nsig, 0)
 
     ul = UpperLimit(calculator, poinull, poialt)
@@ -89,6 +104,6 @@ def test_with_asymptotic_calculator():
     # test error when scan range is too small
 
     with pytest.raises(POIRangeError):
-        poinull = POIarray(Nsig, np.linspace(0.0, 12, 20))
+        poinull = POIarray(Nsig, poinull.values[:5])
         ul = UpperLimit(calculator, poinull, poialt)
         ul.upperlimit(alpha=0.05, CLs=True)

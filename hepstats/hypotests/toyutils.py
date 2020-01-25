@@ -116,6 +116,15 @@ class ToysManager(object):
         Returns:
             `Toys`
         """
+
+        poigen, poieval = index
+
+        if index not in self:
+            for k in self.keys():
+                if np.isin(poieval.values, k[-1].values).all():
+                    index = k
+                    break
+
         return self._toys[index]
 
     def __setitem__(self, index, toy):
@@ -176,7 +185,7 @@ class ToysManager(object):
         else:
             tree = {}
 
-        tree["toys"] = [v.to_dict() for v in self._toys.values()]
+        tree["toys"] = [v.to_dict() for v in self.values()]
         af = asdf.AsdfFile(tree)
         af.write_to(filename)
 
@@ -216,7 +225,7 @@ class ToysManager(object):
             t = ToyResult(poigen, poieval)
             t.add_entries(bestfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
 
-            toyscollection._toys[poigen, poieval] = t
+            toyscollection[poigen, poieval] = t
 
         return toyscollection
 

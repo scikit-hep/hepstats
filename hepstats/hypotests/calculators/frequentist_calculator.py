@@ -4,7 +4,7 @@ from scipy.stats import norm
 from .basecalculator import BaseCalculator
 from ..fitutils.utils import pll, get_nevents
 from ..fitutils.sampling import base_sampler, base_sample
-from ..parameters import POI, POIarray
+from ..parameters import POI, POIarray, asarray
 from ..toyutils import ToyResult, ToysManager
 
 
@@ -228,32 +228,35 @@ class FrequentistCalculator(BaseCalculator):
         ret = {}
 
         for p in poigen:
+            poieval_p = poieval
 
-            if poieval is None:
-                poieval = POIarray(poigen.parameter, [p.value])
+            if poieval_p is None:
+                poieval_p = POIarray(poigen.parameter, [p.value])
             else:
-                if p not in poieval:
-                    poieval = poieval.append(p.value)
+                if p not in poieval_p:
+                    poieval_p = poieval_p.append(p.value)
 
-            if qtilde and 0. not in poieval:
-                poieval = poieval.append(0.0)
+            if qtilde and 0. not in poieval_p.values:
+                poieval_p = poieval_p.append(0.0)
 
-            if (p, poieval) not in self.toyscollection:
-                ntogen = ntoys
-                toysresults = ToyResult(p, poieval)
-                self.toyscollection[p, poieval] = toysresults
+            poieval_p = asarray(poieval_p)
+
+            try:
+                toysresults = self.toyscollection[p, poieval_p]
+            except KeyError:
+                toysresults = ToyResult(p, poieval_p)
+                self.toyscollection[p, poieval_p] = toysresults
+
+            ngenerated = toysresults.ntoys
+            if ngenerated < ntoys:
+                ntogen = ntoys - ngenerated
             else:
-                ngenerated = self.toyscollection[p, poieval].ntoys
-                if ngenerated < ntoys:
-                    ntogen = ntoys - ngenerated
-                else:
-                    ntogen = 0
-                toysresults = self.toyscollection[p, poieval]
+                ntogen = 0
 
             if ntogen > 0:
+                print(p, poieval_p)
                 print(f"Generating {hypothesis} hypothesis toys for {p}.")
-
-                assert all(p in toysresults.poieval for p in poieval)
+                assert all(p in toysresults.poieval for p in poieval_p)
 
                 self._generate_and_fit_toys(ntoys=ntogen, toysresult=toysresults)
 
@@ -331,7 +334,7 @@ class FrequentistCalculator(BaseCalculator):
             bestfit = toysresult.bestfit
 
             if qtilde:
-                nllat0 = toysresult.nlls[0]
+                nllat0 = toysresult.nlls[POI(poinull.parameter, 0.0)]
                 nll2 = np.where(bestfit < 0, nllat0, nll2)
                 bestfit = np.where(bestfit < 0, 0, bestfit)
 
@@ -375,7 +378,7 @@ class FrequentistCalculator(BaseCalculator):
             bestfit = toysresult.bestfit
 
             if qtilde:
-                nllat0 = toysresult.nll[0]
+                nllat0 = toysresult.nlls[POI(poinull.parameter, 0.0)]
                 nll2 = np.where(bestfit < 0, nllat0, nll2)
                 bestfit = np.where(bestfit < 0, 0, bestfit)
 

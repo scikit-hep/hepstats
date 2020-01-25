@@ -158,7 +158,10 @@ class UpperLimit(BaseTest):
             if len(root) > 1:
                 root = root[0]
 
-            limits[k] = float(root)
+            try:
+                limits[k] = float(root)
+            except TypeError:
+                limits[k] = None
 
         if isinstance(self.calculator, AsymptoticCalculator):
             poiul = POI(poinull.parameter, limits["observed"])

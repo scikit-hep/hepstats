@@ -124,3 +124,7 @@ class POI(POIarray):
 
     def __hash__(self):
         return hash((self.name, self.value))
+
+
+def asarray(POI):
+    return POIarray(POI.parameter, POI.values)
