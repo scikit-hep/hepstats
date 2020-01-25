@@ -244,12 +244,15 @@ class FrequentistCalculator(BaseCalculator):
             if tckeys:
                 print("IN", list(self.toyscollection.keys()))
                 print("Curent", p, poieval)
+                print("Current hash", hash(p), hash(poieval))
 
                 ptc, poievaltc = list(self.toyscollection.keys())[0]
                 print("IN 0 ", ptc, poievaltc)
+                print("IN 0 hash", hash(ptc), hash(poievaltc))
                 print(ptc == p)
                 print(poievaltc == poieval)
-                print((ptc, poievaltc) == (p, poieval))
+                print("Tuple", (ptc, poievaltc) == (p, poieval))
+                print("Tuple hash", hash((ptc, poievaltc)), hash((p, poieval)))
 
                 print(self.toyscollection[ptc, poievaltc])
                 print(self.toyscollection[ptc, poievaltc].ntoys)
