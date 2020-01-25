@@ -238,8 +238,15 @@ class FrequentistCalculator(BaseCalculator):
             if qtilde and 0. not in poieval:
                 poieval = poieval.append(0.0)
 
-            print(list(self.toyscollection.keys()))
-            print(p, poieval)
+            tckeys = list(self.toyscollection.keys())
+
+            if tckeys:
+                print(list(self.toyscollection.keys())[0])
+                print(p, poieval)
+
+                ptc, poievaltc = list(self.toyscollection.keys())[0]
+                print(ptc == poieval)
+                print()
 
             if (p, poieval) not in self.toyscollection:
                 print("AAAA")
