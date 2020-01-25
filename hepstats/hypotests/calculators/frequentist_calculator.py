@@ -247,7 +247,7 @@ class FrequentistCalculator(BaseCalculator):
                 print("Current hash: ", hash(p), hash(poieval))
                 print("hash(poieval.name): ", hash(poieval.name))
                 print("hash(poieval.values.tostring()): ", hash(poieval.values.tostring()))
-                print("type(poieval.values): ", type(poieval.values))
+                print("dtype(poieval.values): ", poieval.values.dtype)
                 print("poieval.values.tostring(): ", poieval.values.tostring(), "\n")
 
                 ptc, poievaltc = list(self.toyscollection.keys())[0]
@@ -255,7 +255,7 @@ class FrequentistCalculator(BaseCalculator):
                 print("IN 0 hash: ", hash(ptc), hash(poievaltc))
                 print("hash(poievaltc.name): ", hash(poievaltc.name))
                 print("hash(poievaltc.values.tostring()): ", hash(poievaltc.values.tostring()))
-                print("type(poievaltc.values): ", type(poievaltc.values))
+                print("dtype(poievaltc.values): ", poievaltc.values.dtype)
                 print("poievaltc.values.tostring(): ", poievaltc.values.tostring(), "\n")
 
                 print("ptc == p: ", ptc == p)
