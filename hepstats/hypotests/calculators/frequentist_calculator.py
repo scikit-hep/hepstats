@@ -241,13 +241,14 @@ class FrequentistCalculator(BaseCalculator):
             tckeys = list(self.toyscollection.keys())
 
             if tckeys:
-                print(list(self.toyscollection.keys())[0])
-                print(p, poieval)
+                print("IN", list(self.toyscollection.keys()))
+                print("Curent", p, poieval)
 
                 ptc, poievaltc = list(self.toyscollection.keys())[0]
                 print(ptc == p)
                 print(poievaltc == poieval)
                 print((ptc, poievaltc) == (p, poieval))
+                print("OOOOO")
 
             if (p, poieval) not in self.toyscollection:
                 print("AAAA")
