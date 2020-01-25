@@ -245,8 +245,9 @@ class FrequentistCalculator(BaseCalculator):
                 print(p, poieval)
 
                 ptc, poievaltc = list(self.toyscollection.keys())[0]
-                print(ptc == poieval)
-                print()
+                print(ptc == p)
+                print(poievaltc == poieval)
+                print((ptc, poievaltc) == (p, poieval))
 
             if (p, poieval) not in self.toyscollection:
                 print("AAAA")
