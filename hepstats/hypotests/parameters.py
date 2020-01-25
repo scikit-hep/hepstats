@@ -28,7 +28,7 @@ class POIarray(object):
 
         self.parameter = parameter
         self.name = parameter.name
-        self._values = np.array(values)
+        self._values = np.array(values, dtype=np.float64)
         self._ndim = 1
         self._shape = (len(values),)
 
