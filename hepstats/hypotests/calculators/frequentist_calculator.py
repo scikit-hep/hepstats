@@ -250,8 +250,13 @@ class FrequentistCalculator(BaseCalculator):
                 print(ptc == p)
                 print(poievaltc == poieval)
                 print((ptc, poievaltc) == (p, poieval))
-                print(self.toyscollection[p, poieval])
-                print(self.toyscollection[p, poieval].ntoys)
+
+                print(self.toyscollection[ptc, poievaltc])
+                print(self.toyscollection[ptc, poievaltc].ntoys)
+
+                if (ptc, poievaltc) == (p, poieval):
+                    print(self.toyscollection[p, poieval])
+                    print(self.toyscollection[p, poieval].ntoys)
 
             if (p, poieval) not in self.toyscollection:
                 print(f"{(p, poieval)} NOT IN toyscollection")
