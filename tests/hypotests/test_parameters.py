@@ -27,7 +27,8 @@ def test_pois():
     with pytest.raises(TypeError):
         POIarray(mean, 0)
 
-    print(p0)
+    repr(p0)
+    repr(pn)
 
     assert p0.value == 0
     assert p0.name == mean.name
@@ -38,6 +39,7 @@ def test_pois():
     assert len(pn) == len(values)
     iter(pn)
     assert pn == pnc
+    assert hash(pn) == hash(pnc)
 
     assert pn != p0
     assert pn != p1
@@ -56,5 +58,4 @@ def test_pois():
     assert pn2.values[-3] == 15
     assert pn2 != pn
 
-    # test hash
     {p0: "p0", p1: "p1", pn: "pn"}

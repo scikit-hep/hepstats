@@ -131,21 +131,3 @@ def test_frequentist_calculator_one_poi():
     assert all(is_valid_data(s) for s in samplers)
     loss = calc.toys_loss(mean.name)
     assert is_valid_loss(loss)
-
-
-# def test_asymptotic_calculator_two_pois():
-#
-#     loss, (mean, sigma) = create_loss()
-#     calc = AsymptoticCalculator(loss, Minuit())
-#
-#     poi_null = [POIarray(mean, [1.15, 1.2, 1.25]), POIarray(sigma, [0.05, 0.1])]
-#     poi_alt = [POI(mean, 1.2), POI(sigma, 0.1)]
-#
-#     with pytest.raises(NotImplementedError):
-#         calc.check_pois(poi_null)
-#     with pytest.raises(NotImplementedError):
-#         calc.pvalue(poi_null, poi_alt)
-#     with pytest.raises(NotImplementedError):
-#         calc.expected_pvalue(poinull=poi_null, poialt=poi_alt, nsigma=np.arange(-2, 3, 1))
-#     with pytest.raises(NotImplementedError):
-#         calc.expected_poi(poinull=poi_null, poialt=poi_alt, nsigma=np.arange(-2, 3, 1))

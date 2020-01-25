@@ -38,7 +38,7 @@ def create_loss():
     background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
     tot_model = signal + background
 
-    loss = ExtendedUnbinnedNLL(model=[tot_model], data=[data])
+    loss = ExtendedUnbinnedNLL(model=tot_model, data=data)
 
     return loss, mean
 
