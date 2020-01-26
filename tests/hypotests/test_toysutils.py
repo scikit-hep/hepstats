@@ -110,8 +110,11 @@ def test_toymanager_attributes():
     assert tm.get_toyresult(poigen, poieval) == tr
     tr1 = ToyResult(poigen, poieval.append(1))
     tm.add_toyresult(tr1)
+    with pytest.raises(TypeError):
+        tm.add_toyresult("tr1")
     assert (tr1.poigen, tr1.poieval) in tm.keys()
 
+    tm.to_yaml(f"{pwd}/test_toyutils.yml")
     tm.to_yaml(f"{pwd}/test_toyutils.yml")
     tmc = ToysManager.from_yaml(f"{pwd}/test_toyutils.yml", loss, Minuit())
     assert tm.get_toyresult(poigen, poieval).ntoys == tmc.get_toyresult(poigen, poieval).ntoys

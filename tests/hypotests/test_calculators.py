@@ -36,7 +36,17 @@ def test_base_calculator(calculator):
 
     loss, (mean, sigma) = create_loss()
 
+    with pytest.raises(ValueError):
+        calculator("loss", Minuit())
+
+    with pytest.raises(ValueError):
+        calculator(loss, "Minuit()")
+
     calc_loss = calculator(loss, Minuit())
+
+    with pytest.raises(ValueError):
+        calc_loss.bestfit = "bestfit"
+
     bestfit = calc_loss.bestfit
     calc_fitresult = calculator(bestfit, calc_loss.minimizer)
 

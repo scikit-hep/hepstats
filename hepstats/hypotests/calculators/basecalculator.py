@@ -348,13 +348,21 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
     def from_yaml(cls, filename, loss, minimizer, ntoysnull=100, ntoysalt=100, sampler=base_sampler,
                   sample=base_sample):
         """
-        Read the toys from a yaml file.
+        ToysCalculator constructor with the toys loaded from a yaml file.
 
         Args:
             filename (str)
+            input : loss or fit result
+            minimizer : minimizer to use to find the minimum of the loss function
+            ntoysnull (int, default=100): minimum number of toys to generate for the null hypothesis
+            ntoysalt (int, default=100): minimum number of toys to generate for the alternative hypothesis
+            sampler : function used to create sampler with models, number of events and
+                floating parameters in the sample Default is `hepstats.fitutils.sampling.base_sampler`.
+            sample : function used to get samples from the sampler.
+                Default is `hepstats.fitutils.sampling.base_sample`.
 
         Returns
-            `Toys`
+            ToysCalculator
         """
 
         calculator = cls(loss, minimizer, ntoysnull, ntoysalt, sampler, sample)
