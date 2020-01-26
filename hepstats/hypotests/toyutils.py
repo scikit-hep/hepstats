@@ -8,6 +8,13 @@ from .fitutils.utils import pll
 from .fitutils.sampling import base_sampler, base_sample
 from .hypotests_object import ToysObject
 
+"""
+Module defining the classes to perform and store the results of toy experiments.
+
+Acronyms used in the code:
+    * nll = negative log-likehood, the likehood being the `loss` attribute of a calculator;
+"""
+
 
 class ToyResult(object):
 
@@ -35,29 +42,55 @@ class ToyResult(object):
 
     @property
     def poigen(self):
+        """
+        Returns the POI used to generate the toys.
+        """
         return self._poigen
 
     @property
     def bestfit(self):
+        """
+        Returns the best fitted values of the POI for each toys.
+        """
         return self._bestfit
 
     @property
     def poieval(self):
+        """
+        Returns the scanned POIarray.
+        """
         return self._poieval
 
     @property
     def nll_bestfit(self):
+        """
+        Returns the NLL evaluated at the best fitted values of the POI for each toys.
+        """
         return self._nll_bestfit
 
     @property
     def nlls(self):
+        """
+        Returns the NLL evaluated at the poigeval values of the POI for each toys.
+        """
         return self._nlls
 
     @property
     def ntoys(self):
+        """
+        Returns the number of toys.
+        """
         return len(self.bestfit)
 
     def add_entries(self, bestfit, nll_bestfit, nlls):
+        """
+        Add new result entries.
+
+        Args:
+            * bestfit (`numpy.array`): best fitted values of the POI
+            * nll_bestfit (`numpy.array`): NLL  evaluated at the best fitted values of the POI
+            * nlls (Dict(`POI`, `numpy.array`)): NLL  evaluated at the best fitted values of the POI
+        """
         if not all(k in nlls.keys() for k in self.poieval):
             missing_keys = [k for k in self.poieval if k not in nlls.keys()]
             raise ValueError(f"NLLs values for {missing_keys} are missing.")
@@ -71,21 +104,10 @@ class ToyResult(object):
 
         self._nlls = {p: np.concatenate([v, nlls[p]]) for p, v in self.nlls.items()}
 
-    def __add__(self, toys):
-        if not isinstance(toys, ToyResult):
-            raise TypeError("A `Toys` is required.")
-
-        assert self.poigen == toys.poigen
-        assert self.poieval == toys.poieval
-
-        newtoys = self.copy()
-        print(toys.bestfit)
-        newtoys.add_entries(bestfit=toys.bestfit, nll_bestfit=toys.nll_bestfit,
-                            nlls=toys.nlls)
-
-        return newtoys
-
     def to_dict(self):
+        """
+        Returns dictionnary of the toy results.
+        """
         ret = {"poi": self.poigen.name, "bestfit": self.bestfit}
         ret["nlls"] = {n.value: nll for n, nll in self.nlls.items()}
         ret["genvalue"] = self.poigen.value
@@ -93,21 +115,25 @@ class ToyResult(object):
         ret["nlls"]["bestfit"] = self.nll_bestfit
         return ret
 
-    def copy(self):
-        newtoys = ToyResult(self.poigen, self.poieval)
-        newtoys.add_entries(bestfit=self.bestfit, nll_bestfit=self.nll_bestfit,
-                            nlls=self.nlls)
-        return newtoys
-
 
 class ToysManager(ToysObject):
-    """
-    Class handling the toy generation and fit.
-    """
 
-    def __init__(self, loss, minimizer, sampler=base_sampler, sample=base_sample):
+    def __init__(self, input, minimizer, sampler=base_sampler, sample=base_sample):
+        """Class handling the toy generation and fit, results are stored in `ToyResult` instances stored
+            themselves in a dictionnary.
 
-        super(ToysManager, self).__init__(loss, minimizer, sampler, sample)
+            Args:
+                input : loss or fit result
+                minimizer : minimizer to use to find the minimum of the loss function
+                ntoysnull (int, default=100): minimum number of toys to generate for the null hypothesis
+                ntoysalt (int, default=100): minimum number of toys to generate for the alternative hypothesis
+                sampler : function used to create sampler with models, number of events and
+                    floating parameters in the sample. Default is `hepstats.fitutils.sampling.base_sampler`.
+                sample : function used to get samples from the sampler.
+                    Default is `hepstats.fitutils.sampling.base_sample`.
+        """
+
+        super(ToysManager, self).__init__(input=input, minimizer=minimizer, sampler=sampler, sample=sample)
         self._toys = {}
 
     def get_toyresult(self, poigen, poieval):
@@ -115,8 +141,8 @@ class ToysManager(ToysObject):
         Getter function.
 
         Args:
-            index (`POI`, `POIarray`): POI used to generate the toys and
-                POI values to evaluate the loss function
+            poigen (POI): POI used to generate the toys
+            poieval (POIarray, optional): POI values to evaluate the loss function
 
         Returns:
             `Toys`
@@ -132,27 +158,32 @@ class ToysManager(ToysObject):
 
         return self._toys[index]
 
-    def set_toyresult(self, poigen, poieval, toy):
+    def add_toyresult(self, toy):
         """
-        Setter function.
+        Add ToyResult to the manager.
 
         Args:
-            index (`POI`, `POIarray`): POI used to generate the toys and
-                POI values to evaluate the loss function
-            toy: (`Toys`)
+            toy: (`ToyResults`)
         """
-        index = (poigen, poieval)
-
-        if not isinstance(poigen, POI):
-            raise TypeError("A `hypotests.parameters.POI` is required for poigen.")
-        if not isinstance(poieval, POIarray):
-            raise TypeError("A `hypotests.parameters.POIarray` is required for poieval.")
         if not isinstance(toy, ToyResult):
             raise TypeError("A `hypotests.toyutils.Toys` is required for toy.")
+
+        index = (toy.poigen, toy.poieval)
 
         self._toys[index] = toy
 
     def ntoys(self, poigen, poieval):
+        """
+        Return the number of toys generated from given value of a POI, and scanned/evaluated for given values_equal
+        of the same POI.
+
+        Args:
+            poigen (POI): POI used to generate the toys
+            poieval (POIarray, optional): POI values to evaluate the loss function
+
+        Returns:
+            int
+        """
         if (poigen, poieval) not in self.keys():
             return 0
         else:
@@ -217,7 +248,7 @@ class ToysManager(ToysObject):
 
         if (poigen, poieval) not in self.keys():
             toysresult = ToyResult(p, poieval)
-            self.set_toyresult(poigen, poieval, toysresult)
+            self.add_toyresult(toysresult)
         else:
             toysresult = self.get_toyresult(poigen, poieval)
 
@@ -229,10 +260,10 @@ class ToysManager(ToysObject):
     def values(self):
         return self._toys.values()
 
-    def items(self):
-        return self._toys.items()
-
     def toyresults_to_dict(self):
+        """
+        Returns a list of all the toy results converted into dictionnaries
+        """
         return [v.to_dict() for v in self.values()]
 
     def to_yaml(self, filename):
@@ -252,8 +283,16 @@ class ToysManager(ToysObject):
         af.write_to(filename)
 
     def toysresults_from_yaml(self, filename):
-        ret = {}
+        """
+        Extract toy results from a yaml file.
 
+        Args:
+            filename (str)
+
+        Returns:
+            list(`ToyResults`)
+        """
+        ret = []
         toys = asdf.open(filename).tree["toys"]
 
         for t in toys:
@@ -274,27 +313,34 @@ class ToysManager(ToysObject):
 
             t = ToyResult(poigen, poieval)
             t.add_entries(bestfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
-
-            ret[poigen, poieval] = t
+            ret.append(t)
 
         return ret
 
     @classmethod
-    def from_yaml(cls, filename, loss, minimizer, sampler=base_sampler, sample=base_sample):
+    def from_yaml(cls, filename, input, minimizer, sampler=base_sampler, sample=base_sample):
         """
         Read the toys from a yaml file.
 
         Args:
             filename (str)
+            input : loss or fit result
+            minimizer : minimizer to use to find the minimum of the loss function
+            ntoysnull (int, default=100): minimum number of toys to generate for the null hypothesis
+            ntoysalt (int, default=100): minimum number of toys to generate for the alternative hypothesis
+            sampler : function used to create sampler with models, number of events and
+                floating parameters in the sample. Default is `hepstats.fitutils.sampling.base_sampler`.
+            sample : function used to get samples from the sampler.
+                Default is `hepstats.fitutils.sampling.base_sample`.
 
         Returns
-            `Toys`
+            `ToysManager`
         """
 
-        toyscollection = cls(loss, minimizer, sampler, sample)
+        toyscollection = cls(input, minimizer, sampler, sample)
         toysresults = toyscollection.toysresults_from_yaml(filename)
 
-        for (poigen, poieval), t in toysresults.items():
-            toyscollection.set_toyresult(poigen, poieval, t)
+        for t in toysresults:
+            toyscollection.add_toyresult(t)
 
         return toyscollection

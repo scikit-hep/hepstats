@@ -87,8 +87,8 @@ def test_toyresult_attributes():
     with pytest.raises(ValueError):
         tr.add_entries(bestfit=bf, nll_bestfit=nll_bf, nlls={})
 
-    tr2 = tr + tr.copy()
-    assert tr2.ntoys == 6
+    tr.add_entries(bestfit=bf, nll_bestfit=nll_bf, nlls=nlls)
+    assert tr.ntoys == 6
 
     tr.to_dict()
 
@@ -106,12 +106,11 @@ def test_toymanager_attributes():
     assert isinstance(tr, ToyResult)
     assert list(tm.keys())[0] == (poigen, poigen)
     assert (poigen, poieval) in tm.keys()
-    tm.items()
 
     assert tm.get_toyresult(poigen, poieval) == tr
-    trc = tr.copy()
-    tm.set_toyresult(poigen, poieval.append(1)[-1], trc)
-    assert tm.get_toyresult(poigen, poieval.append(1)[-1]) == trc
+    tr1 = ToyResult(poigen, poieval.append(1))
+    tm.add_toyresult(tr1)
+    assert (tr1.poigen, tr1.poieval) in tm.keys()
 
     tm.to_yaml(f"{pwd}/test_toyutils.yml")
     tmc = ToysManager.from_yaml(f"{pwd}/test_toyutils.yml", loss, Minuit())
