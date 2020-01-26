@@ -38,6 +38,9 @@ def test_constructor():
     with pytest.raises(TypeError):
         BaseTest(calculator, poimean, [poisigma])
 
+    with pytest.raises(TypeError):
+        BaseTest("calculator", poimean, poisigma)
+
 
 def test_attributes():
 

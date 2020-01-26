@@ -323,7 +323,7 @@ class BaseToysCalculator(BaseCalculator):
 
 class ToysCalculator(BaseToysCalculator, ToysManager):
     """
-    Class for frequentist calculators.
+    Class for calculators using toys.
     """
 
     def __init__(self, input, minimizer, ntoysnull=100, ntoysalt=100, sampler=base_sampler, sample=base_sample):
