@@ -6,7 +6,7 @@ from .fitutils.utils import get_nevents
 class HypotestsObject(object):
 
     def __init__(self, input, minimizer):
-        """Base object in `hepstats.hypotests` to manipulate a loss function and a minimzer.
+        """Base object in `hepstats.hypotests` to manipulate a loss function and a minimizer.
 
             Args:
                 input : loss or fit result
@@ -158,11 +158,15 @@ class HypotestsObject(object):
 class ToysObject(HypotestsObject):
 
     def __init__(self, input, minimizer, sampler, sample):
-        """Base object in `hepstats.hypotests` to manipulate a loss function and a minimzer.
+        """Base object in `hepstats.hypotests` to manipulate a loss function, a minimizer and sample a
+        model (within the loss function) to do toy experiments.
 
             Args:
                 input : loss or fit result
                 minimizer : minimizer to use to find the minimum of the loss function
+                sampler : function used to create sampler with models, number of events and
+                    floating parameters in the sample.
+                sample : function used to get samples from the sampler.
         """
         super(ToysObject, self).__init__(input, minimizer)
         self._toys = {}
