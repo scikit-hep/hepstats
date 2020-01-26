@@ -361,7 +361,7 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
         toysresults = calculator.toysresults_from_yaml(filename)
 
         for t in toysresults:
-            calculator.set_toyresult(t)
+            calculator.add_toyresult(t)
 
         return calculator
 
