@@ -82,7 +82,7 @@ def test_with_gauss_exp_example(calculator):
 
     mean, calculator = calculator()
 
-    poinull = POIarray(mean, np.linspace(1.15, 1.26, 100))
+    poinull = POIarray(mean, np.linspace(1.15, 1.26, 50))
     ci = ConfidenceInterval(calculator, poinull)
     interval = ci.interval()
 
