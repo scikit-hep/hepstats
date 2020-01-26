@@ -1,15 +1,18 @@
 import pytest
 import numpy as np
 import zfit
+import os
 from zfit.core.testing import teardown_function  # allows redefinition of zfit.Parameter, needed for tests
 from zfit.loss import ExtendedUnbinnedNLL
 from zfit.minimize import Minuit
 
 from hepstats.hypotests.calculators.basecalculator import BaseCalculator
-from hepstats.hypotests.calculators import AsymptoticCalculator
+from hepstats.hypotests.calculators import AsymptoticCalculator, FrequentistCalculator
 from hepstats.hypotests import ConfidenceInterval
 from hepstats.hypotests.parameters import POI, POIarray
 from hepstats.hypotests.exceptions import POIRangeError
+
+pwd = os.path.dirname(__file__)
 
 
 def create_loss():
@@ -63,10 +66,21 @@ def test_constructor():
         ConfidenceInterval(calculator, [poi_1], [poi_2], qtilde=False)
 
 
-def test_with_asymptotic_calculator():
-
+def asy_calc():
     loss, mean = create_loss()
-    calculator = AsymptoticCalculator(loss, Minuit())
+    return mean, AsymptoticCalculator(loss, Minuit())
+
+
+def freq_calc():
+    loss, mean = create_loss()
+    calculator = FrequentistCalculator.from_yaml(f"{pwd}/ci_freq_zfit_toys.yml", loss, Minuit())
+    return mean, calculator
+
+
+@pytest.mark.parametrize("calculator", [asy_calc, freq_calc])
+def test_with_gauss_exp_example(calculator):
+
+    mean, calculator = calculator()
 
     poinull = POIarray(mean, np.linspace(1.15, 1.26, 100))
     ci = ConfidenceInterval(calculator, poinull)
@@ -75,17 +89,19 @@ def test_with_asymptotic_calculator():
     assert interval["lower"] == pytest.approx(1.1810371356602791, rel=0.1)
     assert interval["upper"] == pytest.approx(1.2156701172321935, rel=0.1)
 
-    with pytest.raises(POIRangeError):
-        poinull = POIarray(mean, np.linspace(1.2, 1.205, 50))
-        ci = ConfidenceInterval(calculator, poinull)
-        ci.interval()
+    if isinstance(calculator, AsymptoticCalculator):
 
-    with pytest.raises(POIRangeError):
-        poinull = POIarray(mean, np.linspace(1.2, 1.26, 50))
-        ci = ConfidenceInterval(calculator, poinull)
-        ci.interval()
+        with pytest.raises(POIRangeError):
+            poinull = POIarray(mean, np.linspace(1.2, 1.205, 50))
+            ci = ConfidenceInterval(calculator, poinull)
+            ci.interval()
 
-    with pytest.raises(POIRangeError):
-        poinull = POIarray(mean, np.linspace(1.17, 1.205, 50))
-        ci = ConfidenceInterval(calculator, poinull)
-        ci.interval()
+        with pytest.raises(POIRangeError):
+            poinull = POIarray(mean, np.linspace(1.2, 1.26, 50))
+            ci = ConfidenceInterval(calculator, poinull)
+            ci.interval()
+
+        with pytest.raises(POIRangeError):
+            poinull = POIarray(mean, np.linspace(1.17, 1.205, 50))
+            ci = ConfidenceInterval(calculator, poinull)
+            ci.interval()

@@ -124,10 +124,8 @@ class ToysManager(ToysObject):
 
         index = (poigen, poieval)
 
-        if index not in self:
-            print("YOOO")
+        if index not in self.keys():
             for k in self.keys():
-                print(poieval.values, k, np.isin(poieval.values, k[-1].values))
                 if np.isin(poieval.values, k[-1].values).all():
                     index = k
                     break
@@ -155,7 +153,7 @@ class ToysManager(ToysObject):
         self._toys[index] = toy
 
     def ntoys(self, poigen, poieval):
-        if (poigen, poieval) not in self:
+        if (poigen, poieval) not in self.keys():
             return 0
         else:
             return self.get_toyresult(poigen, poieval).ntoys
@@ -217,7 +215,7 @@ class ToysManager(ToysObject):
                 break
             i += 1
 
-        if (poigen, poieval) not in self:
+        if (poigen, poieval) not in self.keys():
             toysresult = ToyResult(p, poieval)
             self.set_toyresult(poigen, poieval, toysresult)
         else:
@@ -233,9 +231,6 @@ class ToysManager(ToysObject):
 
     def items(self):
         return self._toys.items()
-
-    def __contains__(self, index):
-        return index in self._toys
 
     def toyresults_to_dict(self):
         return [v.to_dict() for v in self.values()]
@@ -280,7 +275,7 @@ class ToysManager(ToysObject):
             t = ToyResult(poigen, poieval)
             t.add_entries(bestfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
 
-            ret[poigen, poieval]
+            ret[poigen, poieval] = t
 
         return ret
 
@@ -297,7 +292,7 @@ class ToysManager(ToysObject):
         """
 
         toyscollection = cls(loss, minimizer, sampler, sample)
-        toysresults = cls.toysresults_from_yaml(filename)
+        toysresults = toyscollection.toysresults_from_yaml(filename)
 
         for (poigen, poieval), t in toysresults.items():
             toyscollection.set_toyresult(poigen, poieval, t)

@@ -345,7 +345,8 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
         self._ntoysalt = ntoysalt
 
     @classmethod
-    def from_yaml(cls, filename, loss, minimizer, sampler=base_sampler, sample=base_sample):
+    def from_yaml(cls, filename, loss, minimizer, ntoysnull=100, ntoysalt=100, sampler=base_sampler,
+                  sample=base_sample):
         """
         Read the toys from a yaml file.
 
@@ -356,8 +357,8 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
             `Toys`
         """
 
-        calculator = cls(loss, minimizer, sampler, sample)
-        toysresults = cls.toysresults_from_yaml(filename)
+        calculator = cls(loss, minimizer, ntoysnull, ntoysalt, sampler, sample)
+        toysresults = calculator.toysresults_from_yaml(filename)
 
         for (poigen, poieval), t in toysresults.items():
             calculator.set_toyresult(poigen, poieval, t)
@@ -413,15 +414,13 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
 
             poieval_p = asarray(poieval_p)
 
-            ngenerated = self.ntoys(poigen, poieval_p)
-            print(p, poieval_p, ngenerated)
+            ngenerated = self.ntoys(p, poieval_p)
             if ngenerated < ntoys:
                 ntogen = ntoys - ngenerated
             else:
                 ntogen = 0
 
             if ntogen > 0:
-                print(p, poieval_p)
                 print(f"Generating {hypothesis} hypothesis toys for {p}.")
 
                 self.generate_and_fit_toys(ntoys=ntogen, poigen=p, poieval=poieval_p)

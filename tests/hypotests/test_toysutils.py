@@ -97,25 +97,25 @@ def test_toymanager_attributes():
 
     loss, (Nsig, poigen, poieval) = create_loss()
 
-    tm = ToysManager.from_yaml(loss, Minuit(), f"{pwd}/discovery_freq_zfit_toys.yaml")
+    tm = ToysManager.from_yaml(f"{pwd}/discovery_freq_zfit_toys.yaml", loss, Minuit())
 
     with pytest.raises(ParameterNotFound):
-        ToysManager.from_yaml(create_loss_1(), Minuit(), f"{pwd}/discovery_freq_zfit_toys.yaml")
+        ToysManager.from_yaml(f"{pwd}/discovery_freq_zfit_toys.yaml", create_loss_1(), Minuit())
 
     tr = list(tm.values())[0]
     assert isinstance(tr, ToyResult)
     assert list(tm.keys())[0] == (poigen, poigen)
-    assert (poigen, poieval) in tm
+    assert (poigen, poieval) in tm.keys()
     tm.items()
 
-    assert tm[poigen, poieval] == tr
+    assert tm.get_toyresult(poigen, poieval) == tr
     trc = tr.copy()
-    tm[poigen, poieval.append(1)[-1]] = trc
-    assert tm[poigen, poieval.append(1)[-1]] == trc
+    tm.set_toyresult(poigen, poieval.append(1)[-1], trc)
+    assert tm.get_toyresult(poigen, poieval.append(1)[-1]) == trc
 
     tm.to_yaml(f"{pwd}/test_toyutils.yml")
-    tmc = ToysManager.from_yaml(loss, Minuit(), f"{pwd}/test_toyutils.yml")
-    assert tm[poigen, poieval].ntoys == tmc[poigen, poieval].ntoys
+    tmc = ToysManager.from_yaml(f"{pwd}/test_toyutils.yml", loss, Minuit())
+    assert tm.get_toyresult(poigen, poieval).ntoys == tmc.get_toyresult(poigen, poieval).ntoys
 
     samplers = tm.sampler(floating_params=[poigen.parameter])
     assert all(is_valid_data(s) for s in samplers)

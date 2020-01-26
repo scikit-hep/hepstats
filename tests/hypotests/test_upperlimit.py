@@ -71,8 +71,7 @@ def asy_calc():
 
 def freq_calc():
     loss, (Nsig, Nbkg) = create_loss()
-    calculator = FrequentistCalculator(loss, Minuit())
-    calculator.load_toys_from_yaml(f"{pwd}/upperlimit_freq_zfit_toys.yml")
+    calculator = FrequentistCalculator.from_yaml(f"{pwd}/upperlimit_freq_zfit_toys.yml", loss, Minuit())
     return Nsig, calculator
 
 
@@ -103,7 +102,8 @@ def test_with_gauss_exp_example(calculator):
 
     # test error when scan range is too small
 
-    with pytest.raises(POIRangeError):
-        poinull = POIarray(Nsig, poinull.values[:5])
-        ul = UpperLimit(calculator, poinull, poialt)
-        ul.upperlimit(alpha=0.05, CLs=True)
+    if isinstance(calculator, AsymptoticCalculator):
+        with pytest.raises(POIRangeError):
+            poinull = POIarray(Nsig, poinull.values[:5])
+            ul = UpperLimit(calculator, poinull, poialt)
+            ul.upperlimit(alpha=0.05, CLs=True)

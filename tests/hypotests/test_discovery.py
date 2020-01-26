@@ -81,8 +81,7 @@ def test_with_asymptotic_calculator():
 def test_with_frequentist_calculator():
 
     loss, (Nsig, Nbkg) = create_loss()
-    calculator = FrequentistCalculator(loss, Minuit())
-    calculator.load_toys_from_yaml(f"{pwd}/discovery_freq_zfit_toys.yaml")
+    calculator = FrequentistCalculator.from_yaml(f"{pwd}/discovery_freq_zfit_toys.yaml", loss, Minuit())
 
     poinull = POI(Nsig, 0)
 
