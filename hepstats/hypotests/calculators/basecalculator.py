@@ -360,8 +360,8 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
         calculator = cls(loss, minimizer, ntoysnull, ntoysalt, sampler, sample)
         toysresults = calculator.toysresults_from_yaml(filename)
 
-        for (poigen, poieval), t in toysresults.items():
-            calculator.set_toyresult(poigen, poieval, t)
+        for t in toysresults:
+            calculator.set_toyresult(t)
 
         return calculator
 
