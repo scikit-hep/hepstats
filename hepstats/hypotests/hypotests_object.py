@@ -143,13 +143,11 @@ class HypotestsObject(object):
         if weights is not None and len(weights) != len(self.data):
             raise ValueError(msg.format("weights", "`self.data`"))
 
-        fit_range = self.loss.fit_range
-
         if weights is not None:
             for d, w in zip(data, weights):
                 d.set_weights(w)
 
-        loss = type(self.loss)(model=model, data=data, fit_range=fit_range)
+        loss = type(self.loss)(model=model, data=data)
         loss.add_constraints(self.constraints)
 
         return loss
