@@ -5,17 +5,16 @@ import numbers
 def eval_pdf(model, x, params):
     """ Compute pdf of model at a given point x and for given parameters values """
 
-    def _pdf(model, x):
+    def pdf(model, x):
         if model.is_extended:
-            return model.pdf(x) * model.get_yield()
+            ret = model.pdf(x) * model.get_yield()
         else:
-            return model.pdf(x)
+            ret = model.pdf(x)
 
-    if "zfit" in str(model.__class__):
-        import zfit
-        pdf = lambda m, x: zfit.run(_pdf(m, x))
-    else:
-        pdf = _pdf
+        if hasattr(ret, "numpy"):
+            return ret.numpy()
+        else:
+            return ret
 
     with ExitStack() as stack:
         for param in model.get_dependents():
@@ -54,8 +53,7 @@ def get_nevents(dataset):
 
     nevents = dataset.nevents
 
-    if not isinstance(nevents, numbers.Number) and "zfit" in str(dataset):
-        import zfit
-        nevents = zfit.run(nevents)
-
-    return nevents
+    if hasattr(nevents, "numpy"):
+        return nevents.numpy()
+    else:
+        return nevents
