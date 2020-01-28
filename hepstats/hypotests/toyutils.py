@@ -152,6 +152,9 @@ class ToysManager(ToysObject):
 
         if index not in self.keys():
             for k in self.keys():
+                poigen_k, poieval_k = k
+                if poigen_k != poigen:
+                    continue
                 if np.isin(poieval.values, k[-1].values).all():
                     index = k
                     break
@@ -184,10 +187,10 @@ class ToysManager(ToysObject):
         Returns:
             int
         """
-        if (poigen, poieval) not in self.keys():
-            return 0
-        else:
+        try:
             return self.get_toyresult(poigen, poieval).ntoys
+        except KeyError:
+            return 0
 
     def generate_and_fit_toys(self, ntoys, poigen, poieval, printfreq=0.2):
         """
@@ -214,6 +217,13 @@ class ToysManager(ToysObject):
         printfreq = ntoys * printfreq
 
         samples = self.sample(sampler, int(ntoys*1.2), poigen)
+
+        try:
+            toysresult = self.get_toyresult(poigen, poieval)
+            poieval = toysresult.poieval
+        except KeyError:
+            toysresult = ToyResult(poigen, poieval)
+            self.add_toyresult(toysresult)
 
         for i in range(ntoys):
             converged = False

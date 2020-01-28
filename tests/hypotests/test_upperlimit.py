@@ -87,9 +87,6 @@ def test_with_gauss_exp_example(calculator):
     ul_qtilde = UpperLimit(calculator, poinull, poialt, qtilde=True)
     limits = ul.upperlimit(alpha=0.05, CLs=True)
 
-    # np.savez("cls_pvalues.npz", poivalues=poinull.value, **ul.pvalues(True))
-    # np.savez("clsb_pvalues.npz", poivalues=poinull.value, **ul.pvalues(False))
-
     assert limits["observed"] == pytest.approx(15.725784747406346, rel=0.1)
     assert limits["expected"] == pytest.approx(11.927442041887158, rel=0.1)
     assert limits["expected_p1"] == pytest.approx(16.596396280677116, rel=0.1)
@@ -102,8 +99,7 @@ def test_with_gauss_exp_example(calculator):
 
     # test error when scan range is too small
 
-    if isinstance(calculator, AsymptoticCalculator):
-        with pytest.raises(POIRangeError):
-            poinull = POIarray(Nsig, poinull.values[:5])
-            ul = UpperLimit(calculator, poinull, poialt)
-            ul.upperlimit(alpha=0.05, CLs=True)
+    with pytest.raises(POIRangeError):
+        poinull = POIarray(Nsig, poinull.values[:5])
+        ul = UpperLimit(calculator, poinull, poialt)
+        ul.upperlimit(alpha=0.05, CLs=True)
