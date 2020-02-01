@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 
 import zfit
-from zfit.core.testing import setup_function  # allows redefinition of zfit.Parameter, needed for tests
+from zfit.core.testing import teardown_function  # allows redefinition of zfit.Parameter, needed for tests
 from zfit.core.loss import UnbinnedNLL
 from zfit.minimize import Minuit
 
@@ -24,7 +24,7 @@ def create_loss():
     mean = zfit.Parameter("mu", true_mu)
     sigma = zfit.Parameter("sigma", true_sigma)
     model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
-    loss = UnbinnedNLL(model=[model], data=[data], fit_range=[obs])
+    loss = UnbinnedNLL(model=model, data=data)
 
     return loss, (mean, sigma)
 

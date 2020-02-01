@@ -5,10 +5,10 @@ import zfit
 
 from hepstats.hypotests.parameters import POI, POIarray
 
-mean = zfit.Parameter("mu", 1.2, 0.1, 2)
-
 
 def test_pois():
+
+    mean = zfit.Parameter("mu", 1.2, 0.1, 2)
 
     p0 = POI(mean, 0)
     p1 = POI(mean, 1.)
