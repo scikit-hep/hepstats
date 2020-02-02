@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-import zfi
+import zfit
 import os
 from zfit.core.testing import teardown_function  # allows redefinition of zfit.Parameter, needed for tests
 from zfit.loss import ExtendedUnbinnedNLL
