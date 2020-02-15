@@ -430,7 +430,6 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
 
             if ntogen > 0:
                 print(f"Generating {hypothesis} hypothesis toys for {p}.")
-                print(p, poieval_p)
 
                 self.generate_and_fit_toys(ntoys=ntogen, poigen=p, poieval=poieval_p)
 
