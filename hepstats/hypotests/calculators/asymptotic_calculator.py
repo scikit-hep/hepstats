@@ -131,7 +131,7 @@ class AsymptoticCalculator(BaseCalculator):
             for i, ad in enumerate([generate_asimov_hist(m, values, self._asimov_bins) for m in model]):
                 weights, bin_edges = ad
                 bin_centers = bin_edges[0: -1] + np.diff(bin_edges)/2
-                asimov_data.append(array2dataset(type(data[i]), data[i].obs, bin_centers, weights))
+                asimov_data.append(array2dataset(type(data[i]), data[i].space, bin_centers, weights))
 
             self._asimov_dataset[poi] = asimov_data
 

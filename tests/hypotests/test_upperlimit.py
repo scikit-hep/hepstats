@@ -1,15 +1,18 @@
 import pytest
 import numpy as np
 import zfit
-from zfit.core.testing import teardown_function  # allows redefinition of zfit.Parameter, needed for tests
+import os
+from zfit.core.testing import teardown_function # allows redefinition of zfit.Parameter, needed for tests
 from zfit.loss import ExtendedUnbinnedNLL
 from zfit.minimize import Minuit
 
 from hepstats.hypotests.calculators.basecalculator import BaseCalculator
-from hepstats.hypotests.calculators import AsymptoticCalculator
+from hepstats.hypotests.calculators import AsymptoticCalculator, FrequentistCalculator
 from hepstats.hypotests import UpperLimit
 from hepstats.hypotests.parameters import POI, POIarray
 from hepstats.hypotests.exceptions import POIRangeError
+
+pwd = os.path.dirname(__file__)
 
 
 def create_loss():
@@ -29,14 +32,14 @@ def create_loss():
     data = zfit.data.Data.from_numpy(obs=obs, array=data)
 
     lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
-    Nsig = zfit.Parameter("Ns", 20., -20., N)
+    Nsig = zfit.Parameter("Nsig", 20., -20., N)
     Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
 
     signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)
     background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
     tot_model = signal + background
 
-    loss = ExtendedUnbinnedNLL(model=[tot_model], data=[data])
+    loss = ExtendedUnbinnedNLL(model=tot_model, data=data)
 
     return loss, (Nsig, Nbkg)
 
@@ -61,20 +64,28 @@ def test_constructor():
         UpperLimit(calculator, [poi_1], poi_2)
 
 
-def test_with_asymptotic_calculator():
-
+def asy_calc():
     loss, (Nsig, Nbkg) = create_loss()
-    calculator = AsymptoticCalculator(loss, Minuit())
+    return Nsig, AsymptoticCalculator(loss, Minuit())
 
-    poinull = POIarray(Nsig, np.linspace(0.0, 25, 20))
+
+def freq_calc():
+    loss, (Nsig, Nbkg) = create_loss()
+    calculator = FrequentistCalculator.from_yaml(f"{pwd}/upperlimit_freq_zfit_toys.yml", loss, Minuit())
+    return Nsig, calculator
+
+
+@pytest.mark.parametrize("calculator", [asy_calc, freq_calc])
+def test_with_gauss_exp_example(calculator):
+
+    Nsig, calculator = calculator()
+
+    poinull = POIarray(Nsig, np.linspace(0.0, 25, 15))
     poialt = POI(Nsig, 0)
 
     ul = UpperLimit(calculator, poinull, poialt)
     ul_qtilde = UpperLimit(calculator, poinull, poialt, qtilde=True)
     limits = ul.upperlimit(alpha=0.05, CLs=True)
-
-    # np.savez("cls_pvalues.npz", poivalues=poinull.value, **ul.pvalues(True))
-    # np.savez("clsb_pvalues.npz", poivalues=poinull.value, **ul.pvalues(False))
 
     assert limits["observed"] == pytest.approx(15.725784747406346, rel=0.1)
     assert limits["expected"] == pytest.approx(11.927442041887158, rel=0.1)
@@ -89,6 +100,6 @@ def test_with_asymptotic_calculator():
     # test error when scan range is too small
 
     with pytest.raises(POIRangeError):
-        poinull = POIarray(Nsig, np.linspace(0.0, 12, 20))
+        poinull = POIarray(Nsig, poinull.values[:5])
         ul = UpperLimit(calculator, poinull, poialt)
         ul.upperlimit(alpha=0.05, CLs=True)

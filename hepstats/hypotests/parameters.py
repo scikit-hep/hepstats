@@ -28,7 +28,7 @@ class POIarray(object):
 
         self.parameter = parameter
         self.name = parameter.name
-        self._values = np.array(values)
+        self._values = np.array(values, dtype=np.float64)
         self._ndim = 1
         self._shape = (len(values),)
 
@@ -56,8 +56,11 @@ class POIarray(object):
         return len(self.values)
 
     def __eq__(self, other):
-        if not isinstance(other, POI):
+        if not isinstance(other, POIarray):
             return NotImplemented
+
+        if len(self) != len(other):
+            return False
 
         values_equal = self.values == other.values
         name_equal = self.name == other.name
@@ -73,6 +76,12 @@ class POIarray(object):
     @property
     def shape(self):
         return self._shape
+
+    def append(self, values):
+        if not isinstance(values, Iterable):
+            values = [values]
+        values = np.concatenate([self.values, values])
+        return POIarray(parameter=self.parameter, values=values)
 
 
 class POI(POIarray):
@@ -102,8 +111,20 @@ class POI(POIarray):
         """
         return self._value
 
+    def __eq__(self, other):
+        if not isinstance(other, POI):
+            return NotImplemented
+
+        value_equal = self.value == other.value
+        name_equal = self.name == other.name
+        return value_equal and name_equal
+
     def __repr__(self):
         return "POI('{0}', value={1})".format(self.name, self.value)
 
     def __hash__(self):
         return hash((self.name, self.value))
+
+
+def asarray(POI):
+    return POIarray(POI.parameter, POI.values)

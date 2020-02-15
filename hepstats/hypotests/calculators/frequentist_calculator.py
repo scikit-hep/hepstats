@@ -1,13 +1,12 @@
 import numpy as np
 from scipy.stats import norm
 
-from .basecalculator import BaseCalculator
-from ..fitutils.utils import pll, get_nevents
+from .basecalculator import ToysCalculator
 from ..fitutils.sampling import base_sampler, base_sample
 from ..parameters import POI, POIarray
 
 
-class FrequentistCalculator(BaseCalculator):
+class FrequentistCalculator(ToysCalculator):
     """
     Class for frequentist calculators.
     """
@@ -18,10 +17,10 @@ class FrequentistCalculator(BaseCalculator):
             Args:
                 input : loss or fit result
                 minimizer : minimizer to use to find the minimum of the loss function
-                ntoysnull (int, default=100): number of toys to generate for the null hypothesis
-                ntoysalt (int, default=100): number of toys to generate for the alternative hypothesis
+                ntoysnull (int, default=100): minimum number of toys to generate for the null hypothesis
+                ntoysalt (int, default=100): minimum number of toys to generate for the alternative hypothesis
                 sampler : function used to create sampler with models, number of events and
-                    floating parameters in the sample Default is `hepstats.fitutils.sampling.base_sampler`.
+                    floating parameters in the sample. Default is `hepstats.fitutils.sampling.base_sampler`.
                 sample : function used to get samples from the sampler.
                     Default is `hepstats.fitutils.sampling.base_sample`.
 
@@ -40,235 +39,7 @@ class FrequentistCalculator(BaseCalculator):
                 >>> calc = FrequentistCalculator(input=loss, minimizer=MinuitMinimizer(), ntoysnull=1000, ntoysalt=1000)
         """
 
-        super(FrequentistCalculator, self).__init__(input, minimizer)
-
-        self._toysnull = {}
-        self._toysalt = {}
-        self._ntoysnull = ntoysnull
-        self._ntoysalt = ntoysalt
-        self._sampler = sampler
-        self._sample = sample
-        self._toys_loss = {}
-
-    @property
-    def ntoysnull(self):
-        """
-        Returns the number of toys loss for the null hypothesis.
-        """
-        return self._ntoysnull
-
-    @property
-    def ntoysalt(self):
-        """
-        Returns the number of toys loss for the alternative hypothesis.
-        """
-        return self._ntoysalt
-
-    def sampler(self, floating_params=None):
-        """
-        Create sampler with models.
-
-        Args:
-            floating_params (list): floating parameters in the sampler
-
-        Example with `zfit`:
-            >>> sampler = calc.sampler(floating_params=[zfit.Parameter("mean")])
-        """
-        self.set_dependents_to_bestfit()
-        nevents = []
-        # self.model and self.data defined in BaseCalculator
-        for m, d in zip(self.model, self.data):
-            if m.is_extended:
-                nevents.append("extended")
-            else:
-                nevents.append(get_nevents(d))
-
-        return self._sampler(self.model,  nevents, floating_params)
-
-    def sample(self, sampler, ntoys, poi=None):
-        """
-        Returns the samples generated from the sampler for a given value of a parameter of interest
-
-        Args:
-            sampler (list): generator of samples
-            ntoys (int): number of samples to generate
-            poi (POI, optional):  in the sampler
-
-        Example with `zfit`:
-            >>> mean = zfit.Parameter("mean")
-            >>> sampler = calc.sampler(floating_params=[mean])
-            >>> sample = calc.sample(sampler, 1000, POI(mean, 1.2))
-        """
-        return self._sample(sampler, ntoys, parameter=poi.parameter, value=poi.value)
-
-    def toys_loss(self, parameter_name):
-        """
-        Construct a loss function constructed with a sampler for a given floating parameter
-
-        Args:
-            parameter_name: name floating parameter in the sampler
-        Returns:
-             Loss function
-
-        Example with `zfit`:
-            >>> loss = calc.toys_loss(zfit.Parameter("mean"))
-        """
-        if parameter_name not in self._toys_loss:
-            parameter = self.get_parameter(parameter_name)
-            sampler = self.sampler(floating_params=[parameter])
-            self._toys_loss[parameter.name] = self.lossbuilder(self.model, sampler)
-        return self._toys_loss[parameter_name]
-
-    def _generate_and_fit_toys(self, ntoys, poigen, poieval, printfreq=0.2):
-        """
-        Generate and fit toys for at a given POI (poigen). The toys are then fitted, and the likelihood
-        is profiled at the values of poigen and poieval.
-
-        Args:
-            ntoys (int): number of toys to generate
-            poigen (POI): POI used to generate the toys
-            poieval (POIarray, optional): POI values to evaluate the loss function
-            printfreq: print frequency of the toys generation
-        """
-
-        minimizer = self.minimizer
-        param = poigen.parameter
-
-        toys_loss = self.toys_loss(poigen.name)
-        sampler = toys_loss.data
-
-        result = {"bestfit": {"values": np.empty(ntoys), "nll": np.empty(ntoys)},
-                  "nll": {p: np.empty(ntoys) for p in poieval}}
-
-        printfreq = ntoys * printfreq
-
-        toys = self.sample(sampler, int(ntoys*1.2), poigen)
-
-        for i in range(ntoys):
-            converged = False
-            toprint = i % printfreq == 0
-            while converged is False:
-                try:
-                    next(toys)
-                except StopIteration:
-                    to_gen = ntoys - i
-                    toys = self.sample(sampler, int(to_gen*1.2), poigen)
-                    next(toys)
-
-                minimum = minimizer.minimize(loss=toys_loss)
-                converged = minimum.converged
-
-                if not converged:
-                    self.set_dependents_to_bestfit()
-                    continue
-
-                bestfit = minimum.params[param]["value"]
-                result["bestfit"]["values"][i] = bestfit
-                nll = pll(minimizer, toys_loss, POI(param, bestfit))
-                result["bestfit"]["nll"][i] = nll
-
-                for p in poieval:
-                    nll = pll(minimizer, toys_loss, p)
-                    result["nll"][p][i] = nll
-
-            if toprint:
-                print("{0} toys generated, fitted and scanned!".format(i))
-
-            if i > ntoys:
-                break
-            i += 1
-
-        return result
-
-    def _get_toys(self, poigen, poieval=None, qtilde=False, hypothesis="null"):
-        """
-        Return the generated toys for a given POI.
-
-        Args:
-            poigen (POI): POI used to generate the toys
-            poieval (POIarray): POI values to evaluate the loss function
-            qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
-                the $$q$$ test statistic
-            hypothesis: `null` or `alternative`
-        """
-
-        assert hypothesis in ["null", "alternative"]
-
-        if hypothesis == "null":
-            ntoys = self.ntoysnull
-            toysdict = self._toysnull
-        else:
-            ntoys = self.ntoysalt
-            toysdict = self._toysalt
-
-        for p in poigen:
-            if p not in toysdict:
-                ntogen = ntoys
-            else:
-                ngenerated = toysdict[p]["bestfit"]["values"].size
-                if ngenerated < ntoys:
-                    ntogen = ntoys - ngenerated
-                else:
-                    ntogen = 0
-
-            if ntogen > 0:
-                print(f"Generating {hypothesis} hypothesis toys for {p}.")
-
-                eval_values = [p.value]
-                if qtilde:
-                    eval_values.append(0.)
-                if poieval:
-                    eval_values += poieval.values.tolist()
-                eval_values = list(dict.fromkeys(eval_values))
-
-                toyresult = self._generate_and_fit_toys(ntoys=ntogen, poigen=p,
-                                                        poieval=POIarray(poigen.parameter, eval_values))
-
-                if p in toysdict:
-                    toysdict[p].update(toyresult)
-                else:
-                    toysdict[p] = toyresult
-
-        return {p: toysdict[p] for p in poigen}
-
-    def get_toys_null(self, poigen, poieval, qtilde=False):
-        """
-        Return the generated toys for the null hypothesis.
-
-        Args:
-            poigen (POI): POI used to generate the toys
-            ntoys (int): number of toys to generate
-            poieval (POIarray): POI values to evaluate the loss function
-            qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
-                the $$q$$ test statistic
-
-        Example with `zfit`:
-            >>> mean = zfit.Parameter("mu", 1.2)
-            >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
-            >>> poialt = POI(mean, 1.2)
-            >>> for p in poinull:
-            ...     calc.get_toys_alt(p, poieval=poialt)
-        """
-        return self._get_toys(poigen=poigen, poieval=poieval, qtilde=qtilde, hypothesis="null")
-
-    def get_toys_alt(self, poigen, poieval, qtilde=False):
-        """
-        Return the generated toys for the alternative hypothesis.
-
-        Args:
-            poigen (POI): POI used to generate the toys
-            ntoys (int): number of toys to generate
-            poieval (POIarray): POI values to evaluate the loss function
-            qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
-                the $$q$$ test statistic
-
-        Example with `zfit`:
-            >>> mean = zfit.Parameter("mu", 1.2)
-            >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
-            >>> poialt = POI(mean, 1.2)
-            >>> calc.get_toys_alt(poialt, poieval=poinull)
-        """
-        return self._get_toys(poigen=poigen, poieval=poieval, qtilde=qtilde, hypothesis="alternative")
+        super(FrequentistCalculator, self).__init__(input, minimizer, ntoysnull, ntoysalt, sampler, sample)
 
     def qnull(self, poinull, poialt, onesided, onesideddiscovery, qtilde=False):
         """ Compute null hypothesis values of the $$\\Delta$$ log-likelihood test statistic.
@@ -296,16 +67,16 @@ class FrequentistCalculator(BaseCalculator):
 
         for p in poinull:
             toysresult = toysresults[p]
-            nll1 = toysresult["nll"][p]
-            nll2 = toysresult["bestfit"]["nll"]
-            bestfit = toysresult["bestfit"]["values"]
+            nll1 = toysresult.nlls[p]
+            nll2 = toysresult.nll_bestfit
+            bestfit = toysresult.bestfit
 
             if qtilde:
-                nllat0 = toysresult["nll"][0]
+                nllat0 = toysresult.nlls[POI(poinull.parameter, 0.0)]
                 nll2 = np.where(bestfit < 0, nllat0, nll2)
                 bestfit = np.where(bestfit < 0, 0, bestfit)
 
-            poi1 = POIarray(poinull.parameter, np.full(self.ntoysnull, p.value))
+            poi1 = POIarray(poinull.parameter, np.full(nll1.size, p.value))
             poi2 = POIarray(poinull.parameter, bestfit)
 
             ret[p] = self.q(nll1=nll1, nll2=nll2, poi1=poi1, poi2=poi2, onesided=onesided,
@@ -340,16 +111,16 @@ class FrequentistCalculator(BaseCalculator):
         for p in poinull:
             toysresult = toysresults[poialt]
 
-            nll1 = toysresult["nll"][p]
-            nll2 = toysresult["bestfit"]["nll"]
-            bestfit = toysresult["bestfit"]["values"]
+            nll1 = toysresult.nlls[p]
+            nll2 = toysresult.nll_bestfit
+            bestfit = toysresult.bestfit
 
             if qtilde:
-                nllat0 = toysresult["nll"][0]
+                nllat0 = toysresult.nlls[POI(poinull.parameter, 0.0)]
                 nll2 = np.where(bestfit < 0, nllat0, nll2)
                 bestfit = np.where(bestfit < 0, 0, bestfit)
 
-            poi1 = POIarray(poialt.parameter, np.full(self.ntoysalt, p.value))
+            poi1 = POIarray(poialt.parameter, np.full(nll1.size, p.value))
             poi2 = POIarray(poialt.parameter, bestfit)
 
             ret[p] = self.q(nll1=nll1, nll2=nll2, poi1=poi1, poi2=poi2, onesided=onesided,

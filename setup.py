@@ -9,7 +9,7 @@ from setuptools import find_packages
 import os
 
 python_requires = "!=2.*, >=3.6"
-install_requires = ["scipy", "numpy", "pandas"]
+install_requires = ["scipy", "numpy", "pandas", "asdf"]
 setup_requires = ["pytest-runner"]
 tests_requires = ["pytest", "zfit"]
 
@@ -51,6 +51,7 @@ setup(
                 'Programming Language :: Python :: 3',
                 'Programming Language :: Python :: 3.6',
                 'Programming Language :: Python :: 3.7',
+                'Programming Language :: Python :: 3.8',
                 'Development Status :: 4 - Beta'
                 ],
     platforms="Any",

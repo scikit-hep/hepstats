@@ -122,7 +122,7 @@ class UpperLimit(BaseTest):
 
         # create a filter for -1 and -2 sigma expected limits
         bestfit = self.calculator.bestfit.params[poinull.parameter]["value"]
-        filter = poinull.values > bestfit
+        filter = poinull.values >= bestfit
 
         if CLs:
             observed_key = "cls"
@@ -137,28 +137,33 @@ class UpperLimit(BaseTest):
         limits = {}
         for k in to_interpolate:
 
-            if k not in ["expected_m1", "expected_m2"]:
-                pvalues = self.pvalues(CLs)[k][filter]
-                values = poinull.values[filter]
-            else:
-                pvalues = self.pvalues(CLs)[k]
-                values = poinull.values
+            pvalues = self.pvalues(CLs)[k]
+            values = poinull.values
+
+            if k == observed_key:
+                k = "observed"
+                pvalues = pvalues[filter]
+                values = values[filter]
 
             if min(pvalues) > alpha:
-                msg = f"The minimum of the scanned p-values is {min(pvalues)} which is larger than the"
-                msg += f" confidence level alpha = {alpha}. Try to increase the maximum POI value."
-                raise POIRangeError(msg)
+                if k in ["expected", "observed"]:
+                    msg = f"The minimum of the scanned p-values is {min(pvalues)} which is larger than the"
+                    msg += f" confidence level alpha = {alpha}. Try to increase the maximum POI value."
+                    raise POIRangeError(msg)
+                else:
+                    limits[k] = None
+                    continue
 
             tck = interpolate.splrep(values, pvalues-alpha, s=0)
             root = interpolate.sproot(tck)
 
-            if k == observed_key:
-                k = "observed"
-
             if len(root) > 1:
                 root = root[0]
 
-            limits[k] = float(root)
+            try:
+                limits[k] = float(root)
+            except TypeError:
+                limits[k] = None
 
         if isinstance(self.calculator, AsymptoticCalculator):
             poiul = POI(poinull.parameter, limits["observed"])

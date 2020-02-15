@@ -11,3 +11,4 @@ dependencies:
   - tensorflow=>1.14
   - tensorflow-probability
   - zfit
+  - asdf
