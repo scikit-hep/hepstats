@@ -15,3 +15,10 @@ class ParameterNotFound(Exception):
 
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
+
+
+class FormatError(Exception):
+    """Exception class raised when unexpected yaml format are read"""
+
+    def __init__(self, *args, **kwargs):
+        Exception.__init__(self, *args, **kwargs)

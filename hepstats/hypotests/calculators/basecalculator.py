@@ -376,14 +376,14 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
     @property
     def ntoysnull(self):
         """
-        Returns the number of toys loss for the null hypothesis.
+        Returns the number of toys generated for the null hypothesis.
         """
         return self._ntoysnull
 
     @property
     def ntoysalt(self):
         """
-        Returns the number of toys loss for the alternative hypothesis.
+        Returns the number of toys generated for the alternative hypothesis.
         """
         return self._ntoysalt
 

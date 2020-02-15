@@ -1,9 +1,10 @@
 import asdf
 import os
 import numpy as np
+import warnings
 
 from .parameters import POI, POIarray
-from .exceptions import ParameterNotFound
+from .exceptions import ParameterNotFound, FormatError
 from .fitutils.utils import pll
 from .fitutils.sampling import base_sampler, base_sample
 from .hypotests_object import ToysObject
@@ -22,7 +23,7 @@ class ToyResult(object):
         """
         Class to store the results of toys generated for a given value of a POI.
         The best fit value of the POI, the NLL evaluate at the best fit, and the NLL evaluated
-        at several values of the POI are stored.
+        at several values of the POI are stored. The results can serialized using the `to_dict` method.
 
         Args:
             poigen (POI): POI used to generate the toys
@@ -106,7 +107,14 @@ class ToyResult(object):
 
     def to_dict(self):
         """
-        Returns dictionnary of the toy results.
+        Returns dictionary of the toy results.
+
+        Keys:
+            poi: name of the parameter of interest
+            genvalues: fixed vale of the poi used to generate the toys
+            evalvalues: values to evaluate the NLL
+            bestfit: array of best fitted values of the poi for each toy
+            nlls: dictionary of NLL values for each value in `evalvalues` and best fit
         """
         ret = {"poi": self.poigen.name, "bestfit": self.bestfit}
         ret["nlls"] = {n.value: nll for n, nll in self.nlls.items()}
@@ -116,11 +124,15 @@ class ToyResult(object):
         return ret
 
 
+class FitFailuresWarning(UserWarning):
+    pass
+
+
 class ToysManager(ToysObject):
 
     def __init__(self, input, minimizer, sampler=base_sampler, sample=base_sample):
         """Class handling the toy generation and fit, results are stored in `ToyResult` instances stored
-            themselves in a dictionnary.
+            themselves in a dictionary.
 
             Args:
                 input : loss or fit result
@@ -145,7 +157,7 @@ class ToysManager(ToysObject):
             poieval (POIarray, optional): POI values to evaluate the loss function
 
         Returns:
-            `Toys`
+            `ToyResult`
         """
 
         index = (poigen, poieval)
@@ -166,10 +178,10 @@ class ToysManager(ToysObject):
         Add ToyResult to the manager.
 
         Args:
-            toy: (`ToyResults`)
+            toy: (`ToyResult`)
         """
         if not isinstance(toy, ToyResult):
-            raise TypeError("A `hypotests.toyutils.Toys` is required for toy.")
+            raise TypeError("A `hypotests.toyutils.ToyResult` is required for toy.")
 
         index = (toy.poigen, toy.poieval)
 
@@ -204,6 +216,8 @@ class ToysManager(ToysObject):
             printfreq: print frequency of the toys generation
         """
 
+        self.set_dependents_to_bestfit()
+
         minimizer = self.minimizer
         param = poigen.parameter
 
@@ -225,7 +239,11 @@ class ToysManager(ToysObject):
             toysresult = ToyResult(poigen, poieval)
             self.add_toyresult(toysresult)
 
+        nfailures = 0
+        ntrials = 0
+
         for i in range(ntoys):
+            ntrials += 1.
             converged = False
             toprint = i % printfreq == 0
             while converged is False:
@@ -236,11 +254,18 @@ class ToysManager(ToysObject):
                     samples = self.sample(sampler, int(to_gen*1.2), poigen)
                     next(samples)
 
-                minimum = minimizer.minimize(loss=toys_loss)
-                converged = minimum.converged
+                try:
+                    minimum = minimizer.minimize(loss=toys_loss)
+                    converged = minimum.converged
+                except RuntimeError:
+                    converged = False
 
                 if not converged:
                     self.set_dependents_to_bestfit()
+                    nfailures += 1
+                    if nfailures > 0.10 * ntrials and nfailures > 10:
+                        msg = f"{nfailures} out of {ntrials} fits failed or didn't converge."
+                        warnings.warn(msg, FitFailuresWarning)
                     continue
 
                 bestfit[i] = minimum.params[param]["value"]
@@ -278,7 +303,7 @@ class ToysManager(ToysObject):
 
     def to_yaml(self, filename):
         """
-        Save the toys into a yaml file.
+        Save the toys into a yaml file under the key `toys`.
 
         Args:
             filename (str)
@@ -300,10 +325,13 @@ class ToysManager(ToysObject):
             filename (str)
 
         Returns:
-            list(`ToyResults`)
+            list(`ToyResult`)
         """
         ret = []
-        toys = asdf.open(filename).tree["toys"]
+        try:
+            toys = asdf.open(filename).tree["toys"]
+        except KeyError:
+            raise FormatError(f"The key `toys` is not found in {filename}.")
 
         for t in toys:
             poiparam = None
