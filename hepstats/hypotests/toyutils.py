@@ -253,17 +253,21 @@ class ToysManager(ToysObject):
                     to_gen = ntoys - i
                     samples = self.sample(sampler, int(to_gen*1.2), poigen)
                     next(samples)
-
-                try:
-                    minimum = minimizer.minimize(loss=toys_loss)
-                    converged = minimum.converged
-                except RuntimeError:
-                    converged = False
+                     
+                for minimize_trial in range(2):
+                    try:
+                        minimum = minimizer.minimize(loss=toys_loss)
+                        converged = minimum.converged
+                        if converged:
+                            break
+                    except RuntimeError:
+                        converged = False
+                        break
 
                 if not converged:
                     self.set_dependents_to_bestfit()
                     nfailures += 1
-                    if nfailures > 0.10 * ntrials and nfailures > 10:
+                    if nfailures > 0.15 * ntrials and ntrials > 10:
                         msg = f"{nfailures} out of {ntrials} fits failed or didn't converge."
                         warnings.warn(msg, FitFailuresWarning)
                     continue
