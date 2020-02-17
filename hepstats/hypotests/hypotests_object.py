@@ -4,14 +4,14 @@ from .fitutils.utils import get_nevents
 
 
 class HypotestsObject(object):
+    """Base object in `hepstats.hypotests` to manipulate a loss function and a minimizer.
+
+        Args:
+            * **input** : loss or fit result
+            * **minimizer** : minimizer to use to find the minimum of the loss function
+    """
 
     def __init__(self, input, minimizer):
-        """Base object in `hepstats.hypotests` to manipulate a loss function and a minimizer.
-
-            Args:
-                input : loss or fit result
-                minimizer : minimizer to use to find the minimum of the loss function
-        """
 
         if is_valid_fitresult(input):
             self._loss = input.loss
@@ -68,7 +68,7 @@ class HypotestsObject(object):
         Set the best fit values  of the model parameters.
 
             Args:
-                value: fit result
+                * **value**: fit result
         """
         if not is_valid_fitresult(value):
             raise ValueError()
@@ -116,9 +116,9 @@ class HypotestsObject(object):
         """ Method to build a new loss function.
 
             Args:
-                model (List): The model or models to evaluate the data on
-                data (List): Data to use
-                weights (optional, List): the data weights
+                * **model** (List): The model or models to evaluate the data on
+                * **data** (List): Data to use
+                * **weights** (optional, List): the data weights
 
             Example with `zfit`:
                 >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
@@ -154,18 +154,18 @@ class HypotestsObject(object):
 
 
 class ToysObject(HypotestsObject):
+    """Base object in `hepstats.hypotests` to manipulate a loss function, a minimizer and sample a
+    model (within the loss function) to do toy experiments.
+
+        Args:
+            * **input** : loss or fit result
+            * **minimizer** : minimizer to use to find the minimum of the loss function
+            * **sampler** : function used to create sampler with models, number of events and floating parameters in the sample.
+            * **sample** : function used to get samples from the sampler.
+    """
 
     def __init__(self, input, minimizer, sampler, sample):
-        """Base object in `hepstats.hypotests` to manipulate a loss function, a minimizer and sample a
-        model (within the loss function) to do toy experiments.
 
-            Args:
-                input : loss or fit result
-                minimizer : minimizer to use to find the minimum of the loss function
-                sampler : function used to create sampler with models, number of events and
-                    floating parameters in the sample.
-                sample : function used to get samples from the sampler.
-        """
         super(ToysObject, self).__init__(input, minimizer)
         self._toys = {}
         self._sampler = sampler
@@ -177,7 +177,7 @@ class ToysObject(HypotestsObject):
         Create sampler with models.
 
         Args:
-            floating_params (list): floating parameters in the sampler
+            * **floating_params** (list): floating parameters in the sampler
 
         Example with `zfit`:
             >>> sampler = calc.sampler(floating_params=[zfit.Parameter("mean")])
@@ -197,9 +197,9 @@ class ToysObject(HypotestsObject):
         Returns the samples generated from the sampler for a given value of a parameter of interest
 
         Args:
-            sampler (list): generator of samples
-            ntoys (int): number of samples to generate
-            poi (POI, optional):  in the sampler
+            * **sampler** (list): generator of samples
+            * **ntoys** (int): number of samples to generate
+            * **poi** (POI, optional):  in the sampler
 
         Example with `zfit`:
             >>> mean = zfit.Parameter("mean")
@@ -213,7 +213,7 @@ class ToysObject(HypotestsObject):
         Construct a loss function constructed with a sampler for a given floating parameter
 
         Args:
-            parameter_name: name floating parameter in the sampler
+            * **parameter_name**: name floating parameter in the sampler
         Returns:
              Loss function
 

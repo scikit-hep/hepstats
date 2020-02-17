@@ -7,51 +7,44 @@ from ..parameters import POI, POIarray
 
 
 class FrequentistCalculator(ToysCalculator):
-    """
-    Class for frequentist calculators.
+    """Frequentist calculator class.
+
+        Args:
+            * **input** : loss or fit result
+            * **minimizer** : minimizer to use to find the minimum of the loss function
+            * **ntoysnull** (int, default=100): minimum number of toys to generate for the null hypothesis
+            * **ntoysalt** (int, default=100): minimum number of toys to generate for the alternative hypothesis
+            * **sampler** : function used to create sampler with models, number of events and floating parameters in the sample. Default is `hepstats.fitutils.sampling.base_sampler`.
+            * **sample** : function used to get samples from the sampler. Default is `hepstats.fitutils.sampling.base_sample`.
+
+        Example with `zfit`:
+            >>> import zfit
+            >>> from zfit.core.loss import UnbinnedNLL
+            >>> from zfit.minimize import MinuitMinimizer
+
+            >>> obs = zfit.Space('x', limits=(0.1, 2.0))
+            >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
+            >>> mean = zfit.Parameter("mu", 1.2)
+            >>> sigma = zfit.Parameter("sigma", 0.1)
+            >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+            >>> loss = UnbinnedNLL(model=[model], data=[data], fit_range=[obs])
+
+            >>> calc = FrequentistCalculator(input=loss, minimizer=MinuitMinimizer(), ntoysnull=1000, ntoysalt=1000)
     """
 
     def __init__(self, input, minimizer, ntoysnull=100, ntoysalt=100, sampler=base_sampler, sample=base_sample):
-        """Frequentist calculator class.
-
-            Args:
-                input : loss or fit result
-                minimizer : minimizer to use to find the minimum of the loss function
-                ntoysnull (int, default=100): minimum number of toys to generate for the null hypothesis
-                ntoysalt (int, default=100): minimum number of toys to generate for the alternative hypothesis
-                sampler : function used to create sampler with models, number of events and
-                    floating parameters in the sample. Default is `hepstats.fitutils.sampling.base_sampler`.
-                sample : function used to get samples from the sampler.
-                    Default is `hepstats.fitutils.sampling.base_sample`.
-
-            Example with `zfit`:
-                >>> import zfit
-                >>> from zfit.core.loss import UnbinnedNLL
-                >>> from zfit.minimize import MinuitMinimizer
-
-                >>> obs = zfit.Space('x', limits=(0.1, 2.0))
-                >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
-                >>> mean = zfit.Parameter("mu", 1.2)
-                >>> sigma = zfit.Parameter("sigma", 0.1)
-                >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
-                >>> loss = UnbinnedNLL(model=[model], data=[data], fit_range=[obs])
-
-                >>> calc = FrequentistCalculator(input=loss, minimizer=MinuitMinimizer(), ntoysnull=1000, ntoysalt=1000)
-        """
 
         super(FrequentistCalculator, self).__init__(input, minimizer, ntoysnull, ntoysalt, sampler, sample)
 
     def qnull(self, poinull, poialt, onesided, onesideddiscovery, qtilde=False):
-        """ Compute null hypothesis values of the $$\\Delta$$ log-likelihood test statistic.
+        """Computes null hypothesis values of the :math:`\Delta` log-likelihood test statistic.
 
             Args:
-                poinull (`POIarray`): parameters of interest for the null hypothesis
-                poialt (`POIarray`): parameters of interest for the alternative hypothesis
-                onesided (bool): if `True` computes onesided pvalues
-                onesideddiscovery (bool): if `True` computes onesided pvalues for a discovery
-                    test
-                qtilde (bool): if `True` use the $$\tilde{q}$$ test statistics else use
-                    the $$q$$ test statistic
+                * **poinull** (`POIarray`): parameters of interest for the null hypothesis
+                * **poialt** (`POIarray`): parameters of interest for the alternative hypothesis
+                * **onesided** (bool): if `True` computes onesided pvalues
+                * **onesideddiscovery** (bool): if `True` computes onesided pvalues for a discovery test
+                * **qtilde** (bool): if `True` use the :math:`\widetilde{q}` test statistics else use the :math:`q` test statistic
 
             Returns:
                 `numpy.array`: observed values of q
@@ -85,16 +78,14 @@ class FrequentistCalculator(ToysCalculator):
         return ret
 
     def qalt(self, poinull, poialt, onesided, onesideddiscovery, qtilde=False):
-        """ Compute alternative hypothesis values of the $$\\Delta$$ log-likelihood test statistic.
+        """Computes alternative hypothesis values of the :math:`\Delta` log-likelihood test statistic.
 
             Args:
-                poinull (`POIarray`): parameters of interest for the null hypothesis
-                poialt (`POIarray`): parameters of interest for the alternative hypothesis
-                onesided (bool): if `True` computes onesided pvalues
-                onesideddiscovery (bool, optional): if `True` (default) computes onesided pvalues for a discovery
-                    test
-                qtilde (bool): if `True` use the $$\tilde{q}$$ test statistics else use
-                    the $$q$$ test statistic
+                * **poinull** (`POIarray`): parameters of interest for the null hypothesis
+                * **poialt** (`POIarray`): parameters of interest for the alternative hypothesis
+                * **onesided** (bool): if `True` computes onesided pvalues
+                * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery test
+                * ** qtilde** (bool): if `True` use the :math:`\widetilde{q}` test statistics else use the :math:`q` test statistic
 
             Returns:
                 `numpy.array`: observed values of q

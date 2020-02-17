@@ -1,4 +1,10 @@
-#!/usr/bin/python
+# Licensed under a 3-clause BSD style license, see LICENSE
+"""
+Module defining the parameter of interest classes, currently includes:
+
+* `POIarray`
+* `POI`
+"""
 import numpy as np
 from collections.abc import Iterable
 
@@ -6,19 +12,19 @@ from .fitutils.api_check import is_valid_parameter
 
 
 class POIarray(object):
+    """
+    Class for parameters of interest with multiple values:
+
+        Args:
+            * **parameter**: the parameter of interest
+            * **values** (`list(float)`,`numpy.array`): values of the parameter of interest
+
+        Example with `zfit`:
+            >>> Nsig = zfit.Parameter("Nsig")
+            >>> poi = POIarray(Nsig, value=np.linspace(0,10,10))
+    """
 
     def __init__(self, parameter, values):
-        """
-        Class for parameters of interest with multiple values:
-
-            Args:
-                parameter: the parameter of interest
-                values (list(float)`,`numpy.array`): values of the parameter of interest
-
-            Example with `zfit`:
-                >>> Nsig = zfit.Parameter("Nsig")
-                >>> poi = POIarray(Nsig, value=np.linspace(0,10,10))
-        """
 
         if not is_valid_parameter(parameter):
             raise ValueError(f"{parameter} is not a valid parameter!")
@@ -44,7 +50,7 @@ class POIarray(object):
 
     def __getitem__(self, i):
         """
-        Get the i th element the array of values of the `POIarray`.
+        Get the i-th element the array of values of the `POIarray`.
         """
         return POI(self.parameter, self.values[i])
 
@@ -71,13 +77,25 @@ class POIarray(object):
 
     @property
     def ndim(self):
+        """
+        Returns the number of dimension of the `POIarray`.
+        """
         return self._ndim
 
     @property
     def shape(self):
+        """
+        Returns the shape of the `POIarray`.
+        """
         return self._shape
 
     def append(self, values):
+        """
+        Append values in the `POIarray`.
+
+        Args:
+            * **values** (`list(float)`,`numpy.array`): values to append
+        """
         if not isinstance(values, Iterable):
             values = [values]
         values = np.concatenate([self.values, values])
@@ -85,19 +103,19 @@ class POIarray(object):
 
 
 class POI(POIarray):
+    """
+    Class for single value parameter of interest:
+
+        Args:
+            * **parameter**: the parameter of interest
+            * **values** (`float`, `int`): value of the parameter of interest
+
+        Example with `zfit`:
+            >>> Nsig = zfit.Parameter("Nsig")
+            >>> poi = POI(Nsig, value=0)
+    """
 
     def __init__(self, parameter, value):
-        """
-        Class for single value parameters of interest:
-
-            Args:
-                parameter: the parameter of interest
-                values (`float`,`int?): value of the parameter of interest
-
-            Example with `zfit`:
-                >>> Nsig = zfit.Parameter("Nsig")
-                >>> poi = POI(Nsig, value=0)
-        """
         if isinstance(value, Iterable):
             raise TypeError("A single value for the POI is required.")
 
@@ -127,4 +145,7 @@ class POI(POIarray):
 
 
 def asarray(POI):
+    """
+    Transforms a `POI` instance into a `POIarray` instance.
+    """
     return POIarray(POI.parameter, POI.values)

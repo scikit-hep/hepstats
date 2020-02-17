@@ -10,12 +10,12 @@ def generate_asimov_hist(model, params, nbins=100):
     """ Generate the Asimov histogram using a model and dictionary of parameters.
 
         Args:
-            model : model used to generate the dataset
-            params (Dict) : values of the parameters of the models
-            nbins (int, optional) : number of bins
+            * **model** : model used to generate the dataset
+            * **params** (Dict) : values of the parameters of the models
+            * **nbins** (int, optional) : number of bins
 
         Returns:
-             (`np.array`, `np.array`) : hist, bin_edges
+             (`numpy.array`, `numpy.array`) : hist, bin_edges
 
         Example with `zfit`:
             >>> obs = zfit.Space('x', limits=(0.1, 2.0))
@@ -49,9 +49,9 @@ class AsymptoticCalculator(BaseCalculator):
         """Asymptotic calculator class.
 
             Args:
-                input : loss or fit result
-                minimizer : minimizer to use to find the minimum of the loss function
-                asimov_bins (Optional, int) : number of bins of the Asimov dataset
+                * **input** : loss or fit result
+                * **minimizer** : minimizer to use to find the minimum of the loss function
+                * **asimov_bins** (Optional, int) : number of bins of the Asimov dataset
 
             Example with `zfit`:
                 >>> import zfit
@@ -78,7 +78,7 @@ class AsymptoticCalculator(BaseCalculator):
     @staticmethod
     def check_pois(pois):
         """
-        Check if the parameters of interest are all `hepstats.parameters.POI/POIarray` instances.
+        Checks if the parameters of interest are all `hepstats.parameters.POI/POIarray` instances.
         """
 
         msg = "POI/POIarray is required."
@@ -89,10 +89,10 @@ class AsymptoticCalculator(BaseCalculator):
             raise NotImplementedError(msg)
 
     def asimov_dataset(self, poi) -> (np.array, np.array):
-        """ Generate the Asimov dataset for a given alternative hypothesis.
+        """Generates the Asimov dataset for a given alternative hypothesis.
 
             Args:
-                poi (`POI`): parameter of interest of the alternative hypothesis
+                * **poi** (`POI`): parameter of interest of the alternative hypothesis
 
             Returns:
                  Dataset
@@ -138,10 +138,10 @@ class AsymptoticCalculator(BaseCalculator):
         return self._asimov_dataset[poi]
 
     def asimov_loss(self, poi):
-        """ Construct a loss function using the Asimov dataset for a given alternative hypothesis.
+        """Constructs a loss function using the Asimov dataset for a given alternative hypothesis.
 
             Args:
-                poi (`POI`): parameter of interest of the alternative hypothesis
+                * **poi** (`POI`): parameter of interest of the alternative hypothesis
 
             Returns:
                  Loss function
@@ -158,12 +158,12 @@ class AsymptoticCalculator(BaseCalculator):
         return self._asimov_loss[poi]
 
     def asimov_nll(self, pois, poialt) -> np.array:
-        """ Compute negative log-likelihood values for given parameters of interest using the Asimov dataset
+        """Computes negative log-likelihood values for given parameters of interest using the Asimov dataset
             generated with a given alternative hypothesis.
 
             Args:
-                pois (`POIarray`): parameters of interest
-                poialt (`POIarray`): parameter of interest of the alternative hypothesis
+                * **pois** (`POIarray`): parameters of interest
+                * **poialt** (`POIarray`): parameter of interest of the alternative hypothesis
 
             Returns:
                  `numpy.array`: alternative nll values
@@ -189,16 +189,15 @@ class AsymptoticCalculator(BaseCalculator):
         return ret
 
     def pnull(self, qobs, qalt=None, onesided=True, onesideddiscovery=False, qtilde=False, nsigma=0) -> np.array:
-        """ Compute the pvalue for the null hypothesis.
+        """Computes the pvalue for the null hypothesis.
 
             Args:
-                qobs (`np.array`): observed values of the test-statistic q
-                qalt (`np.array`): alternative values of the test-statistic q using the asimov dataset
-                onesided (bool, optional): if `True` (default) computes onesided pvalues
-                onesideddiscovery (bool, optional): if `True` (default) computes onesided pvalues for a discovery
-                qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
-                    the $$q$$ test statistic
-                nsigma (float, optional): significance shift
+                * **qobs** (`numpy.array`): observed values of the test-statistic q
+                * **qalt** (`numpy.array`): alternative values of the test-statistic q using the asimov dataset
+                * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
+                * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery
+                * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default) use the :math:`q` test statistic
+                * **nsigma** (float, optional): significance shift
 
             Returns:
                  `np.array` : array of the pvalues for the null hypothesis
@@ -224,15 +223,14 @@ class AsymptoticCalculator(BaseCalculator):
         return pnull
 
     def qalt(self, poinull, poialt, onesided, onesideddiscovery) -> np.array:
-        """ Compute alternative hypothesis values of the $$\\Delta$$ log-likelihood test statistic using the asimov
+        """Computes alternative hypothesis values of the :math:`\Delta` log-likelihood test statistic using the asimov
             dataset.
 
             Args:
-                poinull (`POIarray`): parameters of interest for the null hypothesis
-                poialt (`POIarray`): parameters of interest for the alternative hypothesis
-                onesided (bool, optional): if `True` (default) computes onesided pvalues
-                onesideddiscovery (bool, optional): if `True` (default) computes onesided pvalues for a discovery
-                    test
+                * **poinull** (`POIarray`): parameters of interest for the null hypothesis
+                * **poialt** (`POIarray`): parameters of interest for the alternative hypothesis
+                * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
+                * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery test
 
             Returns:
                 `numpy.array`: observed values of q
@@ -249,18 +247,17 @@ class AsymptoticCalculator(BaseCalculator):
                       onesided=onesided, onesideddiscovery=onesideddiscovery)
 
     def palt(self, qobs, qalt, onesided=True, onesideddiscovery=False, qtilde=False) -> np.array:
-        """ Compute the pvalue for the alternative hypothesis.
+        """Computes the pvalue for the alternative hypothesis.
 
             Args:
-                qobs (`np.array`): observed values of the test-statistic q
-                qalt (`np.array`): alternative values of the test-statistic q using the Asimov dataset
-                onesided (bool, optional): if `True` (default) computes onesided pvalues
-                onesideddiscovery (bool, optional): if `True` (default) computes onesided pvalues for a discovery
-                qtilde (bool, optional): if `True` use the $$\tilde{q}$$ test statistics else (default) use
-                    the $$q$$ test statistic
+                * **qobs** (`np.array`): observed values of the test-statistic q
+                * **qalt** (`np.array`): alternative values of the test-statistic q using the Asimov dataset
+                * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
+                * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery
+                * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default) use the :math:`q` test statistic
 
             Returns:
-                 `np.array` : array of the pvalues for the alternative hypothesis
+                 `numpy.array` : array of the pvalues for the alternative hypothesis
         """
         sqrtqobs = np.sqrt(qobs)
         sqrtqalt = np.sqrt(qalt)
