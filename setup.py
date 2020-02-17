@@ -9,7 +9,7 @@ from setuptools import find_packages
 import os
 
 python_requires = "!=2.*, >=3.6"
-install_requires = ["scipy", "numpy", "pandas", "asdf"]
+install_requires = ["scipy", "numpy", "pandas", "asdf", "numpydoc"]
 setup_requires = ["pytest-runner"]
 tests_requires = ["pytest", "zfit"]
 
