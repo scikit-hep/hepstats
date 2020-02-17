@@ -47,8 +47,7 @@ The modeling submodule includes the [Bayesian Block algorithm](https://arxiv.org
 
 This submodule provides tools to do hypothesis tests such as discovery test and computations of upper limits or confidence intervals. hepstats needs a fitting backend to perform computations such as [zfit](https://github.com/zfit/zfit). Any fitting library can be used if their API is compatible  with hepstats (see [api checks](https://github.com/scikit-hep/hepstats/blob/master/hepstats/hypotests/fitutils/api_check.py)).
 
-We give here a simple example of a discovery test, using the [zfit](https://github.com/zfit/zfit)
-fitting package as backend, of a Gaussian signal with known mean and sigma over an exponential background.
+We give here a simple example of an upper limit calculation of the yield of a Gaussian signal with known mean and sigma over an exponential background. The fitting backend used is the [zfit](https://github.com/zfit/zfit) package.
 
 ```python
 >>> import zfit
@@ -59,32 +58,37 @@ fitting package as backend, of a Gaussian signal with known mean and sigma over 
 >>> obs = zfit.Space('x', limits=bounds)
 
 >>> bkg = np.random.exponential(0.5, 300)
->>> peak = np.random.normal(1.2, 0.1, 25)
+>>> peak = np.random.normal(1.2, 0.1, 10)
 >>> data = np.concatenate((bkg, peak))
 >>> data = data[(data > bounds[0]) & (data < bounds[1])]
 >>> N = data.size
 >>> data = zfit.Data.from_numpy(obs=obs, array=data)
 
 >>> lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
->>> Nsig = zfit.Parameter("Ns", 20., -20., N)
+>>> Nsig = zfit.Parameter("Nsig", 1., -20., N)
 >>> Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
 >>> signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)
 >>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
 >>> loss = ExtendedUnbinnedNLL(model=signal + background, data=data)
 
 >>> from hepstats.hypotests.calculators import AsymptoticCalculator
->>> from hepstats.hypotests import Discovery
->>> from hepstats.hypotests.parameters import POI
+>>> from hepstats.hypotests import UpperLimit
+>>> from hepstats.hypotests.parameters import POI, POIarray
 
 >>> calculator = AsymptoticCalculator(loss, Minuit())
->>> poinull = POI(Nsig, 0)
->>> discovery_test = Discovery(calculator, [poinull])
->>> discovery_test.result()
+>>> poinull = POIarray(Nsig, np.linspace(0.0, 25, 20))
+>>> poialt = POI(Nsig, 0)
+>>> ul = UpperLimit(calculator, poinull, poialt)
+>>> ul.upperlimit(alpha=0.05, CLs=True)
 
-p_value for the Null hypothesis = 0.0007571045424956679
-Significance (in units of sigma) = 3.1719464825102244
+Observed upper limit: Nsig = 15.725784747406346
+Expected upper limit: Nsig = 11.927442041887158
+Expected upper limit +1 sigma: Nsig = 16.596396280677116
+Expected upper limit -1 sigma: Nsig = 8.592750403611896
+Expected upper limit +2 sigma: Nsig = 22.24864429383046
+Expected upper limit -2 sigma: Nsig = 6.400549971360598
 ```
 
-The discovery test prints out the p-value and the significance of the null hypothesis to be rejected.
+![upper limit example](https://raw.githubusercontent.com/scikit-hep/hepstats/master/notebooks/hypotests/asy_ul.png)
 
 [sk-badge]: https://img.shields.io/badge/Scikit--HEP-Project-blue?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAcCAYAAAB/E6/TAAAACXBIWXMAAAEZAAABGQHyCY1sAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAA6dJREFUSImdlktonFUUx/930kQ0nYo2JX5NUqSghSq2oIgvcCFaC0EEH2AXUh9FEV1UUaGIC924qY8igo+FQi26sWp8gDS24qOgCOIiKCVomLlnZpxk7Dh2GjMz389F7tgv4zfNJGdzh/M/5/zuud/ch9MKDFgnaUjSnHOu2kuOmb0h6brMMoVHgceBY8ApSVVJ05JOAnXga+BJ4OK0fO/9PZL2AL91AwwBLwLz9GYLwKvAcLtGLpcbMbM5MyuXy+UoDXI14BNFcsABYBy4DLgojDvDZH5PxJaAG4CM937SzCgUCnemQcaB0yFpDngMGFhmefuBh4E/Qt4/tVrtoJlhZq+nJWwHaiH4F2DL2QAp+SPA9wBxHDM7O5svl8vZzqBzgOkAOQGsXwmkbbVabUOj0Wh/1xIw+J+Yy+UuBJ4O4jywdTUQSSoUCgdKpRJxHC+Ees8mxVKr1WoGYf9qId77m80sNrNvgedDvb+A8yQpMzg4OJHJZPoAVavVQ6uBmNmQc+4dSfVWq7Vb0n5JC5KyknZIUiabzdYlqdFoqF6vTxSLxctXwXpNUuSce3RsbOyEc+6kpKNBG5ekjKRLguMTSUNxHE/m8/ntvRK89w9IukvS4SiK3k5Ix8N4aRu0UZIGBgaOAHdIWpfJZI56769fDlIqlTY7515yzlkcx3s65xDGjW1Qf3A0R0ZGJpxzOyX1Oee+MLMd3SDAmjiOD0paK+nB0dHRuY6QhTD2t0EWHJEkRVF0zDl3k6TTkj5OPUIkmdkzwLWSXomi6POUkNFkZxlJM8GxrR0RRdEPzrkbnXOzwHve+/s7IFc55/ZJmmq1Wvu6NH1FGGfaS3B3YrMuOTJKpdJmM5sO+2OvJBWLxUEz+9XM5vP5/DalWDhpqqHu7rYzmzhI96Ys0aZQmEKh8IKZvRV+P9GlEwEPhXoNYCgpvByE2SXCmc6GzeyncCLjvZ8EUi9N4HygEOq92SmuB/4M4pdAf2eBmZmZC7z3lQDb1AXSB3wW6vwNpF54twOtEPQBsLYzplgsfmhmpHUDnAscCvkxsCttMu3gpzhjPwNLNq2ZHU4DsXgr/5jIfa4rJJF0H0vfCp8C9wLDSRCwAdgFfBQ6gMW3wyPLQhKwK4Gv+L81m80mwKkU7Tvgmp4hHcBbgXcTf5ROqwLvA7cBblWQDmA/sLVSqXxTqVQAbmHxJXTWh0vS1vQS5JxrSJoys3JwHXHOxSuZbE+ghE1J2rJSiCT9CxJT5EBIY81lAAAAAElFTkSuQmCC
