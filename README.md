@@ -9,6 +9,7 @@
 ![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/matthieumarinangeli/matthieumarinangeli/4)
 ![Azure DevOps tests](https://img.shields.io/azure-devops/tests/matthieumarinangeli/matthieumarinangeli/4)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/scikit-hep/hepstats/master)
+[![Documentation Status](https://readthedocs.org/projects/hepstats/badge/?version=latest)](https://hepstats.readthedocs.io/en/latest/?badge=latest)
 
 ## Installation
 
