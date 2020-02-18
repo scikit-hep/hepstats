@@ -10,7 +10,7 @@ def pltdist(data, bins, bounds):
     plt.errorbar(bin_centers, y, yerr=yerr, fmt=".", color="royalblue")
 
 
-def plotfitresult(model, bounds, nbins, data):
+def plotfitresult(model, bounds, nbins):
     x = np.linspace(*bounds, num=1000)
     pdf = zfit.run(model.pdf(x, norm_range=bounds) * model.get_yield())
     plt.plot(x, ((bounds[1] - bounds[0])/nbins)*(pdf), "-r", label="fit result")
