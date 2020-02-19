@@ -1,0 +1,265 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>hepstats.hypotests.core.discovery &mdash; hepstats 0.2.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> hepstats
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">Quick start</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/modules.html">hepstats</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">hepstats</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>hepstats.hypotests.core.discovery</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for hepstats.hypotests.core.discovery</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
+
+<span class="kn">from</span> <span class="nn">.basetest</span> <span class="kn">import</span> <span class="n">BaseTest</span>
+
+
+<div class="viewcode-block" id="Discovery"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.core.discovery.Discovery">[docs]</a><span class="k">class</span> <span class="nc">Discovery</span><span class="p">(</span><span class="n">BaseTest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class for discovery test.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            * **calculator** (`sktats.hypotests.BaseCalculator`): calculator to use for computing the pvalues</span>
+<span class="sd">            * **poinull** (`POI`): parameter of interest for the null hypothesis</span>
+
+<span class="sd">        Example with `zfit`:</span>
+<span class="sd">            &gt;&gt;&gt; import zfit</span>
+<span class="sd">            &gt;&gt;&gt; from zfit.loss import ExtendedUnbinnedNLL</span>
+<span class="sd">            &gt;&gt;&gt; from zfit.minimize import MinuitMinimizer</span>
+
+<span class="sd">            &gt;&gt;&gt; bounds = (0.1, 3.0)</span>
+<span class="sd">            &gt;&gt;&gt; zfit.Space(&#39;x&#39;, limits=bounds)</span>
+
+<span class="sd">            &gt;&gt;&gt; bkg = np.random.exponential(0.5, 300)</span>
+<span class="sd">            &gt;&gt;&gt; peak = np.random.normal(1.2, 0.1, 25)</span>
+<span class="sd">            &gt;&gt;&gt; data = np.concatenate((bkg, peak))</span>
+<span class="sd">            &gt;&gt;&gt; data = data[(data &gt; bounds[0]) &amp; (data &lt; bounds[1])]</span>
+<span class="sd">            &gt;&gt;&gt; N = data.size</span>
+<span class="sd">            &gt;&gt;&gt; data = zfit.data.Data.from_numpy(obs=obs, array=data)</span>
+
+<span class="sd">            &gt;&gt;&gt; lambda_ = zfit.Parameter(&quot;lambda&quot;, -2.0, -4.0, -1.0)</span>
+<span class="sd">            &gt;&gt;&gt; Nsig = zfit.Parameter(&quot;Ns&quot;, 20., -20., N)</span>
+<span class="sd">            &gt;&gt;&gt; Nbkg = zfit.Parameter(&quot;Nbkg&quot;, N, 0., N*1.1)</span>
+<span class="sd">            &gt;&gt;&gt; signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)</span>
+<span class="sd">            &gt;&gt;&gt; background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)</span>
+<span class="sd">            &gt;&gt;&gt; loss = ExtendedUnbinnedNLL(model=[signal + background], data=[data])</span>
+
+<span class="sd">            &gt;&gt;&gt; from hepstats.hypotests.calculators import AsymptoticCalculator</span>
+<span class="sd">            &gt;&gt;&gt; from hepstats.hypotests import Discovery</span>
+<span class="sd">            &gt;&gt;&gt; from hepstats.hypotests.parameters import POI</span>
+
+<span class="sd">            &gt;&gt;&gt; calculator = AsymptoticCalculator(loss, MinuitMinimizer())</span>
+<span class="sd">            &gt;&gt;&gt; poinull = POI(Nsig, 0)</span>
+<span class="sd">            &gt;&gt;&gt; discovery_test = Discovery(calculator, [poinull])</span>
+<span class="sd">            &gt;&gt;&gt; discovery_test.result()</span>
+<span class="sd">            p_value for the Null hypothesis = 0.0007571045424956679</span>
+<span class="sd">            Significance (in units of sigma) = 3.1719464825102244</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calculator</span><span class="p">,</span> <span class="n">poinull</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">Discovery</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">calculator</span><span class="p">,</span> <span class="n">poinull</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Discovery.result"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.core.discovery.Discovery.result">[docs]</a>    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">printlevel</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the result of the discovery hypothesis test.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                * **printlevel** (int, default=1): if &gt; 0 print the result</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                Tuple(float, float): pnull, significance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pnull</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">pvalue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">poinull</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">pnull</span> <span class="o">=</span> <span class="n">pnull</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">significance</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">pnull</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">printlevel</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">p_value for the Null hypothesis = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pnull</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Significance (in units of sigma) = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">significance</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">pnull</span><span class="p">,</span> <span class="n">significance</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Matthieu Marinangeli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
