@@ -242,7 +242,7 @@
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="AsymptoticCalculator.asimov_dataset"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.asimov_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">asimov_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poi</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generates the Asimov dataset for a given alternative hypothesis.</span>
+        <span class="sd">&quot;&quot;&quot;Gets the Asimov dataset for a given alternative hypothesis.</span>
 
 <span class="sd">            Args:</span>
 <span class="sd">                * **poi** (`POI`): parameter of interest of the alternative hypothesis</span>
@@ -252,7 +252,7 @@
 
 <span class="sd">            Example with `zfit`:</span>
 <span class="sd">                &gt;&gt;&gt; poialt = POI(mean, 1.2)</span>
-<span class="sd">                &gt;&gt;&gt; dataset = calc.asimov_dataset([poialt])</span>
+<span class="sd">                &gt;&gt;&gt; dataset = calc.asimov_dataset(poialt)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -301,7 +301,7 @@
 
 <span class="sd">            Example with `zfit`:</span>
 <span class="sd">                &gt;&gt;&gt; poialt = POI(mean, 1.2)</span>
-<span class="sd">                &gt;&gt;&gt; loss = calc.asimov_loss([poialt])</span>
+<span class="sd">                &gt;&gt;&gt; loss = calc.asimov_loss(poialt)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">poi</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asimov_loss</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -310,13 +310,13 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asimov_loss</span><span class="p">[</span><span class="n">poi</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="AsymptoticCalculator.asimov_nll"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.asimov_nll">[docs]</a>    <span class="k">def</span> <span class="nf">asimov_nll</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pois</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<div class="viewcode-block" id="AsymptoticCalculator.asimov_nll"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.asimov_nll">[docs]</a>    <span class="k">def</span> <span class="nf">asimov_nll</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pois</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Computes negative log-likelihood values for given parameters of interest using the Asimov dataset</span>
 <span class="sd">            generated with a given alternative hypothesis.</span>
 
 <span class="sd">            Args:</span>
 <span class="sd">                * **pois** (`POIarray`): parameters of interest</span>
-<span class="sd">                * **poialt** (`POIarray`): parameter of interest of the alternative hypothesis</span>
+<span class="sd">                * **poialt** (`POI`): parameter of interest of the alternative hypothesis</span>
 
 <span class="sd">            Returns:</span>
 <span class="sd">                 `numpy.array`: alternative nll values</span>
@@ -325,7 +325,7 @@
 <span class="sd">                &gt;&gt;&gt; mean = zfit.Parameter(&quot;mu&quot;, 1.2)</span>
 <span class="sd">                &gt;&gt;&gt; poinull = POIarray(mean, [1.1, 1.2, 1.0])</span>
 <span class="sd">                &gt;&gt;&gt; poialt = POI(mean, 1.2)</span>
-<span class="sd">                &gt;&gt;&gt; nll = calc.asimov_nll([poinull], [poialt])</span>
+<span class="sd">                &gt;&gt;&gt; nll = calc.asimov_nll(poinull, poialt)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_pois</span><span class="p">(</span><span class="n">pois</span><span class="p">)</span>
@@ -341,7 +341,7 @@
             <span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asimov_nll</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">ret</span></div>
 
-<div class="viewcode-block" id="AsymptoticCalculator.pnull"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.pnull">[docs]</a>    <span class="k">def</span> <span class="nf">pnull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qobs</span><span class="p">,</span> <span class="n">qalt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<div class="viewcode-block" id="AsymptoticCalculator.pnull"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.pnull">[docs]</a>    <span class="k">def</span> <span class="nf">pnull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qobs</span><span class="p">,</span> <span class="n">qalt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Computes the pvalue for the null hypothesis.</span>
 
 <span class="sd">            Args:</span>
@@ -375,7 +375,7 @@
 
         <span class="k">return</span> <span class="n">pnull</span></div>
 
-<div class="viewcode-block" id="AsymptoticCalculator.qalt"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.qalt">[docs]</a>    <span class="k">def</span> <span class="nf">qalt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<div class="viewcode-block" id="AsymptoticCalculator.qalt"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.qalt">[docs]</a>    <span class="k">def</span> <span class="nf">qalt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Computes alternative hypothesis values of the :math:`\Delta` log-likelihood test statistic using the asimov</span>
 <span class="sd">            dataset.</span>
 
@@ -399,7 +399,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">nll1</span><span class="o">=</span><span class="n">nll_poinull_asy</span><span class="p">,</span> <span class="n">nll2</span><span class="o">=</span><span class="n">nll_poialt_asy</span><span class="p">,</span> <span class="n">poi1</span><span class="o">=</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poi2</span><span class="o">=</span><span class="n">poialt</span><span class="p">,</span>
                       <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AsymptoticCalculator.palt"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.palt">[docs]</a>    <span class="k">def</span> <span class="nf">palt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qobs</span><span class="p">,</span> <span class="n">qalt</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<div class="viewcode-block" id="AsymptoticCalculator.palt"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.palt">[docs]</a>    <span class="k">def</span> <span class="nf">palt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qobs</span><span class="p">,</span> <span class="n">qalt</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Computes the pvalue for the alternative hypothesis.</span>
 
 <span class="sd">            Args:</span>

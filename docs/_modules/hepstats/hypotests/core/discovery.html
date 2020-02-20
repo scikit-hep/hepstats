@@ -166,7 +166,7 @@
 <span class="sd">        Example with `zfit`:</span>
 <span class="sd">            &gt;&gt;&gt; import zfit</span>
 <span class="sd">            &gt;&gt;&gt; from zfit.loss import ExtendedUnbinnedNLL</span>
-<span class="sd">            &gt;&gt;&gt; from zfit.minimize import MinuitMinimizer</span>
+<span class="sd">            &gt;&gt;&gt; from zfit.minimize import Minuit</span>
 
 <span class="sd">            &gt;&gt;&gt; bounds = (0.1, 3.0)</span>
 <span class="sd">            &gt;&gt;&gt; zfit.Space(&#39;x&#39;, limits=bounds)</span>
@@ -183,15 +183,15 @@
 <span class="sd">            &gt;&gt;&gt; Nbkg = zfit.Parameter(&quot;Nbkg&quot;, N, 0., N*1.1)</span>
 <span class="sd">            &gt;&gt;&gt; signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)</span>
 <span class="sd">            &gt;&gt;&gt; background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)</span>
-<span class="sd">            &gt;&gt;&gt; loss = ExtendedUnbinnedNLL(model=[signal + background], data=[data])</span>
+<span class="sd">            &gt;&gt;&gt; loss = ExtendedUnbinnedNLL(model=signal + background, data=data)</span>
 
 <span class="sd">            &gt;&gt;&gt; from hepstats.hypotests.calculators import AsymptoticCalculator</span>
 <span class="sd">            &gt;&gt;&gt; from hepstats.hypotests import Discovery</span>
 <span class="sd">            &gt;&gt;&gt; from hepstats.hypotests.parameters import POI</span>
 
-<span class="sd">            &gt;&gt;&gt; calculator = AsymptoticCalculator(loss, MinuitMinimizer())</span>
+<span class="sd">            &gt;&gt;&gt; calculator = AsymptoticCalculator(loss, Minuit())</span>
 <span class="sd">            &gt;&gt;&gt; poinull = POI(Nsig, 0)</span>
-<span class="sd">            &gt;&gt;&gt; discovery_test = Discovery(calculator, [poinull])</span>
+<span class="sd">            &gt;&gt;&gt; discovery_test = Discovery(calculator, poinull)</span>
 <span class="sd">            &gt;&gt;&gt; discovery_test.result()</span>
 <span class="sd">            p_value for the Null hypothesis = 0.0007571045424956679</span>
 <span class="sd">            Significance (in units of sigma) = 3.1719464825102244</span>
