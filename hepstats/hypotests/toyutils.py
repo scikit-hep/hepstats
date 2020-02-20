@@ -292,9 +292,16 @@ class ToysManager(ToysObject):
         toysresult.add_entries(bestfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
 
     def keys(self):
+        """
+        Returns keys of the `ToysManager` instance defined as `key = (toy.poigen, toy.poieval)` for a
+        given `ToyResult` instance `toy`.
+        """
         return self._toys.keys()
 
     def values(self):
+        """
+        Returns values of `ToysManager` instance that are `ToyResult` instances.
+        """
         return self._toys.values()
 
     def toyresults_to_dict(self):

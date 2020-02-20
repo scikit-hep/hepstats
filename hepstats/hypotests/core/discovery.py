@@ -13,7 +13,7 @@ class Discovery(BaseTest):
         Example with `zfit`:
             >>> import zfit
             >>> from zfit.loss import ExtendedUnbinnedNLL
-            >>> from zfit.minimize import MinuitMinimizer
+            >>> from zfit.minimize import Minuit
 
             >>> bounds = (0.1, 3.0)
             >>> zfit.Space('x', limits=bounds)
@@ -30,15 +30,15 @@ class Discovery(BaseTest):
             >>> Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
             >>> signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)
             >>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
-            >>> loss = ExtendedUnbinnedNLL(model=[signal + background], data=[data])
+            >>> loss = ExtendedUnbinnedNLL(model=signal + background, data=data)
 
             >>> from hepstats.hypotests.calculators import AsymptoticCalculator
             >>> from hepstats.hypotests import Discovery
             >>> from hepstats.hypotests.parameters import POI
 
-            >>> calculator = AsymptoticCalculator(loss, MinuitMinimizer())
+            >>> calculator = AsymptoticCalculator(loss, Minuit())
             >>> poinull = POI(Nsig, 0)
-            >>> discovery_test = Discovery(calculator, [poinull])
+            >>> discovery_test = Discovery(calculator, poinull)
             >>> discovery_test.result()
             p_value for the Null hypothesis = 0.0007571045424956679
             Significance (in units of sigma) = 3.1719464825102244

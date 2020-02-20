@@ -89,7 +89,7 @@ class AsymptoticCalculator(BaseCalculator):
             raise NotImplementedError(msg)
 
     def asimov_dataset(self, poi) -> (np.array, np.array):
-        """Generates the Asimov dataset for a given alternative hypothesis.
+        """Gets the Asimov dataset for a given alternative hypothesis.
 
             Args:
                 * **poi** (`POI`): parameter of interest of the alternative hypothesis
@@ -99,7 +99,7 @@ class AsymptoticCalculator(BaseCalculator):
 
             Example with `zfit`:
                 >>> poialt = POI(mean, 1.2)
-                >>> dataset = calc.asimov_dataset([poialt])
+                >>> dataset = calc.asimov_dataset(poialt)
 
         """
 
@@ -148,7 +148,7 @@ class AsymptoticCalculator(BaseCalculator):
 
             Example with `zfit`:
                 >>> poialt = POI(mean, 1.2)
-                >>> loss = calc.asimov_loss([poialt])
+                >>> loss = calc.asimov_loss(poialt)
 
         """
         if poi not in self._asimov_loss.keys():
@@ -157,13 +157,13 @@ class AsymptoticCalculator(BaseCalculator):
 
         return self._asimov_loss[poi]
 
-    def asimov_nll(self, pois, poialt) -> np.array:
+    def asimov_nll(self, pois, poialt) -> np.ndarray:
         """Computes negative log-likelihood values for given parameters of interest using the Asimov dataset
             generated with a given alternative hypothesis.
 
             Args:
                 * **pois** (`POIarray`): parameters of interest
-                * **poialt** (`POIarray`): parameter of interest of the alternative hypothesis
+                * **poialt** (`POI`): parameter of interest of the alternative hypothesis
 
             Returns:
                  `numpy.array`: alternative nll values
@@ -172,7 +172,7 @@ class AsymptoticCalculator(BaseCalculator):
                 >>> mean = zfit.Parameter("mu", 1.2)
                 >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
                 >>> poialt = POI(mean, 1.2)
-                >>> nll = calc.asimov_nll([poinull], [poialt])
+                >>> nll = calc.asimov_nll(poinull, poialt)
 
         """
         self.check_pois(pois)
@@ -188,7 +188,7 @@ class AsymptoticCalculator(BaseCalculator):
             ret[i] = self._asimov_nll[p]
         return ret
 
-    def pnull(self, qobs, qalt=None, onesided=True, onesideddiscovery=False, qtilde=False, nsigma=0) -> np.array:
+    def pnull(self, qobs, qalt=None, onesided=True, onesideddiscovery=False, qtilde=False, nsigma=0) -> np.ndarray:
         """Computes the pvalue for the null hypothesis.
 
             Args:
@@ -222,7 +222,7 @@ class AsymptoticCalculator(BaseCalculator):
 
         return pnull
 
-    def qalt(self, poinull, poialt, onesided, onesideddiscovery) -> np.array:
+    def qalt(self, poinull, poialt, onesided, onesideddiscovery) -> np.ndarray:
         """Computes alternative hypothesis values of the :math:`\Delta` log-likelihood test statistic using the asimov
             dataset.
 
@@ -246,7 +246,7 @@ class AsymptoticCalculator(BaseCalculator):
         return self.q(nll1=nll_poinull_asy, nll2=nll_poialt_asy, poi1=poinull, poi2=poialt,
                       onesided=onesided, onesideddiscovery=onesideddiscovery)
 
-    def palt(self, qobs, qalt, onesided=True, onesideddiscovery=False, qtilde=False) -> np.array:
+    def palt(self, qobs, qalt, onesided=True, onesideddiscovery=False, qtilde=False) -> np.ndarray:
         """Computes the pvalue for the alternative hypothesis.
 
             Args:

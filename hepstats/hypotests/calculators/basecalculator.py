@@ -42,7 +42,7 @@ class BaseCalculator(HypotestsObject):
             for d in m.get_dependents():
                 self._parameters[d.name] = d
 
-    def obs_nll(self, pois) -> np.array:
+    def obs_nll(self, pois) -> np.ndarray:
         """ Compute observed negative log-likelihood values for given parameters of interest.
 
             Args:
@@ -54,7 +54,7 @@ class BaseCalculator(HypotestsObject):
             Example with `zfit`:
                 >>> mean = zfit.Parameter("mu", 1.2)
                 >>> poi = POI(mean, [1.1, 1.2, 1.0])
-                >>> nll = calc.obs_nll([poi])
+                >>> nll = calc.obs_nll(poi)
 
         """
         ret = np.empty(pois.shape)
@@ -80,7 +80,7 @@ class BaseCalculator(HypotestsObject):
             Example with `zfit`:
                 >>> mean = zfit.Parameter("mu", 1.2)
                 >>> poi = POI(mean, [1.1, 1.2, 1.0])
-                >>> q = calc.qobs([poi])
+                >>> q = calc.qobs(poi)
         """
 
         self.check_pois(poinull)
@@ -102,7 +102,7 @@ class BaseCalculator(HypotestsObject):
         return qobs
 
     def pvalue(self, poinull: List[POI], poialt: Union[List[POI], None] = None, qtilde=False, onesided=True,
-               onesideddiscovery=False) -> Tuple[np.array, np.array]:
+               onesideddiscovery=False) -> Tuple[np.ndarray, np.ndarray]:
         """Computes pvalues for the null and alternative hypothesis.
 
         Args:
@@ -110,8 +110,7 @@ class BaseCalculator(HypotestsObject):
             * **poialt** (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis
             * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default) use the :math:`q` test statistic
             * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
-            * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery
-                test
+            * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery test
 
         Returns:
             Tuple(`numpy.array`, `numpy.array`): pnull, palt
@@ -120,7 +119,7 @@ class BaseCalculator(HypotestsObject):
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> poinull = POI(mean, [1.1, 1.2, 1.0])
             >>> poialt = POI(mean, 1.2)
-            >>> pvalues = calc.pavalue([poinull], [poialt])
+            >>> pvalues = calc.pavalue(poinull, poialt)
         """
         self.check_pois(poinull)
         if poialt:
@@ -156,7 +155,7 @@ class BaseCalculator(HypotestsObject):
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> poinull = POI(mean, [1.1, 1.2, 1.0])
             >>> poialt = POI(mean, 1.2)
-            >>> nll = calc.expected_pvalue([poinull], [poialt])
+            >>> nll = calc.expected_pvalue(poinull, poialt)
         """
         self.check_pois(poinull)
         if poialt:
@@ -174,8 +173,8 @@ class BaseCalculator(HypotestsObject):
 
     def expected_poi(self, poinull: List[POI], poialt: List[POI], nsigma, alpha=0.05, CLs=False,
                      onesided=True, onesideddiscovery=False):
-        """Computes the expected parameter of interest values such that the expected p_values == :math:`\alpha`
-        for different values of :math:`\sigma` (0=expected/median)
+        """Computes the expected parameter of interest values such that the expected p_values = :math:`\alpha` for
+        different values of :math:`\sigma` (0=expected/median)
 
         Args:
             * **poinull** (List[`hypotests.POI`]): parameters of interest for the null hypothesis
@@ -193,7 +192,7 @@ class BaseCalculator(HypotestsObject):
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> poinull = POI(mean, [1.1, 1.2, 1.0])
             >>> poialt = POI(mean, 1.2)
-            >>> nll = calc.expected_poi([poinull], [poialt])
+            >>> nll = calc.expected_poi(poinull, poialt)
         """
         self.check_pois(poinull)
         if poialt:
@@ -240,7 +239,7 @@ class BaseCalculator(HypotestsObject):
                 raise ValueError(msg)
 
     def q(self, nll1: np.array, nll2: np.array, poi1, poi2,
-          onesided=True, onesideddiscovery=False) -> np.array:
+          onesided=True, onesideddiscovery=False) -> np.ndarray:
         """Compute values of the test statistic q defined as the difference between negative log-likelihood
             values :math:`q = nll1 - nll2`.
 
@@ -436,7 +435,7 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
 
         Args:
             * **poigen** (POI): POI used to generate the toys
-            * **ntoys**(int): number of toys to generate
+            * **ntoys** (int): number of toys to generate
             * **poieval** (POIarray): POI values to evaluate the loss function
             * **qtilde** (bool, optional): if `True` use the :math:`\tilde{q}` test statistics else (default) use the :math:`q` test statistic
 

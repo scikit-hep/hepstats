@@ -19,7 +19,7 @@ class UpperLimit(BaseTest):
             >>> import numpy as np
             >>> import zfit
             >>> from zfit.loss import ExtendedUnbinnedNLL
-            >>> from zfit.minimize import MinuitMinimizer
+            >>> from zfit.minimize import Minuit
 
             >>> bounds = (0.1, 3.0)
             >>> zfit.Space('x', limits=bounds)
@@ -36,16 +36,16 @@ class UpperLimit(BaseTest):
             >>> Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
             >>> signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)
             >>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
-            >>> loss = ExtendedUnbinnedNLL(model=[signal + background], data=[data])
+            >>> loss = ExtendedUnbinnedNLL(model=signal + background, data=data)
 
             >>> from hepstats.hypotests.calculators import AsymptoticCalculator
             >>> from hepstats.hypotests import UpperLimit
             >>> from hepstats.hypotests.parameters import POI, POIarray
 
-            >>> calculator = AsymptoticCalculator(loss, MinuitMinimizer())
+            >>> calculator = AsymptoticCalculator(loss, Minuit())
             >>> poinull = POIarray(Nsig, np.linspace(0.0, 25, 20))
             >>> poialt = POI(Nsig, 0)
-            >>> ul = UpperLimit(calculator, [poinull], [poialt])
+            >>> ul = UpperLimit(calculator, poinull, poialt)
             >>> ul.upperlimit(alpha=0.05, CLs=True)
             Observed upper limit: Nsig = 15.725784747406346
             Expected upper limit: Nsig = 11.927442041887158

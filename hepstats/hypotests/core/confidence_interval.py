@@ -16,7 +16,7 @@ class ConfidenceInterval(BaseTest):
             >>> import numpy as np
             >>> import zfit
             >>> from zfit.loss import ExtendedUnbinnedNLL
-            >>> from zfit.minimize import MinuitMinimizer
+            >>> from zfit.minimize import Minuit
 
             >>> bounds = (0.1, 3.0)
             >>> zfit.Space('x', limits=bounds)
@@ -35,15 +35,15 @@ class ConfidenceInterval(BaseTest):
             >>> Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
             >>> signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
             >>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
-            >>> loss = ExtendedUnbinnedNLL(model=[signal + background], data=[data])
+            >>> loss = ExtendedUnbinnedNLL(model=signal + background, data=data)
 
             >>> from hepstats.hypotests.calculators import AsymptoticCalculator
             >>> from hepstats.hypotests import ConfidenceInterval
             >>> from hepstats.hypotests.parameters import POI, POIarray
 
-            >>> calculator = AsymptoticCalculator(loss, MinuitMinimizer())
+            >>> calculator = AsymptoticCalculator(loss, Minuit())
             >>> poinull = POIarray(mean, np.linspace(1.15, 1.26, 100))
-            >>> ci = ConfidenceInterval(calculator, [poinull])
+            >>> ci = ConfidenceInterval(calculator, poinull)
             >>> ci.interval()
             Confidence interval on mean:
                 1.1810371356602791 < mean < 1.2156701172321935 at 68.0% C.L.

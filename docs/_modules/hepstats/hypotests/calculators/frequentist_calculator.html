@@ -173,16 +173,16 @@
 <span class="sd">        Example with `zfit`:</span>
 <span class="sd">            &gt;&gt;&gt; import zfit</span>
 <span class="sd">            &gt;&gt;&gt; from zfit.core.loss import UnbinnedNLL</span>
-<span class="sd">            &gt;&gt;&gt; from zfit.minimize import MinuitMinimizer</span>
+<span class="sd">            &gt;&gt;&gt; from zfit.minimize import Minuit</span>
 
 <span class="sd">            &gt;&gt;&gt; obs = zfit.Space(&#39;x&#39;, limits=(0.1, 2.0))</span>
 <span class="sd">            &gt;&gt;&gt; data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))</span>
 <span class="sd">            &gt;&gt;&gt; mean = zfit.Parameter(&quot;mu&quot;, 1.2)</span>
 <span class="sd">            &gt;&gt;&gt; sigma = zfit.Parameter(&quot;sigma&quot;, 0.1)</span>
 <span class="sd">            &gt;&gt;&gt; model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)</span>
-<span class="sd">            &gt;&gt;&gt; loss = UnbinnedNLL(model=[model], data=[data], fit_range=[obs])</span>
+<span class="sd">            &gt;&gt;&gt; loss = UnbinnedNLL(model=model, data=data)</span>
 
-<span class="sd">            &gt;&gt;&gt; calc = FrequentistCalculator(input=loss, minimizer=MinuitMinimizer(), ntoysnull=1000, ntoysalt=1000)</span>
+<span class="sd">            &gt;&gt;&gt; calc = FrequentistCalculator(input=loss, minimizer=Minuit(), ntoysnull=1000, ntoysalt=1000)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">minimizer</span><span class="p">,</span> <span class="n">ntoysnull</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ntoysalt</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">base_sampler</span><span class="p">,</span> <span class="n">sample</span><span class="o">=</span><span class="n">base_sample</span><span class="p">):</span>
