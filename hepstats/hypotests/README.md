@@ -31,7 +31,7 @@ fitting package as backend, of a Gaussian signal with known mean and sigma over 
 >>> from hepstats.hypotests import Discovery
 >>> from hepstats.hypotests.parameters import POI
 
->>> calculator = AsymptoticCalculator(input=loss, minimizer=Minuit(), asimov_bins=100)
+>>> calculator = AsymptoticCalculator(input=loss, minimizer=Minuit())
 >>> poinull = POI(Nsig, 0)
 >>> discovery_test = Discovery(calculator, poinull)
 >>> discovery_test.result()

@@ -76,7 +76,7 @@ We give here a simple example of an upper limit calculation of the yield of a Ga
 >>> from hepstats.hypotests import UpperLimit
 >>> from hepstats.hypotests.parameters import POI, POIarray
 
->>> calculator = AsymptoticCalculator(loss, Minuit())
+>>> calculator = AsymptoticCalculator(loss, Minuit(), asimov_bins=100)
 >>> poinull = POIarray(Nsig, np.linspace(0.0, 25, 20))
 >>> poialt = POI(Nsig, 0)
 >>> ul = UpperLimit(calculator, poinull, poialt)
