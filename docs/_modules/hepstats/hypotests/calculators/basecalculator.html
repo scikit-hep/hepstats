@@ -223,9 +223,11 @@
 
 <span class="sd">            Args:</span>
 <span class="sd">                * **poinull** (List[`hypotests.POI`]): parameters of interest for the null hypothesis</span>
-<span class="sd">                * **qtilde** (bool, optional): if `True` use the :math:`\tilde{q}` test statistics else (default) use the :math:`q` test statistic</span>
+<span class="sd">                * **qtilde** (bool, optional): if `True` use the :math:`\\tilde{q}` test statistics else (default)</span>
+<span class="sd">                  use the :math:`q` test statistic</span>
 <span class="sd">                * **onesided** (bool, optional): if `True` (default) computes onesided pvalues</span>
-<span class="sd">                * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery test</span>
+<span class="sd">                * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a</span>
+<span class="sd">                  discovery test</span>
 
 <span class="sd">            Returns:</span>
 <span class="sd">                `numpy.array`: observed values of q</span>
@@ -261,7 +263,8 @@
 <span class="sd">        Args:</span>
 <span class="sd">            * **poinull** (List[`hypotests.POI`]): parameters of interest for the null hypothesis</span>
 <span class="sd">            * **poialt** (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis</span>
-<span class="sd">            * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default) use the :math:`q` test statistic</span>
+<span class="sd">            * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default)</span>
+<span class="sd">              use the :math:`q` test statistic</span>
 <span class="sd">            * **onesided** (bool, optional): if `True` (default) computes onesided pvalues</span>
 <span class="sd">            * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery test</span>
 
@@ -296,8 +299,10 @@
 <span class="sd">            * **poinull** (List[`hypotests.POI`]): parameters of interest for the null hypothesis</span>
 <span class="sd">            * **poialt** (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis</span>
 <span class="sd">            * **nsigma** (`numpy.array`): array of values of :math:`\sigma` to compute the expected pvalue</span>
-<span class="sd">            * **CLs** (bool, optional): if `True` computes pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}` else as :math:`p_{clsb} = p_{null}`</span>
-<span class="sd">            * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default) use the :math:`q` test statistic</span>
+<span class="sd">            * **CLs** (bool, optional): if `True` computes pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}`</span>
+<span class="sd">              else as :math:`p_{clsb} = p_{null}`</span>
+<span class="sd">            * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default)</span>
+<span class="sd">              use the :math:`q` test statistic</span>
 <span class="sd">            * **onesided** (bool, optional): if `True` (default) computes onesided pvalues</span>
 <span class="sd">            * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery</span>
 
@@ -334,7 +339,8 @@
 <span class="sd">            * **poialt** (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis</span>
 <span class="sd">            * **nsigma** (`numpy.array`): array of values of :math:`\sigma` to compute the expected pvalue</span>
 <span class="sd">            * **alpha** (float, default=0.05): significance level</span>
-<span class="sd">            * **CLs** (bool, optional): if `True` uses pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}` else as :math:`p_{clsb} = p_{null}`</span>
+<span class="sd">            * **CLs** (bool, optional): if `True` uses pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}`</span>
+<span class="sd">              else as :math:`p_{clsb} = p_{null}`</span>
 <span class="sd">            * **onesided** (bool, optional): if `True` (default) computes onesided pvalues</span>
 <span class="sd">            * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery</span>
 

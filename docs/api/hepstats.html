@@ -245,43 +245,20 @@ bayesian blocks python implementation found in astroML <a class="reference inter
 <a href="#id9"><span class="problematic" id="id6">[1]_</span></a>.  It has been modified to natively accept weighted events, for ease of use in HEP
 applications.</p>
 <dl>
-<dt>Args:</dt><dd><ul>
-<li><dl class="simple">
-<dt><strong>data</strong> (array):</dt><dd><p>Input data values (one dimensional, length N). Repeat values are allowed.</p>
-</dd>
-</dl>
-</li>
-<li><dl>
-<dt><strong>weights</strong> (array_like, optional):</dt><dd><p>Weights for data (otherwise assume all data points have a weight of 1).  Must be same
-length as data.</p>
-<p>Defaults to None.</p>
-</dd>
-</dl>
-</li>
-<li><dl>
-<dt><strong>p0</strong> (float, optional):</dt><dd><p>False-positive rate, between 0 and 1.  A lower number places a stricter penalty against
-creating more bin edges, thus reducing the potential for false-positive bin edges.  In
-general, the larger the number of bins, the small the p0 should be to prevent the
-creation of spurious, jagged bins.</p>
-<p>Defaults to 0.05.</p>
-</dd>
-</dl>
-</li>
-<li><dl>
-<dt><strong>gamma</strong> (float, optional):</dt><dd><p>If specified, then use this gamma to compute the general prior form, p ~ gamma^N. If
-gamma is specified, p0 is ignored.</p>
-<p>Defaults to None.</p>
-</dd>
-</dl>
-</li>
+<dt>Args:</dt><dd><ul class="simple">
+<li><p><strong>data</strong> (array): Input data values (one dimensional, length N). Repeat values are allowed.</p></li>
+<li><p><strong>weights</strong> (array_like, optional): Weights for data (otherwise assume all data points have a weight of 1).
+Must be same length as data. Defaults to None.</p></li>
+<li><p><strong>p0</strong> (float, optional): False-positive rate, between 0 and 1.  A lower number places a stricter penalty
+against creating more bin edges, thus reducing the potential for false-positive bin edges. In general,
+the larger the number of bins, the small the p0 should be to prevent the creation of spurious, jagged
+bins. Defaults to 0.05.</p></li>
+<li><p><strong>gamma</strong> (float, optional): If specified, then use this gamma to compute the general prior form,
+p ~ gamma^N. If gamma is specified, p0 is ignored. Defaults to None.</p></li>
 </ul>
 </dd>
 <dt>Returns:</dt><dd><ul class="simple">
-<li><dl class="simple">
-<dt><strong>edges</strong> (ndarray):</dt><dd><p>Array containing the (N+1) bin edges</p>
-</dd>
-</dl>
-</li>
+<li><p><strong>edges</strong> (ndarray): Array containing the (N+1) bin edges</p></li>
 </ul>
 </dd>
 <dt>Examples:</dt><dd><p>Unweighted data:</p>
@@ -582,7 +559,8 @@ different values of <span class="math notranslate nohighlight">\(\sigma\)</span>
 <li><p><strong>poialt</strong> (List[<cite>hypotests.POI</cite>], optional): parameters of interest for the alternative hypothesis</p></li>
 <li><p><strong>nsigma</strong> (<cite>numpy.array</cite>): array of values of <span class="math notranslate nohighlight">\(\sigma\)</span> to compute the expected pvalue</p></li>
 <li><p><strong>alpha</strong> (float, default=0.05): significance level</p></li>
-<li><p><strong>CLs</strong> (bool, optional): if <cite>True</cite> uses pvalues as <span class="math notranslate nohighlight">\(p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}\)</span> else as <span class="math notranslate nohighlight">\(p_{clsb} = p_{null}\)</span></p></li>
+<li><p><strong>CLs</strong> (bool, optional): if <cite>True</cite> uses pvalues as <span class="math notranslate nohighlight">\(p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}\)</span>
+else as <span class="math notranslate nohighlight">\(p_{clsb} = p_{null}\)</span></p></li>
 <li><p><strong>onesided</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues</p></li>
 <li><p><strong>onesideddiscovery</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues for a discovery</p></li>
 </ul>
@@ -608,8 +586,10 @@ different values of <span class="math notranslate nohighlight">\(\sigma\)</span>
 <li><p><strong>poinull</strong> (List[<cite>hypotests.POI</cite>]): parameters of interest for the null hypothesis</p></li>
 <li><p><strong>poialt</strong> (List[<cite>hypotests.POI</cite>], optional): parameters of interest for the alternative hypothesis</p></li>
 <li><p><strong>nsigma</strong> (<cite>numpy.array</cite>): array of values of <span class="math notranslate nohighlight">\(\sigma\)</span> to compute the expected pvalue</p></li>
-<li><p><strong>CLs</strong> (bool, optional): if <cite>True</cite> computes pvalues as <span class="math notranslate nohighlight">\(p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}\)</span> else as <span class="math notranslate nohighlight">\(p_{clsb} = p_{null}\)</span></p></li>
-<li><p><strong>qtilde</strong> (bool, optional): if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default) use the <span class="math notranslate nohighlight">\(q\)</span> test statistic</p></li>
+<li><p><strong>CLs</strong> (bool, optional): if <cite>True</cite> computes pvalues as <span class="math notranslate nohighlight">\(p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}\)</span>
+else as <span class="math notranslate nohighlight">\(p_{clsb} = p_{null}\)</span></p></li>
+<li><p><strong>qtilde</strong> (bool, optional): if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic</p></li>
 <li><p><strong>onesided</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues</p></li>
 <li><p><strong>onesideddiscovery</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues for a discovery</p></li>
 </ul>
@@ -654,7 +634,8 @@ different values of <span class="math notranslate nohighlight">\(\sigma\)</span>
 <dt>Args:</dt><dd><ul class="simple">
 <li><p><strong>poinull</strong> (List[<cite>hypotests.POI</cite>]): parameters of interest for the null hypothesis</p></li>
 <li><p><strong>poialt</strong> (List[<cite>hypotests.POI</cite>], optional): parameters of interest for the alternative hypothesis</p></li>
-<li><p><strong>qtilde</strong> (bool, optional): if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default) use the <span class="math notranslate nohighlight">\(q\)</span> test statistic</p></li>
+<li><p><strong>qtilde</strong> (bool, optional): if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic</p></li>
 <li><p><strong>onesided</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues</p></li>
 <li><p><strong>onesideddiscovery</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues for a discovery test</p></li>
 </ul>
@@ -698,9 +679,11 @@ values <span class="math notranslate nohighlight">\(q = nll1 - nll2\)</span>.</p
 <dl>
 <dt>Args:</dt><dd><ul class="simple">
 <li><p><strong>poinull</strong> (List[<cite>hypotests.POI</cite>]): parameters of interest for the null hypothesis</p></li>
-<li><p><strong>qtilde</strong> (bool, optional): if <cite>True</cite> use the :math:`        ilde{q}` test statistics else (default) use the <span class="math notranslate nohighlight">\(q\)</span> test statistic</p></li>
+<li><p><strong>qtilde</strong> (bool, optional): if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\tilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic</p></li>
 <li><p><strong>onesided</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues</p></li>
-<li><p><strong>onesideddiscovery</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues for a discovery test</p></li>
+<li><p><strong>onesideddiscovery</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues for a
+discovery test</p></li>
 </ul>
 </dd>
 <dt>Returns:</dt><dd><p><cite>numpy.array</cite>: observed values of q</p>
@@ -898,7 +881,7 @@ values <span class="math notranslate nohighlight">\(q = nll1 - nll2\)</span>.</p
 </table>
 <dl class="method">
 <dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.from_yaml">
-<em class="property">classmethod </em><code class="sig-name descname">from_yaml</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">loss</em>, <em class="sig-param">minimizer</em>, <em class="sig-param">ntoysnull=100</em>, <em class="sig-param">ntoysalt=100</em>, <em class="sig-param">sampler=&lt;function base_sampler at 0x11cce4f80&gt;</em>, <em class="sig-param">sample=&lt;function base_sample at 0x11ccf4050&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#ToysCalculator.from_yaml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.from_yaml" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">from_yaml</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">loss</em>, <em class="sig-param">minimizer</em>, <em class="sig-param">ntoysnull=100</em>, <em class="sig-param">ntoysalt=100</em>, <em class="sig-param">sampler=&lt;function base_sampler at 0x11636aa70&gt;</em>, <em class="sig-param">sample=&lt;function base_sample at 0x11637ab00&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#ToysCalculator.from_yaml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.from_yaml" title="Permalink to this definition">¶</a></dt>
 <dd><p>ToysCalculator constructor with the toys loaded from a yaml file.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><ul class="simple">
@@ -1065,7 +1048,7 @@ likelihood- based tests of new physics. Eur. Phys. J., C71:1–19, 2011</p>
 </table>
 <dl class="method">
 <dt id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.asimov_dataset">
-<code class="sig-name descname">asimov_dataset</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">poi) -&gt; (&lt;built-in function array&gt;</em>, <em class="sig-param">&lt;built-in function array&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/asymptotic_calculator.html#AsymptoticCalculator.asimov_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.asimov_dataset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">asimov_dataset</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">poi</em><span class="sig-paren">)</span> &#x2192; Tuple[numpy.ndarray, numpy.ndarray]<a class="reference internal" href="../_modules/hepstats/hypotests/calculators/asymptotic_calculator.html#AsymptoticCalculator.asimov_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.asimov_dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the Asimov dataset for a given alternative hypothesis.</p>
 <dl>
 <dt>Args:</dt><dd><ul class="simple">
@@ -1140,7 +1123,8 @@ generated with a given alternative hypothesis.</p>
 <li><p><strong>qalt</strong> (<cite>np.array</cite>): alternative values of the test-statistic q using the Asimov dataset</p></li>
 <li><p><strong>onesided</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues</p></li>
 <li><p><strong>onesideddiscovery</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues for a discovery</p></li>
-<li><p><strong>qtilde</strong> (bool, optional): if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default) use the <span class="math notranslate nohighlight">\(q\)</span> test statistic</p></li>
+<li><p><strong>qtilde</strong> (bool, optional): if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic</p></li>
 </ul>
 </dd>
 <dt>Returns:</dt><dd><p><cite>numpy.array</cite> : array of the pvalues for the alternative hypothesis</p>
@@ -1158,7 +1142,8 @@ generated with a given alternative hypothesis.</p>
 <li><p><strong>qalt</strong> (<cite>numpy.array</cite>): alternative values of the test-statistic q using the asimov dataset</p></li>
 <li><p><strong>onesided</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues</p></li>
 <li><p><strong>onesideddiscovery</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues for a discovery</p></li>
-<li><p><strong>qtilde</strong> (bool, optional): if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default) use the <span class="math notranslate nohighlight">\(q\)</span> test statistic</p></li>
+<li><p><strong>qtilde</strong> (bool, optional): if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic</p></li>
 <li><p><strong>nsigma</strong> (float, optional): significance shift</p></li>
 </ul>
 </dd>
@@ -1177,7 +1162,8 @@ dataset.</p>
 <li><p><strong>poinull</strong> (<cite>POIarray</cite>): parameters of interest for the null hypothesis</p></li>
 <li><p><strong>poialt</strong> (<cite>POIarray</cite>): parameters of interest for the alternative hypothesis</p></li>
 <li><p><strong>onesided</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues</p></li>
-<li><p><strong>onesideddiscovery</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues for a discovery test</p></li>
+<li><p><strong>onesideddiscovery</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues for a
+discovery test</p></li>
 </ul>
 </dd>
 <dt>Returns:</dt><dd><p><cite>numpy.array</cite>: observed values of q</p>
@@ -1238,7 +1224,7 @@ dataset.</p>
 </dd>
 <dt>Example with <cite>zfit</cite>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">zfit</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">zfit.core.loss</span> <span class="kn">import</span> <span class="n">UnbinnedNLL</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">zfit.minimize</span> <span class="kn">import</span> <span class="n">Minuit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">zfit.minimize</span> <span class="kn">import</span> <span class="n">MinuitMinimizer</span>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obs</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Space</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">))</span>
@@ -1246,10 +1232,10 @@ dataset.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sigma</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">pdf</span><span class="o">.</span><span class="n">Gauss</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">UnbinnedNLL</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">UnbinnedNLL</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">data</span><span class="p">],</span> <span class="n">fit_range</span><span class="o">=</span><span class="p">[</span><span class="n">obs</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc</span> <span class="o">=</span> <span class="n">FrequentistCalculator</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span> <span class="n">minimizer</span><span class="o">=</span><span class="n">Minuit</span><span class="p">(),</span> <span class="n">ntoysnull</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">ntoysalt</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc</span> <span class="o">=</span> <span class="n">FrequentistCalculator</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span> <span class="n">minimizer</span><span class="o">=</span><span class="n">MinuitMinimizer</span><span class="p">(),</span> <span class="n">ntoysnull</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">ntoysalt</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd>
@@ -1378,8 +1364,10 @@ dataset.</p>
 <li><p><strong>poinull</strong> (<cite>POIarray</cite>): parameters of interest for the null hypothesis</p></li>
 <li><p><strong>poialt</strong> (<cite>POIarray</cite>): parameters of interest for the alternative hypothesis</p></li>
 <li><p><strong>onesided</strong> (bool): if <cite>True</cite> computes onesided pvalues</p></li>
-<li><p><strong>onesideddiscovery</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues for a discovery test</p></li>
-<li><p>** qtilde** (bool): if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else use the <span class="math notranslate nohighlight">\(q\)</span> test statistic</p></li>
+<li><p><strong>onesideddiscovery</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues for a
+discovery test</p></li>
+<li><p>** qtilde** (bool): if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else use the
+<span class="math notranslate nohighlight">\(q\)</span> test statistic</p></li>
 </ul>
 </dd>
 <dt>Returns:</dt><dd><p><cite>numpy.array</cite>: observed values of q</p>

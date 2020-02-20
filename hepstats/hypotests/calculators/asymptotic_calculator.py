@@ -1,3 +1,4 @@
+from typing import Tuple
 import numpy as np
 from scipy.stats import norm
 
@@ -88,7 +89,7 @@ class AsymptoticCalculator(BaseCalculator):
             msg = "Tests using the asymptotic calculator can only be used with one parameter of interest."
             raise NotImplementedError(msg)
 
-    def asimov_dataset(self, poi) -> (np.array, np.array):
+    def asimov_dataset(self, poi) -> Tuple[np.ndarray, np.ndarray]:
         """Gets the Asimov dataset for a given alternative hypothesis.
 
             Args:
@@ -196,7 +197,8 @@ class AsymptoticCalculator(BaseCalculator):
                 * **qalt** (`numpy.array`): alternative values of the test-statistic q using the asimov dataset
                 * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
                 * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery
-                * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default) use the :math:`q` test statistic
+                * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default)
+                  use the :math:`q` test statistic
                 * **nsigma** (float, optional): significance shift
 
             Returns:
@@ -230,7 +232,8 @@ class AsymptoticCalculator(BaseCalculator):
                 * **poinull** (`POIarray`): parameters of interest for the null hypothesis
                 * **poialt** (`POIarray`): parameters of interest for the alternative hypothesis
                 * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
-                * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery test
+                * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a
+                  discovery test
 
             Returns:
                 `numpy.array`: observed values of q
@@ -254,7 +257,8 @@ class AsymptoticCalculator(BaseCalculator):
                 * **qalt** (`np.array`): alternative values of the test-statistic q using the Asimov dataset
                 * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
                 * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery
-                * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default) use the :math:`q` test statistic
+                * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default)
+                  use the :math:`q` test statistic
 
             Returns:
                  `numpy.array` : array of the pvalues for the alternative hypothesis

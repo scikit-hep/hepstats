@@ -199,33 +199,21 @@
 <span class="sd">    applications.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        * **data** (array):</span>
-<span class="sd">            Input data values (one dimensional, length N). Repeat values are allowed.</span>
+<span class="sd">        * **data** (array): Input data values (one dimensional, length N). Repeat values are allowed.</span>
 
-<span class="sd">        * **weights** (array_like, optional):</span>
-<span class="sd">            Weights for data (otherwise assume all data points have a weight of 1).  Must be same</span>
-<span class="sd">            length as data.</span>
+<span class="sd">        * **weights** (array_like, optional): Weights for data (otherwise assume all data points have a weight of 1).</span>
+<span class="sd">          Must be same length as data. Defaults to None.</span>
 
-<span class="sd">            Defaults to None.</span>
+<span class="sd">        * **p0** (float, optional): False-positive rate, between 0 and 1.  A lower number places a stricter penalty</span>
+<span class="sd">          against creating more bin edges, thus reducing the potential for false-positive bin edges. In general,</span>
+<span class="sd">          the larger the number of bins, the small the p0 should be to prevent the creation of spurious, jagged</span>
+<span class="sd">          bins. Defaults to 0.05.</span>
 
-<span class="sd">        * **p0** (float, optional):</span>
-<span class="sd">            False-positive rate, between 0 and 1.  A lower number places a stricter penalty against</span>
-<span class="sd">            creating more bin edges, thus reducing the potential for false-positive bin edges.  In</span>
-<span class="sd">            general, the larger the number of bins, the small the p0 should be to prevent the</span>
-<span class="sd">            creation of spurious, jagged bins.</span>
-
-<span class="sd">            Defaults to 0.05.</span>
-
-<span class="sd">        * **gamma** (float, optional):</span>
-<span class="sd">            If specified, then use this gamma to compute the general prior form, p ~ gamma^N. If</span>
-<span class="sd">            gamma is specified, p0 is ignored.</span>
-
-<span class="sd">            Defaults to None.</span>
-
+<span class="sd">        * **gamma** (float, optional): If specified, then use this gamma to compute the general prior form,</span>
+<span class="sd">          p ~ gamma^N. If gamma is specified, p0 is ignored. Defaults to None.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        * **edges** (ndarray):</span>
-<span class="sd">            Array containing the (N+1) bin edges</span>
+<span class="sd">        * **edges** (ndarray): Array containing the (N+1) bin edges</span>
 
 <span class="sd">    Examples:</span>
 <span class="sd">        Unweighted data:</span>

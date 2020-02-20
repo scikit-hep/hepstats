@@ -70,9 +70,11 @@ class BaseCalculator(HypotestsObject):
 
             Args:
                 * **poinull** (List[`hypotests.POI`]): parameters of interest for the null hypothesis
-                * **qtilde** (bool, optional): if `True` use the :math:`\tilde{q}` test statistics else (default) use the :math:`q` test statistic
+                * **qtilde** (bool, optional): if `True` use the :math:`\\tilde{q}` test statistics else (default)
+                  use the :math:`q` test statistic
                 * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
-                * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery test
+                * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a
+                  discovery test
 
             Returns:
                 `numpy.array`: observed values of q
@@ -108,7 +110,8 @@ class BaseCalculator(HypotestsObject):
         Args:
             * **poinull** (List[`hypotests.POI`]): parameters of interest for the null hypothesis
             * **poialt** (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis
-            * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default) use the :math:`q` test statistic
+            * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default)
+              use the :math:`q` test statistic
             * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
             * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery test
 
@@ -143,8 +146,10 @@ class BaseCalculator(HypotestsObject):
             * **poinull** (List[`hypotests.POI`]): parameters of interest for the null hypothesis
             * **poialt** (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis
             * **nsigma** (`numpy.array`): array of values of :math:`\sigma` to compute the expected pvalue
-            * **CLs** (bool, optional): if `True` computes pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}` else as :math:`p_{clsb} = p_{null}`
-            * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default) use the :math:`q` test statistic
+            * **CLs** (bool, optional): if `True` computes pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}`
+              else as :math:`p_{clsb} = p_{null}`
+            * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default)
+              use the :math:`q` test statistic
             * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
             * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery
 
@@ -181,7 +186,8 @@ class BaseCalculator(HypotestsObject):
             * **poialt** (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis
             * **nsigma** (`numpy.array`): array of values of :math:`\sigma` to compute the expected pvalue
             * **alpha** (float, default=0.05): significance level
-            * **CLs** (bool, optional): if `True` uses pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}` else as :math:`p_{clsb} = p_{null}`
+            * **CLs** (bool, optional): if `True` uses pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}`
+              else as :math:`p_{clsb} = p_{null}`
             * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
             * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery
 
