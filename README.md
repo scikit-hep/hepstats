@@ -1,3 +1,5 @@
+![hepstats_logo](docs/source/logo.pdf)
+
 # Scikit-HEP project `hepstats` package: statistics tools and utilities
 
 [![Scikit-HEP][sk-badge]](https://scikit-hep.org/)
