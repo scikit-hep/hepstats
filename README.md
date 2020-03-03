@@ -1,4 +1,4 @@
-![hepstats_logo](https://raw.githubusercontent.com/scikit-hep/hepstats/master/docs/source/logo.png)
+![hepstats_logo](https://raw.githubusercontent.com/scikit-hep/hepstats/master/docs/source/logo.png =450x)
 
 # Scikit-HEP project `hepstats` package: statistics tools and utilities
 
