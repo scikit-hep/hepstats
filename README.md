@@ -25,7 +25,7 @@ or similar (use e.g. `virtualenv` if you wish).
 
 ## Getting Started
 
-The `hepstats` module includes modeling and hypothesis tests submodules. This a quick user guide to each submodule. The [binder](https://mybinder.org/v2/gh/scikit-hep/hepstats/master) examples are also a good way to get started.
+The `hepstats` module includes `modeling`, `hypotests` and `splot` submodules. This a quick user guide to each submodule. The [binder](https://mybinder.org/v2/gh/scikit-hep/hepstats/master) examples are also a good way to get started.
 
 ### modeling
 
@@ -48,7 +48,7 @@ The modeling submodule includes the [Bayesian Block algorithm](https://arxiv.org
 
 ### hypotests
 
-This submodule provides tools to do hypothesis tests such as discovery test and computations of upper limits or confidence intervals. hepstats needs a fitting backend to perform computations such as [zfit](https://github.com/zfit/zfit). Any fitting library can be used if their API is compatible  with hepstats (see [api checks](https://github.com/scikit-hep/hepstats/blob/master/hepstats/hypotests/fitutils/api_check.py)).
+This submodule provides tools to do hypothesis tests such as discovery test and computations of upper limits or confidence intervals. hepstats needs a fitting backend to perform computations such as [zfit](https://github.com/zfit/zfit). Any fitting library can be used if their API is compatible  with hepstats (see [api checks](https://github.com/scikit-hep/hepstats/blob/master/hepstats/hypotests/utils/fit/api_check.py)).
 
 We give here a simple example of an upper limit calculation of the yield of a Gaussian signal with known mean and sigma over an exponential background. The fitting backend used is the [zfit](https://github.com/zfit/zfit) package.
 

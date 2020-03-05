@@ -5,7 +5,6 @@ from ..utils.fit.api_check import is_valid_pdf
 
 
 def is_sum_of_extended_pdfs(model):
-
     if not hasattr(model, "get_models"):
         return False
 

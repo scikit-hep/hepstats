@@ -105,3 +105,18 @@ Toy utilities
   :members:
   :undoc-members:
   :show-inheritance:
+
+
+hepstats.splot module
+^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: hepstats.splot
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
+sWeights
+""""""""
+.. automodule:: hepstats.splot.sweights
+  :members:
+  :undoc-members:

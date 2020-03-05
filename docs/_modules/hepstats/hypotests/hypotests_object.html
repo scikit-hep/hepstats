@@ -25,7 +25,6 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -151,9 +150,9 @@
            <div itemprop="articleBody">
             
   <h1>Source code for hepstats.hypotests.hypotests_object</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">.fitutils.api_check</span> <span class="kn">import</span> <span class="n">is_valid_loss</span><span class="p">,</span> <span class="n">is_valid_fitresult</span><span class="p">,</span> <span class="n">is_valid_minimizer</span>
-<span class="kn">from</span> <span class="nn">.fitutils.api_check</span> <span class="kn">import</span> <span class="n">is_valid_data</span><span class="p">,</span> <span class="n">is_valid_pdf</span>
-<span class="kn">from</span> <span class="nn">.fitutils.utils</span> <span class="kn">import</span> <span class="n">get_nevents</span>
+<span></span><span class="kn">from</span> <span class="nn">..utils.fit.api_check</span> <span class="kn">import</span> <span class="n">is_valid_loss</span><span class="p">,</span> <span class="n">is_valid_fitresult</span><span class="p">,</span> <span class="n">is_valid_minimizer</span>
+<span class="kn">from</span> <span class="nn">..utils.fit.api_check</span> <span class="kn">import</span> <span class="n">is_valid_data</span><span class="p">,</span> <span class="n">is_valid_pdf</span>
+<span class="kn">from</span> <span class="nn">..utils.fit</span> <span class="kn">import</span> <span class="n">get_nevents</span>
 
 
 <div class="viewcode-block" id="HypotestsObject"><a class="viewcode-back" href="../../../api/hepstats.html#hepstats.hypotests.hypotests_object.HypotestsObject">[docs]</a><span class="k">class</span> <span class="nc">HypotestsObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -224,7 +223,7 @@
 <span class="sd">                * **value**: fit result</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_fitresult</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> is not a valid fit result!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">input</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_bestfit</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
