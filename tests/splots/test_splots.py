@@ -76,7 +76,6 @@ def test_sweights():
     hist_sig_true_p = hist_sig_true_p[sel]
     hist_sig_sweights_p = np.histogram(p, weights=sweights[Nsig], **hist_conf)[0][sel]
 
-    print(chisquare(hist_sig_sweights_p, hist_sig_true_p))
     assert chisquare(hist_sig_sweights_p, hist_sig_true_p)[-1] < 0.01
 
     hist_bkg_true_p, _ = np.histogram(bkg_p, **hist_conf)
@@ -84,5 +83,4 @@ def test_sweights():
     hist_bkg_true_p = hist_bkg_true_p[sel]
     hist_bkg_sweights_p = np.histogram(p, weights=sweights[Nbkg], **hist_conf)[0][sel]
 
-    print(chisquare(hist_bkg_sweights_p, hist_bkg_true_p))
     assert chisquare(hist_bkg_sweights_p, hist_bkg_true_p)[-1] < 0.01
