@@ -12,8 +12,8 @@ def is_sum_of_extended_pdfs(model):
 
 
 def compute_sweights(model, x):
-    """Computes sWeights based on probabilities obtained from probability density functions for different
-        components/species in a fit model (for instance signal and background) fitted on some data `x`.
+    """Computes sWeights from probability density functions for different components/species in a fit model
+    (for instance signal and background) fitted on some data `x`.
 
         i.e. model = Nsig * pdf_signal + Nbkg * pdf_bkg
 
@@ -22,7 +22,7 @@ def compute_sweights(model, x):
             * **x** (`np.array`): data on which `model` is fitted
 
         Returns:
-            * `dict(`yield`, `np.array`)`: dictionnary with yield parameters as keys, and sWeights for
+            * `dict(`yield`, `np.array`)`: dictionary with yield parameters as keys, and sWeights for
               correspoind species as values.
 
         Example with `zfit`:
@@ -62,7 +62,7 @@ def compute_sweights(model, x):
     if not is_valid_pdf(model):
         raise ValueError("{} is not a valid pdf!".format(model))
     if not is_sum_of_extended_pdfs(model):
-        raise ValueError("Input model, {}, should a sum of extended pdfs!".format(model))
+        raise ValueError("Input model, {}, should be a sum of extended pdfs!".format(model))
 
     models = model.get_models()
     yields = [m.get_yield() for m in models]
