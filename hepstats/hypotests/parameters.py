@@ -8,7 +8,7 @@ Module defining the parameter of interest classes, currently includes:
 import numpy as np
 from collections.abc import Iterable
 
-from .fitutils.api_check import is_valid_parameter
+from ..utils.fit.api_check import is_valid_parameter
 
 
 class POIarray(object):

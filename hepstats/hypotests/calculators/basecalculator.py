@@ -4,9 +4,9 @@ import numpy as np
 
 from ..hypotests_object import HypotestsObject
 from ..parameters import POI, POIarray, asarray
-from ..fitutils.utils import pll
+from ...utils.fit import pll
 from ..toyutils import ToysManager
-from ..fitutils.sampling import base_sampler, base_sample
+from ...utils.fit.sampling import base_sampler, base_sample
 
 
 class BaseCalculator(HypotestsObject):

@@ -2,7 +2,7 @@ import numpy as np
 from scipy.stats import norm
 
 from .basecalculator import ToysCalculator
-from ..fitutils.sampling import base_sampler, base_sample
+from ...utils.fit.sampling import base_sampler, base_sample
 from ..parameters import POI, POIarray
 
 

@@ -10,7 +10,7 @@ from zfit.minimize import Minuit
 from hepstats.hypotests.calculators.basecalculator import BaseCalculator
 from hepstats.hypotests.calculators import AsymptoticCalculator, FrequentistCalculator
 from hepstats.hypotests.parameters import POI, POIarray
-from hepstats.hypotests.fitutils.api_check import is_valid_loss, is_valid_data
+from hepstats.utils.fit.api_check import is_valid_loss, is_valid_data
 
 
 true_mu = 1.2

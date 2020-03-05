@@ -3,7 +3,7 @@ import numpy as np
 from scipy.stats import norm
 
 from .basecalculator import BaseCalculator
-from ..fitutils.utils import eval_pdf, array2dataset, pll
+from ...utils.fit import eval_pdf, array2dataset, pll
 from ..parameters import POI, POIarray
 
 
@@ -31,7 +31,7 @@ def generate_asimov_hist(model, params, nbins=100):
     bin_edges = np.linspace(*bounds, nbins+1)
     bin_centers = bin_edges[0: -1] + np.diff(bin_edges)/2
 
-    hist = eval_pdf(model, bin_centers, params)
+    hist = eval_pdf(model, bin_centers, params, allow_extended=True)
     hist *= (space.area() / nbins)
 
     return hist, bin_edges

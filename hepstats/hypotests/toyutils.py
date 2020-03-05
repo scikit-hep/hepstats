@@ -5,8 +5,8 @@ import warnings
 
 from .parameters import POI, POIarray
 from .exceptions import ParameterNotFound, FormatError
-from .fitutils.utils import pll
-from .fitutils.sampling import base_sampler, base_sample
+from ..utils.fit import pll
+from ..utils.fit.sampling import base_sampler, base_sample
 from .hypotests_object import ToysObject
 
 """
