@@ -55,6 +55,17 @@ def get_data_and_loss():
     return mass, p, loss, Nsig, Nbkg, sig_p, bck_p
 
 
+def test_sweights_constructor():
+
+    mass, p, loss, Nsig, Nbkg, sig_p, bkg_p = get_data_and_loss()
+
+    with pytest.raises(ValueError):
+        compute_sweights("model", mass)
+
+    with pytest.raises(ValueError):
+        compute_sweights(loss.model[0].get_models()[0], mass)
+
+
 def test_sweights():
 
     minimizer = Minuit()
