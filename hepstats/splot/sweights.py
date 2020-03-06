@@ -2,6 +2,7 @@ import numpy as np
 
 from ..utils.fit import eval_pdf, get_value
 from ..utils.fit.api_check import is_valid_pdf
+from .exceptions import ModelNotFittedToData
 
 
 def is_sum_of_extended_pdfs(model):
@@ -71,12 +72,11 @@ def compute_sweights(model, x):
     Nx = eval_pdf(model, x, allow_extended=True)
     pN = p / Nx[:, None]
 
-    assert np.allclose(pN.sum(axis=0), 1, atol=1e-3)
+    if not np.allclose(pN.sum(axis=0), 1, atol=1e-3):
+        raise ModelNotFittedToData("The model needs to fitted to input data in order to comput the sWeights.")
 
     Vinv = (pN).T.dot(pN)
     V = np.linalg.inv(Vinv)
-
-    assert np.allclose(np.sum(V, axis=0), [get_value(y) for y in yields], rtol=0.1)
 
     sweights = p.dot(V) / Nx[:, None]
 

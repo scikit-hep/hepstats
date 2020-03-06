@@ -1,12 +1,9 @@
 from contextlib import ExitStack
+import numpy as np
 
 
 def get_value(value):
-
-    if hasattr(value, "numpy"):
-        return value.numpy()
-    else:
-        return value
+    return np.array(value)
 
 
 def eval_pdf(model, x, params={}, allow_extended=False):

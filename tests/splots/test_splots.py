@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 from scipy.stats import chisquare
 
 import zfit
@@ -9,6 +10,7 @@ from zfit.minimize import Minuit
 from hepstats.splot import compute_sweights
 from hepstats.splot.sweights import is_sum_of_extended_pdfs
 from hepstats.utils.fit import get_value
+from hepstats.splot.exceptions import ModelNotFittedToData
 
 
 def get_data_and_loss():
@@ -57,6 +59,10 @@ def test_sweights():
 
     minimizer = Minuit()
     mass, p, loss, Nsig, Nbkg, sig_p, bkg_p = get_data_and_loss()
+
+    with pytest.raises(ModelNotFittedToData):
+        compute_sweights(loss.model[0], mass)
+
     minimizer.minimize(loss)
 
     model = loss.model[0]
@@ -66,7 +72,7 @@ def test_sweights():
 
     sweights = compute_sweights(loss.model[0], mass)
 
-    assert np.allclose([np.sum(sweights[y])/get_value(y) for y in yields], 1.0)
+    assert np.allclose([np.sum(sweights[y])/get_value(y.value()) for y in yields], 1.0)
 
     nbins = 30
     hist_conf = dict(bins=nbins, range=[0, 10])
@@ -84,3 +90,6 @@ def test_sweights():
     hist_bkg_sweights_p = np.histogram(p, weights=sweights[Nbkg], **hist_conf)[0][sel]
 
     assert chisquare(hist_bkg_sweights_p, hist_bkg_true_p)[-1] < 0.01
+
+    with pytest.raises(ModelNotFittedToData):
+        compute_sweights(loss.model[0], np.concatenate([mass, np.random.normal(0.8, 0.1, 1000)]))
