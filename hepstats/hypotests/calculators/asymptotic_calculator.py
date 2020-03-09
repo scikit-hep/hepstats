@@ -3,7 +3,7 @@ import numpy as np
 from scipy.stats import norm
 
 from .basecalculator import BaseCalculator
-from ..fitutils.utils import eval_pdf, array2dataset, pll
+from ...utils.fit import eval_pdf, array2dataset, pll
 from ..parameters import POI, POIarray
 
 
@@ -28,11 +28,11 @@ def generate_asimov_hist(model, params, nbins=100):
 
     space = model.space
     bounds = space.limit1d
-    bin_edges = np.linspace(*bounds, nbins+1)
-    bin_centers = bin_edges[0: -1] + np.diff(bin_edges)/2
+    bin_edges = np.linspace(*bounds, nbins + 1)
+    bin_centers = bin_edges[0:-1] + np.diff(bin_edges) / 2
 
-    hist = eval_pdf(model, bin_centers, params)
-    hist *= (space.area() / nbins)
+    hist = eval_pdf(model, bin_centers, params, allow_extended=True)
+    hist *= space.area() / nbins
 
     return hist, bin_edges
 
@@ -131,7 +131,7 @@ class AsymptoticCalculator(BaseCalculator):
             asimov_data = []
             for i, ad in enumerate([generate_asimov_hist(m, values, self._asimov_bins) for m in model]):
                 weights, bin_edges = ad
-                bin_centers = bin_edges[0: -1] + np.diff(bin_edges)/2
+                bin_centers = bin_edges[0:-1] + np.diff(bin_edges) / 2
                 asimov_data.append(array2dataset(type(data[i]), data[i].space, bin_centers, weights))
 
             self._asimov_dataset[poi] = asimov_data
@@ -189,7 +189,9 @@ class AsymptoticCalculator(BaseCalculator):
             ret[i] = self._asimov_nll[p]
         return ret
 
-    def pnull(self, qobs, qalt=None, onesided=True, onesideddiscovery=False, qtilde=False, nsigma=0) -> np.ndarray:
+    def pnull(
+        self, qobs, qalt=None, onesided=True, onesideddiscovery=False, qtilde=False, nsigma=0
+    ) -> np.ndarray:
         """Computes the pvalue for the null hypothesis.
 
             Args:
@@ -208,17 +210,17 @@ class AsymptoticCalculator(BaseCalculator):
 
         # 1 - norm.cdf(x) == norm.cdf(-x)
         if onesided or onesideddiscovery:
-            pnull = 1. - norm.cdf(sqrtqobs - nsigma)
+            pnull = 1.0 - norm.cdf(sqrtqobs - nsigma)
         else:
-            pnull = (1. - norm.cdf(sqrtqobs - nsigma))*2.
+            pnull = (1.0 - norm.cdf(sqrtqobs - nsigma)) * 2.0
 
         if qalt is not None and qtilde:
             cond = (qobs > qalt) & (qalt > 0)
             sqrtqalt = np.sqrt(qalt)
-            pnull_2 = 1. - norm.cdf((qobs + qalt) / (2. * sqrtqalt) - nsigma)
+            pnull_2 = 1.0 - norm.cdf((qobs + qalt) / (2.0 * sqrtqalt) - nsigma)
 
             if not (onesided or onesideddiscovery):
-                pnull_2 += 1. - norm.cdf(sqrtqobs - nsigma)
+                pnull_2 += 1.0 - norm.cdf(sqrtqobs - nsigma)
 
             pnull = np.where(cond, pnull_2, pnull)
 
@@ -246,8 +248,14 @@ class AsymptoticCalculator(BaseCalculator):
         """
         nll_poinull_asy = self.asimov_nll(poinull, poialt)
         nll_poialt_asy = self.asimov_nll(poialt, poialt)
-        return self.q(nll1=nll_poinull_asy, nll2=nll_poialt_asy, poi1=poinull, poi2=poialt,
-                      onesided=onesided, onesideddiscovery=onesideddiscovery)
+        return self.q(
+            nll1=nll_poinull_asy,
+            nll2=nll_poialt_asy,
+            poi1=poinull,
+            poi2=poialt,
+            onesided=onesided,
+            onesideddiscovery=onesideddiscovery,
+        )
 
     def palt(self, qobs, qalt, onesided=True, onesideddiscovery=False, qtilde=False) -> np.ndarray:
         """Computes the pvalue for the alternative hypothesis.
@@ -268,17 +276,17 @@ class AsymptoticCalculator(BaseCalculator):
 
         # 1 - norm.cdf(x) == norm.cdf(-x)
         if onesided or onesideddiscovery:
-            palt = 1. - norm.cdf(sqrtqobs - sqrtqalt)
+            palt = 1.0 - norm.cdf(sqrtqobs - sqrtqalt)
         else:
-            palt = 1. - norm.cdf(sqrtqobs + sqrtqalt)
-            palt += 1. - norm.cdf(sqrtqobs - sqrtqalt)
+            palt = 1.0 - norm.cdf(sqrtqobs + sqrtqalt)
+            palt += 1.0 - norm.cdf(sqrtqobs - sqrtqalt)
 
         if qtilde:
             cond = (qobs > qalt) & (qalt > 0)
-            palt_2 = 1. - norm.cdf((qobs - qalt) / (2. * sqrtqalt))
+            palt_2 = 1.0 - norm.cdf((qobs - qalt) / (2.0 * sqrtqalt))
 
             if not (onesided or onesideddiscovery):
-                palt_2 += 1. - norm.cdf(sqrtqobs + sqrtqalt)
+                palt_2 += 1.0 - norm.cdf(sqrtqobs + sqrtqalt)
 
             palt = np.where(cond, palt_2, palt)
 
@@ -286,21 +294,22 @@ class AsymptoticCalculator(BaseCalculator):
 
     def _pvalue_(self, poinull, poialt, qtilde, onesided, onesideddiscovery):
 
-        qobs = self.qobs(poinull, onesided=onesided, qtilde=qtilde,
-                         onesideddiscovery=onesideddiscovery)
+        qobs = self.qobs(poinull, onesided=onesided, qtilde=qtilde, onesideddiscovery=onesideddiscovery)
 
         needpalt = poialt is not None
 
         if needpalt:
             qalt = self.qalt(poinull, poialt, onesided, onesideddiscovery)
-            palt = self.palt(qobs=qobs, qalt=qalt, onesided=onesided, qtilde=qtilde,
-                             onesideddiscovery=onesideddiscovery)
+            palt = self.palt(
+                qobs=qobs, qalt=qalt, onesided=onesided, qtilde=qtilde, onesideddiscovery=onesideddiscovery
+            )
         else:
             qalt = None
             palt = None
 
-        pnull = self.pnull(qobs=qobs, qalt=qalt, onesided=onesided, qtilde=qtilde,
-                           onesideddiscovery=onesideddiscovery)
+        pnull = self.pnull(
+            qobs=qobs, qalt=qalt, onesided=onesided, qtilde=qtilde, onesideddiscovery=onesideddiscovery
+        )
 
         return pnull, palt
 
@@ -311,8 +320,14 @@ class AsymptoticCalculator(BaseCalculator):
 
         expected_pvalues = []
         for ns in nsigma:
-            p_clsb = self.pnull(qobs=qalt, qalt=None, onesided=onesided, qtilde=qtilde,
-                                onesideddiscovery=onesideddiscovery, nsigma=ns)
+            p_clsb = self.pnull(
+                qobs=qalt,
+                qalt=None,
+                onesided=onesided,
+                qtilde=qtilde,
+                onesideddiscovery=onesideddiscovery,
+                nsigma=ns,
+            )
             if CLs:
                 p_clb = norm.cdf(ns)
                 p_cls = p_clsb / p_clb
@@ -327,12 +342,12 @@ class AsymptoticCalculator(BaseCalculator):
         qalt = self.qalt(poinull, poialt, onesided=onesided, onesideddiscovery=onesideddiscovery)
         qalt = np.where(qalt < 0, 0, qalt)
 
-        sigma = np.sqrt((poinull[0].value - poialt[0].value)**2 / qalt)
+        sigma = np.sqrt((poinull[0].value - poialt[0].value) ** 2 / qalt)
 
         expected_values = []
         for ns in nsigma:
             if CLs:
-                exp = sigma * (norm.ppf(1 - alpha*norm.cdf(ns)) + ns)
+                exp = sigma * (norm.ppf(1 - alpha * norm.cdf(ns)) + ns)
             else:
                 exp = sigma * (norm.ppf(1 - alpha) + ns)
 

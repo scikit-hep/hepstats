@@ -5,8 +5,8 @@ import warnings
 
 from .parameters import POI, POIarray
 from .exceptions import ParameterNotFound, FormatError
-from .fitutils.utils import pll
-from .fitutils.sampling import base_sampler, base_sample
+from ..utils.fit import pll
+from ..utils.fit.sampling import base_sampler, base_sample
 from .hypotests_object import ToysObject
 
 """
@@ -228,7 +228,7 @@ class ToysManager(ToysObject):
 
         printfreq = ntoys * printfreq
 
-        samples = self.sample(sampler, int(ntoys*1.2), poigen)
+        samples = self.sample(sampler, int(ntoys * 1.2), poigen)
 
         try:
             toysresult = self.get_toyresult(poigen, poieval)
@@ -241,7 +241,7 @@ class ToysManager(ToysObject):
         ntrials = 0
 
         for i in range(ntoys):
-            ntrials += 1.
+            ntrials += 1.0
             converged = False
             toprint = i % printfreq == 0
             while converged is False:
@@ -249,7 +249,7 @@ class ToysManager(ToysObject):
                     next(samples)
                 except StopIteration:
                     to_gen = ntoys - i
-                    samples = self.sample(sampler, int(to_gen*1.2), poigen)
+                    samples = self.sample(sampler, int(to_gen * 1.2), poigen)
                     next(samples)
 
                 for minimize_trial in range(2):

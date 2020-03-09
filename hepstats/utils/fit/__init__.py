@@ -1,25 +1,27 @@
 from contextlib import ExitStack
-import numbers
+import numpy as np
 
 
-def eval_pdf(model, x, params):
+def get_value(value):
+    return np.array(value)
+
+
+def eval_pdf(model, x, params={}, allow_extended=False):
     """ Compute pdf of model at a given point x and for given parameters values """
 
     def pdf(model, x):
-        if model.is_extended:
+        if model.is_extended and allow_extended:
             ret = model.pdf(x) * model.get_yield()
         else:
             ret = model.pdf(x)
 
-        if hasattr(ret, "numpy"):
-            return ret.numpy()
-        else:
-            return ret
+        return get_value(ret)
 
     with ExitStack() as stack:
         for param in model.get_dependents():
-            value = params[param]["value"]
-            stack.enter_context(param.set_value(value))
+            if param in params:
+                value = params[param]["value"]
+                stack.enter_context(param.set_value(value))
         return pdf(model, x)
 
 
@@ -51,9 +53,4 @@ def array2dataset(dataset_cls, obs, array, weights=None):
 def get_nevents(dataset):
     """ Returns the number of events in the dataset """
 
-    nevents = dataset.nevents
-
-    if hasattr(nevents, "numpy"):
-        return nevents.numpy()
-    else:
-        return nevents
+    return get_value(dataset.nevents)

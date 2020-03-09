@@ -1,6 +1,6 @@
-from .fitutils.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
-from .fitutils.api_check import is_valid_data, is_valid_pdf
-from .fitutils.utils import get_nevents
+from ..utils.fit.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
+from ..utils.fit.api_check import is_valid_data, is_valid_pdf
+from ..utils.fit import get_nevents
 
 
 class HypotestsObject(object):
@@ -71,7 +71,7 @@ class HypotestsObject(object):
                 * **value**: fit result
         """
         if not is_valid_fitresult(value):
-            raise ValueError()
+            raise ValueError("{} is not a valid fit result!".format(input))
         self._bestfit = value
 
     @property
@@ -190,7 +190,7 @@ class ToysObject(HypotestsObject):
             else:
                 nevents.append(get_nevents(d))
 
-        return self._sampler(self.loss.model,  nevents, floating_params)
+        return self._sampler(self.loss.model, nevents, floating_params)
 
     def sample(self, sampler, ntoys, poi=None):
         """

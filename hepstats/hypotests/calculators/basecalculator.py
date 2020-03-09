@@ -4,9 +4,9 @@ import numpy as np
 
 from ..hypotests_object import HypotestsObject
 from ..parameters import POI, POIarray, asarray
-from ..fitutils.utils import pll
+from ...utils.fit import pll
 from ..toyutils import ToysManager
-from ..fitutils.sampling import base_sampler, base_sample
+from ...utils.fit.sampling import base_sampler, base_sample
 
 
 class BaseCalculator(HypotestsObject):
@@ -98,13 +98,25 @@ class BaseCalculator(HypotestsObject):
 
         nll_poinull_obs = self.obs_nll(poinull)
         nll_bestfitpoi_obs = self.obs_nll(bestfitpoi)
-        qobs = self.q(nll1=nll_poinull_obs, nll2=nll_bestfitpoi_obs, poi1=poinull, poi2=bestfitpoi,
-                      onesided=onesided, onesideddiscovery=onesideddiscovery)
+        qobs = self.q(
+            nll1=nll_poinull_obs,
+            nll2=nll_bestfitpoi_obs,
+            poi1=poinull,
+            poi2=bestfitpoi,
+            onesided=onesided,
+            onesideddiscovery=onesideddiscovery,
+        )
 
         return qobs
 
-    def pvalue(self, poinull: List[POI], poialt: Union[List[POI], None] = None, qtilde=False, onesided=True,
-               onesideddiscovery=False) -> Tuple[np.ndarray, np.ndarray]:
+    def pvalue(
+        self,
+        poinull: List[POI],
+        poialt: Union[List[POI], None] = None,
+        qtilde=False,
+        onesided=True,
+        onesideddiscovery=False,
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """Computes pvalues for the null and alternative hypothesis.
 
         Args:
@@ -129,8 +141,13 @@ class BaseCalculator(HypotestsObject):
             self.check_pois(poialt)
             self.check_pois_compatibility(poinull, poialt)
 
-        return self._pvalue_(poinull=poinull, poialt=poialt, qtilde=qtilde, onesided=onesided,
-                             onesideddiscovery=onesideddiscovery)
+        return self._pvalue_(
+            poinull=poinull,
+            poialt=poialt,
+            qtilde=qtilde,
+            onesided=onesided,
+            onesideddiscovery=onesideddiscovery,
+        )
 
     def _pvalue_(self, poinull, poialt, qtilde, onesided, onesideddiscovery):
         """
@@ -138,8 +155,16 @@ class BaseCalculator(HypotestsObject):
         """
         raise NotImplementedError
 
-    def expected_pvalue(self, poinull: List[POI], poialt: List[POI], nsigma, CLs=False, qtilde=False,
-                        onesided=True, onesideddiscovery=False) -> Dict[int, np.array]:
+    def expected_pvalue(
+        self,
+        poinull: List[POI],
+        poialt: List[POI],
+        nsigma,
+        CLs=False,
+        qtilde=False,
+        onesided=True,
+        onesideddiscovery=False,
+    ) -> Dict[int, np.array]:
         """Computes the expected pvalues and error bands for different values of :math:`\sigma` (0=expected/median)
 
         Args:
@@ -167,8 +192,15 @@ class BaseCalculator(HypotestsObject):
             self.check_pois(poialt)
             self.check_pois_compatibility(poinull, poialt)
 
-        return self._expected_pvalue_(poinull=poinull, poialt=poialt, nsigma=nsigma, CLs=CLs, qtilde=qtilde,
-                                      onesided=onesided, onesideddiscovery=onesideddiscovery)
+        return self._expected_pvalue_(
+            poinull=poinull,
+            poialt=poialt,
+            nsigma=nsigma,
+            CLs=CLs,
+            qtilde=qtilde,
+            onesided=onesided,
+            onesideddiscovery=onesideddiscovery,
+        )
 
     def _expected_pvalue_(self, poinull, poialt, nsigma, CLs, qtilde, onesided, onesideddiscovery):
         """
@@ -176,8 +208,16 @@ class BaseCalculator(HypotestsObject):
         """
         raise NotImplementedError
 
-    def expected_poi(self, poinull: List[POI], poialt: List[POI], nsigma, alpha=0.05, CLs=False,
-                     onesided=True, onesideddiscovery=False):
+    def expected_poi(
+        self,
+        poinull: List[POI],
+        poialt: List[POI],
+        nsigma,
+        alpha=0.05,
+        CLs=False,
+        onesided=True,
+        onesideddiscovery=False,
+    ):
         """Computes the expected parameter of interest values such that the expected p_values = :math:`\alpha` for
         different values of :math:`\sigma` (0=expected/median)
 
@@ -205,8 +245,15 @@ class BaseCalculator(HypotestsObject):
             self.check_pois(poialt)
             self.check_pois_compatibility(poinull, poialt)
 
-        return self._expected_poi_(poinull=poinull, poialt=poialt, nsigma=nsigma, alpha=alpha, CLs=CLs,
-                                   onesided=onesided, onesideddiscovery=onesideddiscovery)
+        return self._expected_poi_(
+            poinull=poinull,
+            poialt=poialt,
+            nsigma=nsigma,
+            alpha=alpha,
+            CLs=CLs,
+            onesided=onesided,
+            onesideddiscovery=onesideddiscovery,
+        )
 
     def _expected_poi_(self, poinull, poialt, nsigma, alpha, CLs, onesided, onesideddiscovery):
         """
@@ -244,8 +291,9 @@ class BaseCalculator(HypotestsObject):
                 msg += f" poi1={poi1.name}, poi2={poi2.name}"
                 raise ValueError(msg)
 
-    def q(self, nll1: np.array, nll2: np.array, poi1, poi2,
-          onesided=True, onesideddiscovery=False) -> np.ndarray:
+    def q(
+        self, nll1: np.array, nll2: np.array, poi1, poi2, onesided=True, onesideddiscovery=False
+    ) -> np.ndarray:
         """Compute values of the test statistic q defined as the difference between negative log-likelihood
             values :math:`q = nll1 - nll2`.
 
@@ -271,7 +319,7 @@ class BaseCalculator(HypotestsObject):
         poi1 = poi1.values
         poi2 = poi2.values
 
-        q = 2*(nll1 - nll2)
+        q = 2 * (nll1 - nll2)
         # filter_non_nan = ~(np.isnan(q) | np.isinf(q))
         # q = q[filter_non_nan]
         #
@@ -292,7 +340,6 @@ class BaseCalculator(HypotestsObject):
 
 
 class BaseToysCalculator(BaseCalculator):
-
     def __init__(self, input, minimizer, sampler, sample):
         """Basis for toys calculator class.
 
@@ -310,7 +357,9 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
     Class for calculators using toys.
     """
 
-    def __init__(self, input, minimizer, ntoysnull=100, ntoysalt=100, sampler=base_sampler, sample=base_sample):
+    def __init__(
+        self, input, minimizer, ntoysnull=100, ntoysalt=100, sampler=base_sampler, sample=base_sample
+    ):
         """Toys calculator class.
 
             Args:
@@ -327,8 +376,9 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
         self._ntoysalt = ntoysalt
 
     @classmethod
-    def from_yaml(cls, filename, loss, minimizer, ntoysnull=100, ntoysalt=100, sampler=base_sampler,
-                  sample=base_sample):
+    def from_yaml(
+        cls, filename, loss, minimizer, ntoysnull=100, ntoysalt=100, sampler=base_sampler, sample=base_sample
+    ):
         """
         ToysCalculator constructor with the toys loaded from a yaml file.
 
@@ -396,7 +446,7 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
                 if p not in poieval_p:
                     poieval_p = poieval_p.append(p.value)
 
-            if qtilde and 0. not in poieval_p.values:
+            if qtilde and 0.0 not in poieval_p.values:
                 poieval_p = poieval_p.append(0.0)
 
             poieval_p = asarray(poieval_p)

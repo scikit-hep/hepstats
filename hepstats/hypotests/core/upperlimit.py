@@ -89,8 +89,14 @@ class UpperLimit(BaseTest):
 
         exppvalue_func = self.calculator.expected_pvalue
 
-        result = exppvalue_func(poinull=self.poinull, poialt=self.poialt, nsigma=sigmas, CLs=CLs,
-                                qtilde=self.qtilde, onesided=True)
+        result = exppvalue_func(
+            poinull=self.poinull,
+            poialt=self.poialt,
+            nsigma=sigmas,
+            CLs=CLs,
+            qtilde=self.qtilde,
+            onesided=True,
+        )
 
         pvalues["expected"] = result[0]
         pvalues["expected_p1"] = result[1]
@@ -152,7 +158,7 @@ class UpperLimit(BaseTest):
                     limits[k] = None
                     continue
 
-            tck = interpolate.splrep(values, pvalues-alpha, s=0)
+            tck = interpolate.splrep(values, pvalues - alpha, s=0)
             root = interpolate.sproot(tck)
 
             if len(root) > 1:

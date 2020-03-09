@@ -9,7 +9,7 @@ from zfit.minimize import Minuit
 from hepstats.hypotests.parameters import POI, POIarray
 from hepstats.hypotests.exceptions import ParameterNotFound
 from hepstats.hypotests.toyutils import ToyResult, ToysManager
-from hepstats.hypotests.fitutils.api_check import is_valid_loss, is_valid_data
+from hepstats.utils.fit.api_check import is_valid_loss, is_valid_data
 
 pwd = os.path.dirname(__file__)
 

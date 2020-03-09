@@ -2,7 +2,7 @@ import numpy as np
 from scipy.stats import norm
 
 from .basecalculator import ToysCalculator
-from ..fitutils.sampling import base_sampler, base_sample
+from ...utils.fit.sampling import base_sampler, base_sample
 from ..parameters import POI, POIarray
 
 
@@ -32,7 +32,9 @@ class FrequentistCalculator(ToysCalculator):
             >>> calc = FrequentistCalculator(input=loss, minimizer=MinuitMinimizer(), ntoysnull=1000, ntoysalt=1000)
     """
 
-    def __init__(self, input, minimizer, ntoysnull=100, ntoysalt=100, sampler=base_sampler, sample=base_sample):
+    def __init__(
+        self, input, minimizer, ntoysnull=100, ntoysalt=100, sampler=base_sampler, sample=base_sample
+    ):
 
         super(FrequentistCalculator, self).__init__(input, minimizer, ntoysnull, ntoysalt, sampler, sample)
 
@@ -72,8 +74,14 @@ class FrequentistCalculator(ToysCalculator):
             poi1 = POIarray(poinull.parameter, np.full(nll1.size, p.value))
             poi2 = POIarray(poinull.parameter, bestfit)
 
-            ret[p] = self.q(nll1=nll1, nll2=nll2, poi1=poi1, poi2=poi2, onesided=onesided,
-                            onesideddiscovery=onesideddiscovery)
+            ret[p] = self.q(
+                nll1=nll1,
+                nll2=nll2,
+                poi1=poi1,
+                poi2=poi2,
+                onesided=onesided,
+                onesideddiscovery=onesideddiscovery,
+            )
 
         return ret
 
@@ -116,19 +124,24 @@ class FrequentistCalculator(ToysCalculator):
             poi1 = POIarray(poialt.parameter, np.full(nll1.size, p.value))
             poi2 = POIarray(poialt.parameter, bestfit)
 
-            ret[p] = self.q(nll1=nll1, nll2=nll2, poi1=poi1, poi2=poi2, onesided=onesided,
-                            onesideddiscovery=onesideddiscovery)
+            ret[p] = self.q(
+                nll1=nll1,
+                nll2=nll2,
+                poi1=poi1,
+                poi2=poi2,
+                onesided=onesided,
+                onesideddiscovery=onesideddiscovery,
+            )
 
         return ret
 
     def _pvalue_(self, poinull, poialt, qtilde, onesided, onesideddiscovery):
 
-        qobs = self.qobs(poinull, onesided=onesided, qtilde=qtilde,
-                         onesideddiscovery=onesideddiscovery)
+        qobs = self.qobs(poinull, onesided=onesided, qtilde=qtilde, onesideddiscovery=onesideddiscovery)
 
         def compute_pvalue(qdist, qobs):
             qdist = qdist[~(np.isnan(qdist) | np.isinf(qdist))]
-            p = len(qdist[qdist >= qobs])/len(qdist)
+            p = len(qdist[qdist >= qobs]) / len(qdist)
             return p
 
         qnulldist = self.qnull(poinull, poialt, onesided, onesideddiscovery, qtilde)
@@ -148,8 +161,7 @@ class FrequentistCalculator(ToysCalculator):
 
     def _expected_pvalue_(self, poinull, poialt, nsigma, CLs, onesided, onesideddiscovery, qtilde):
 
-        ps = {ns: {"p_clsb": np.empty(len(poinull)),
-                   "p_clb": np.empty(len(poinull))} for ns in nsigma}
+        ps = {ns: {"p_clsb": np.empty(len(poinull)), "p_clb": np.empty(len(poinull))} for ns in nsigma}
 
         qnulldist = self.qnull(poinull, poialt, onesided, onesideddiscovery, qtilde)
         qaltdist = self.qalt(poinull, poialt, onesided, onesideddiscovery, qtilde)
@@ -168,11 +180,11 @@ class FrequentistCalculator(ToysCalculator):
             p_clb_i = np.empty(lqaltdist)
 
             for j, q in np.ndenumerate(qaltdist_p):
-                p_clsb_i[j] = (len(qnulldist_p[qnulldist_p >= q])/lqnulldist)
-                p_clb_i[j] = (len(qaltdist_p[qaltdist_p >= q])/lqaltdist)
+                p_clsb_i[j] = len(qnulldist_p[qnulldist_p >= q]) / lqnulldist
+                p_clb_i[j] = len(qaltdist_p[qaltdist_p >= q]) / lqaltdist
 
             for ns in nsigma:
-                frac = norm.cdf(ns)*100
+                frac = norm.cdf(ns) * 100
                 ps[ns]["p_clsb"][i] = np.percentile(p_clsb_i, frac)
                 ps[ns]["p_clb"][i] = np.percentile(p_clb_i, frac)
 

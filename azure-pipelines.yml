@@ -28,13 +28,15 @@ jobs:
 
 - job: 'Windows'
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'windows-2019'
   strategy:
     matrix:
       Python36:
         python.version: '3.6'
       Python37:
         python.version: '3.7'
+      #Python38:
+        #python.version: '3.8'
 
   steps:
     - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
@@ -43,13 +45,15 @@ jobs:
 
 - job: 'macOS'
   pool:
-    vmImage: 'macOS-10.13'
+    vmImage: 'macOS-10.15'
   strategy:
     matrix:
       Python36:
         python.version: '3.6'
       Python37:
         python.version: '3.7'
+      Python38:
+        python.version: '3.8'
 
   steps:
     - bash: echo "##vso[task.prependpath]$CONDA/bin"
