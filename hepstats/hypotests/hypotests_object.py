@@ -190,7 +190,7 @@ class ToysObject(HypotestsObject):
             else:
                 nevents.append(get_nevents(d))
 
-        return self._sampler(self.loss.model,  nevents, floating_params)
+        return self._sampler(self.loss.model, nevents, floating_params)
 
     def sample(self, sampler, ntoys, poi=None):
         """

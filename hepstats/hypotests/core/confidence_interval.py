@@ -94,7 +94,7 @@ class ConfidenceInterval(BaseTest):
             msg += f" confidence level alpha = {alpha}. Try to increase the range of POI values."
             raise POIRangeError(msg)
 
-        tck = interpolate.splrep(poinull.values, self.pvalues()-alpha, s=0)
+        tck = interpolate.splrep(poinull.values, self.pvalues() - alpha, s=0)
         root = interpolate.sproot(tck)
 
         bands = {}

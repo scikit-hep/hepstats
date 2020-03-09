@@ -61,7 +61,7 @@ class Discovery(BaseTest):
         pnull, _ = self.calculator.pvalue(self.poinull, onesideddiscovery=True)
         pnull = pnull[0]
 
-        significance = norm.ppf(1. - pnull)
+        significance = norm.ppf(1.0 - pnull)
 
         if printlevel > 0:
             print("\np_value for the Null hypothesis = {0}".format(pnull))

@@ -24,11 +24,13 @@ def base_sampler(models, nevents, floating_params=None):
     samplers = []
     fixed_params = []
     for m in models:
+
         def to_fix(p):
             if floating_params:
                 return p.name in floating_params_names
             else:
                 return False
+
         fixed = [p for p in m.get_dependents() if not to_fix(p)]
         fixed_params.append(fixed)
 

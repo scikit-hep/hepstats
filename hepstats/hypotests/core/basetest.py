@@ -6,7 +6,6 @@ Module defining the base class for hypothesis tests.
 
 
 class BaseTest(object):
-
     def __init__(self, calculator, poinull, poialt=None):
         """Base class for hypothesis tests.
 
