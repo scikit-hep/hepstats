@@ -25,6 +25,7 @@
         <script src="../../../../_static/underscore.js"></script>
         <script src="../../../../_static/doctools.js"></script>
         <script src="../../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
 
@@ -213,7 +214,7 @@
         <span class="n">pnull</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">pvalue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">poinull</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">pnull</span> <span class="o">=</span> <span class="n">pnull</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">significance</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">pnull</span><span class="p">)</span>
+        <span class="n">significance</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">pnull</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">printlevel</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">p_value for the Null hypothesis = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pnull</span><span class="p">))</span>

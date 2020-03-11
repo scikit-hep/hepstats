@@ -25,6 +25,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -342,7 +343,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">nevents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_nevents</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sampler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>  <span class="n">nevents</span><span class="p">,</span> <span class="n">floating_params</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sampler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">nevents</span><span class="p">,</span> <span class="n">floating_params</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ToysObject.sample"><a class="viewcode-back" href="../../../api/hepstats.html#hepstats.hypotests.hypotests_object.ToysObject.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampler</span><span class="p">,</span> <span class="n">ntoys</span><span class="p">,</span> <span class="n">poi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

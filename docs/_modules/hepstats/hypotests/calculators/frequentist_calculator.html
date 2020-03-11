@@ -25,6 +25,7 @@
         <script src="../../../../_static/underscore.js"></script>
         <script src="../../../../_static/doctools.js"></script>
         <script src="../../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
 
@@ -154,7 +155,7 @@
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
 
 <span class="kn">from</span> <span class="nn">.basecalculator</span> <span class="kn">import</span> <span class="n">ToysCalculator</span>
-<span class="kn">from</span> <span class="nn">..fitutils.sampling</span> <span class="kn">import</span> <span class="n">base_sampler</span><span class="p">,</span> <span class="n">base_sample</span>
+<span class="kn">from</span> <span class="nn">...utils</span> <span class="kn">import</span> <span class="n">base_sampler</span><span class="p">,</span> <span class="n">base_sample</span>
 <span class="kn">from</span> <span class="nn">..parameters</span> <span class="kn">import</span> <span class="n">POI</span><span class="p">,</span> <span class="n">POIarray</span>
 
 
@@ -184,9 +185,19 @@
 <span class="sd">            &gt;&gt;&gt; calc = FrequentistCalculator(input=loss, minimizer=MinuitMinimizer(), ntoysnull=1000, ntoysalt=1000)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">minimizer</span><span class="p">,</span> <span class="n">ntoysnull</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ntoysalt</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">base_sampler</span><span class="p">,</span> <span class="n">sample</span><span class="o">=</span><span class="n">base_sample</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">input</span><span class="p">,</span>
+        <span class="n">minimizer</span><span class="p">,</span>
+        <span class="n">ntoysnull</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">ntoysalt</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">sampler</span><span class="o">=</span><span class="n">base_sampler</span><span class="p">,</span>
+        <span class="n">sample</span><span class="o">=</span><span class="n">base_sample</span><span class="p">,</span>
+    <span class="p">):</span>
 
-        <span class="nb">super</span><span class="p">(</span><span class="n">FrequentistCalculator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">minimizer</span><span class="p">,</span> <span class="n">ntoysnull</span><span class="p">,</span> <span class="n">ntoysalt</span><span class="p">,</span> <span class="n">sampler</span><span class="p">,</span> <span class="n">sample</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FrequentistCalculator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="nb">input</span><span class="p">,</span> <span class="n">minimizer</span><span class="p">,</span> <span class="n">ntoysnull</span><span class="p">,</span> <span class="n">ntoysalt</span><span class="p">,</span> <span class="n">sampler</span><span class="p">,</span> <span class="n">sample</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="FrequentistCalculator.qnull"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.frequentist_calculator.FrequentistCalculator.qnull">[docs]</a>    <span class="k">def</span> <span class="nf">qnull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Computes null hypothesis values of the :math:`\\Delta` log-likelihood test statistic.</span>
@@ -224,8 +235,14 @@
             <span class="n">poi1</span> <span class="o">=</span> <span class="n">POIarray</span><span class="p">(</span><span class="n">poinull</span><span class="o">.</span><span class="n">parameter</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">nll1</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
             <span class="n">poi2</span> <span class="o">=</span> <span class="n">POIarray</span><span class="p">(</span><span class="n">poinull</span><span class="o">.</span><span class="n">parameter</span><span class="p">,</span> <span class="n">bestfit</span><span class="p">)</span>
 
-            <span class="n">ret</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">nll1</span><span class="o">=</span><span class="n">nll1</span><span class="p">,</span> <span class="n">nll2</span><span class="o">=</span><span class="n">nll2</span><span class="p">,</span> <span class="n">poi1</span><span class="o">=</span><span class="n">poi1</span><span class="p">,</span> <span class="n">poi2</span><span class="o">=</span><span class="n">poi2</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span>
-                            <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">)</span>
+            <span class="n">ret</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">(</span>
+                <span class="n">nll1</span><span class="o">=</span><span class="n">nll1</span><span class="p">,</span>
+                <span class="n">nll2</span><span class="o">=</span><span class="n">nll2</span><span class="p">,</span>
+                <span class="n">poi1</span><span class="o">=</span><span class="n">poi1</span><span class="p">,</span>
+                <span class="n">poi2</span><span class="o">=</span><span class="n">poi2</span><span class="p">,</span>
+                <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span>
+                <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">ret</span></div>
 
@@ -268,19 +285,29 @@
             <span class="n">poi1</span> <span class="o">=</span> <span class="n">POIarray</span><span class="p">(</span><span class="n">poialt</span><span class="o">.</span><span class="n">parameter</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">nll1</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
             <span class="n">poi2</span> <span class="o">=</span> <span class="n">POIarray</span><span class="p">(</span><span class="n">poialt</span><span class="o">.</span><span class="n">parameter</span><span class="p">,</span> <span class="n">bestfit</span><span class="p">)</span>
 
-            <span class="n">ret</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">nll1</span><span class="o">=</span><span class="n">nll1</span><span class="p">,</span> <span class="n">nll2</span><span class="o">=</span><span class="n">nll2</span><span class="p">,</span> <span class="n">poi1</span><span class="o">=</span><span class="n">poi1</span><span class="p">,</span> <span class="n">poi2</span><span class="o">=</span><span class="n">poi2</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span>
-                            <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">)</span>
+            <span class="n">ret</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">(</span>
+                <span class="n">nll1</span><span class="o">=</span><span class="n">nll1</span><span class="p">,</span>
+                <span class="n">nll2</span><span class="o">=</span><span class="n">nll2</span><span class="p">,</span>
+                <span class="n">poi1</span><span class="o">=</span><span class="n">poi1</span><span class="p">,</span>
+                <span class="n">poi2</span><span class="o">=</span><span class="n">poi2</span><span class="p">,</span>
+                <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span>
+                <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">ret</span></div>
 
     <span class="k">def</span> <span class="nf">_pvalue_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">qtilde</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">):</span>
 
-        <span class="n">qobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qobs</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span>
-                         <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">)</span>
+        <span class="n">qobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qobs</span><span class="p">(</span>
+            <span class="n">poinull</span><span class="p">,</span>
+            <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span>
+            <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span>
+            <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">compute_pvalue</span><span class="p">(</span><span class="n">qdist</span><span class="p">,</span> <span class="n">qobs</span><span class="p">):</span>
             <span class="n">qdist</span> <span class="o">=</span> <span class="n">qdist</span><span class="p">[</span><span class="o">~</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">qdist</span><span class="p">)</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">qdist</span><span class="p">))]</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">qdist</span><span class="p">[</span><span class="n">qdist</span> <span class="o">&gt;=</span> <span class="n">qobs</span><span class="p">])</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">qdist</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">qdist</span><span class="p">[</span><span class="n">qdist</span> <span class="o">&gt;=</span> <span class="n">qobs</span><span class="p">])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">qdist</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">p</span>
 
         <span class="n">qnulldist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qnull</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">,</span> <span class="n">qtilde</span><span class="p">)</span>
@@ -298,10 +325,14 @@
 
         <span class="k">return</span> <span class="n">pnull</span><span class="p">,</span> <span class="n">palt</span>
 
-    <span class="k">def</span> <span class="nf">_expected_pvalue_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">nsigma</span><span class="p">,</span> <span class="n">CLs</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">,</span> <span class="n">qtilde</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_expected_pvalue_</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">nsigma</span><span class="p">,</span> <span class="n">CLs</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">,</span> <span class="n">qtilde</span>
+    <span class="p">):</span>
 
-        <span class="n">ps</span> <span class="o">=</span> <span class="p">{</span><span class="n">ns</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;p_clsb&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">poinull</span><span class="p">)),</span>
-                   <span class="s2">&quot;p_clb&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">poinull</span><span class="p">))}</span> <span class="k">for</span> <span class="n">ns</span> <span class="ow">in</span> <span class="n">nsigma</span><span class="p">}</span>
+        <span class="n">ps</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">ns</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;p_clsb&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">poinull</span><span class="p">)),</span> <span class="s2">&quot;p_clb&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">poinull</span><span class="p">))}</span>
+            <span class="k">for</span> <span class="n">ns</span> <span class="ow">in</span> <span class="n">nsigma</span>
+        <span class="p">}</span>
 
         <span class="n">qnulldist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qnull</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">,</span> <span class="n">qtilde</span><span class="p">)</span>
         <span class="n">qaltdist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qalt</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">,</span> <span class="n">qtilde</span><span class="p">)</span>
@@ -320,11 +351,11 @@
             <span class="n">p_clb_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">lqaltdist</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">ndenumerate</span><span class="p">(</span><span class="n">qaltdist_p</span><span class="p">):</span>
-                <span class="n">p_clsb_i</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qnulldist_p</span><span class="p">[</span><span class="n">qnulldist_p</span> <span class="o">&gt;=</span> <span class="n">q</span><span class="p">])</span><span class="o">/</span><span class="n">lqnulldist</span><span class="p">)</span>
-                <span class="n">p_clb_i</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qaltdist_p</span><span class="p">[</span><span class="n">qaltdist_p</span> <span class="o">&gt;=</span> <span class="n">q</span><span class="p">])</span><span class="o">/</span><span class="n">lqaltdist</span><span class="p">)</span>
+                <span class="n">p_clsb_i</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">qnulldist_p</span><span class="p">[</span><span class="n">qnulldist_p</span> <span class="o">&gt;=</span> <span class="n">q</span><span class="p">])</span> <span class="o">/</span> <span class="n">lqnulldist</span>
+                <span class="n">p_clb_i</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">qaltdist_p</span><span class="p">[</span><span class="n">qaltdist_p</span> <span class="o">&gt;=</span> <span class="n">q</span><span class="p">])</span> <span class="o">/</span> <span class="n">lqaltdist</span>
 
             <span class="k">for</span> <span class="n">ns</span> <span class="ow">in</span> <span class="n">nsigma</span><span class="p">:</span>
-                <span class="n">frac</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">ns</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span>
+                <span class="n">frac</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">ns</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
                 <span class="n">ps</span><span class="p">[</span><span class="n">ns</span><span class="p">][</span><span class="s2">&quot;p_clsb&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">p_clsb_i</span><span class="p">,</span> <span class="n">frac</span><span class="p">)</span>
                 <span class="n">ps</span><span class="p">[</span><span class="n">ns</span><span class="p">][</span><span class="s2">&quot;p_clb&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">p_clb_i</span><span class="p">,</span> <span class="n">frac</span><span class="p">)</span>
 

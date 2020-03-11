@@ -25,6 +25,7 @@
         <script src="../../../../_static/underscore.js"></script>
         <script src="../../../../_static/doctools.js"></script>
         <script src="../../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
 
@@ -241,8 +242,14 @@
 
         <span class="n">exppvalue_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">expected_pvalue</span>
 
-        <span class="n">result</span> <span class="o">=</span> <span class="n">exppvalue_func</span><span class="p">(</span><span class="n">poinull</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">poialt</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="n">sigmas</span><span class="p">,</span> <span class="n">CLs</span><span class="o">=</span><span class="n">CLs</span><span class="p">,</span>
-                                <span class="n">qtilde</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">qtilde</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">exppvalue_func</span><span class="p">(</span>
+            <span class="n">poinull</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">poinull</span><span class="p">,</span>
+            <span class="n">poialt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">poialt</span><span class="p">,</span>
+            <span class="n">nsigma</span><span class="o">=</span><span class="n">sigmas</span><span class="p">,</span>
+            <span class="n">CLs</span><span class="o">=</span><span class="n">CLs</span><span class="p">,</span>
+            <span class="n">qtilde</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">qtilde</span><span class="p">,</span>
+            <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="n">pvalues</span><span class="p">[</span><span class="s2">&quot;expected&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">pvalues</span><span class="p">[</span><span class="s2">&quot;expected_p1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -304,7 +311,7 @@
                     <span class="n">limits</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                     <span class="k">continue</span>
 
-            <span class="n">tck</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">splrep</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">pvalues</span><span class="o">-</span><span class="n">alpha</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">tck</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">splrep</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">pvalues</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">root</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">sproot</span><span class="p">(</span><span class="n">tck</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>

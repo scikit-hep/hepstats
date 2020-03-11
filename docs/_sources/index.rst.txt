@@ -35,3 +35,9 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+
+bibliography
+============
+
+.. bibliography:: references.bib
