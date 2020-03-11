@@ -1,6 +1,8 @@
 from contextlib import ExitStack
 import numpy as np
 
+from .sampling import base_sampler, base_sample
+
 
 def get_value(value):
     return np.array(value)

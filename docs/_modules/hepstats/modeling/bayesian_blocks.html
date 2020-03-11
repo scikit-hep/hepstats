@@ -25,6 +25,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -156,19 +157,12 @@
 <span class="sd">=============================</span>
 
 <span class="sd">Dynamic programming algorithm for finding the optimal adaptive-width histogram.  Modified from the</span>
-<span class="sd">bayesian blocks python implementation found in astroML [3]_.</span>
+<span class="sd">bayesian blocks python implementation found in astroML :cite:`VanderPlas_2012`.</span>
 
-<span class="sd">* Based on Scargle et al 2012 [1]_</span>
-<span class="sd">* Initial Python Implementation [2]_</span>
-<span class="sd">* AstroML Implementation [3]_</span>
-<span class="sd">* Initial Examination in HEP context [4]_</span>
-
-<span class="sd">References</span>
-<span class="sd">----------</span>
-<span class="sd">.. [1] http://adsabs.harvard.edu/abs/2012arXiv1207.5578S</span>
-<span class="sd">.. [2] http://jakevdp.github.com/blog/2012/09/12/dynamic-programming-in-python/</span>
-<span class="sd">.. [3] https://github.com/astroML/astroML/blob/master/astroML/density_estimation/bayesian_blocks.py</span>
-<span class="sd">.. [4] https://arxiv.org/abs/1708.00810</span>
+<span class="sd">* Based on Scargle et al 2012 :cite:`Scargle_2013`</span>
+<span class="sd">* Initial Python Implementation :cite:`BB_jakevdp`</span>
+<span class="sd">* AstroML Implementation :cite:`VanderPlas_2012`</span>
+<span class="sd">* Initial Examination in HEP context :cite:`Pollack:2017srh`</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
@@ -178,6 +172,7 @@
 
 <div class="viewcode-block" id="Prior"><a class="viewcode-back" href="../../../api/hepstats.html#hepstats.modeling.bayesian_blocks.Prior">[docs]</a><span class="k">class</span> <span class="nc">Prior</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Helper class for calculating the prior on the fitness function.&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p0</span> <span class="o">=</span> <span class="n">p0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
@@ -251,17 +246,15 @@
     <span class="c1"># We want to sort the data array (without losing the associated weights), and combine duplicate</span>
     <span class="c1"># data points by summing their weights together.  We can accomplish all this with `groupby`</span>
 
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span> <span class="s1">&#39;weights&#39;</span><span class="p">:</span> <span class="n">weights</span><span class="p">})</span>
-    <span class="n">gb</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span> <span class="s2">&quot;weights&quot;</span><span class="p">:</span> <span class="n">weights</span><span class="p">})</span>
+    <span class="n">gb</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">gb</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span>
     <span class="n">weights</span> <span class="o">=</span> <span class="n">gb</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">values</span>
 
     <span class="n">N</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">size</span>
 
     <span class="c1"># create length-(N + 1) array of cell edges</span>
-    <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">data</span><span class="p">[:</span><span class="mi">1</span><span class="p">],</span>
-                            <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
-                            <span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]])</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">data</span><span class="p">[:</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]])</span>
     <span class="n">block_length</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">edges</span>
 
     <span class="c1"># arrays to store the best configuration</span>
@@ -276,13 +269,13 @@
         <span class="c1"># Compute fit_vec : fitness of putative last block (end at R)</span>
 
         <span class="c1"># T_k: width/duration of each block</span>
-        <span class="n">T_k</span> <span class="o">=</span> <span class="n">block_length</span><span class="p">[:</span><span class="n">R</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">block_length</span><span class="p">[</span><span class="n">R</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">T_k</span> <span class="o">=</span> <span class="n">block_length</span><span class="p">[:</span> <span class="n">R</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">block_length</span><span class="p">[</span><span class="n">R</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
 
         <span class="c1"># N_k: number of elements in each block</span>
-        <span class="n">N_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">weights</span><span class="p">[:</span><span class="n">R</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">])[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">N_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">weights</span><span class="p">[:</span> <span class="n">R</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">])[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="c1"># evaluate fitness function</span>
-        <span class="n">fit_vec</span> <span class="o">=</span> <span class="n">N_k</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">N_k</span><span class="o">/</span><span class="n">T_k</span><span class="p">))</span>
+        <span class="n">fit_vec</span> <span class="o">=</span> <span class="n">N_k</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">N_k</span> <span class="o">/</span> <span class="n">T_k</span><span class="p">))</span>
 
         <span class="c1"># penalize function with prior</span>
         <span class="n">A_R</span> <span class="o">=</span> <span class="n">fit_vec</span> <span class="o">-</span> <span class="n">prior</span><span class="o">.</span><span class="n">calc</span><span class="p">(</span><span class="n">R</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>

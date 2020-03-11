@@ -4,9 +4,8 @@ import numpy as np
 
 from ..hypotests_object import HypotestsObject
 from ..parameters import POI, POIarray, asarray
-from ...utils.fit import pll
+from ...utils import pll, base_sampler, base_sample
 from ..toyutils import ToysManager
-from ...utils.fit.sampling import base_sampler, base_sample
 
 
 class BaseCalculator(HypotestsObject):
@@ -65,7 +64,9 @@ class BaseCalculator(HypotestsObject):
             ret[i] = self._obs_nll[p]
         return ret
 
-    def qobs(self, poinull: List[POI], onesided=True, onesideddiscovery=False, qtilde=False):
+    def qobs(
+        self, poinull: List[POI], onesided=True, onesideddiscovery=False, qtilde=False
+    ):
         """Computes observed values of the :math:`\Delta` log-likelihood test statistic.
 
             Args:
@@ -202,7 +203,9 @@ class BaseCalculator(HypotestsObject):
             onesideddiscovery=onesideddiscovery,
         )
 
-    def _expected_pvalue_(self, poinull, poialt, nsigma, CLs, qtilde, onesided, onesideddiscovery):
+    def _expected_pvalue_(
+        self, poinull, poialt, nsigma, CLs, qtilde, onesided, onesideddiscovery
+    ):
         """
         To be overwritten in `BaseCalculator` subclasses.
         """
@@ -255,7 +258,9 @@ class BaseCalculator(HypotestsObject):
             onesideddiscovery=onesideddiscovery,
         )
 
-    def _expected_poi_(self, poinull, poialt, nsigma, alpha, CLs, onesided, onesideddiscovery):
+    def _expected_poi_(
+        self, poinull, poialt, nsigma, alpha, CLs, onesided, onesideddiscovery
+    ):
         """
         To be overwritten in `BaseCalculator` subclasses.
         """
@@ -292,7 +297,13 @@ class BaseCalculator(HypotestsObject):
                 raise ValueError(msg)
 
     def q(
-        self, nll1: np.array, nll2: np.array, poi1, poi2, onesided=True, onesideddiscovery=False
+        self,
+        nll1: np.array,
+        nll2: np.array,
+        poi1,
+        poi2,
+        onesided=True,
+        onesideddiscovery=False,
     ) -> np.ndarray:
         """Compute values of the test statistic q defined as the difference between negative log-likelihood
             values :math:`q = nll1 - nll2`.
@@ -358,7 +369,13 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
     """
 
     def __init__(
-        self, input, minimizer, ntoysnull=100, ntoysalt=100, sampler=base_sampler, sample=base_sample
+        self,
+        input,
+        minimizer,
+        ntoysnull=100,
+        ntoysalt=100,
+        sampler=base_sampler,
+        sample=base_sample,
     ):
         """Toys calculator class.
 
@@ -377,7 +394,14 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
 
     @classmethod
     def from_yaml(
-        cls, filename, loss, minimizer, ntoysnull=100, ntoysalt=100, sampler=base_sampler, sample=base_sample
+        cls,
+        filename,
+        loss,
+        minimizer,
+        ntoysnull=100,
+        ntoysalt=100,
+        sampler=base_sampler,
+        sample=base_sample,
     ):
         """
         ToysCalculator constructor with the toys loaded from a yaml file.
@@ -483,7 +507,9 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
             >>> for p in poinull:
             ...     calc.get_toys_alt(p, poieval=poialt)
         """
-        return self._get_toys(poigen=poigen, poieval=poieval, qtilde=qtilde, hypothesis="null")
+        return self._get_toys(
+            poigen=poigen, poieval=poieval, qtilde=qtilde, hypothesis="null"
+        )
 
     def get_toys_alt(self, poigen, poieval, qtilde=False):
         """
@@ -501,4 +527,6 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
             >>> poialt = POI(mean, 1.2)
             >>> calc.get_toys_alt(poialt, poieval=poinull)
         """
-        return self._get_toys(poigen=poigen, poieval=poieval, qtilde=qtilde, hypothesis="alternative")
+        return self._get_toys(
+            poigen=poigen, poieval=poieval, qtilde=qtilde, hypothesis="alternative"
+        )

@@ -25,6 +25,7 @@
         <script src="../../../../_static/underscore.js"></script>
         <script src="../../../../_static/doctools.js"></script>
         <script src="../../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
 
@@ -155,7 +156,7 @@
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
 
 <span class="kn">from</span> <span class="nn">.basecalculator</span> <span class="kn">import</span> <span class="n">BaseCalculator</span>
-<span class="kn">from</span> <span class="nn">..fitutils.utils</span> <span class="kn">import</span> <span class="n">eval_pdf</span><span class="p">,</span> <span class="n">array2dataset</span><span class="p">,</span> <span class="n">pll</span>
+<span class="kn">from</span> <span class="nn">...utils</span> <span class="kn">import</span> <span class="n">eval_pdf</span><span class="p">,</span> <span class="n">array2dataset</span><span class="p">,</span> <span class="n">pll</span>
 <span class="kn">from</span> <span class="nn">..parameters</span> <span class="kn">import</span> <span class="n">POI</span><span class="p">,</span> <span class="n">POIarray</span>
 
 
@@ -180,11 +181,11 @@
 
     <span class="n">space</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">space</span>
     <span class="n">bounds</span> <span class="o">=</span> <span class="n">space</span><span class="o">.</span><span class="n">limit1d</span>
-    <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="n">bounds</span><span class="p">,</span> <span class="n">nbins</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">bin_centers</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">bin_edges</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+    <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="n">bounds</span><span class="p">,</span> <span class="n">nbins</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">bin_centers</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">bin_edges</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
 
-    <span class="n">hist</span> <span class="o">=</span> <span class="n">eval_pdf</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">bin_centers</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-    <span class="n">hist</span> <span class="o">*=</span> <span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">area</span><span class="p">()</span> <span class="o">/</span> <span class="n">nbins</span><span class="p">)</span>
+    <span class="n">hist</span> <span class="o">=</span> <span class="n">eval_pdf</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">bin_centers</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">allow_extended</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">hist</span> <span class="o">*=</span> <span class="n">space</span><span class="o">.</span><span class="n">area</span><span class="p">()</span> <span class="o">/</span> <span class="n">nbins</span>
 
     <span class="k">return</span> <span class="n">hist</span><span class="p">,</span> <span class="n">bin_edges</span></div>
 
@@ -281,10 +282,14 @@
             <span class="n">values</span><span class="p">[</span><span class="n">poiparam</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">poivalue</span><span class="p">}</span>
 
             <span class="n">asimov_data</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ad</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">generate_asimov_hist</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asimov_bins</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">model</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ad</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">generate_asimov_hist</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asimov_bins</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">model</span><span class="p">]</span>
+            <span class="p">):</span>
                 <span class="n">weights</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">ad</span>
-                <span class="n">bin_centers</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">bin_edges</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-                <span class="n">asimov_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">array2dataset</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">space</span><span class="p">,</span> <span class="n">bin_centers</span><span class="p">,</span> <span class="n">weights</span><span class="p">))</span>
+                <span class="n">bin_centers</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">bin_edges</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+                <span class="n">asimov_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">array2dataset</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">space</span><span class="p">,</span> <span class="n">bin_centers</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+                <span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_asimov_dataset</span><span class="p">[</span><span class="n">poi</span><span class="p">]</span> <span class="o">=</span> <span class="n">asimov_data</span>
 
@@ -341,7 +346,15 @@
             <span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asimov_nll</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">ret</span></div>
 
-<div class="viewcode-block" id="AsymptoticCalculator.pnull"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.pnull">[docs]</a>    <span class="k">def</span> <span class="nf">pnull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qobs</span><span class="p">,</span> <span class="n">qalt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="AsymptoticCalculator.pnull"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.pnull">[docs]</a>    <span class="k">def</span> <span class="nf">pnull</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">qobs</span><span class="p">,</span>
+        <span class="n">qalt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">nsigma</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Computes the pvalue for the null hypothesis.</span>
 
 <span class="sd">            Args:</span>
@@ -360,17 +373,17 @@
 
         <span class="c1"># 1 - norm.cdf(x) == norm.cdf(-x)</span>
         <span class="k">if</span> <span class="n">onesided</span> <span class="ow">or</span> <span class="n">onesideddiscovery</span><span class="p">:</span>
-            <span class="n">pnull</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">sqrtqobs</span> <span class="o">-</span> <span class="n">nsigma</span><span class="p">)</span>
+            <span class="n">pnull</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">sqrtqobs</span> <span class="o">-</span> <span class="n">nsigma</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">pnull</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">sqrtqobs</span> <span class="o">-</span> <span class="n">nsigma</span><span class="p">))</span><span class="o">*</span><span class="mf">2.</span>
+            <span class="n">pnull</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">sqrtqobs</span> <span class="o">-</span> <span class="n">nsigma</span><span class="p">))</span> <span class="o">*</span> <span class="mf">2.0</span>
 
         <span class="k">if</span> <span class="n">qalt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">qtilde</span><span class="p">:</span>
             <span class="n">cond</span> <span class="o">=</span> <span class="p">(</span><span class="n">qobs</span> <span class="o">&gt;</span> <span class="n">qalt</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">qalt</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
             <span class="n">sqrtqalt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">qalt</span><span class="p">)</span>
-            <span class="n">pnull_2</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">((</span><span class="n">qobs</span> <span class="o">+</span> <span class="n">qalt</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">sqrtqalt</span><span class="p">)</span> <span class="o">-</span> <span class="n">nsigma</span><span class="p">)</span>
+            <span class="n">pnull_2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">((</span><span class="n">qobs</span> <span class="o">+</span> <span class="n">qalt</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">sqrtqalt</span><span class="p">)</span> <span class="o">-</span> <span class="n">nsigma</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">onesided</span> <span class="ow">or</span> <span class="n">onesideddiscovery</span><span class="p">):</span>
-                <span class="n">pnull_2</span> <span class="o">+=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">sqrtqobs</span> <span class="o">-</span> <span class="n">nsigma</span><span class="p">)</span>
+                <span class="n">pnull_2</span> <span class="o">+=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">sqrtqobs</span> <span class="o">-</span> <span class="n">nsigma</span><span class="p">)</span>
 
             <span class="n">pnull</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="n">pnull_2</span><span class="p">,</span> <span class="n">pnull</span><span class="p">)</span>
 
@@ -398,10 +411,18 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nll_poinull_asy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">asimov_nll</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
         <span class="n">nll_poialt_asy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">asimov_nll</span><span class="p">(</span><span class="n">poialt</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">nll1</span><span class="o">=</span><span class="n">nll_poinull_asy</span><span class="p">,</span> <span class="n">nll2</span><span class="o">=</span><span class="n">nll_poialt_asy</span><span class="p">,</span> <span class="n">poi1</span><span class="o">=</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poi2</span><span class="o">=</span><span class="n">poialt</span><span class="p">,</span>
-                      <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">(</span>
+            <span class="n">nll1</span><span class="o">=</span><span class="n">nll_poinull_asy</span><span class="p">,</span>
+            <span class="n">nll2</span><span class="o">=</span><span class="n">nll_poialt_asy</span><span class="p">,</span>
+            <span class="n">poi1</span><span class="o">=</span><span class="n">poinull</span><span class="p">,</span>
+            <span class="n">poi2</span><span class="o">=</span><span class="n">poialt</span><span class="p">,</span>
+            <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span>
+            <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
-<div class="viewcode-block" id="AsymptoticCalculator.palt"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.palt">[docs]</a>    <span class="k">def</span> <span class="nf">palt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qobs</span><span class="p">,</span> <span class="n">qalt</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="AsymptoticCalculator.palt"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.palt">[docs]</a>    <span class="k">def</span> <span class="nf">palt</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">qobs</span><span class="p">,</span> <span class="n">qalt</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Computes the pvalue for the alternative hypothesis.</span>
 
 <span class="sd">            Args:</span>
@@ -420,17 +441,17 @@
 
         <span class="c1"># 1 - norm.cdf(x) == norm.cdf(-x)</span>
         <span class="k">if</span> <span class="n">onesided</span> <span class="ow">or</span> <span class="n">onesideddiscovery</span><span class="p">:</span>
-            <span class="n">palt</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">sqrtqobs</span> <span class="o">-</span> <span class="n">sqrtqalt</span><span class="p">)</span>
+            <span class="n">palt</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">sqrtqobs</span> <span class="o">-</span> <span class="n">sqrtqalt</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">palt</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">sqrtqobs</span> <span class="o">+</span> <span class="n">sqrtqalt</span><span class="p">)</span>
-            <span class="n">palt</span> <span class="o">+=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">sqrtqobs</span> <span class="o">-</span> <span class="n">sqrtqalt</span><span class="p">)</span>
+            <span class="n">palt</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">sqrtqobs</span> <span class="o">+</span> <span class="n">sqrtqalt</span><span class="p">)</span>
+            <span class="n">palt</span> <span class="o">+=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">sqrtqobs</span> <span class="o">-</span> <span class="n">sqrtqalt</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">qtilde</span><span class="p">:</span>
             <span class="n">cond</span> <span class="o">=</span> <span class="p">(</span><span class="n">qobs</span> <span class="o">&gt;</span> <span class="n">qalt</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">qalt</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="n">palt_2</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">((</span><span class="n">qobs</span> <span class="o">-</span> <span class="n">qalt</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">sqrtqalt</span><span class="p">))</span>
+            <span class="n">palt_2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">((</span><span class="n">qobs</span> <span class="o">-</span> <span class="n">qalt</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">sqrtqalt</span><span class="p">))</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">onesided</span> <span class="ow">or</span> <span class="n">onesideddiscovery</span><span class="p">):</span>
-                <span class="n">palt_2</span> <span class="o">+=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">sqrtqobs</span> <span class="o">+</span> <span class="n">sqrtqalt</span><span class="p">)</span>
+                <span class="n">palt_2</span> <span class="o">+=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">sqrtqobs</span> <span class="o">+</span> <span class="n">sqrtqalt</span><span class="p">)</span>
 
             <span class="n">palt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="n">palt_2</span><span class="p">,</span> <span class="n">palt</span><span class="p">)</span>
 
@@ -438,33 +459,57 @@
 
     <span class="k">def</span> <span class="nf">_pvalue_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">qtilde</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">):</span>
 
-        <span class="n">qobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qobs</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span>
-                         <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">)</span>
+        <span class="n">qobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qobs</span><span class="p">(</span>
+            <span class="n">poinull</span><span class="p">,</span>
+            <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span>
+            <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span>
+            <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="n">needpalt</span> <span class="o">=</span> <span class="n">poialt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">needpalt</span><span class="p">:</span>
             <span class="n">qalt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qalt</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">)</span>
-            <span class="n">palt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palt</span><span class="p">(</span><span class="n">qobs</span><span class="o">=</span><span class="n">qobs</span><span class="p">,</span> <span class="n">qalt</span><span class="o">=</span><span class="n">qalt</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span>
-                             <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">)</span>
+            <span class="n">palt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palt</span><span class="p">(</span>
+                <span class="n">qobs</span><span class="o">=</span><span class="n">qobs</span><span class="p">,</span>
+                <span class="n">qalt</span><span class="o">=</span><span class="n">qalt</span><span class="p">,</span>
+                <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span>
+                <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span>
+                <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">qalt</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">palt</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="n">pnull</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pnull</span><span class="p">(</span><span class="n">qobs</span><span class="o">=</span><span class="n">qobs</span><span class="p">,</span> <span class="n">qalt</span><span class="o">=</span><span class="n">qalt</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span>
-                           <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">)</span>
+        <span class="n">pnull</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pnull</span><span class="p">(</span>
+            <span class="n">qobs</span><span class="o">=</span><span class="n">qobs</span><span class="p">,</span>
+            <span class="n">qalt</span><span class="o">=</span><span class="n">qalt</span><span class="p">,</span>
+            <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span>
+            <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span>
+            <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">pnull</span><span class="p">,</span> <span class="n">palt</span>
 
-    <span class="k">def</span> <span class="nf">_expected_pvalue_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">nsigma</span><span class="p">,</span> <span class="n">CLs</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">,</span> <span class="n">qtilde</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_expected_pvalue_</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">nsigma</span><span class="p">,</span> <span class="n">CLs</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">,</span> <span class="n">qtilde</span>
+    <span class="p">):</span>
 
-        <span class="n">qalt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qalt</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">)</span>
+        <span class="n">qalt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qalt</span><span class="p">(</span>
+            <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span>
+        <span class="p">)</span>
         <span class="n">qalt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">qalt</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">qalt</span><span class="p">)</span>
 
         <span class="n">expected_pvalues</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">ns</span> <span class="ow">in</span> <span class="n">nsigma</span><span class="p">:</span>
-            <span class="n">p_clsb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pnull</span><span class="p">(</span><span class="n">qobs</span><span class="o">=</span><span class="n">qalt</span><span class="p">,</span> <span class="n">qalt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span>
-                                <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="n">ns</span><span class="p">)</span>
+            <span class="n">p_clsb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pnull</span><span class="p">(</span>
+                <span class="n">qobs</span><span class="o">=</span><span class="n">qalt</span><span class="p">,</span>
+                <span class="n">qalt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span>
+                <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span>
+                <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">,</span>
+                <span class="n">nsigma</span><span class="o">=</span><span class="n">ns</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="n">CLs</span><span class="p">:</span>
                 <span class="n">p_clb</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">ns</span><span class="p">)</span>
                 <span class="n">p_cls</span> <span class="o">=</span> <span class="n">p_clsb</span> <span class="o">/</span> <span class="n">p_clb</span>
@@ -474,17 +519,21 @@
 
         <span class="k">return</span> <span class="n">expected_pvalues</span>
 
-    <span class="k">def</span> <span class="nf">_expected_poi_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">nsigma</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">CLs</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_expected_poi_</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">nsigma</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">CLs</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span>
+    <span class="p">):</span>
 
-        <span class="n">qalt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qalt</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">)</span>
+        <span class="n">qalt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qalt</span><span class="p">(</span>
+            <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span>
+        <span class="p">)</span>
         <span class="n">qalt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">qalt</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">qalt</span><span class="p">)</span>
 
-        <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">poinull</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">-</span> <span class="n">poialt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">qalt</span><span class="p">)</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">poinull</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">-</span> <span class="n">poialt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">qalt</span><span class="p">)</span>
 
         <span class="n">expected_values</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">ns</span> <span class="ow">in</span> <span class="n">nsigma</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">CLs</span><span class="p">:</span>
-                <span class="n">exp</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="p">(</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="o">*</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">ns</span><span class="p">))</span> <span class="o">+</span> <span class="n">ns</span><span class="p">)</span>
+                <span class="n">exp</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="p">(</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">ns</span><span class="p">))</span> <span class="o">+</span> <span class="n">ns</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">exp</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="p">(</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">+</span> <span class="n">ns</span><span class="p">)</span>
 

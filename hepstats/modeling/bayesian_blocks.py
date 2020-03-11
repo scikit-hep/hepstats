@@ -4,19 +4,11 @@ Bayesian Block implementation
 =============================
 
 Dynamic programming algorithm for finding the optimal adaptive-width histogram.  Modified from the
-bayesian blocks python implementation found in astroML [3]_.
+bayesian blocks python implementation found in astroML :cite:`VanderPlas_2012`.
 
-* Based on Scargle et al 2012 [1]_
-* Initial Python Implementation [2]_
-* AstroML Implementation [3]_
-* Initial Examination in HEP context [4]_
-
-References
-----------
-.. [1] http://adsabs.harvard.edu/abs/2012arXiv1207.5578S
-.. [2] http://jakevdp.github.com/blog/2012/09/12/dynamic-programming-in-python/
-.. [3] https://github.com/astroML/astroML/blob/master/astroML/density_estimation/bayesian_blocks.py
-.. [4] https://arxiv.org/abs/1708.00810
+* Based on Scargle et al 2012 :cite:`Scargle_2013`
+* Initial Python Implementation :cite:`BB_jakevdp`
+* Initial Examination in HEP context :cite:`Pollack:2017srh`
 """
 from __future__ import absolute_import
 from __future__ import division

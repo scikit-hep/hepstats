@@ -1,6 +1,6 @@
 import numpy as np
 
-from ..utils.fit import eval_pdf, get_value
+from ..utils import eval_pdf, get_value
 from ..utils.fit.api_check import is_valid_pdf
 from .exceptions import ModelNotFittedToData
 
@@ -63,7 +63,9 @@ def compute_sweights(model, x):
     if not is_valid_pdf(model):
         raise ValueError("{} is not a valid pdf!".format(model))
     if not is_sum_of_extended_pdfs(model):
-        raise ValueError("Input model, {}, should be a sum of extended pdfs!".format(model))
+        raise ValueError(
+            "Input model, {}, should be a sum of extended pdfs!".format(model)
+        )
 
     models = model.get_models()
     yields = [m.get_yield() for m in models]
@@ -73,7 +75,9 @@ def compute_sweights(model, x):
     pN = p / Nx[:, None]
 
     if not np.allclose(pN.sum(axis=0), 1, atol=1e-3):
-        raise ModelNotFittedToData("The model needs to fitted to input data in order to comput the sWeights.")
+        raise ModelNotFittedToData(
+            "The model needs to fitted to input data in order to comput the sWeights."
+        )
 
     Vinv = (pN).T.dot(pN)
     V = np.linalg.inv(Vinv)

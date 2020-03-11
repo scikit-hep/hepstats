@@ -2,7 +2,7 @@ import numpy as np
 from scipy.stats import norm
 
 from .basecalculator import ToysCalculator
-from ...utils.fit.sampling import base_sampler, base_sample
+from ...utils import base_sampler, base_sample
 from ..parameters import POI, POIarray
 
 
@@ -33,10 +33,18 @@ class FrequentistCalculator(ToysCalculator):
     """
 
     def __init__(
-        self, input, minimizer, ntoysnull=100, ntoysalt=100, sampler=base_sampler, sample=base_sample
+        self,
+        input,
+        minimizer,
+        ntoysnull=100,
+        ntoysalt=100,
+        sampler=base_sampler,
+        sample=base_sample,
     ):
 
-        super(FrequentistCalculator, self).__init__(input, minimizer, ntoysnull, ntoysalt, sampler, sample)
+        super(FrequentistCalculator, self).__init__(
+            input, minimizer, ntoysnull, ntoysalt, sampler, sample
+        )
 
     def qnull(self, poinull, poialt, onesided, onesideddiscovery, qtilde=False):
         """Computes null hypothesis values of the :math:`\\Delta` log-likelihood test statistic.
@@ -137,7 +145,12 @@ class FrequentistCalculator(ToysCalculator):
 
     def _pvalue_(self, poinull, poialt, qtilde, onesided, onesideddiscovery):
 
-        qobs = self.qobs(poinull, onesided=onesided, qtilde=qtilde, onesideddiscovery=onesideddiscovery)
+        qobs = self.qobs(
+            poinull,
+            onesided=onesided,
+            qtilde=qtilde,
+            onesideddiscovery=onesideddiscovery,
+        )
 
         def compute_pvalue(qdist, qobs):
             qdist = qdist[~(np.isnan(qdist) | np.isinf(qdist))]
@@ -159,9 +172,14 @@ class FrequentistCalculator(ToysCalculator):
 
         return pnull, palt
 
-    def _expected_pvalue_(self, poinull, poialt, nsigma, CLs, onesided, onesideddiscovery, qtilde):
+    def _expected_pvalue_(
+        self, poinull, poialt, nsigma, CLs, onesided, onesideddiscovery, qtilde
+    ):
 
-        ps = {ns: {"p_clsb": np.empty(len(poinull)), "p_clb": np.empty(len(poinull))} for ns in nsigma}
+        ps = {
+            ns: {"p_clsb": np.empty(len(poinull)), "p_clb": np.empty(len(poinull))}
+            for ns in nsigma
+        }
 
         qnulldist = self.qnull(poinull, poialt, onesided, onesideddiscovery, qtilde)
         qaltdist = self.qalt(poinull, poialt, onesided, onesideddiscovery, qtilde)

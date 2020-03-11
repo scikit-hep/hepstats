@@ -3,7 +3,7 @@ import numpy as np
 from scipy.stats import norm
 
 from .basecalculator import BaseCalculator
-from ...utils.fit import eval_pdf, array2dataset, pll
+from ...utils import eval_pdf, array2dataset, pll
 from ..parameters import POI, POIarray
 
 
@@ -129,10 +129,14 @@ class AsymptoticCalculator(BaseCalculator):
             values[poiparam] = {"value": poivalue}
 
             asimov_data = []
-            for i, ad in enumerate([generate_asimov_hist(m, values, self._asimov_bins) for m in model]):
+            for i, ad in enumerate(
+                [generate_asimov_hist(m, values, self._asimov_bins) for m in model]
+            ):
                 weights, bin_edges = ad
                 bin_centers = bin_edges[0:-1] + np.diff(bin_edges) / 2
-                asimov_data.append(array2dataset(type(data[i]), data[i].space, bin_centers, weights))
+                asimov_data.append(
+                    array2dataset(type(data[i]), data[i].space, bin_centers, weights)
+                )
 
             self._asimov_dataset[poi] = asimov_data
 
@@ -190,7 +194,13 @@ class AsymptoticCalculator(BaseCalculator):
         return ret
 
     def pnull(
-        self, qobs, qalt=None, onesided=True, onesideddiscovery=False, qtilde=False, nsigma=0
+        self,
+        qobs,
+        qalt=None,
+        onesided=True,
+        onesideddiscovery=False,
+        qtilde=False,
+        nsigma=0,
     ) -> np.ndarray:
         """Computes the pvalue for the null hypothesis.
 
@@ -257,7 +267,9 @@ class AsymptoticCalculator(BaseCalculator):
             onesideddiscovery=onesideddiscovery,
         )
 
-    def palt(self, qobs, qalt, onesided=True, onesideddiscovery=False, qtilde=False) -> np.ndarray:
+    def palt(
+        self, qobs, qalt, onesided=True, onesideddiscovery=False, qtilde=False
+    ) -> np.ndarray:
         """Computes the pvalue for the alternative hypothesis.
 
             Args:
@@ -294,28 +306,45 @@ class AsymptoticCalculator(BaseCalculator):
 
     def _pvalue_(self, poinull, poialt, qtilde, onesided, onesideddiscovery):
 
-        qobs = self.qobs(poinull, onesided=onesided, qtilde=qtilde, onesideddiscovery=onesideddiscovery)
+        qobs = self.qobs(
+            poinull,
+            onesided=onesided,
+            qtilde=qtilde,
+            onesideddiscovery=onesideddiscovery,
+        )
 
         needpalt = poialt is not None
 
         if needpalt:
             qalt = self.qalt(poinull, poialt, onesided, onesideddiscovery)
             palt = self.palt(
-                qobs=qobs, qalt=qalt, onesided=onesided, qtilde=qtilde, onesideddiscovery=onesideddiscovery
+                qobs=qobs,
+                qalt=qalt,
+                onesided=onesided,
+                qtilde=qtilde,
+                onesideddiscovery=onesideddiscovery,
             )
         else:
             qalt = None
             palt = None
 
         pnull = self.pnull(
-            qobs=qobs, qalt=qalt, onesided=onesided, qtilde=qtilde, onesideddiscovery=onesideddiscovery
+            qobs=qobs,
+            qalt=qalt,
+            onesided=onesided,
+            qtilde=qtilde,
+            onesideddiscovery=onesideddiscovery,
         )
 
         return pnull, palt
 
-    def _expected_pvalue_(self, poinull, poialt, nsigma, CLs, onesided, onesideddiscovery, qtilde):
+    def _expected_pvalue_(
+        self, poinull, poialt, nsigma, CLs, onesided, onesideddiscovery, qtilde
+    ):
 
-        qalt = self.qalt(poinull, poialt, onesided=onesided, onesideddiscovery=onesideddiscovery)
+        qalt = self.qalt(
+            poinull, poialt, onesided=onesided, onesideddiscovery=onesideddiscovery
+        )
         qalt = np.where(qalt < 0, 0, qalt)
 
         expected_pvalues = []
@@ -337,9 +366,13 @@ class AsymptoticCalculator(BaseCalculator):
 
         return expected_pvalues
 
-    def _expected_poi_(self, poinull, poialt, nsigma, alpha, CLs, onesided, onesideddiscovery):
+    def _expected_poi_(
+        self, poinull, poialt, nsigma, alpha, CLs, onesided, onesideddiscovery
+    ):
 
-        qalt = self.qalt(poinull, poialt, onesided=onesided, onesideddiscovery=onesideddiscovery)
+        qalt = self.qalt(
+            poinull, poialt, onesided=onesided, onesideddiscovery=onesideddiscovery
+        )
         qalt = np.where(qalt < 0, 0, qalt)
 
         sigma = np.sqrt((poinull[0].value - poialt[0].value) ** 2 / qalt)

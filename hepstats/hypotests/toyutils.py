@@ -5,8 +5,7 @@ import warnings
 
 from .parameters import POI, POIarray
 from .exceptions import ParameterNotFound, FormatError
-from ..utils.fit import pll
-from ..utils.fit.sampling import base_sampler, base_sample
+from ..utils import pll, base_sampler, base_sample
 from .hypotests_object import ToysObject
 
 """
@@ -33,7 +32,9 @@ class ToyResult(object):
         if not isinstance(poigen, POI):
             raise TypeError("A `hypotests.parameters.POI` is required for poigen.")
         if not isinstance(poieval, POIarray):
-            raise TypeError("A `hypotests.parameters.POIarray` is required for poieval.")
+            raise TypeError(
+                "A `hypotests.parameters.POIarray` is required for poieval."
+            )
 
         self._poigen = poigen
         self._bestfit = np.array([])
@@ -143,7 +144,9 @@ class ToysManager(ToysObject):
 
     def __init__(self, input, minimizer, sampler=base_sampler, sample=base_sample):
 
-        super(ToysManager, self).__init__(input=input, minimizer=minimizer, sampler=sampler, sample=sample)
+        super(ToysManager, self).__init__(
+            input=input, minimizer=minimizer, sampler=sampler, sample=sample
+        )
         self._toys = {}
 
     def get_toyresult(self, poigen, poieval):
@@ -365,7 +368,9 @@ class ToysManager(ToysObject):
         return ret
 
     @classmethod
-    def from_yaml(cls, filename, input, minimizer, sampler=base_sampler, sample=base_sample):
+    def from_yaml(
+        cls, filename, input, minimizer, sampler=base_sampler, sample=base_sample
+    ):
         """
         Read the toys from a yaml file.
 

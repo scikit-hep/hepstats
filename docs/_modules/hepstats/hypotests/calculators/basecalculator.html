@@ -25,6 +25,7 @@
         <script src="../../../../_static/underscore.js"></script>
         <script src="../../../../_static/doctools.js"></script>
         <script src="../../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
 
@@ -156,9 +157,8 @@
 
 <span class="kn">from</span> <span class="nn">..hypotests_object</span> <span class="kn">import</span> <span class="n">HypotestsObject</span>
 <span class="kn">from</span> <span class="nn">..parameters</span> <span class="kn">import</span> <span class="n">POI</span><span class="p">,</span> <span class="n">POIarray</span><span class="p">,</span> <span class="n">asarray</span>
-<span class="kn">from</span> <span class="nn">..fitutils.utils</span> <span class="kn">import</span> <span class="n">pll</span>
+<span class="kn">from</span> <span class="nn">...utils</span> <span class="kn">import</span> <span class="n">pll</span><span class="p">,</span> <span class="n">base_sampler</span><span class="p">,</span> <span class="n">base_sample</span>
 <span class="kn">from</span> <span class="nn">..toyutils</span> <span class="kn">import</span> <span class="n">ToysManager</span>
-<span class="kn">from</span> <span class="nn">..fitutils.sampling</span> <span class="kn">import</span> <span class="n">base_sampler</span><span class="p">,</span> <span class="n">base_sample</span>
 
 
 <div class="viewcode-block" id="BaseCalculator"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.basecalculator.BaseCalculator">[docs]</a><span class="k">class</span> <span class="nc">BaseCalculator</span><span class="p">(</span><span class="n">HypotestsObject</span><span class="p">):</span>
@@ -217,7 +217,9 @@
             <span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obs_nll</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">ret</span></div>
 
-<div class="viewcode-block" id="BaseCalculator.qobs"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.basecalculator.BaseCalculator.qobs">[docs]</a>    <span class="k">def</span> <span class="nf">qobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">POI</span><span class="p">],</span> <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseCalculator.qobs"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.basecalculator.BaseCalculator.qobs">[docs]</a>    <span class="k">def</span> <span class="nf">qobs</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">POI</span><span class="p">],</span> <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Computes observed values of the :math:`\Delta` log-likelihood test statistic.</span>
 
 <span class="sd">            Args:</span>
@@ -250,13 +252,25 @@
 
         <span class="n">nll_poinull_obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs_nll</span><span class="p">(</span><span class="n">poinull</span><span class="p">)</span>
         <span class="n">nll_bestfitpoi_obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs_nll</span><span class="p">(</span><span class="n">bestfitpoi</span><span class="p">)</span>
-        <span class="n">qobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">nll1</span><span class="o">=</span><span class="n">nll_poinull_obs</span><span class="p">,</span> <span class="n">nll2</span><span class="o">=</span><span class="n">nll_bestfitpoi_obs</span><span class="p">,</span> <span class="n">poi1</span><span class="o">=</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poi2</span><span class="o">=</span><span class="n">bestfitpoi</span><span class="p">,</span>
-                      <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">)</span>
+        <span class="n">qobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">(</span>
+            <span class="n">nll1</span><span class="o">=</span><span class="n">nll_poinull_obs</span><span class="p">,</span>
+            <span class="n">nll2</span><span class="o">=</span><span class="n">nll_bestfitpoi_obs</span><span class="p">,</span>
+            <span class="n">poi1</span><span class="o">=</span><span class="n">poinull</span><span class="p">,</span>
+            <span class="n">poi2</span><span class="o">=</span><span class="n">bestfitpoi</span><span class="p">,</span>
+            <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span>
+            <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">qobs</span></div>
 
-<div class="viewcode-block" id="BaseCalculator.pvalue"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.basecalculator.BaseCalculator.pvalue">[docs]</a>    <span class="k">def</span> <span class="nf">pvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">POI</span><span class="p">],</span> <span class="n">poialt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">POI</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-               <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<div class="viewcode-block" id="BaseCalculator.pvalue"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.basecalculator.BaseCalculator.pvalue">[docs]</a>    <span class="k">def</span> <span class="nf">pvalue</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">poinull</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">POI</span><span class="p">],</span>
+        <span class="n">poialt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">POI</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Computes pvalues for the null and alternative hypothesis.</span>
 
 <span class="sd">        Args:</span>
@@ -281,8 +295,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">check_pois</span><span class="p">(</span><span class="n">poialt</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">check_pois_compatibility</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pvalue_</span><span class="p">(</span><span class="n">poinull</span><span class="o">=</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="o">=</span><span class="n">poialt</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span>
-                             <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pvalue_</span><span class="p">(</span>
+            <span class="n">poinull</span><span class="o">=</span><span class="n">poinull</span><span class="p">,</span>
+            <span class="n">poialt</span><span class="o">=</span><span class="n">poialt</span><span class="p">,</span>
+            <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span>
+            <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span>
+            <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_pvalue_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">qtilde</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -290,8 +309,16 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<div class="viewcode-block" id="BaseCalculator.expected_pvalue"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.basecalculator.BaseCalculator.expected_pvalue">[docs]</a>    <span class="k">def</span> <span class="nf">expected_pvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">POI</span><span class="p">],</span> <span class="n">poialt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">POI</span><span class="p">],</span> <span class="n">nsigma</span><span class="p">,</span> <span class="n">CLs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">]:</span>
+<div class="viewcode-block" id="BaseCalculator.expected_pvalue"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.basecalculator.BaseCalculator.expected_pvalue">[docs]</a>    <span class="k">def</span> <span class="nf">expected_pvalue</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">poinull</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">POI</span><span class="p">],</span>
+        <span class="n">poialt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">POI</span><span class="p">],</span>
+        <span class="n">nsigma</span><span class="p">,</span>
+        <span class="n">CLs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Computes the expected pvalues and error bands for different values of :math:`\sigma` (0=expected/median)</span>
 
 <span class="sd">        Args:</span>
@@ -319,17 +346,34 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">check_pois</span><span class="p">(</span><span class="n">poialt</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">check_pois_compatibility</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expected_pvalue_</span><span class="p">(</span><span class="n">poinull</span><span class="o">=</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="o">=</span><span class="n">poialt</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="n">nsigma</span><span class="p">,</span> <span class="n">CLs</span><span class="o">=</span><span class="n">CLs</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span>
-                                      <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expected_pvalue_</span><span class="p">(</span>
+            <span class="n">poinull</span><span class="o">=</span><span class="n">poinull</span><span class="p">,</span>
+            <span class="n">poialt</span><span class="o">=</span><span class="n">poialt</span><span class="p">,</span>
+            <span class="n">nsigma</span><span class="o">=</span><span class="n">nsigma</span><span class="p">,</span>
+            <span class="n">CLs</span><span class="o">=</span><span class="n">CLs</span><span class="p">,</span>
+            <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span>
+            <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span>
+            <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_expected_pvalue_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">nsigma</span><span class="p">,</span> <span class="n">CLs</span><span class="p">,</span> <span class="n">qtilde</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_expected_pvalue_</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">nsigma</span><span class="p">,</span> <span class="n">CLs</span><span class="p">,</span> <span class="n">qtilde</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        To be overwritten in `BaseCalculator` subclasses.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<div class="viewcode-block" id="BaseCalculator.expected_poi"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.basecalculator.BaseCalculator.expected_poi">[docs]</a>    <span class="k">def</span> <span class="nf">expected_poi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">POI</span><span class="p">],</span> <span class="n">poialt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">POI</span><span class="p">],</span> <span class="n">nsigma</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">CLs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                     <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseCalculator.expected_poi"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.basecalculator.BaseCalculator.expected_poi">[docs]</a>    <span class="k">def</span> <span class="nf">expected_poi</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">poinull</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">POI</span><span class="p">],</span>
+        <span class="n">poialt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">POI</span><span class="p">],</span>
+        <span class="n">nsigma</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+        <span class="n">CLs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Computes the expected parameter of interest values such that the expected p_values = :math:`\alpha` for</span>
 <span class="sd">        different values of :math:`\sigma` (0=expected/median)</span>
 
@@ -357,10 +401,19 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">check_pois</span><span class="p">(</span><span class="n">poialt</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">check_pois_compatibility</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expected_poi_</span><span class="p">(</span><span class="n">poinull</span><span class="o">=</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="o">=</span><span class="n">poialt</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="n">nsigma</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">CLs</span><span class="o">=</span><span class="n">CLs</span><span class="p">,</span>
-                                   <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expected_poi_</span><span class="p">(</span>
+            <span class="n">poinull</span><span class="o">=</span><span class="n">poinull</span><span class="p">,</span>
+            <span class="n">poialt</span><span class="o">=</span><span class="n">poialt</span><span class="p">,</span>
+            <span class="n">nsigma</span><span class="o">=</span><span class="n">nsigma</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+            <span class="n">CLs</span><span class="o">=</span><span class="n">CLs</span><span class="p">,</span>
+            <span class="n">onesided</span><span class="o">=</span><span class="n">onesided</span><span class="p">,</span>
+            <span class="n">onesideddiscovery</span><span class="o">=</span><span class="n">onesideddiscovery</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_expected_poi_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">nsigma</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">CLs</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_expected_poi_</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">,</span> <span class="n">nsigma</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">CLs</span><span class="p">,</span> <span class="n">onesided</span><span class="p">,</span> <span class="n">onesideddiscovery</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        To be overwritten in `BaseCalculator` subclasses.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -396,8 +449,15 @@
                 <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; poi1=</span><span class="si">{poi1.name}</span><span class="s2">, poi2=</span><span class="si">{poi2.name}</span><span class="s2">&quot;</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseCalculator.q"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.basecalculator.BaseCalculator.q">[docs]</a>    <span class="k">def</span> <span class="nf">q</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nll1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">nll2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">poi1</span><span class="p">,</span> <span class="n">poi2</span><span class="p">,</span>
-          <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseCalculator.q"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.basecalculator.BaseCalculator.q">[docs]</a>    <span class="k">def</span> <span class="nf">q</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">nll1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">nll2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">poi1</span><span class="p">,</span>
+        <span class="n">poi2</span><span class="p">,</span>
+        <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">onesideddiscovery</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Compute values of the test statistic q defined as the difference between negative log-likelihood</span>
 <span class="sd">            values :math:`q = nll1 - nll2`.</span>
 
@@ -423,7 +483,7 @@
         <span class="n">poi1</span> <span class="o">=</span> <span class="n">poi1</span><span class="o">.</span><span class="n">values</span>
         <span class="n">poi2</span> <span class="o">=</span> <span class="n">poi2</span><span class="o">.</span><span class="n">values</span>
 
-        <span class="n">q</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">nll1</span> <span class="o">-</span> <span class="n">nll2</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">nll1</span> <span class="o">-</span> <span class="n">nll2</span><span class="p">)</span>
         <span class="c1"># filter_non_nan = ~(np.isnan(q) | np.isinf(q))</span>
         <span class="c1"># q = q[filter_non_nan]</span>
         <span class="c1">#</span>
@@ -444,7 +504,6 @@
 
 
 <div class="viewcode-block" id="BaseToysCalculator"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator">[docs]</a><span class="k">class</span> <span class="nc">BaseToysCalculator</span><span class="p">(</span><span class="n">BaseCalculator</span><span class="p">):</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">minimizer</span><span class="p">,</span> <span class="n">sampler</span><span class="p">,</span> <span class="n">sample</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Basis for toys calculator class.</span>
 
@@ -462,7 +521,15 @@
 <span class="sd">    Class for calculators using toys.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">minimizer</span><span class="p">,</span> <span class="n">ntoysnull</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ntoysalt</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">base_sampler</span><span class="p">,</span> <span class="n">sample</span><span class="o">=</span><span class="n">base_sample</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">input</span><span class="p">,</span>
+        <span class="n">minimizer</span><span class="p">,</span>
+        <span class="n">ntoysnull</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">ntoysalt</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">sampler</span><span class="o">=</span><span class="n">base_sampler</span><span class="p">,</span>
+        <span class="n">sample</span><span class="o">=</span><span class="n">base_sample</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Toys calculator class.</span>
 
 <span class="sd">            Args:</span>
@@ -479,8 +546,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ntoysalt</span> <span class="o">=</span> <span class="n">ntoysalt</span>
 
 <div class="viewcode-block" id="ToysCalculator.from_yaml"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.basecalculator.ToysCalculator.from_yaml">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_yaml</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">minimizer</span><span class="p">,</span> <span class="n">ntoysnull</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ntoysalt</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">base_sampler</span><span class="p">,</span>
-                  <span class="n">sample</span><span class="o">=</span><span class="n">base_sample</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">from_yaml</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">filename</span><span class="p">,</span>
+        <span class="n">loss</span><span class="p">,</span>
+        <span class="n">minimizer</span><span class="p">,</span>
+        <span class="n">ntoysnull</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">ntoysalt</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">sampler</span><span class="o">=</span><span class="n">base_sampler</span><span class="p">,</span>
+        <span class="n">sample</span><span class="o">=</span><span class="n">base_sample</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ToysCalculator constructor with the toys loaded from a yaml file.</span>
 
@@ -548,7 +623,7 @@
                 <span class="k">if</span> <span class="n">p</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">poieval_p</span><span class="p">:</span>
                     <span class="n">poieval_p</span> <span class="o">=</span> <span class="n">poieval_p</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">qtilde</span> <span class="ow">and</span> <span class="mf">0.</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">poieval_p</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">qtilde</span> <span class="ow">and</span> <span class="mf">0.0</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">poieval_p</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
                 <span class="n">poieval_p</span> <span class="o">=</span> <span class="n">poieval_p</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
 
             <span class="n">poieval_p</span> <span class="o">=</span> <span class="n">asarray</span><span class="p">(</span><span class="n">poieval_p</span><span class="p">)</span>
@@ -585,7 +660,9 @@
 <span class="sd">            &gt;&gt;&gt; for p in poinull:</span>
 <span class="sd">            ...     calc.get_toys_alt(p, poieval=poialt)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_toys</span><span class="p">(</span><span class="n">poigen</span><span class="o">=</span><span class="n">poigen</span><span class="p">,</span> <span class="n">poieval</span><span class="o">=</span><span class="n">poieval</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span> <span class="n">hypothesis</span><span class="o">=</span><span class="s2">&quot;null&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_toys</span><span class="p">(</span>
+            <span class="n">poigen</span><span class="o">=</span><span class="n">poigen</span><span class="p">,</span> <span class="n">poieval</span><span class="o">=</span><span class="n">poieval</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span> <span class="n">hypothesis</span><span class="o">=</span><span class="s2">&quot;null&quot;</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ToysCalculator.get_toys_alt"><a class="viewcode-back" href="../../../../api/hepstats.html#hepstats.hypotests.calculators.basecalculator.ToysCalculator.get_toys_alt">[docs]</a>    <span class="k">def</span> <span class="nf">get_toys_alt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poigen</span><span class="p">,</span> <span class="n">poieval</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -603,7 +680,9 @@
 <span class="sd">            &gt;&gt;&gt; poialt = POI(mean, 1.2)</span>
 <span class="sd">            &gt;&gt;&gt; calc.get_toys_alt(poialt, poieval=poinull)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_toys</span><span class="p">(</span><span class="n">poigen</span><span class="o">=</span><span class="n">poigen</span><span class="p">,</span> <span class="n">poieval</span><span class="o">=</span><span class="n">poieval</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span> <span class="n">hypothesis</span><span class="o">=</span><span class="s2">&quot;alternative&quot;</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_toys</span><span class="p">(</span>
+            <span class="n">poigen</span><span class="o">=</span><span class="n">poigen</span><span class="p">,</span> <span class="n">poieval</span><span class="o">=</span><span class="n">poieval</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="n">qtilde</span><span class="p">,</span> <span class="n">hypothesis</span><span class="o">=</span><span class="s2">&quot;alternative&quot;</span>
+        <span class="p">)</span></div></div>
 </pre></div>
 
            </div>

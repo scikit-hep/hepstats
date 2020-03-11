@@ -25,6 +25,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -175,24 +176,21 @@ It can be installed with <code class="docutils literal notranslate"><span class=
 <li class="toctree-l2"><a class="reference internal" href="api/hepstats.html">Submodules</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/hepstats.html#module-hepstats.modeling">hepstats.modeling module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="api/hepstats.html#module-hepstats.modeling.bayesian_blocks">Bayesian blocks</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="api/hepstats.html#bayesian-block-implementation">Bayesian Block implementation</a><ul>
-<li class="toctree-l6"><a class="reference internal" href="api/hepstats.html#references">References</a></li>
+<li class="toctree-l5"><a class="reference internal" href="api/hepstats.html#bayesian-block-implementation">Bayesian Block implementation</a></li>
 </ul>
 </li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="api/hepstats.html#hepstats-hypotests-module">hepstats.hypotests module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/hepstats.html#module-hepstats.hypotests">hepstats.hypotests module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="api/hepstats.html#module-hepstats.hypotests.parameters">Parameters</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/hepstats.html#calculators">Calculators</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="api/hepstats.html#asymptotic">Asymptotic</a></li>
-<li class="toctree-l5"><a class="reference internal" href="api/hepstats.html#frequentist">Frequentist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/hepstats.html#module-hepstats.hypotests.calculators">Calculators</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="api/hepstats.html#module-hepstats.hypotests.calculators.asymptotic_calculator">Asymptotic</a></li>
+<li class="toctree-l5"><a class="reference internal" href="api/hepstats.html#module-hepstats.hypotests.calculators.frequentist_calculator">Frequentist</a></li>
 </ul>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="api/hepstats.html#discovery-test">Discovery test</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/hepstats.html#upper-limit">Upper limit</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/hepstats.html#confidence-interval">Confidence interval</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/hepstats.html#module-hepstats.hypotests.core.discovery">Discovery test</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/hepstats.html#module-hepstats.hypotests.core.upperlimit">Upper limit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/hepstats.html#module-hepstats.hypotests.core.confidence_interval">Confidence interval</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/hepstats.html#module-hepstats.hypotests.hypotests_object">Hypotests objects</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/hepstats.html#module-hepstats.hypotests.hypotests_object">Toy utilities</a></li>
 </ul>
@@ -215,6 +213,27 @@ It can be installed with <code class="docutils literal notranslate"><span class=
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
+</div>
+<div class="section" id="bibliography">
+<h1>bibliography<a class="headerlink" href="#bibliography" title="Permalink to this headline">¶</a></h1>
+<p id="bibtex-bibliography-index-0"><dl class="citation">
+<dt class="bibtex label" id="bb-jakevdp"><span class="brackets">BB_</span></dt>
+<dd><p>Dynamic Programming in Python: Bayesian Blocks, howpublished = http://jakevdp.github.io/blog/2012/09/12/dynamic-programming-in-python/. Accessed: 2020-11-03.</p>
+</dd>
+<dt class="bibtex label" id="pivk-2004ty"><span class="brackets">PLD05</span></dt>
+<dd><p>Muriel Pivk and Francois R. Le Diberder. SPlot: A Statistical tool to unfold data distributions. <em>Nucl. Instrum. Meth.</em>, A555:356–369, 2005. <a class="reference external" href="https://arxiv.org/abs/physics/0402083">arXiv:physics/0402083</a>, <a class="reference external" href="https://doi.org/10.1016/j.nima.2005.08.106">doi:10.1016/j.nima.2005.08.106</a>.</p>
+</dd>
+<dt class="bibtex label" id="pollack-2017srh"><span class="brackets">PBS17</span></dt>
+<dd><p>Brian Pollack, Saptaparna Bhattacharya, and Michael Schmitt. Bayesian Block Histogramming for High Energy Physics. 2017. <a class="reference external" href="https://arxiv.org/abs/1708.00810">arXiv:1708.00810</a>.</p>
+</dd>
+<dt class="bibtex label" id="scargle-2013"><span class="brackets">SNJC13</span></dt>
+<dd><p>Jeffrey D. Scargle, Jay P. Norris, Brad Jackson, and James Chiang. Studies in astronomical time series analysis. vi. bayesian block representations. <em>The Astrophysical Journal</em>, 764(2):167, Feb 2013. URL: <a class="reference external" href="http://dx.doi.org/10.1088/0004-637X/764/2/167">http://dx.doi.org/10.1088/0004-637X/764/2/167</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637x/764/2/167">doi:10.1088/0004-637x/764/2/167</a>.</p>
+</dd>
+<dt class="bibtex label" id="vanderplas-2012"><span class="brackets">VCIG12</span></dt>
+<dd><p>Jacob VanderPlas, Andrew J. Connolly, Zeljko Ivezic, and Alex Gray. Introduction to astroml: machine learning for astrophysics. <em>2012 Conference on Intelligent Data Understanding</em>, Oct 2012. URL: <a class="reference external" href="http://dx.doi.org/10.1109/CIDU.2012.6382200">http://dx.doi.org/10.1109/CIDU.2012.6382200</a>, <a class="reference external" href="https://doi.org/10.1109/cidu.2012.6382200">doi:10.1109/cidu.2012.6382200</a>.</p>
+</dd>
+</dl>
+</p>
 </div>
 
 
