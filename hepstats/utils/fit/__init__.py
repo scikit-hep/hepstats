@@ -2,6 +2,7 @@ from contextlib import ExitStack
 import numpy as np
 
 from .sampling import base_sampler, base_sample
+from .api_check import is_valid_parameter
 
 
 def get_value(value):
@@ -27,16 +28,26 @@ def eval_pdf(model, x, params={}, allow_extended=False):
         return pdf(model, x)
 
 
-def pll(minimizer, loss, pois) -> float:
+def pll(minimizer, loss, param, value) -> float:
     """ Compute minimum profile likelihood for given parameters values. """
+    verbosity = minimizer.verbosity
+
+    if not isinstance(param, list):
+        param = [param]
+    if not isinstance(param, list):
+        value = [value]
+
     with ExitStack() as stack:
-        for p in pois:
-            param = p.parameter
-            stack.enter_context(param.set_value(p.value))
-            param.floating = False
+        for p, v in zip(param, value):
+            stack.enter_context(p.set_value(v))
+            p.floating = False
+        minimizer.verbosity = 0
         minimum = minimizer.minimize(loss=loss)
-        for p in pois:
-            p.parameter.floating = True
+
+    for p in param:
+        p.floating = True
+    minimizer.verbosity = verbosity
+
     return minimum.fmin
 
 

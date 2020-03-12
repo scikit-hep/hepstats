@@ -3,7 +3,7 @@ import numpy as np
 from scipy.stats import norm
 
 from .basecalculator import BaseCalculator
-from ...utils import eval_pdf, array2dataset, pll
+from ...utils import eval_pdf, array2dataset
 from ..parameters import POI, POIarray
 
 
@@ -188,7 +188,7 @@ class AsymptoticCalculator(BaseCalculator):
         for i, p in enumerate(pois):
             if p not in self._asimov_nll.keys():
                 loss = self.asimov_loss(poialt)
-                nll = pll(minimizer, loss, p)
+                nll = self.pll(loss, p)
                 self._asimov_nll[p] = nll
             ret[i] = self._asimov_nll[p]
         return ret

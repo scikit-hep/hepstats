@@ -5,7 +5,7 @@ import warnings
 
 from .parameters import POI, POIarray
 from .exceptions import ParameterNotFound, FormatError
-from ..utils import pll, base_sampler, base_sample
+from ..utils import base_sampler, base_sample
 from .hypotests_object import ToysObject
 
 """
@@ -274,10 +274,10 @@ class ToysManager(ToysObject):
                     continue
 
                 bestfit[i] = minimum.params[param]["value"]
-                nll_bestfit[i] = pll(minimizer, toys_loss, POI(param, bestfit[i]))
+                nll_bestfit[i] = self.pll(toys_loss, POI(param, bestfit[i]))
 
                 for p in poieval:
-                    nlls[p][i] = pll(minimizer, toys_loss, p)
+                    nlls[p][i] = self.pll(toys_loss, p)
 
             if toprint:
                 print("{0} toys generated, fitted and scanned!".format(i))

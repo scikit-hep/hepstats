@@ -4,7 +4,7 @@ import numpy as np
 
 from ..hypotests_object import HypotestsObject
 from ..parameters import POI, POIarray, asarray
-from ...utils import pll, base_sampler, base_sample
+from ...utils import base_sampler, base_sample
 from ..toyutils import ToysManager
 
 
@@ -59,7 +59,7 @@ class BaseCalculator(HypotestsObject):
         ret = np.empty(pois.shape)
         for i, p in enumerate(pois):
             if p not in self._obs_nll.keys():
-                nll = pll(minimizer=self.minimizer, loss=self.loss, pois=p)
+                nll = self.pll(loss=self.loss, pois=p)
                 self._obs_nll[p] = nll
             ret[i] = self._obs_nll[p]
         return ret

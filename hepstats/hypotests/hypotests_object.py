@@ -1,6 +1,6 @@
 from ..utils.fit.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
 from ..utils.fit.api_check import is_valid_data, is_valid_pdf
-from ..utils.fit import get_nevents
+from ..utils.fit import get_nevents, pll
 
 
 class HypotestsObject(object):
@@ -20,7 +20,9 @@ class HypotestsObject(object):
             self._loss = input
             self._bestfit = None
         else:
-            raise ValueError("{} is not a valid loss funtion or fit result!".format(input))
+            raise ValueError(
+                "{} is not a valid loss funtion or fit result!".format(input)
+            )
 
         if not is_valid_minimizer(minimizer):
             raise ValueError("{} is not a valid minimizer !".format(minimizer))
@@ -151,6 +153,15 @@ class HypotestsObject(object):
         loss.add_constraints(self.constraints)
 
         return loss
+
+    def pll(self, loss, pois):
+
+        parameters, values = [], []
+        for p in pois:
+            parameters.append(p.parameter)
+            values.append(p.value)
+
+        return pll(minimizer=self.minimizer, loss=loss, param=parameters, value=values)
 
 
 class ToysObject(HypotestsObject):
