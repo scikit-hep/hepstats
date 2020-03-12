@@ -28,14 +28,24 @@ def eval_pdf(model, x, params={}, allow_extended=False):
         return pdf(model, x)
 
 
+def convert_to_list(object):
+    if not isinstance(object, list):
+        object = [object]
+    return object
+
+
 def pll(minimizer, loss, param, value) -> float:
     """ Compute minimum profile likelihood for given parameters values. """
     verbosity = minimizer.verbosity
 
-    if not isinstance(param, list):
-        param = [param]
-    if not isinstance(param, list):
-        value = [value]
+    param = convert_to_list(param)
+    value = convert_to_list(value)
+
+    assert all(is_valid_parameter(p) for p in param)
+    if not len(param) == len(value):
+        raise ValueError(
+            f"Incompatible length of parameters and values: {param}, {value}"
+        )
 
     with ExitStack() as stack:
         for p, v in zip(param, value):
