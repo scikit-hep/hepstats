@@ -123,15 +123,24 @@ class AsymptoticCalculator(BaseCalculator):
                 minimum = minimizer.minimize(loss=self.loss)
                 poiparam.floating = True
 
+            print(minimum)
+
             minimizer.verbosity = oldverbose
 
             values = minimum.params
             values[poiparam] = {"value": poivalue}
 
             asimov_data = []
-            for i, ad in enumerate(
-                [generate_asimov_hist(m, values, self._asimov_bins) for m in model]
-            ):
+
+            if not isinstance(self._asimov_bins, list):
+                asimov_bins = [self._asimov_bins] * len(data)
+            else:
+                asimov_bins = self._asimov_bins
+                assert len(asimov_bins) == len(data)
+
+            asimov_hists = [generate_asimov_hist(m, values, bins) for m, bins in zip(model, asimov_bins)]
+
+            for i, ad in enumerate(asimov_hists):
                 weights, bin_edges = ad
                 bin_centers = bin_edges[0:-1] + np.diff(bin_edges) / 2
                 asimov_data.append(
@@ -258,6 +267,7 @@ class AsymptoticCalculator(BaseCalculator):
         """
         nll_poinull_asy = self.asimov_nll(poinull, poialt)
         nll_poialt_asy = self.asimov_nll(poialt, poialt)
+
         return self.q(
             nll1=nll_poinull_asy,
             nll2=nll_poialt_asy,
@@ -367,7 +377,7 @@ class AsymptoticCalculator(BaseCalculator):
         return expected_pvalues
 
     def _expected_poi_(
-        self, poinull, poialt, nsigma, alpha, CLs, onesided, onesideddiscovery
+        self, poinull, poialt, nsigma, alpha, CLs, qtilde, onesided, onesideddiscovery
     ):
 
         qalt = self.qalt(

@@ -133,10 +133,7 @@ class UpperLimit(BaseTest):
         else:
             observed_key = "clsb"
 
-        if isinstance(self.calculator, AsymptoticCalculator):
-            to_interpolate = [observed_key]
-        else:
-            to_interpolate = [observed_key] + [f"expected{i}" for i in ["", "_p1", "_m1", "_p2", "_m2"]]
+        to_interpolate = [observed_key] + [f"expected{i}" for i in ["", "_p1", "_m1", "_p2", "_m2"]]
 
         limits = {}
         for k in to_interpolate:
@@ -168,17 +165,6 @@ class UpperLimit(BaseTest):
                 limits[k] = float(root)
             except TypeError:
                 limits[k] = None
-
-        if isinstance(self.calculator, AsymptoticCalculator):
-            poiul = POI(poinull.parameter, limits["observed"])
-            exppoi_func = self.calculator.expected_poi
-            sigmas = [0.0, 1.0, -1.0, 2.0, -2.0]
-
-            results = exppoi_func(poinull=poiul, poialt=self.poialt, nsigma=sigmas, alpha=alpha, CLs=CLs)
-            keys = [f"expected{i}" for i in ["", "_p1", "_m1", "_p2", "_m2"]]
-
-            for r, k in zip(results, keys):
-                limits[k] = float(r)
 
         if printlevel > 0:
             print(f"\nObserved upper limit: {poinull.name} = {limits['observed']}")

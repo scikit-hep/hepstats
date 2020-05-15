@@ -142,6 +142,10 @@ class BaseCalculator(HypotestsObject):
             self.check_pois(poialt)
             self.check_pois_compatibility(poinull, poialt)
 
+        if qtilde and (poialt.values < 0).any():
+            poialt = POIarray(parameter=poialt.parameter,
+                              values=np.where(poialt.values < 0, 0, poialt.values))
+
         return self._pvalue_(
             poinull=poinull,
             poialt=poialt,
@@ -193,6 +197,10 @@ class BaseCalculator(HypotestsObject):
             self.check_pois(poialt)
             self.check_pois_compatibility(poinull, poialt)
 
+        if qtilde and (poialt.values < 0).any():
+            poialt = POIarray(parameter=poialt.parameter,
+                              values=np.where(poialt.values < 0, 0, poialt.values))
+
         return self._expected_pvalue_(
             poinull=poinull,
             poialt=poialt,
@@ -218,6 +226,7 @@ class BaseCalculator(HypotestsObject):
         nsigma,
         alpha=0.05,
         CLs=False,
+        qtilde=False,
         onesided=True,
         onesideddiscovery=False,
     ):
@@ -231,6 +240,8 @@ class BaseCalculator(HypotestsObject):
             * **alpha** (float, default=0.05): significance level
             * **CLs** (bool, optional): if `True` uses pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}`
               else as :math:`p_{clsb} = p_{null}`
+            * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default)
+              use the :math:`q` test statistic
             * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
             * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery
 
@@ -248,18 +259,23 @@ class BaseCalculator(HypotestsObject):
             self.check_pois(poialt)
             self.check_pois_compatibility(poinull, poialt)
 
+        if qtilde and (poialt.values < 0).any():
+            poialt = POIarray(parameter=poialt.parameter,
+                              values=np.where(poialt.values < 0, 0, poialt.values))
+
         return self._expected_poi_(
             poinull=poinull,
             poialt=poialt,
             nsigma=nsigma,
             alpha=alpha,
             CLs=CLs,
+            qtilde=qtilde,
             onesided=onesided,
             onesideddiscovery=onesideddiscovery,
         )
 
     def _expected_poi_(
-        self, poinull, poialt, nsigma, alpha, CLs, onesided, onesideddiscovery
+        self, poinull, poialt, nsigma, alpha, CLs, qtilde, onesided, onesideddiscovery
     ):
         """
         To be overwritten in `BaseCalculator` subclasses.
