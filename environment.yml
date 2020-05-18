@@ -8,5 +8,5 @@ dependencies:
   - matplotlib
   - tensorflow
   - tensorflow-probability
-  - zfit=>0.5
+  - zfit=>0.5.2
   - asdf
