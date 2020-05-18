@@ -1,12 +1,10 @@
 name: hepstats-test
 channels:
-  - defaults
   - conda-forge
 dependencies:
   - numpy
   - scipy
   - iminuit
-  - uproot
   - matplotlib
   - tensorflow=>1.14
   - tensorflow-probability
