@@ -198,8 +198,7 @@ bayesian blocks python implementation found in astroML <a class="bibtex referenc
 <ul class="simple">
 <li><p>Based on Scargle et al 2012 <a class="bibtex reference internal" href="../index.html#scargle-2013" id="id2">[SNJC13]</a></p></li>
 <li><p>Initial Python Implementation <a class="bibtex reference internal" href="../index.html#bb-jakevdp" id="id3">[BB_]</a></p></li>
-<li><p>AstroML Implementation <a class="bibtex reference internal" href="../index.html#vanderplas-2012" id="id4">[VCIG12]</a></p></li>
-<li><p>Initial Examination in HEP context <a class="bibtex reference internal" href="../index.html#pollack-2017srh" id="id5">[PBS17]</a></p></li>
+<li><p>Initial Examination in HEP context <a class="bibtex reference internal" href="../index.html#pollack-2017srh" id="id4">[PBS17]</a></p></li>
 </ul>
 <dl class="class">
 <dt id="hepstats.modeling.bayesian_blocks.Prior">
@@ -230,7 +229,7 @@ bayesian blocks python implementation found in astroML <a class="bibtex referenc
 <code class="sig-prename descclassname">hepstats.modeling.bayesian_blocks.</code><code class="sig-name descname">bayesian_blocks</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">weights=None</em>, <em class="sig-param">p0=0.05</em>, <em class="sig-param">gamma=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/modeling/bayesian_blocks.html#bayesian_blocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.modeling.bayesian_blocks.bayesian_blocks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bayesian Blocks Implementation.</p>
 <p>This is a flexible implementation of the Bayesian Blocks algorithm described in Scargle 2012
-<a href="#id10"><span class="problematic" id="id6">[1]_</span></a>.  It has been modified to natively accept weighted events, for ease of use in HEP
+<a href="#id9"><span class="problematic" id="id5">[1]_</span></a>.  It has been modified to natively accept weighted events, for ease of use in HEP
 applications.</p>
 <dl>
 <dt>Args:</dt><dd><ul class="simple">
@@ -518,7 +517,7 @@ p ~ gamma^N. If gamma is specified, p0 is ignored. Defaults to None.</p></li>
 <tr class="row-even"><td><p><a class="reference internal" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.qobs" title="hepstats.hypotests.calculators.basecalculator.BaseCalculator.qobs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">qobs</span></code></a>(self, poinull[, onesided, …])</p></td>
 <td><p>Computes observed values of the <span class="math notranslate nohighlight">\(\Delta\)</span> log-likelihood test statistic.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_dependents_to_bestfit</span></code>(self)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params_to_bestfit</span></code>(self)</p></td>
 <td><p>Set the values of the parameters in the models to the best fit values</p></td>
 </tr>
 </tbody>
@@ -537,7 +536,7 @@ p ~ gamma^N. If gamma is specified, p0 is ignored. Defaults to None.</p></li>
 
 <dl class="method">
 <dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.expected_poi">
-<code class="sig-name descname">expected_poi</code><span class="sig-paren">(</span><em class="sig-param">self, poinull: List[hepstats.hypotests.parameters.POI], poialt: List[hepstats.hypotests.parameters.POI], nsigma, alpha=0.05, CLs=False, onesided=True, onesideddiscovery=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#BaseCalculator.expected_poi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.expected_poi" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">expected_poi</code><span class="sig-paren">(</span><em class="sig-param">self, poinull: List[hepstats.hypotests.parameters.POI], poialt: List[hepstats.hypotests.parameters.POI], nsigma, alpha=0.05, CLs=False, qtilde=False, onesided=True, onesideddiscovery=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#BaseCalculator.expected_poi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.expected_poi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the expected parameter of interest values such that the expected p_values = <span class="math notranslate nohighlight">\(lpha\)</span> for
 different values of <span class="math notranslate nohighlight">\(\sigma\)</span> (0=expected/median)</p>
 <dl>
@@ -548,11 +547,13 @@ different values of <span class="math notranslate nohighlight">\(\sigma\)</span>
 <li><p><strong>alpha</strong> (float, default=0.05): significance level</p></li>
 <li><p><strong>CLs</strong> (bool, optional): if <cite>True</cite> uses pvalues as <span class="math notranslate nohighlight">\(p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}\)</span>
 else as <span class="math notranslate nohighlight">\(p_{clsb} = p_{null}\)</span></p></li>
+<li><p><strong>qtilde</strong> (bool, optional): if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic</p></li>
 <li><p><strong>onesided</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues</p></li>
 <li><p><strong>onesideddiscovery</strong> (bool, optional): if <cite>True</cite> (default) computes onesided pvalues for a discovery</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt><dd><p><cite>numpy.array</cite>: array of expected POI values for each :math:<a href="#id7"><span class="problematic" id="id8">`</span></a>sigma  value</p>
+<dt>Returns:</dt><dd><p><cite>numpy.array</cite>: array of expected POI values for each :math:<a href="#id6"><span class="problematic" id="id7">`</span></a>sigma  value</p>
 </dd>
 <dt>Example with <cite>zfit</cite>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">poinull</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
@@ -745,7 +746,7 @@ discovery test</p></li>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">qobs</span></code>(self, poinull[, onesided, …])</p></td>
 <td><p>Computes observed values of the <span class="math notranslate nohighlight">\(\Delta\)</span> log-likelihood test statistic.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_dependents_to_bestfit</span></code>(self)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params_to_bestfit</span></code>(self)</p></td>
 <td><p>Set the values of the parameters in the models to the best fit values</p></td>
 </tr>
 </tbody>
@@ -846,7 +847,7 @@ discovery test</p></li>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sampler</span></code>(self[, floating_params])</p></td>
 <td><p>Create sampler with models.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_dependents_to_bestfit</span></code>(self)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params_to_bestfit</span></code>(self)</p></td>
 <td><p>Set the values of the parameters in the models to the best fit values</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_yaml</span></code>(self, filename)</p></td>
@@ -868,7 +869,7 @@ discovery test</p></li>
 </table>
 <dl class="method">
 <dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.from_yaml">
-<em class="property">classmethod </em><code class="sig-name descname">from_yaml</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">loss</em>, <em class="sig-param">minimizer</em>, <em class="sig-param">ntoysnull=100</em>, <em class="sig-param">ntoysalt=100</em>, <em class="sig-param">sampler=&lt;function base_sampler at 0x11e151050&gt;</em>, <em class="sig-param">sample=&lt;function base_sample at 0x11e1513b0&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#ToysCalculator.from_yaml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.from_yaml" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">from_yaml</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">loss</em>, <em class="sig-param">minimizer</em>, <em class="sig-param">ntoysnull=100</em>, <em class="sig-param">ntoysalt=100</em>, <em class="sig-param">sampler=&lt;function base_sampler at 0x129062560&gt;</em>, <em class="sig-param">sample=&lt;function base_sample at 0x1290628c0&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#ToysCalculator.from_yaml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.from_yaml" title="Permalink to this definition">¶</a></dt>
 <dd><p>ToysCalculator constructor with the toys loaded from a yaml file.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><ul class="simple">
@@ -1028,7 +1029,7 @@ likelihood- based tests of new physics. Eur. Phys. J., C71:1–19, 2011</p>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">qobs</span></code>(self, poinull[, onesided, …])</p></td>
 <td><p>Computes observed values of the <span class="math notranslate nohighlight">\(\Delta\)</span> log-likelihood test statistic.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_dependents_to_bestfit</span></code>(self)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params_to_bestfit</span></code>(self)</p></td>
 <td><p>Set the values of the parameters in the models to the best fit values</p></td>
 </tr>
 </tbody>
@@ -1322,7 +1323,7 @@ discovery test</p></li>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sampler</span></code>(self[, floating_params])</p></td>
 <td><p>Create sampler with models.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_dependents_to_bestfit</span></code>(self)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params_to_bestfit</span></code>(self)</p></td>
 <td><p>Set the values of the parameters in the models to the best fit values</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_yaml</span></code>(self, filename)</p></td>
@@ -1790,7 +1791,7 @@ in the null hypothesis.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#hepstats.hypotests.hypotests_object.HypotestsObject.lossbuilder" title="hepstats.hypotests.hypotests_object.HypotestsObject.lossbuilder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lossbuilder</span></code></a>(self, model, data[, weights])</p></td>
 <td><p>Method to build a new loss function.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#hepstats.hypotests.hypotests_object.HypotestsObject.set_dependents_to_bestfit" title="hepstats.hypotests.hypotests_object.HypotestsObject.set_dependents_to_bestfit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_dependents_to_bestfit</span></code></a>(self)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hepstats.hypotests.hypotests_object.HypotestsObject.set_params_to_bestfit" title="hepstats.hypotests.hypotests_object.HypotestsObject.set_params_to_bestfit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params_to_bestfit</span></code></a>(self)</p></td>
 <td><p>Set the values of the parameters in the models to the best fit values</p></td>
 </tr>
 </tbody>
@@ -1866,8 +1867,8 @@ in the null hypothesis.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="hepstats.hypotests.hypotests_object.HypotestsObject.set_dependents_to_bestfit">
-<code class="sig-name descname">set_dependents_to_bestfit</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/hypotests_object.html#HypotestsObject.set_dependents_to_bestfit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.hypotests_object.HypotestsObject.set_dependents_to_bestfit" title="Permalink to this definition">¶</a></dt>
+<dt id="hepstats.hypotests.hypotests_object.HypotestsObject.set_params_to_bestfit">
+<code class="sig-name descname">set_params_to_bestfit</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/hypotests_object.html#HypotestsObject.set_params_to_bestfit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.hypotests_object.HypotestsObject.set_params_to_bestfit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the values of the parameters in the models to the best fit values</p>
 </dd></dl>
 
@@ -1927,7 +1928,7 @@ model (within the loss function) to do toy experiments.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#hepstats.hypotests.hypotests_object.ToysObject.sampler" title="hepstats.hypotests.hypotests_object.ToysObject.sampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sampler</span></code></a>(self[, floating_params])</p></td>
 <td><p>Create sampler with models.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_dependents_to_bestfit</span></code>(self)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params_to_bestfit</span></code>(self)</p></td>
 <td><p>Set the values of the parameters in the models to the best fit values</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#hepstats.hypotests.hypotests_object.ToysObject.toys_loss" title="hepstats.hypotests.hypotests_object.ToysObject.toys_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toys_loss</span></code></a>(self, parameter_name)</p></td>
@@ -2037,7 +2038,7 @@ model (within the loss function) to do toy experiments.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#hepstats.hypotests.hypotests_object.HypotestsObject.lossbuilder" title="hepstats.hypotests.hypotests_object.HypotestsObject.lossbuilder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lossbuilder</span></code></a>(self, model, data[, weights])</p></td>
 <td><p>Method to build a new loss function.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#hepstats.hypotests.hypotests_object.HypotestsObject.set_dependents_to_bestfit" title="hepstats.hypotests.hypotests_object.HypotestsObject.set_dependents_to_bestfit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_dependents_to_bestfit</span></code></a>(self)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hepstats.hypotests.hypotests_object.HypotestsObject.set_params_to_bestfit" title="hepstats.hypotests.hypotests_object.HypotestsObject.set_params_to_bestfit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params_to_bestfit</span></code></a>(self)</p></td>
 <td><p>Set the values of the parameters in the models to the best fit values</p></td>
 </tr>
 </tbody>
@@ -2114,7 +2115,7 @@ model (within the loss function) to do toy experiments.</p>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">set_dependents_to_bestfit</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/hypotests_object.html#HypotestsObject.set_dependents_to_bestfit"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">set_params_to_bestfit</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/hypotests_object.html#HypotestsObject.set_params_to_bestfit"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Set the values of the parameters in the models to the best fit values</p>
 </dd></dl>
 
@@ -2174,7 +2175,7 @@ model (within the loss function) to do toy experiments.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#hepstats.hypotests.hypotests_object.ToysObject.sampler" title="hepstats.hypotests.hypotests_object.ToysObject.sampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sampler</span></code></a>(self[, floating_params])</p></td>
 <td><p>Create sampler with models.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_dependents_to_bestfit</span></code>(self)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params_to_bestfit</span></code>(self)</p></td>
 <td><p>Set the values of the parameters in the models to the best fit values</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#hepstats.hypotests.hypotests_object.ToysObject.toys_loss" title="hepstats.hypotests.hypotests_object.ToysObject.toys_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toys_loss</span></code></a>(self, parameter_name)</p></td>
@@ -2242,7 +2243,7 @@ model (within the loss function) to do toy experiments.</p>
 </div>
 <div class="section" id="module-hepstats.splot">
 <span id="hepstats-splot-module"></span><h2>hepstats.splot module<a class="headerlink" href="#module-hepstats.splot" title="Permalink to this headline">¶</a></h2>
-<p>Module implementing the <strong>sPlot</strong> algorithm, see <a class="bibtex reference internal" href="../index.html#pivk-2004ty" id="id9">[PLD05]</a>.</p>
+<p>Module implementing the <strong>sPlot</strong> algorithm, see <a class="bibtex reference internal" href="../index.html#pivk-2004ty" id="id8">[PLD05]</a>.</p>
 <div class="section" id="module-hepstats.splot.sweights">
 <span id="sweights"></span><h3>sWeights<a class="headerlink" href="#module-hepstats.splot.sweights" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
