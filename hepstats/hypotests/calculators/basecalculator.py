@@ -38,7 +38,7 @@ class BaseCalculator(HypotestsObject):
 
         self._parameters = {}
         for m in self.model:
-            for d in m.get_dependents():
+            for d in m.get_params():
                 self._parameters[d.name] = d
 
     def obs_nll(self, pois) -> np.ndarray:

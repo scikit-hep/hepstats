@@ -45,11 +45,11 @@ def is_valid_data(object):
 
 
 def is_valid_pdf(object):
-    has_get_dependents = hasattr(object, "get_dependents")
-    if not has_get_dependents:
+    has_get_params = hasattr(object, "get_params")
+    if not has_get_params:
         return False
     else:
-        params = object.get_dependents()
+        params = object.get_params()
 
     all_valid_params = all(is_valid_parameter(p) for p in params)
     has_pdf = hasattr(object, "pdf")
@@ -72,12 +72,13 @@ def is_valid_loss(object):
     else:
         data = object.data
 
+    has_get_params = hasattr(object, "get_params")
     has_constraints = hasattr(object, "constraints")
     has_fit_range = hasattr(object, "fit_range")
     all_valid_pdfs = all(is_valid_pdf(m) for m in model)
     all_valid_datasets = all(is_valid_data(d) for d in data)
 
-    return all_valid_pdfs and all_valid_datasets and has_constraints and has_fit_range
+    return all_valid_pdfs and all_valid_datasets and has_constraints and has_fit_range and has_get_params
 
 
 def is_valid_fitresult(object):

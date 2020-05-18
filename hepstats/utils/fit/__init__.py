@@ -13,14 +13,14 @@ def eval_pdf(model, x, params={}, allow_extended=False):
 
     def pdf(model, x):
         if model.is_extended and allow_extended:
-            ret = model.pdf(x) * model.get_yield()
+            ret = model.ext_pdf(x)
         else:
             ret = model.pdf(x)
 
         return get_value(ret)
 
     with ExitStack() as stack:
-        for param in model.get_dependents():
+        for param in model.get_params():
             if param in params:
                 value = params[param]["value"]
                 stack.enter_context(param.set_value(value))

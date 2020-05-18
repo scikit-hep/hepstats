@@ -23,9 +23,10 @@ fitting package as backend, of a Gaussian signal with known mean and sigma over 
 >>> lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
 >>> Nsig = zfit.Parameter("Ns", 20., -20., N)
 >>> Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
->>> signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)
->>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
->>> loss = ExtendedUnbinnedNLL(model=signal + background, data=data)
+>>> signal = zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1).create_extended(Nsig)
+>>> background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
+>>> total = zfit.pdf.SumPDF([signal, background])
+>>> loss = ExtendedUnbinnedNLL(model=total, data=data)
 
 >>> from hepstats.hypotests.calculators import AsymptoticCalculator
 >>> from hepstats.hypotests import Discovery

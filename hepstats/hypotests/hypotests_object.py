@@ -30,7 +30,7 @@ class HypotestsObject(object):
 
         self._parameters = {}
         for m in self.model:
-            for d in m.get_dependents():
+            for d in m.get_params():
                 self._parameters[d.name] = d
 
     @property
@@ -104,12 +104,12 @@ class HypotestsObject(object):
         """
         return self._parameters[name]
 
-    def set_dependents_to_bestfit(self):
+    def set_params_to_bestfit(self):
         """
         Set the values of the parameters in the models to the best fit values
         """
         for m in self.model:
-            for d in m.get_dependents():
+            for d in m.get_params():
                 d.set_value(self.bestfit.params[d]["value"])
 
     def lossbuilder(self, model, data, weights=None):
@@ -182,7 +182,7 @@ class ToysObject(HypotestsObject):
         Example with `zfit`:
             >>> sampler = calc.sampler(floating_params=[zfit.Parameter("mean")])
         """
-        self.set_dependents_to_bestfit()
+        self.set_params_to_bestfit()
         nevents = []
         for m, d in zip(self.loss.model, self.loss.data):
             if m.is_extended:

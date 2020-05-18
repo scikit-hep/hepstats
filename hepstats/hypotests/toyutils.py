@@ -217,7 +217,7 @@ class ToysManager(ToysObject):
             * **printfreq** : print frequency of the toys generation
         """
 
-        self.set_dependents_to_bestfit()
+        self.set_params_to_bestfit()
 
         minimizer = self.minimizer
         param = poigen.parameter
@@ -266,7 +266,7 @@ class ToysManager(ToysObject):
                         break
 
                 if not converged:
-                    self.set_dependents_to_bestfit()
+                    self.set_params_to_bestfit()
                     nfailures += 1
                     if nfailures > 0.15 * ntrials and ntrials > 10:
                         msg = f"{nfailures} out of {ntrials} fits failed or didn't converge."
@@ -347,7 +347,7 @@ class ToysManager(ToysObject):
 
         for t in toys:
             poiparam = None
-            for p in self.loss.get_dependents():
+            for p in self.loss.get_params():
                 if t["poi"] == p.name:
                     poiparam = p
 
