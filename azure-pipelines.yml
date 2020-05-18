@@ -43,24 +43,24 @@ jobs:
       displayName: Add conda to PATH
     - template: .ci/azure-steps.yml
 
-- job: 'macOS'
-  pool:
-    vmImage: 'macOS-10.15'
-  strategy:
-    matrix:
-      Python36:
-        python.version: '3.6'
-      Python37:
-        python.version: '3.7'
-      Python38:
-        python.version: '3.8'
-
-  steps:
-    - bash: echo "##vso[task.prependpath]$CONDA/bin"
-      displayName: Add conda to PATH
-    - bash: sudo chown -R $USER $CONDA
-      displayName: Take ownership of conda installation
-    - template: .ci/azure-steps.yml
+# - job: 'macOS'
+#   pool:
+#     vmImage: 'macOS-10.15'
+#   strategy:
+#     matrix:
+#       Python36:
+#         python.version: '3.6'
+#       Python37:
+#         python.version: '3.7'
+#       Python38:
+#         python.version: '3.8'
+#
+#   steps:
+#     - bash: echo "##vso[task.prependpath]$CONDA/bin"
+#       displayName: Add conda to PATH
+#     - bash: sudo chown -R $USER $CONDA
+#       displayName: Take ownership of conda installation
+#     - template: .ci/azure-steps.yml
 
 - job: 'Package'
   pool:

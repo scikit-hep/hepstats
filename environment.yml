@@ -1,12 +1,12 @@
 name: hepstats-test
 channels:
+  - default
   - conda-forge
 dependencies:
   - numpy
   - scipy
   - iminuit
-  - matplotlib
-  - tensorflow=>2.0
+  - tensorflow=>1.14
   - tensorflow-probability
-  - zfit=>0.5
+  - zfit
   - asdf
