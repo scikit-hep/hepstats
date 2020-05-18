@@ -10,5 +10,5 @@ dependencies:
   - matplotlib
   - tensorflow=>1.14
   - tensorflow-probability
-  - zfit
+  - zfit=>0.5.2
   - asdf
