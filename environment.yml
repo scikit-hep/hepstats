@@ -6,7 +6,7 @@ dependencies:
   - scipy
   - iminuit
   - matplotlib
-  - tensorflow=>1.14
+  - tensorflow
   - tensorflow-probability
   - zfit=>0.5.2
   - asdf
