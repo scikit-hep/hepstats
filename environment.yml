@@ -1,6 +1,6 @@
 name: hepstats-test
 channels:
-  - default
+  - defaults
   - conda-forge
 dependencies:
   - numpy
