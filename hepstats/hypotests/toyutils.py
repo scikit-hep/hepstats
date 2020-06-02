@@ -253,7 +253,8 @@ class ToysManager(ToysObject):
                     param_dict = next(samples)
                 except StopIteration:
                     to_gen = ntoys - i
-                    samples = self.sample(sampler, int(to_gen * 1.2), poigen)
+                    samples = self.sample(sampler=sampler, ntoys=int(to_gen * 1.2), poi=poigen,
+                                          constraints=toys_loss.constraints)
                     param_dict = next(samples)
 
                 with ExitStack() as stack:

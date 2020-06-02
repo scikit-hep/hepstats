@@ -192,21 +192,26 @@ class ToysObject(HypotestsObject):
 
         return self._sampler(self.loss.model, nevents, floating_params)
 
-    def sample(self, sampler, ntoys, poi=None):
+    def sample(self, sampler, ntoys, poi=None, constraints=None):
         """
-        Returns the samples generated from the sampler for a given value of a parameter of interest
+        Generator function of samples from the sampler for a given value of a parameter of interest. Returns a
+        dictionnary of samples constraints in any.
 
         Args:
             * **sampler** (list): generator of samples
             * **ntoys** (int): number of samples to generate
             * **poi** (POI, optional):  in the sampler
+            * **constraints** (list, optional): list of constraints to sample
 
         Example with `zfit`:
             >>> mean = zfit.Parameter("mean")
             >>> sampler = calc.sampler(floating_params=[mean])
             >>> sample = calc.sample(sampler, 1000, POI(mean, 1.2))
+
+        Returns:
+            dictionnary of sampled values of the constraints at each iteration
         """
-        return self._sample(sampler, ntoys, parameter=poi.parameter, value=poi.value)
+        return self._sample(sampler, ntoys, parameter=poi.parameter, value=poi.value, constraints=None)
 
     def toys_loss(self, parameter_name):
         """

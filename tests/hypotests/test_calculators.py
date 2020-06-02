@@ -17,7 +17,7 @@ true_mu = 1.2
 true_sigma = 0.1
 
 
-def create_loss():
+def create_loss(constraint=False):
 
     obs = zfit.Space('x', limits=(0.1, 2.0))
     data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
@@ -25,6 +25,9 @@ def create_loss():
     sigma = zfit.Parameter("sigma", true_sigma)
     model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
     loss = UnbinnedNLL(model=model, data=data)
+
+    if constraint:
+        loss.add_constraints(zfit.constraint.GaussianConstraint(params=mean, mu=true_mu, sigma=0.01))
 
     return loss, (mean, sigma)
 
@@ -127,7 +130,8 @@ def test_asymptotic_calculator_one_poi():
     assert null_nll[2] >= null_nll[1]
 
 
-def test_frequentist_calculator_one_poi():
+@pytest.mark.parametrize("constraint", [False, True])
+def test_frequentist_calculator_one_poi(constraint):
     with pytest.raises(TypeError):
         FrequentistCalculator()
 
