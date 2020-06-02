@@ -2,6 +2,7 @@ import asdf
 import os
 import numpy as np
 import warnings
+from contextlib import ExitStack
 
 from .parameters import POI, POIarray
 from .exceptions import ParameterNotFound, FormatError
@@ -249,21 +250,25 @@ class ToysManager(ToysObject):
             toprint = i % printfreq == 0
             while converged is False:
                 try:
-                    next(samples)
+                    param_dict = next(samples)
                 except StopIteration:
                     to_gen = ntoys - i
                     samples = self.sample(sampler, int(to_gen * 1.2), poigen)
-                    next(samples)
+                    param_dict = next(samples)
 
-                for minimize_trial in range(2):
-                    try:
-                        minimum = minimizer.minimize(loss=toys_loss)
-                        converged = minimum.converged
-                        if converged:
+                with ExitStack() as stack:
+                    for param, value in param_dict:
+                        stack.enter_context(param.set_value(value))
+
+                    for minimize_trial in range(2):
+                        try:
+                            minimum = minimizer.minimize(loss=toys_loss)
+                            converged = minimum.converged
+                            if converged:
+                                break
+                        except RuntimeError:
+                            converged = False
                             break
-                    except RuntimeError:
-                        converged = False
-                        break
 
                 if not converged:
                     self.set_params_to_bestfit()
