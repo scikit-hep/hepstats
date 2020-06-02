@@ -1,8 +1,13 @@
 from .api_check import is_valid_pdf
+from .diverse import get_value
 
 """
 Module providing basic sampling methods.
 """
+
+class Sampler
+
+    def __init__(loss, nevents, floating_params=None):
 
 
 def base_sampler(models, nevents, floating_params=None):
@@ -51,7 +56,13 @@ def base_sample(samplers, ntoys, parameter=None, value=None):
         ntoys (int): number of samples to generate
         parameter (optional): floating parameter in the sampler
         value (optional): value of the parameter
+        constraints (optional): constraints to sample
     """
+
+    sampled_constraints = {}
+    if constraints is not None:
+        for constr in constraints:
+            sampled_constraints.update({k: get_value(v) for k, v in constr.sample(n=ntoys).items()})
 
     for i in range(ntoys):
         if not (parameter is None or value is None):
@@ -62,4 +73,20 @@ def base_sample(samplers, ntoys, parameter=None, value=None):
             for s in samplers:
                 s.resample()
 
+        for param, value in sampled_constraints:
+            param.set_value(value[i])
+
         yield i
+
+
+def base_minimize_sample(minimizer, loss, n_trials=2):
+
+    for minimize_trial in range(n_trials):
+        try:
+            minimum = minimizer.minimize(loss=toys_loss)
+            converged = minimum.converged
+            if converged:
+                break
+        except RuntimeError:
+            converged = False
+            break
