@@ -13,7 +13,7 @@ from .hypotests_object import ToysObject
 Module defining the classes to perform and store the results of toy experiments.
 
 Acronyms used in the code:
-    * nll = negative log-likehood, the likehood being the `loss` attribute of a calculator;
+    * nll = negative log-likehood, which the value of the `loss` attribute of a calculator;
 """
 
 
