@@ -27,7 +27,7 @@ def create_loss(constraint=False):
     loss = UnbinnedNLL(model=model, data=data)
 
     if constraint:
-        loss.add_constraints(zfit.constraint.GaussianConstraint(params=mean, mu=true_mu, sigma=0.01))
+        loss.add_constraints(zfit.constraint.GaussianConstraint(params=mean, observation=true_mu, uncertainty=0.01))
 
     return loss, (mean, sigma)
 
@@ -135,7 +135,7 @@ def test_frequentist_calculator_one_poi(constraint):
     with pytest.raises(TypeError):
         FrequentistCalculator()
 
-    loss, (mean, sigma) = create_loss()
+    loss, (mean, sigma) = create_loss(constraint=constraint)
     calc = FrequentistCalculator(loss, Minuit(), ntoysnull=100, ntoysalt=100)
 
     assert calc.ntoysnull == 100
