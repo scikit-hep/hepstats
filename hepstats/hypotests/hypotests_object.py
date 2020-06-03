@@ -211,7 +211,7 @@ class ToysObject(HypotestsObject):
         Returns:
             dictionnary of sampled values of the constraints at each iteration
         """
-        return self._sample(sampler, ntoys, parameter=poi.parameter, value=poi.value, constraints=None)
+        return self._sample(sampler, ntoys, parameter=poi.parameter, value=poi.value, constraints=constraints)
 
     def toys_loss(self, parameter_name):
         """

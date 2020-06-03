@@ -7,13 +7,6 @@ from ..parameters import POI, POIarray, asarray
 from ...utils import pll, base_sampler, base_sample
 from ..toyutils import ToysManager
 
-"""
-Module defining the bases calculator classes.
-
-Acronyms used in the code:
-    * nll = negative log-likehood, which the value of the `loss` attribute of a calculator;
-"""
-
 
 class BaseCalculator(HypotestsObject):
     """Base class for calculator.
