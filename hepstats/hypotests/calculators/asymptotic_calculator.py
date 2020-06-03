@@ -114,7 +114,7 @@ class AsymptoticCalculator(BaseCalculator):
             poiparam = poi.parameter
             poivalue = poi.value
 
-            msg = "\nGet fit best values for nuisance parameters for the"
+            msg = "\nGet fitted values of the nuisance parameters for the"
             msg += " alternative hypothesis!"
             print(msg)
 
