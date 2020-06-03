@@ -89,7 +89,8 @@ def is_valid_fitresult(object):
     else:
         loss = object.loss
         has_params = hasattr(object, "params")
-        return is_valid_loss(loss) and has_params
+        has_covariance = hasattr(object, "covariance")
+        return is_valid_loss(loss) and has_params and has_covariance
 
 
 def is_valid_minimizer(object):

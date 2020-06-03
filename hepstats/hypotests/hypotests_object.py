@@ -104,6 +104,13 @@ class HypotestsObject(object):
         """
         return self._parameters[name]
 
+    @property
+    def parameters(self):
+        """
+        Returns the list of free parameters in loss / likelihood function.
+        """
+        return list(self._parameters.values())
+
     def set_params_to_bestfit(self):
         """
         Set the values of the parameters in the models to the best fit values

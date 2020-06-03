@@ -56,6 +56,7 @@ class BaseCalculator(HypotestsObject):
                 >>> nll = calc.obs_nll(poi)
 
         """
+
         ret = np.empty(pois.shape)
         for i, p in enumerate(pois):
             if p not in self._obs_nll.keys():
