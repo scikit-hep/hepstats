@@ -34,10 +34,11 @@ def pll(minimizer, loss, pois) -> float:
             param = p.parameter
             stack.enter_context(param.set_value(p.value))
             param.floating = False
-            minimum = minimizer.minimize(loss=loss)
+        minimum = minimizer.minimize(loss=loss)
 
         for p in pois:
             p.parameter.floating = True
+
     return minimum.fmin
 
 

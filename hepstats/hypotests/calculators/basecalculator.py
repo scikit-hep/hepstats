@@ -359,12 +359,12 @@ class BaseCalculator(HypotestsObject):
 
         if onesideddiscovery:
             condition = (poi2 < poi1) | (q < 0)
-            q = np.where(condition, zeros, q)
         elif onesided:
             condition = (poi2 > poi1) | (q < 0)
-            q = np.where(condition, zeros, q)
         else:
-            q = q
+            condition = (q < 0)
+
+        q = np.where(condition, zeros, q)
 
         return q
 
