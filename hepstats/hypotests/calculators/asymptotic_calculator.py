@@ -131,7 +131,7 @@ class AsymptoticCalculator(BaseCalculator):
                     else:
                         # shift other parameter values to change starting point of minimization
                         for p in self.parameters:
-                            if p not in poiparam:
+                            if p != poiparam:
                                 p.set_value(get_value(p) * np.random.normal(1, 0.02, 1)[0])
                 else:
                     msg = "No valid minimum was found when fitting the loss function for the alternative"
