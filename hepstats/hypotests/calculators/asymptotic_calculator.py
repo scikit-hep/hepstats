@@ -1,9 +1,10 @@
 from typing import Tuple
 import numpy as np
 from scipy.stats import norm
+import warnings
 
 from .basecalculator import BaseCalculator
-from ...utils import eval_pdf, array2dataset, pll
+from ...utils import eval_pdf, array2dataset, pll, get_value
 from ..parameters import POI, POIarray
 
 
@@ -118,10 +119,24 @@ class AsymptoticCalculator(BaseCalculator):
             msg += " alternative hypothesis!"
             print(msg)
 
+            poiparam.floating = False
+
             with poiparam.set_value(poivalue):
-                poiparam.floating = False
-                minimum = minimizer.minimize(loss=self.loss)
-                poiparam.floating = True
+                for trial in range(5):
+                    minimum = minimizer.minimize(loss=self.loss)
+                    if minimum.valid:
+                        break
+                    else:
+                        # shift other parameter values to change starting point of minimization
+                        for p in self.parameters:
+                            if p not in poiparam:
+                                p.set_value(get_value(p) * np.random.normal(1, 0.05, 1)[0])
+                else:
+                    msg = "No valid minimum was found when fitting the loss function for the alternative"
+                    msg += f"hypothesis ({poi})."
+                    warnings.warn(msg)
+
+            poiparam.floating = True
 
             print(minimum)
 

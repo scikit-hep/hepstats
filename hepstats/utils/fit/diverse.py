@@ -1,5 +1,6 @@
 from contextlib import ExitStack
 import numpy as np
+import warnings
 
 
 def get_value(value):
@@ -45,7 +46,9 @@ def pll(minimizer, loss, pois, n_trials=5) -> float:
                     if p not in pois_params:
                         p.set_value(get_value(p) * np.random.normal(1, 0.05, 1)[0])
         else:
-            print(f"Warning not valid: {pois}")
+            msg = "No valid minimum was found when fitting the loss function for the parameters of"
+            msg += f"interests {pois}."
+            warnings.warn(msg)
 
         for p in pois:
             p.parameter.floating = True
