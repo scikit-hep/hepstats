@@ -29,9 +29,8 @@ class HypotestsObject(object):
         self.minimizer.verbosity = 0
 
         self._parameters = {}
-        for m in self.model:
-            for d in m.get_params():
-                self._parameters[d.name] = d
+        for param in self.loss.get_params():
+            self._parameters[param.name] = param
 
     @property
     def loss(self):
@@ -115,9 +114,8 @@ class HypotestsObject(object):
         """
         Set the values of the parameters in the models to the best fit values
         """
-        for m in self.model:
-            for d in m.get_params():
-                d.set_value(self.bestfit.params[d]["value"])
+        for param in self.parameters:
+            param.set_value(self.bestfit.params[param]["value"])
 
     def lossbuilder(self, model, data, weights=None):
         """ Method to build a new loss function.

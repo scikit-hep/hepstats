@@ -119,6 +119,8 @@ class AsymptoticCalculator(BaseCalculator):
             msg += " alternative hypothesis!"
             print(msg)
 
+            self.set_params_to_bestfit()
+
             poiparam.floating = False
 
             with poiparam.set_value(poivalue):
@@ -130,7 +132,7 @@ class AsymptoticCalculator(BaseCalculator):
                         # shift other parameter values to change starting point of minimization
                         for p in self.parameters:
                             if p not in poiparam:
-                                p.set_value(get_value(p) * np.random.normal(1, 0.05, 1)[0])
+                                p.set_value(get_value(p) * np.random.normal(1, 0.02, 1)[0])
                 else:
                     msg = "No valid minimum was found when fitting the loss function for the alternative"
                     msg += f"hypothesis ({poi})."
@@ -280,8 +282,8 @@ class AsymptoticCalculator(BaseCalculator):
                 >>> poialt = POI(mean, [1.2])
                 >>> q = calc.qalt([poinull], [poialt])
         """
-        nll_poinull_asy = self.asimov_nll(poinull, poialt)
         nll_poialt_asy = self.asimov_nll(poialt, poialt)
+        nll_poinull_asy = self.asimov_nll(poinull, poialt)
 
         return self.q(
             nll1=nll_poinull_asy,

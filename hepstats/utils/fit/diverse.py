@@ -26,29 +26,15 @@ def eval_pdf(model, x, params={}, allow_extended=False):
         return pdf(model, x)
 
 
-def pll(minimizer, loss, pois, n_trials=5) -> float:
+def pll(minimizer, loss, pois) -> float:
     """ Compute minimum profile likelihood for fixed given parameters values. """
-
-    pois_params = [p.parameter for p in pois]
 
     with ExitStack() as stack:
         for p in pois:
             param = p.parameter
             stack.enter_context(param.set_value(p.value))
             param.floating = False
-        for trial in range(n_trials):
             minimum = minimizer.minimize(loss=loss)
-            if minimum.valid:
-                break
-            else:
-                # shift other parameter values to change starting point of minimization
-                for p in loss.get_params():
-                    if p not in pois_params:
-                        p.set_value(get_value(p) * np.random.normal(1, 0.05, 1)[0])
-        else:
-            msg = "No valid minimum was found when fitting the loss function for the parameters of"
-            msg += f"interests {pois}."
-            warnings.warn(msg)
 
         for p in pois:
             p.parameter.floating = True

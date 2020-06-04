@@ -68,7 +68,7 @@ class BaseCalculator(HypotestsObject):
     def qobs(
         self, poinull: List[POI], onesided=True, onesideddiscovery=False, qtilde=False
     ):
-        """Computes observed values of the :math:`\Delta` log-likelihood test statistic.
+        """Computes observed values of the :math:`\\Delta` log-likelihood test statistic.
 
             Args:
                 * **poinull** (List[`hypotests.POI`]): parameters of interest for the null hypothesis
@@ -89,17 +89,19 @@ class BaseCalculator(HypotestsObject):
 
         self.check_pois(poinull)
 
-        param = poinull.parameter
-        bestfit = self.bestfit.params[param]["value"]
-        if qtilde and poinull.ndim == 1:
-            bestfitpoi = POI(param, 0)
-        else:
-            bestfitpoi = POI(param, bestfit)
-            if len(poinull) == 1:
+        if poinull.ndim == 1:
+
+            param = poinull.parameter
+            bestfit = self.bestfit.params[param]["value"]
+
+            if qtilde:
+                bestfitpoi = POI(param, 0)
+            else:
+                bestfitpoi = POI(param, bestfit)
                 self._obs_nll[bestfitpoi] = self.bestfit.fmin
 
-        nll_poinull_obs = self.obs_nll(poinull)
         nll_bestfitpoi_obs = self.obs_nll(bestfitpoi)
+        nll_poinull_obs = self.obs_nll(poinull)
         qobs = self.q(
             nll1=nll_poinull_obs,
             nll2=nll_bestfitpoi_obs,
