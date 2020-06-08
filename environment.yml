@@ -10,3 +10,4 @@ dependencies:
   - tensorflow-probability
   - zfit
   - asdf
+  - matplotlib
