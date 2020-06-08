@@ -232,7 +232,8 @@ class ToysManager(ToysObject):
 
         printfreq = ntoys * printfreq
 
-        samples = self.sample(sampler, int(ntoys * 1.2), poigen)
+        samples = self.sample(sampler=sampler, ntoys=int(ntoys * 1.2), poi=poigen,
+                              constraints=toys_loss.constraints)
 
         try:
             toysresult = self.get_toyresult(poigen, poieval)
