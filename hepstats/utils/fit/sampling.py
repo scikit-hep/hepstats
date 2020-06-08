@@ -1,4 +1,5 @@
 from .api_check import is_valid_pdf
+from .diverse import get_value
 
 """
 Module providing basic sampling methods.
@@ -41,7 +42,7 @@ def base_sampler(models, nevents, floating_params=None):
     return samplers
 
 
-def base_sample(samplers, ntoys, parameter=None, value=None):
+def base_sample(samplers, ntoys, parameter=None, value=None, constraints=None):
     """
     Sample from samplers. The parameters that are floating in the samplers can be set to a specific value
     using the `parameter` and `value` argument.
@@ -51,7 +52,20 @@ def base_sample(samplers, ntoys, parameter=None, value=None):
         ntoys (int): number of samples to generate
         parameter (optional): floating parameter in the sampler
         value (optional): value of the parameter
+        constraints (optional): constraints to sample
+
+    Returns:
+        dict: sampled values for each constraint
     """
+
+    sampled_constraints = {}
+    if constraints is not None:
+        for constr in constraints:
+            try:
+                sampled_constraints.update({k: get_value(v) for k, v
+                                            in constr.sample(n=ntoys).items()})
+            except AttributeError:
+                continue
 
     for i in range(ntoys):
         if not (parameter is None or value is None):
@@ -62,4 +76,7 @@ def base_sample(samplers, ntoys, parameter=None, value=None):
             for s in samplers:
                 s.resample()
 
-        yield i
+        if constraints is not None:
+            yield {param: value[i] for param, value in sampled_constraints.items()}
+        else:
+            yield {}

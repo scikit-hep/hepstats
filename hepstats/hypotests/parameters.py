@@ -148,4 +148,4 @@ def asarray(POI):
     """
     Transforms a `POI` instance into a `POIarray` instance.
     """
-    return POIarray(POI.parameter, POI.values)
+    return POIarray(parameter=POI.parameter, values=POI.values)

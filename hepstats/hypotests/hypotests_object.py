@@ -29,9 +29,8 @@ class HypotestsObject(object):
         self.minimizer.verbosity = 0
 
         self._parameters = {}
-        for m in self.model:
-            for d in m.get_params():
-                self._parameters[d.name] = d
+        for param in self.loss.get_params():
+            self._parameters[param.name] = param
 
     @property
     def loss(self):
@@ -104,13 +103,19 @@ class HypotestsObject(object):
         """
         return self._parameters[name]
 
+    @property
+    def parameters(self):
+        """
+        Returns the list of free parameters in loss / likelihood function.
+        """
+        return list(self._parameters.values())
+
     def set_params_to_bestfit(self):
         """
         Set the values of the parameters in the models to the best fit values
         """
-        for m in self.model:
-            for d in m.get_params():
-                d.set_value(self.bestfit.params[d]["value"])
+        for param in self.parameters:
+            param.set_value(self.bestfit.params[param]["value"])
 
     def lossbuilder(self, model, data, weights=None):
         """ Method to build a new loss function.
@@ -192,21 +197,26 @@ class ToysObject(HypotestsObject):
 
         return self._sampler(self.loss.model, nevents, floating_params)
 
-    def sample(self, sampler, ntoys, poi=None):
+    def sample(self, sampler, ntoys, poi=None, constraints=None):
         """
-        Returns the samples generated from the sampler for a given value of a parameter of interest
+        Generator function of samples from the sampler for a given value of a parameter of interest. Returns a
+        dictionnary of samples constraints in any.
 
         Args:
             * **sampler** (list): generator of samples
             * **ntoys** (int): number of samples to generate
             * **poi** (POI, optional):  in the sampler
+            * **constraints** (list, optional): list of constraints to sample
 
         Example with `zfit`:
             >>> mean = zfit.Parameter("mean")
             >>> sampler = calc.sampler(floating_params=[mean])
             >>> sample = calc.sample(sampler, 1000, POI(mean, 1.2))
+
+        Returns:
+            dictionnary of sampled values of the constraints at each iteration
         """
-        return self._sample(sampler, ntoys, parameter=poi.parameter, value=poi.value)
+        return self._sample(sampler, ntoys, parameter=poi.parameter, value=poi.value, constraints=constraints)
 
     def toys_loss(self, parameter_name):
         """
