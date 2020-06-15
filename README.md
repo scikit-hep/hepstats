@@ -100,13 +100,13 @@ Expected upper limit -2 sigma: Nsig = 6.400549971360598
 A full example using the **sPlot** algorithm can be found [here](https://github.com/scikit-hep/hepstats/tree/master/notebooks/splots/splot_example.ipynb). **sWeights** for different components in a data sample, modeled with a sum of extended probability density functions, are derived using the `compute_sweights` function:
 
 ```python
-from hepstats.splot import compute_sweights
+>>> from hepstats.splot import compute_sweights
 
 # using same model as above for illustration
-sweights = compute_sweights(signal + background, data)
+>>> sweights = compute_sweights(signal + background, data)
 
-bkg_sweights = sweights[Nbkg]
-sig_sweights = sweights[Nsig]
+>>> bkg_sweights = sweights[Nbkg]
+>>> sig_sweights = sweights[Nsig]
 ```
 
 The model needs to be fitted to the data for the computation of the **sWeights**, if not an error is raised.

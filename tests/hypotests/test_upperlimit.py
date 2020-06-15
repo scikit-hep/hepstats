@@ -93,12 +93,12 @@ def test_with_gauss_exp_example(calculator):
     ul_qtilde = UpperLimit(calculator, poinull, poialt, qtilde=True)
     limits = ul.upperlimit(alpha=0.05, CLs=True)
 
-    assert limits["observed"] == pytest.approx(15.725784747406346, rel=0.1)
-    assert limits["expected"] == pytest.approx(11.927442041887158, rel=0.1)
-    assert limits["expected_p1"] == pytest.approx(16.596396280677116, rel=0.1)
-    assert limits["expected_p2"] == pytest.approx(22.24864429383046, rel=0.1)
-    assert limits["expected_m1"] == pytest.approx(8.592750403611896, rel=0.1)
-    assert limits["expected_m2"] == pytest.approx(6.400549971360598, rel=0.1)
+    assert limits["observed"] == pytest.approx(15.725784747406346, rel=0.05)
+    assert limits["expected"] == pytest.approx(11.464238503550177, rel=0.05)
+    assert limits["expected_p1"] == pytest.approx(16.729552184042365, rel=0.1)
+    assert limits["expected_p2"] == pytest.approx(23.718823517614066, rel=0.15)
+    assert limits["expected_m1"] == pytest.approx(7.977175378979202, rel=0.1)
+    assert limits["expected_m2"] == pytest.approx(5.805298972983304, rel=0.15)
 
     ul.upperlimit(alpha=0.05, CLs=False)
     ul_qtilde.upperlimit(alpha=0.05, CLs=True)
