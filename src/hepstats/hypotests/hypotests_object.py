@@ -4,7 +4,7 @@ from typing import Union
 from ..utils.fit.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
 from ..utils.fit.api_check import is_valid_data, is_valid_pdf
 from ..utils.fit import get_nevents
-from ..parameters import POI
+from .parameters import POI
 
 
 class HypotestsObject(object):

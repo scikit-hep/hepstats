@@ -14,17 +14,12 @@ recursive-include docs *.js
 recursive-include docs *.md
 recursive-include docs *.nojekyll
 recursive-include docs *.pdf
-recursive-include docs *.pickle
 recursive-include docs *.png
 recursive-include docs *.py
 recursive-include docs *.rst
 recursive-include docs *.svg
 recursive-include docs *.ttf
 recursive-include docs *.txt
-recursive-include docs *.woff
-recursive-include docs *.woff2
-recursive-include docs *.xcf
-recursive-include docs Makefile
 recursive-include notebooks *.ipynb
 recursive-include notebooks *.png
 recursive-include notebooks *.py
@@ -34,3 +29,27 @@ recursive-include tests *.npz
 recursive-include tests *.py
 recursive-include tests *.yaml
 recursive-include tests *.yml
+recursive-include docs *.pickle
+recursive-include docs *.woff
+recursive-include docs *.woff2
+recursive-include docs *.xcf
+recursive-include docs Makefile
+
+graft src/hepstats
+
+global-exclude .env*
+global-exclude .git*
+global-exclude .pytest_cache
+global-exclude .DS_Store
+global-exclude .ipynb_checkpoints
+global-exclude *.py[co]
+global-exclude __pycache__
+
+prune .ci
+prune .github
+prune notebooks
+exclude .pre-commit-config.yaml azure-pipelines.yml environment.yml
+
+include src/hepstats/version.py
+include README.md pyproject.toml setup.py setup.cfg
+recursive-include LICENSES *
