@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from scipy import interpolate
 
 from .basetest import BaseTest
@@ -81,7 +82,9 @@ class UpperLimit(BaseTest):
         """
         pvalue_func = self.calculator.pvalue
 
-        pnull, palt = pvalue_func(poinull=self.poinull, poialt=self.poialt, qtilde=self.qtilde, onesided=True)
+        pnull, palt = pvalue_func(
+            poinull=self.poinull, poialt=self.poialt, qtilde=self.qtilde, onesided=True
+        )
 
         pvalues = {"clsb": pnull, "clb": palt}
 
@@ -133,7 +136,9 @@ class UpperLimit(BaseTest):
         else:
             observed_key = "clsb"
 
-        to_interpolate = [observed_key] + [f"expected{i}" for i in ["", "_p1", "_m1", "_p2", "_m2"]]
+        to_interpolate = [observed_key] + [
+            f"expected{i}" for i in ["", "_p1", "_m1", "_p2", "_m2"]
+        ]
 
         limits = {}
         for k in to_interpolate:
@@ -171,6 +176,8 @@ class UpperLimit(BaseTest):
             print(f"Expected upper limit: {poinull.name} = {limits['expected']}")
             for sigma in ["+1", "-1", "+2", "-2"]:
                 key = sigma.replace("+", "p").replace("-", "m")
-                print(f"Expected upper limit {sigma} sigma: {poinull.name} = {limits[f'expected_{key}']}")
+                print(
+                    f"Expected upper limit {sigma} sigma: {poinull.name} = {limits[f'expected_{key}']}"
+                )
 
         return limits

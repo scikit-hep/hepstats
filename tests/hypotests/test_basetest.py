@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
 import pytest
 import numpy as np
 import zfit
-from zfit.core.testing import teardown_function  # allows redefinition of zfit.Parameter, needed for tests
+from zfit.core.testing import (
+    teardown_function,
+)  # allows redefinition of zfit.Parameter, needed for tests
 from zfit.core.loss import UnbinnedNLL
 from zfit.minimize import Minuit
 
@@ -12,7 +15,7 @@ from hepstats.hypotests.parameters import POI, POIarray
 
 def create_loss():
 
-    obs = zfit.Space('x', limits=(0.1, 2.0))
+    obs = zfit.Space("x", limits=(0.1, 2.0))
     data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
     mean = zfit.Parameter("mu", 1.2)
     sigma = zfit.Parameter("sigma", 0.1)

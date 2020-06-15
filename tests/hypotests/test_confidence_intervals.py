@@ -1,8 +1,11 @@
+# -*- coding: utf-8 -*-
 import pytest
 import numpy as np
 import zfit
 import os
-from zfit.core.testing import teardown_function  # allows redefinition of zfit.Parameter, needed for tests
+from zfit.core.testing import (
+    teardown_function,
+)  # allows redefinition of zfit.Parameter, needed for tests
 from zfit.loss import ExtendedUnbinnedNLL
 from zfit.minimize import Minuit
 
@@ -18,12 +21,12 @@ pwd = os.path.dirname(__file__)
 def create_loss():
 
     bounds = (0.1, 3.0)
-    obs = zfit.Space('x', limits=bounds)
+    obs = zfit.Space("x", limits=bounds)
 
     # Data and signal
     np.random.seed(0)
     tau = -2.0
-    beta = -1/tau
+    beta = -1 / tau
     bkg = np.random.exponential(beta, 300)
     peak = np.random.normal(1.2, 0.1, 80)
     data = np.concatenate((bkg, peak))
@@ -34,8 +37,8 @@ def create_loss():
     mean = zfit.Parameter("mean", 1.2, 0.5, 2.0)
     sigma = zfit.Parameter("sigma", 0.1, 0.02, 0.2)
     lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
-    Nsig = zfit.Parameter("Ns", 20., -20., N)
-    Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
+    Nsig = zfit.Parameter("Ns", 20.0, -20.0, N)
+    Nbkg = zfit.Parameter("Nbkg", N, 0.0, N * 1.1)
 
     signal = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma).create_extended(Nsig)
     background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
@@ -73,7 +76,9 @@ def asy_calc():
 
 def freq_calc():
     loss, mean = create_loss()
-    calculator = FrequentistCalculator.from_yaml(f"{pwd}/ci_freq_zfit_toys.yml", loss, Minuit())
+    calculator = FrequentistCalculator.from_yaml(
+        f"{pwd}/ci_freq_zfit_toys.yml", loss, Minuit()
+    )
     return mean, calculator
 
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Specific exceptions for the `hypotests` submodule
 """

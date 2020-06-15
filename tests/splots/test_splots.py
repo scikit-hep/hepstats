@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
 import numpy as np
 import pytest
 from scipy.stats import chisquare
 
 import zfit
-from zfit.core.testing import teardown_function  # allows redefinition of zfit.Parameter, needed for tests
+from zfit.core.testing import (
+    teardown_function,
+)  # allows redefinition of zfit.Parameter, needed for tests
 from zfit.loss import ExtendedUnbinnedNLL
 from zfit.minimize import Minuit
 
@@ -16,7 +19,7 @@ from hepstats.splot.exceptions import ModelNotFittedToData
 def get_data_and_loss():
 
     bounds = (0.0, 3.0)
-    obs = zfit.Space('x', limits=bounds)
+    obs = zfit.Space("x", limits=bounds)
     nbkg = 10000
     nsig = 5000
 
@@ -24,7 +27,7 @@ def get_data_and_loss():
 
     np.random.seed(0)
     tau = -2.0
-    beta = -1/tau
+    beta = -1 / tau
     bkg = np.random.exponential(beta, nbkg)
     peak = np.random.normal(1.2, 0.2, nsig)
     mass = np.concatenate((bkg, peak))
@@ -43,8 +46,8 @@ def get_data_and_loss():
     mean = zfit.Parameter("mean", 1.2, 0.5, 2.0)
     sigma = zfit.Parameter("sigma", 0.1, 0.02, 0.2)
     lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
-    Nsig = zfit.Parameter("Nsig", nsig, 0., N)
-    Nbkg = zfit.Parameter("Nbkg", nbkg, 0., N)
+    Nsig = zfit.Parameter("Nsig", nsig, 0.0, N)
+    Nbkg = zfit.Parameter("Nbkg", nbkg, 0.0, N)
 
     signal = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma).create_extended(Nsig)
     background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
@@ -83,7 +86,9 @@ def test_sweights():
 
     sweights = compute_sweights(loss.model[0], mass)
 
-    assert np.allclose([np.sum(sweights[y])/get_value(y.value()) for y in yields], 1.0)
+    assert np.allclose(
+        [np.sum(sweights[y]) / get_value(y.value()) for y in yields], 1.0
+    )
 
     nbins = 30
     hist_conf = dict(bins=nbins, range=[0, 10])
@@ -103,4 +108,6 @@ def test_sweights():
     assert chisquare(hist_bkg_sweights_p, hist_bkg_true_p)[-1] < 0.01
 
     with pytest.raises(ModelNotFittedToData):
-        compute_sweights(loss.model[0], np.concatenate([mass, np.random.normal(0.8, 0.1, 1000)]))
+        compute_sweights(
+            loss.model[0], np.concatenate([mass, np.random.normal(0.8, 0.1, 1000)])
+        )

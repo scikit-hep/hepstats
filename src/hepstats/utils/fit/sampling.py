@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from .api_check import is_valid_pdf
 from .diverse import get_value
 
@@ -62,8 +63,9 @@ def base_sample(samplers, ntoys, parameter=None, value=None, constraints=None):
     if constraints is not None:
         for constr in constraints:
             try:
-                sampled_constraints.update({k: get_value(v) for k, v
-                                            in constr.sample(n=ntoys).items()})
+                sampled_constraints.update(
+                    {k: get_value(v) for k, v in constr.sample(n=ntoys).items()}
+                )
             except AttributeError:
                 continue
 

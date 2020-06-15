@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from contextlib import ExitStack
 import numpy as np
 import warnings

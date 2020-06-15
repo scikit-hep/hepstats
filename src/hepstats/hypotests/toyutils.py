@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import asdf
 import os
 import numpy as np
@@ -232,8 +233,12 @@ class ToysManager(ToysObject):
 
         printfreq = ntoys * printfreq
 
-        samples = self.sample(sampler=sampler, ntoys=int(ntoys * 1.2), poi=poigen,
-                              constraints=toys_loss.constraints)
+        samples = self.sample(
+            sampler=sampler,
+            ntoys=int(ntoys * 1.2),
+            poi=poigen,
+            constraints=toys_loss.constraints,
+        )
 
         try:
             toysresult = self.get_toyresult(poigen, poieval)
@@ -254,8 +259,12 @@ class ToysManager(ToysObject):
                     param_dict = next(samples)
                 except StopIteration:
                     to_gen = ntoys - i
-                    samples = self.sample(sampler=sampler, ntoys=int(to_gen * 1.2), poi=poigen,
-                                          constraints=toys_loss.constraints)
+                    samples = self.sample(
+                        sampler=sampler,
+                        ntoys=int(to_gen * 1.2),
+                        poi=poigen,
+                        constraints=toys_loss.constraints,
+                    )
                     param_dict = next(samples)
 
                 with ExitStack() as stack:

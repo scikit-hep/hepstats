@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from typing import Tuple
 import numpy as np
 from scipy.stats import norm
@@ -132,7 +133,9 @@ class AsymptoticCalculator(BaseCalculator):
                         # shift other parameter values to change starting point of minimization
                         for p in self.parameters:
                             if p != poiparam:
-                                p.set_value(get_value(p) * np.random.normal(1, 0.02, 1)[0])
+                                p.set_value(
+                                    get_value(p) * np.random.normal(1, 0.02, 1)[0]
+                                )
                 else:
                     msg = "No valid minimum was found when fitting the loss function for the alternative"
                     msg += f"hypothesis ({poi})."
@@ -155,7 +158,10 @@ class AsymptoticCalculator(BaseCalculator):
                 asimov_bins = self._asimov_bins
                 assert len(asimov_bins) == len(data)
 
-            asimov_hists = [generate_asimov_hist(m, values, bins) for m, bins in zip(model, asimov_bins)]
+            asimov_hists = [
+                generate_asimov_hist(m, values, bins)
+                for m, bins in zip(model, asimov_bins)
+            ]
 
             for i, ad in enumerate(asimov_hists):
                 weights, bin_edges = ad

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from ..utils.fit.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
 from ..utils.fit.api_check import is_valid_data, is_valid_pdf
 from ..utils.fit import get_nevents
@@ -20,7 +21,9 @@ class HypotestsObject(object):
             self._loss = input
             self._bestfit = None
         else:
-            raise ValueError("{} is not a valid loss funtion or fit result!".format(input))
+            raise ValueError(
+                "{} is not a valid loss funtion or fit result!".format(input)
+            )
 
         if not is_valid_minimizer(minimizer):
             raise ValueError("{} is not a valid minimizer !".format(minimizer))
@@ -216,7 +219,13 @@ class ToysObject(HypotestsObject):
         Returns:
             dictionnary of sampled values of the constraints at each iteration
         """
-        return self._sample(sampler, ntoys, parameter=poi.parameter, value=poi.value, constraints=constraints)
+        return self._sample(
+            sampler,
+            ntoys,
+            parameter=poi.parameter,
+            value=poi.value,
+            constraints=constraints,
+        )
 
     def toys_loss(self, parameter_name):
         """

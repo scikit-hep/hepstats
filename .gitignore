@@ -3,7 +3,13 @@
 *egg*
 build/
 dist/
-.pytest_cache/
 .tox/
 .python-version
 
+
+.ipynb_checkpoints
+.pytest_cache
+*.gv*
+/src/hepstats/version.py
+/.mypy_cache/*
+/pip-wheel-metadata

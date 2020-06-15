@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 from typing import Dict, Union, Tuple, List
 import numpy as np
 
@@ -146,8 +147,10 @@ class BaseCalculator(HypotestsObject):
             self.check_pois_compatibility(poinull, poialt)
 
         if qtilde and (poialt.values < 0).any():
-            poialt = POIarray(parameter=poialt.parameter,
-                              values=np.where(poialt.values < 0, 0, poialt.values))
+            poialt = POIarray(
+                parameter=poialt.parameter,
+                values=np.where(poialt.values < 0, 0, poialt.values),
+            )
 
         return self._pvalue_(
             poinull=poinull,
@@ -201,8 +204,10 @@ class BaseCalculator(HypotestsObject):
             self.check_pois_compatibility(poinull, poialt)
 
         if qtilde and (poialt.values < 0).any():
-            poialt = POIarray(parameter=poialt.parameter,
-                              values=np.where(poialt.values < 0, 0, poialt.values))
+            poialt = POIarray(
+                parameter=poialt.parameter,
+                values=np.where(poialt.values < 0, 0, poialt.values),
+            )
 
         return self._expected_pvalue_(
             poinull=poinull,
@@ -263,8 +268,10 @@ class BaseCalculator(HypotestsObject):
             self.check_pois_compatibility(poinull, poialt)
 
         if qtilde and (poialt.values < 0).any():
-            poialt = POIarray(parameter=poialt.parameter,
-                              values=np.where(poialt.values < 0, 0, poialt.values))
+            poialt = POIarray(
+                parameter=poialt.parameter,
+                values=np.where(poialt.values < 0, 0, poialt.values),
+            )
 
         return self._expected_poi_(
             poinull=poinull,
@@ -362,7 +369,7 @@ class BaseCalculator(HypotestsObject):
         elif onesided:
             condition = (poi2 > poi1) | (q < 0)
         else:
-            condition = (q < 0)
+            condition = q < 0
 
         q = np.where(condition, zeros, q)
 

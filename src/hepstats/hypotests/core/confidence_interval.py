@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from scipy import interpolate
 
 from .basetest import BaseTest
@@ -71,7 +72,9 @@ class ConfidenceInterval(BaseTest):
             pvalues (`np.array`): CLsb, CLs, expected (+/- sigma bands) p-values
         """
 
-        return self.calculator.pvalue(self.poinull, qtilde=self.qtilde, onesided=False)[0]
+        return self.calculator.pvalue(self.poinull, qtilde=self.qtilde, onesided=False)[
+            0
+        ]
 
     def interval(self, alpha=0.32, printlevel=1):
         """
@@ -115,7 +118,9 @@ class ConfidenceInterval(BaseTest):
         if printlevel > 0:
 
             msg = f"\nConfidence interval on {poinull.name}:\n"
-            msg += f"\t{root[0]} < {poinull.name} < {root[1]} at {(1-alpha)*100:.1f}% C.L."
+            msg += (
+                f"\t{root[0]} < {poinull.name} < {root[1]} at {(1-alpha)*100:.1f}% C.L."
+            )
             print(msg)
 
         return bands

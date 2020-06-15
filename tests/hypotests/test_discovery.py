@@ -1,8 +1,11 @@
+# -*- coding: utf-8 -*-
 import os
 import pytest
 import numpy as np
 import zfit
-from zfit.core.testing import teardown_function  # allows redefinition of zfit.Parameter, needed for tests
+from zfit.core.testing import (
+    teardown_function,
+)  # allows redefinition of zfit.Parameter, needed for tests
 from zfit.core.loss import ExtendedUnbinnedNLL
 from zfit.minimize import Minuit
 
@@ -17,12 +20,12 @@ pwd = os.path.dirname(__file__)
 def create_loss():
 
     bounds = (0.1, 3.0)
-    obs = zfit.Space('x', limits=bounds)
+    obs = zfit.Space("x", limits=bounds)
 
     # Data and signal
     np.random.seed(0)
     tau = -2.0
-    beta = -1/tau
+    beta = -1 / tau
     bkg = np.random.exponential(beta, 300)
     peak = np.random.normal(1.2, 0.1, 25)
     data = np.concatenate((bkg, peak))
@@ -31,8 +34,8 @@ def create_loss():
     data = zfit.data.Data.from_numpy(obs=obs, array=data)
 
     lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
-    Nsig = zfit.Parameter("Nsig", 20., -20., N)
-    Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
+    Nsig = zfit.Parameter("Nsig", 20.0, -20.0, N)
+    Nbkg = zfit.Parameter("Nbkg", N, 0.0, N * 1.1)
 
     signal = zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1).create_extended(Nsig)
     background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
@@ -81,7 +84,9 @@ def test_with_asymptotic_calculator():
 def test_with_frequentist_calculator():
 
     loss, (Nsig, Nbkg) = create_loss()
-    calculator = FrequentistCalculator.from_yaml(f"{pwd}/discovery_freq_zfit_toys.yaml", loss, Minuit())
+    calculator = FrequentistCalculator.from_yaml(
+        f"{pwd}/discovery_freq_zfit_toys.yaml", loss, Minuit()
+    )
 
     poinull = POI(Nsig, 0)
 

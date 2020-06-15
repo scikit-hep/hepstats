@@ -1,9 +1,12 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 import pytest
 import numpy as np
 
 import zfit
-from zfit.core.testing import teardown_function  # allows redefinition of zfit.Parameter, needed for tests
+from zfit.core.testing import (
+    teardown_function,
+)  # allows redefinition of zfit.Parameter, needed for tests
 from zfit.core.loss import UnbinnedNLL
 from zfit.minimize import Minuit
 
@@ -19,7 +22,7 @@ true_sigma = 0.1
 
 def create_loss(constraint=False):
 
-    obs = zfit.Space('x', limits=(0.1, 2.0))
+    obs = zfit.Space("x", limits=(0.1, 2.0))
     data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
     mean = zfit.Parameter("mu", true_mu)
     sigma = zfit.Parameter("sigma", true_sigma)
@@ -27,12 +30,18 @@ def create_loss(constraint=False):
     loss = UnbinnedNLL(model=model, data=data)
 
     if constraint:
-        loss.add_constraints(zfit.constraint.GaussianConstraint(params=mean, observation=true_mu, uncertainty=0.01))
+        loss.add_constraints(
+            zfit.constraint.GaussianConstraint(
+                params=mean, observation=true_mu, uncertainty=0.01
+            )
+        )
 
     return loss, (mean, sigma)
 
 
-@pytest.mark.parametrize("calculator", [BaseCalculator, AsymptoticCalculator, FrequentistCalculator])
+@pytest.mark.parametrize(
+    "calculator", [BaseCalculator, AsymptoticCalculator, FrequentistCalculator]
+)
 def test_base_calculator(calculator):
     with pytest.raises(TypeError):
         calculator()
@@ -70,8 +79,12 @@ def test_base_calculator(calculator):
     mean_poialt = POI(mean, 1.2)
 
     pvalue = lambda: calc_loss.pvalue(poinull=mean_poi, poialt=mean_poialt)
-    exp_pvalue = lambda: calc_loss.expected_pvalue(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
-    exp_poi = lambda: calc_loss.expected_poi(poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1))
+    exp_pvalue = lambda: calc_loss.expected_pvalue(
+        poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1)
+    )
+    exp_poi = lambda: calc_loss.expected_poi(
+        poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1)
+    )
 
     if calculator == BaseCalculator:
         with pytest.raises(NotImplementedError):
@@ -102,7 +115,9 @@ def test_base_calculator(calculator):
     with pytest.raises(ValueError):
         calc_loss.lossbuilder(model=[model], data=[sampler], weights=[])
     with pytest.raises(ValueError):
-        calc_loss.lossbuilder(model=[model], data=[sampler], weights=[np.ones(10000), np.ones(10000)])
+        calc_loss.lossbuilder(
+            model=[model], data=[sampler], weights=[np.ones(10000), np.ones(10000)]
+        )
 
     assert calc_loss.get_parameter(mean_poi.name) == mean
     with pytest.raises(KeyError):

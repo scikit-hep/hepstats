@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import numpy as np
 
 from ..utils import eval_pdf, get_value

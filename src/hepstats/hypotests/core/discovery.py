@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from scipy.stats import norm
 
 from .basetest import BaseTest

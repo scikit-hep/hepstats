@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Module for testing a fitting library validity with hepstats.
 
@@ -58,7 +59,14 @@ def is_valid_pdf(object):
     has_space = hasattr(object, "space")
     has_get_yield = hasattr(object, "get_yield")
 
-    return all_valid_params and has_pdf and has_integrate and has_sample and has_space and has_get_yield
+    return (
+        all_valid_params
+        and has_pdf
+        and has_integrate
+        and has_sample
+        and has_space
+        and has_get_yield
+    )
 
 
 def is_valid_loss(object):
@@ -78,7 +86,13 @@ def is_valid_loss(object):
     all_valid_pdfs = all(is_valid_pdf(m) for m in model)
     all_valid_datasets = all(is_valid_data(d) for d in data)
 
-    return all_valid_pdfs and all_valid_datasets and has_constraints and has_fit_range and has_get_params
+    return (
+        all_valid_pdfs
+        and all_valid_datasets
+        and has_constraints
+        and has_fit_range
+        and has_get_params
+    )
 
 
 def is_valid_fitresult(object):

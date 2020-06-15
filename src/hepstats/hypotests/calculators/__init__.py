@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Module defining the base class for the calculators for statistical tests based on the likelyhood ratio.
 
