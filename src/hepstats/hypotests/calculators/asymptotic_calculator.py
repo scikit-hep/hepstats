@@ -91,7 +91,7 @@ class AsymptoticCalculator(BaseCalculator):
             msg = "Tests using the asymptotic calculator can only be used with one parameter of interest."
             raise NotImplementedError(msg)
 
-    def asimov_dataset(self, poi) -> Tuple[np.ndarray, np.ndarray]:
+    def asimov_dataset(self, poi: POI) -> Tuple[np.ndarray, np.ndarray]:
         """Gets the Asimov dataset for a given alternative hypothesis.
 
             Args:
@@ -174,7 +174,7 @@ class AsymptoticCalculator(BaseCalculator):
 
         return self._asimov_dataset[poi]
 
-    def asimov_loss(self, poi):
+    def asimov_loss(self, poi: POI):
         """Constructs a loss function using the Asimov dataset for a given alternative hypothesis.
 
             Args:
@@ -194,7 +194,7 @@ class AsymptoticCalculator(BaseCalculator):
 
         return self._asimov_loss[poi]
 
-    def asimov_nll(self, pois, poialt) -> np.ndarray:
+    def asimov_nll(self, pois: POIarray, poialt: POI) -> np.ndarray:
         """Computes negative log-likelihood values for given parameters of interest using the Asimov dataset
             generated with a given alternative hypothesis.
 
@@ -241,7 +241,7 @@ class AsymptoticCalculator(BaseCalculator):
                 * **qalt** (`numpy.array`): alternative values of the test-statistic q using the asimov dataset
                 * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
                 * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery
-                * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default)
+                * **qtilde** (bool, optional): if `True` use the :math:`\\widetilde{q}` test statistics else (default)
                   use the :math:`q` test statistic
                 * **nsigma** (float, optional): significance shift
 
@@ -268,13 +268,15 @@ class AsymptoticCalculator(BaseCalculator):
 
         return pnull
 
-    def qalt(self, poinull, poialt, onesided, onesideddiscovery) -> np.ndarray:
-        """Computes alternative hypothesis values of the :math:`\Delta` log-likelihood test statistic using the asimov
+    def qalt(
+        self, poinull: POIarray, poialt: POI, onesided, onesideddiscovery
+    ) -> np.ndarray:
+        """Computes alternative hypothesis values of the :math:`\\Delta` log-likelihood test statistic using the asimov
             dataset.
 
             Args:
                 * **poinull** (`POIarray`): parameters of interest for the null hypothesis
-                * **poialt** (`POIarray`): parameters of interest for the alternative hypothesis
+                * **poialt** (`POI`): parameters of interest for the alternative hypothesis
                 * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
                 * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a
                   discovery test
@@ -310,7 +312,7 @@ class AsymptoticCalculator(BaseCalculator):
                 * **qalt** (`np.array`): alternative values of the test-statistic q using the Asimov dataset
                 * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
                 * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery
-                * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default)
+                * **qtilde** (bool, optional): if `True` use the :math:`\\widetilde{q}` test statistics else (default)
                   use the :math:`q` test statistic
 
             Returns:

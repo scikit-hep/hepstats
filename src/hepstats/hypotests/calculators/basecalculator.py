@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from typing import Dict, Union, Tuple, List
+from typing import Dict, Union, Tuple
 import numpy as np
 
 from ..hypotests_object import HypotestsObject

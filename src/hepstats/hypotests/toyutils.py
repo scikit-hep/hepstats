@@ -4,6 +4,7 @@ import os
 import numpy as np
 import warnings
 from contextlib import ExitStack
+from typing import Union, List
 
 from .parameters import POI, POIarray
 from .exceptions import ParameterNotFound, FormatError
@@ -29,7 +30,7 @@ class ToyResult(object):
         * **poieval** (POIarray): POI values to evaluate the loss function
     """
 
-    def __init__(self, poigen, poieval):
+    def __init__(self, poigen: POI, poieval: POIarray):
 
         if not isinstance(poigen, POI):
             raise TypeError("A `hypotests.parameters.POI` is required for poigen.")
@@ -151,13 +152,13 @@ class ToysManager(ToysObject):
         )
         self._toys = {}
 
-    def get_toyresult(self, poigen, poieval):
+    def get_toyresult(self, poigen: POI, poieval: POIarray) -> ToyResult:
         """
         Getter function.
 
         Args:
             * **poigen** (POI): POI used to generate the toys
-            * **poieval** (POIarray, optional): POI values to evaluate the loss function
+            * **poieval** (POIarray): POI values to evaluate the loss function
 
         Returns:
             `ToyResult`
@@ -176,7 +177,7 @@ class ToysManager(ToysObject):
 
         return self._toys[index]
 
-    def add_toyresult(self, toy):
+    def add_toyresult(self, toy: ToyResult):
         """
         Add ToyResult to the manager.
 
@@ -190,7 +191,7 @@ class ToysManager(ToysObject):
 
         self._toys[index] = toy
 
-    def ntoys(self, poigen, poieval):
+    def ntoys(self, poigen: POI, poieval: POIarray) -> int:
         """
         Return the number of toys generated from given value of a POI, and scanned/evaluated for given values_equal
         of the same POI.
@@ -207,7 +208,9 @@ class ToysManager(ToysObject):
         except KeyError:
             return 0
 
-    def generate_and_fit_toys(self, ntoys, poigen, poieval, printfreq=0.2):
+    def generate_and_fit_toys(
+        self, ntoys, poigen: POI, poieval: POIarray, printfreq=0.2
+    ):
         """
         Generate and fit toys for at a given POI (poigen). The toys are then fitted, and the likelihood
         is profiled at the values of poigen and poieval.
@@ -251,7 +254,7 @@ class ToysManager(ToysObject):
         ntrials = 0
 
         for i in range(ntoys):
-            ntrials += 1.0
+            ntrials += 1
             converged = False
             toprint = i % printfreq == 0
             while converged is False:
@@ -329,7 +332,7 @@ class ToysManager(ToysObject):
         """
         return [v.to_dict() for v in self.values()]
 
-    def to_yaml(self, filename):
+    def to_yaml(self, filename: str):
         """
         Save the toys into a yaml file under the key `toys`.
 
@@ -345,7 +348,7 @@ class ToysManager(ToysObject):
         af = asdf.AsdfFile(tree)
         af.write_to(filename)
 
-    def toysresults_from_yaml(self, filename):
+    def toysresults_from_yaml(self, filename: str) -> List[ToyResult]:
         """
         Extract toy results from a yaml file.
 

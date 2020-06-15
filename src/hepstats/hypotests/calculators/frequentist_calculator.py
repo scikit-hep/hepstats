@@ -15,8 +15,10 @@ class FrequentistCalculator(ToysCalculator):
             * **minimizer** : minimizer to use to find the minimum of the loss function
             * **ntoysnull** (int, default=100): minimum number of toys to generate for the null hypothesis
             * **ntoysalt** (int, default=100): minimum number of toys to generate for the alternative hypothesis
-            * **sampler** : function used to create sampler with models, number of events and floating parameters in the sample. Default is `hepstats.fitutils.sampling.base_sampler`.
-            * **sample** : function used to get samples from the sampler. Default is `hepstats.fitutils.sampling.base_sample`.
+            * **sampler** : function used to create sampler with models, number of events and floating parameters
+              in the sample. Default is `hepstats.fitutils.sampling.base_sampler`.
+            * **sample** : function used to get samples from the sampler. Default is
+              `hepstats.fitutils.sampling.base_sample`.
 
         Example with `zfit`:
             >>> import zfit
@@ -47,7 +49,14 @@ class FrequentistCalculator(ToysCalculator):
             input, minimizer, ntoysnull, ntoysalt, sampler, sample
         )
 
-    def qnull(self, poinull, poialt, onesided, onesideddiscovery, qtilde=False):
+    def qnull(
+        self,
+        poinull: POIarray,
+        poialt: POIarray,
+        onesided,
+        onesideddiscovery,
+        qtilde=False,
+    ):
         """Computes null hypothesis values of the :math:`\\Delta` log-likelihood test statistic.
 
             Args:
@@ -55,7 +64,8 @@ class FrequentistCalculator(ToysCalculator):
                 * **poialt** (`POIarray`): parameters of interest for the alternative hypothesis
                 * **onesided** (bool): if `True` computes onesided pvalues
                 * **onesideddiscovery** (bool): if `True` computes onesided pvalues for a discovery test
-                * **qtilde** (bool): if `True` use the :math:`\widetilde{q}` test statistics else use the :math:`q` test statistic
+                * **qtilde** (bool): if `True` use the :math:`\\widetilde{q}` test statistics else use the :math:`q`
+                  test statistic
 
             Returns:
                 `numpy.array`: observed values of q
@@ -94,7 +104,14 @@ class FrequentistCalculator(ToysCalculator):
 
         return ret
 
-    def qalt(self, poinull, poialt, onesided, onesideddiscovery, qtilde=False):
+    def qalt(
+        self,
+        poinull: POIarray,
+        poialt: POIarray,
+        onesided,
+        onesideddiscovery,
+        qtilde=False,
+    ):
         """Computes alternative hypothesis values of the :math:`\\Delta` log-likelihood test statistic.
 
             Args:

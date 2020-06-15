@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+from typing import Union
+
 from ..utils.fit.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
 from ..utils.fit.api_check import is_valid_data, is_valid_pdf
 from ..utils.fit import get_nevents
+from ..parameters import POI
 
 
 class HypotestsObject(object):
@@ -200,7 +203,7 @@ class ToysObject(HypotestsObject):
 
         return self._sampler(self.loss.model, nevents, floating_params)
 
-    def sample(self, sampler, ntoys, poi=None, constraints=None):
+    def sample(self, sampler, ntoys, poi: POI, constraints=None):
         """
         Generator function of samples from the sampler for a given value of a parameter of interest. Returns a
         dictionnary of samples constraints in any.
@@ -208,7 +211,7 @@ class ToysObject(HypotestsObject):
         Args:
             * **sampler** (list): generator of samples
             * **ntoys** (int): number of samples to generate
-            * **poi** (POI, optional):  in the sampler
+            * **poi** (POI):  in the sampler
             * **constraints** (list, optional): list of constraints to sample
 
         Example with `zfit`:
