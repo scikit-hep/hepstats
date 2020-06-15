@@ -10,11 +10,14 @@ repos:
   - id: check-added-large-files
     args: ['--maxkb=1000']
   - id: mixed-line-ending
+    exclude: ^notebooks/
   - id: trailing-whitespace
+    exclude: ^notebooks/
   - id: check-merge-conflict
   - id: check-case-conflict
   - id: check-symlinks
   - id: check-yaml
+    exclude: ^notebooks/
   - id: requirements-txt-fixer
   - id: debug-statements
   - id: end-of-file-fixer

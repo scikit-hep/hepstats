@@ -9,12 +9,13 @@ from zfit.core.testing import (
 from zfit.core.loss import ExtendedUnbinnedNLL
 from zfit.minimize import Minuit
 
+import hepstats
 from hepstats.hypotests.calculators.basecalculator import BaseCalculator
 from hepstats.hypotests.calculators import AsymptoticCalculator, FrequentistCalculator
 from hepstats.hypotests import Discovery
 from hepstats.hypotests.parameters import POI
 
-pwd = os.path.dirname(__file__)
+notebooks_dir = os.path.dirname(hepstats.__file__) + "/../../notebooks/hypotests"
 
 
 def create_loss():
@@ -85,7 +86,7 @@ def test_with_frequentist_calculator():
 
     loss, (Nsig, Nbkg) = create_loss()
     calculator = FrequentistCalculator.from_yaml(
-        f"{pwd}/discovery_freq_zfit_toys.yaml", loss, Minuit()
+        f"{notebooks_dir}/discovery_freq_zfit_toys.yml", loss, Minuit()
     )
 
     poinull = POI(Nsig, 0)
@@ -93,6 +94,6 @@ def test_with_frequentist_calculator():
     discovery_test = Discovery(calculator, poinull)
     pnull, significance = discovery_test.result()
 
-    assert pnull == pytest.approx(0.0006, abs=0.05)
-    assert significance == pytest.approx(3.2388801183529563, abs=0.05)
+    assert pnull == pytest.approx(0.000181818, rel=0.05)
+    assert significance == pytest.approx(3.565158501231352, rel=0.05)
     assert significance >= 3

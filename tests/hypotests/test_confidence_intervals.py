@@ -9,13 +9,14 @@ from zfit.core.testing import (
 from zfit.loss import ExtendedUnbinnedNLL
 from zfit.minimize import Minuit
 
+import hepstats
 from hepstats.hypotests.calculators.basecalculator import BaseCalculator
 from hepstats.hypotests.calculators import AsymptoticCalculator, FrequentistCalculator
 from hepstats.hypotests import ConfidenceInterval
 from hepstats.hypotests.parameters import POI, POIarray
 from hepstats.hypotests.exceptions import POIRangeError
 
-pwd = os.path.dirname(__file__)
+notebooks_dir = os.path.dirname(hepstats.__file__) + "/../../notebooks/hypotests"
 
 
 def create_loss():
@@ -77,7 +78,7 @@ def asy_calc():
 def freq_calc():
     loss, mean = create_loss()
     calculator = FrequentistCalculator.from_yaml(
-        f"{pwd}/ci_freq_zfit_toys.yml", loss, Minuit()
+        f"{notebooks_dir}/ci_freq_zfit_toys.yml", loss, Minuit()
     )
     return mean, calculator
 

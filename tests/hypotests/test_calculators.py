@@ -95,12 +95,6 @@ def test_base_calculator(calculator):
         pvalue()
         exp_pvalue()
 
-    if calculator in [BaseCalculator, FrequentistCalculator]:
-        with pytest.raises(NotImplementedError):
-            exp_poi()
-    else:
-        exp_poi()
-
     model = calc_loss.model[0]
     sampler = model.create_sampler(n=10000)
     assert is_valid_data(sampler)

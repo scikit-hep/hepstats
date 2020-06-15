@@ -9,12 +9,14 @@ from zfit.core.testing import (
 from zfit.core.loss import ExtendedUnbinnedNLL, UnbinnedNLL
 from zfit.minimize import Minuit
 
+import hepstats
 from hepstats.hypotests.parameters import POI, POIarray
 from hepstats.hypotests.exceptions import ParameterNotFound
 from hepstats.hypotests.toyutils import ToyResult, ToysManager
 from hepstats.utils.fit.api_check import is_valid_loss, is_valid_data
 
 pwd = os.path.dirname(__file__)
+notebooks_dir = os.path.dirname(hepstats.__file__) + "/../../notebooks/hypotests"
 
 
 def create_loss():
@@ -100,11 +102,13 @@ def test_toymanager_attributes():
 
     loss, (Nsig, poigen, poieval) = create_loss()
 
-    tm = ToysManager.from_yaml(f"{pwd}/discovery_freq_zfit_toys.yaml", loss, Minuit())
+    tm = ToysManager.from_yaml(
+        f"{notebooks_dir}/discovery_freq_zfit_toys.yml", loss, Minuit()
+    )
 
     with pytest.raises(ParameterNotFound):
         ToysManager.from_yaml(
-            f"{pwd}/discovery_freq_zfit_toys.yaml", create_loss_1(), Minuit()
+            f"{notebooks_dir}/discovery_freq_zfit_toys.yml", create_loss_1(), Minuit()
         )
 
     tr = list(tm.values())[0]
@@ -131,3 +135,5 @@ def test_toymanager_attributes():
     assert all(is_valid_data(s) for s in samplers)
     loss = tm.toys_loss(poigen.name)
     assert is_valid_loss(loss)
+
+    os.remove(f"{pwd}/test_toyutils.yml")

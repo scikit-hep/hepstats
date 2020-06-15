@@ -27,8 +27,6 @@ recursive-include notebooks *.yml
 recursive-include src *.md
 recursive-include tests *.npz
 recursive-include tests *.py
-recursive-include tests *.yaml
-recursive-include tests *.yml
 recursive-include docs *.pickle
 recursive-include docs *.woff
 recursive-include docs *.woff2
