@@ -66,13 +66,11 @@ class BaseCalculator(HypotestsObject):
             ret[i] = self._obs_nll[p]
         return ret
 
-    def qobs(
-        self, poinull: List[POI], onesided=True, onesideddiscovery=False, qtilde=False
-    ):
+    def qobs(self, poinull: POI, onesided=True, onesideddiscovery=False, qtilde=False):
         """Computes observed values of the :math:`\\Delta` log-likelihood test statistic.
 
             Args:
-                * **poinull** (List[`hypotests.POI`]): parameters of interest for the null hypothesis
+                * **poinull** (`hypotests.POI`): parameters of interest for the null hypothesis
                 * **qtilde** (bool, optional): if `True` use the :math:`\\tilde{q}` test statistics else (default)
                   use the :math:`q` test statistic
                 * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
@@ -116,8 +114,8 @@ class BaseCalculator(HypotestsObject):
 
     def pvalue(
         self,
-        poinull: List[POI],
-        poialt: Union[List[POI], None] = None,
+        poinull: Union[POI, POIarray],
+        poialt: Union[POI, POIarray, None] = None,
         qtilde=False,
         onesided=True,
         onesideddiscovery=False,
@@ -125,8 +123,9 @@ class BaseCalculator(HypotestsObject):
         """Computes pvalues for the null and alternative hypothesis.
 
         Args:
-            * **poinull** (List[`hypotests.POI`]): parameters of interest for the null hypothesis
-            * **poialt** (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis
+            * **poinull** (`hypotests.POI`, `hypotests.POIarray`): parameters of interest for the null hypothesis
+            * **poialt** (`hypotests.POI`, `hypotests.POIarray`, optional): parameters of interest for the alternative
+              hypothesis
             * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default)
               use the :math:`q` test statistic
             * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
@@ -146,11 +145,11 @@ class BaseCalculator(HypotestsObject):
             self.check_pois(poialt)
             self.check_pois_compatibility(poinull, poialt)
 
-        if qtilde and (poialt.values < 0).any():
-            poialt = POIarray(
-                parameter=poialt.parameter,
-                values=np.where(poialt.values < 0, 0, poialt.values),
-            )
+            if qtilde and (poialt.values < 0).any():
+                poialt = POIarray(
+                    parameter=poialt.parameter,
+                    values=np.where(poialt.values < 0, 0, poialt.values),
+                )
 
         return self._pvalue_(
             poinull=poinull,
@@ -168,29 +167,30 @@ class BaseCalculator(HypotestsObject):
 
     def expected_pvalue(
         self,
-        poinull: List[POI],
-        poialt: List[POI],
+        poinull: Union[POI, POIarray],
+        poialt: Union[POI, POIarray],
         nsigma,
         CLs=False,
         qtilde=False,
         onesided=True,
         onesideddiscovery=False,
     ) -> Dict[int, np.array]:
-        """Computes the expected pvalues and error bands for different values of :math:`\sigma` (0=expected/median)
+        """Computes the expected pvalues and error bands for different values of :math:`\\sigma` (0=expected/median)
 
         Args:
-            * **poinull** (List[`hypotests.POI`]): parameters of interest for the null hypothesis
-            * **poialt** (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis
-            * **nsigma** (`numpy.array`): array of values of :math:`\sigma` to compute the expected pvalue
+            * **poinull** (`hypotests.POI`, `hypotests.POIarray`): parameters of interest for the null hypothesis
+            * **poialt** (`hypotests.POI`, `hypotests.POIarray`, optional): parameters of interest for the alternative
+              hypothesis
+            * **nsigma** (`numpy.array`): array of values of :math:`\\sigma` to compute the expected pvalue
             * **CLs** (bool, optional): if `True` computes pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}`
               else as :math:`p_{clsb} = p_{null}`
-            * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default)
+            * **qtilde** (bool, optional): if `True` use the :math:`\\widetilde{q}` test statistics else (default)
               use the :math:`q` test statistic
             * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
             * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery
 
         Returns:
-            `numpy.array`: array of expected pvalues for each :math:`\sigma` value
+            `numpy.array`: array of expected pvalues for each :math:`\\sigma` value
 
         Example with `zfit`:
             >>> mean = zfit.Parameter("mu", 1.2)
@@ -221,71 +221,6 @@ class BaseCalculator(HypotestsObject):
 
     def _expected_pvalue_(
         self, poinull, poialt, nsigma, CLs, qtilde, onesided, onesideddiscovery
-    ):
-        """
-        To be overwritten in `BaseCalculator` subclasses.
-        """
-        raise NotImplementedError
-
-    def expected_poi(
-        self,
-        poinull: List[POI],
-        poialt: List[POI],
-        nsigma,
-        alpha=0.05,
-        CLs=False,
-        qtilde=False,
-        onesided=True,
-        onesideddiscovery=False,
-    ):
-        """Computes the expected parameter of interest values such that the expected p_values = :math:`\alpha` for
-        different values of :math:`\sigma` (0=expected/median)
-
-        Args:
-            * **poinull** (List[`hypotests.POI`]): parameters of interest for the null hypothesis
-            * **poialt** (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis
-            * **nsigma** (`numpy.array`): array of values of :math:`\sigma` to compute the expected pvalue
-            * **alpha** (float, default=0.05): significance level
-            * **CLs** (bool, optional): if `True` uses pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}`
-              else as :math:`p_{clsb} = p_{null}`
-            * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default)
-              use the :math:`q` test statistic
-            * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
-            * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery
-
-        Returns:
-            `numpy.array`: array of expected POI values for each :math:`\sigma  value
-
-        Example with `zfit`:
-            >>> mean = zfit.Parameter("mu", 1.2)
-            >>> poinull = POI(mean, [1.1, 1.2, 1.0])
-            >>> poialt = POI(mean, 1.2)
-            >>> nll = calc.expected_poi(poinull, poialt)
-        """
-        self.check_pois(poinull)
-        if poialt:
-            self.check_pois(poialt)
-            self.check_pois_compatibility(poinull, poialt)
-
-        if qtilde and (poialt.values < 0).any():
-            poialt = POIarray(
-                parameter=poialt.parameter,
-                values=np.where(poialt.values < 0, 0, poialt.values),
-            )
-
-        return self._expected_poi_(
-            poinull=poinull,
-            poialt=poialt,
-            nsigma=nsigma,
-            alpha=alpha,
-            CLs=CLs,
-            qtilde=qtilde,
-            onesided=onesided,
-            onesideddiscovery=onesideddiscovery,
-        )
-
-    def _expected_poi_(
-        self, poinull, poialt, nsigma, alpha, CLs, qtilde, onesided, onesideddiscovery
     ):
         """
         To be overwritten in `BaseCalculator` subclasses.

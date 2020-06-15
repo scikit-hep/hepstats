@@ -398,25 +398,3 @@ class AsymptoticCalculator(BaseCalculator):
                 expected_pvalues.append(np.where(p_clsb < 0, 0, p_clsb))
 
         return expected_pvalues
-
-    def _expected_poi_(
-        self, poinull, poialt, nsigma, alpha, CLs, qtilde, onesided, onesideddiscovery
-    ):
-
-        qalt = self.qalt(
-            poinull, poialt, onesided=onesided, onesideddiscovery=onesideddiscovery
-        )
-        qalt = np.where(qalt < 0, 0, qalt)
-
-        sigma = np.sqrt((poinull[0].value - poialt[0].value) ** 2 / qalt)
-
-        expected_values = []
-        for ns in nsigma:
-            if CLs:
-                exp = sigma * (norm.ppf(1 - alpha * norm.cdf(ns)) + ns)
-            else:
-                exp = sigma * (norm.ppf(1 - alpha) + ns)
-
-            expected_values.append(poialt[0].value + exp)
-
-        return expected_values
