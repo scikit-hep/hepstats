@@ -16,6 +16,7 @@ steps:
 
 - script: |
     source activate hepstats-test
+    python -m pip install --upgrade setuptools wheel
     python -m pip install -e .[test]
   displayName: 'Install package'
 
