@@ -96,6 +96,8 @@ jobs:
         password: ${{ secrets.pypi_password }}
 
   codecov:
+    needs: [checks]
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
     - uses: codecov/codecov-action@v1
