@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from typing import Tuple
+from typing import Tuple, Union, Dict
 import numpy as np
 from scipy.stats import norm
 import warnings
@@ -9,7 +9,7 @@ from ...utils import eval_pdf, array2dataset, pll, get_value
 from ..parameters import POI, POIarray
 
 
-def generate_asimov_hist(model, params, nbins=100):
+def generate_asimov_hist(model, params, nbins: int = 100):
     """ Generate the Asimov histogram using a model and dictionary of parameters.
 
         Args:
@@ -48,7 +48,7 @@ class AsymptoticCalculator(BaseCalculator):
     likelihood- based tests of new physics. Eur. Phys. J., C71:1–19, 2011
     """
 
-    def __init__(self, input, minimizer, asimov_bins=100):
+    def __init__(self, input, minimizer, asimov_bins: int = 100):
         """Asymptotic calculator class.
 
             Args:
@@ -73,13 +73,13 @@ class AsymptoticCalculator(BaseCalculator):
 
         super(AsymptoticCalculator, self).__init__(input, minimizer)
         self._asimov_bins = asimov_bins
-        self._asimov_dataset = {}
-        self._asimov_loss = {}
+        self._asimov_dataset: Dict = {}
+        self._asimov_loss: Dict = {}
         # cache of nll values computed with the asimov dataset
-        self._asimov_nll = {}
+        self._asimov_nll: Dict[POI, np.ndarray] = {}
 
     @staticmethod
-    def check_pois(pois):
+    def check_pois(pois: POIarray):
         """
         Checks if the parameters of interest are all `hepstats.parameters.POI/POIarray` instances.
         """
@@ -227,12 +227,12 @@ class AsymptoticCalculator(BaseCalculator):
 
     def pnull(
         self,
-        qobs,
-        qalt=None,
+        qobs: np.ndarray,
+        qalt: Union[np.ndarray, None] = None,
         onesided=True,
         onesideddiscovery=False,
         qtilde=False,
-        nsigma=0,
+        nsigma: int = 0,
     ) -> np.ndarray:
         """Computes the pvalue for the null hypothesis.
 
@@ -303,7 +303,12 @@ class AsymptoticCalculator(BaseCalculator):
         )
 
     def palt(
-        self, qobs, qalt, onesided=True, onesideddiscovery=False, qtilde=False
+        self,
+        qobs: np.ndarray,
+        qalt: np.ndarray,
+        onesided=True,
+        onesideddiscovery=False,
+        qtilde=False,
     ) -> np.ndarray:
         """Computes the pvalue for the alternative hypothesis.
 

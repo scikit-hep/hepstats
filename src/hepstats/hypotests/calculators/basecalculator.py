@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from typing import Dict, Union, Tuple
+from typing import Dict, Union, Tuple, List
 import numpy as np
 
 from ..hypotests_object import HypotestsObject
@@ -42,11 +42,11 @@ class BaseCalculator(HypotestsObject):
             for d in m.get_params():
                 self._parameters[d.name] = d
 
-    def obs_nll(self, pois) -> np.ndarray:
+    def obs_nll(self, pois: POIarray) -> np.ndarray:
         """ Compute observed negative log-likelihood values for given parameters of interest.
 
             Args:
-                * **pois** (List[`hypotests.POI`]): parameters of interest
+                * **pois** (`hypotests.POIarray`): parameters of interest
 
             Returns:
                  `numpy.array`: observed nll values
@@ -169,19 +169,19 @@ class BaseCalculator(HypotestsObject):
         self,
         poinull: Union[POI, POIarray],
         poialt: Union[POI, POIarray],
-        nsigma,
+        nsigma: List[int],
         CLs=False,
         qtilde=False,
         onesided=True,
         onesideddiscovery=False,
-    ) -> Dict[int, np.array]:
+    ) -> List[np.array]:
         """Computes the expected pvalues and error bands for different values of :math:`\\sigma` (0=expected/median)
 
         Args:
             * **poinull** (`hypotests.POI`, `hypotests.POIarray`): parameters of interest for the null hypothesis
             * **poialt** (`hypotests.POI`, `hypotests.POIarray`, optional): parameters of interest for the alternative
               hypothesis
-            * **nsigma** (`numpy.array`): array of values of :math:`\\sigma` to compute the expected pvalue
+            * **nsigma** (list(int)): list of values of :math:`\\sigma` to compute the expected pvalue
             * **CLs** (bool, optional): if `True` computes pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}`
               else as :math:`p_{clsb} = p_{null}`
             * **qtilde** (bool, optional): if `True` use the :math:`\\widetilde{q}` test statistics else (default)
@@ -228,7 +228,7 @@ class BaseCalculator(HypotestsObject):
         raise NotImplementedError
 
     @staticmethod
-    def check_pois(pois):
+    def check_pois(pois: POIarray):
         """
         Checks if the parameters of interest are all `hepstats.parameters.POI/POIarray` instances.
         """
@@ -241,7 +241,7 @@ class BaseCalculator(HypotestsObject):
             raise NotImplementedError(msg)
 
     @staticmethod
-    def check_pois_compatibility(poi1, poi2):
+    def check_pois_compatibility(poi1: POIarray, poi2: POIarray):
         """
         Checks compatibility between two lists of `hepstats.parameters.POIarray` instances.
         """
@@ -261,8 +261,8 @@ class BaseCalculator(HypotestsObject):
         self,
         nll1: np.array,
         nll2: np.array,
-        poi1,
-        poi2,
+        poi1: POIarray,
+        poi2: POIarray,
         onesided=True,
         onesideddiscovery=False,
     ) -> np.ndarray:
@@ -272,8 +272,8 @@ class BaseCalculator(HypotestsObject):
             Args:
                 * **nll1** (`numpy.array`): array of nll values #1, evaluated with poi1
                 * **nll2** (`numpy.array`): array of nll values #2, evaluated with poi2
-                * **poi1** ((List[`hypotests.POI`])): list of POI's #1
-                * **poi2** ((List[`hypotests.POI`])): list of POI's #2
+                * **poi1** (`hypotests.POIarray`): POI's #1
+                * **poi2** (`hypotests.POIarray`): POI's #2
                 * **onesided** (bool, optional, default=True)
                 * **onesideddiscovery** (bool, optional, default=True)
 
@@ -288,21 +288,16 @@ class BaseCalculator(HypotestsObject):
         assert len(nll1) == len(poi1)
         assert len(nll2) == len(poi2)
 
-        poi1 = poi1.values
-        poi2 = poi2.values
+        poi1_values = poi1.values
+        poi2_values = poi2.values
 
         q = 2 * (nll1 - nll2)
-        # filter_non_nan = ~(np.isnan(q) | np.isinf(q))
-        # q = q[filter_non_nan]
-        #
-        # if isinstance(poi2, np.ndarray):
-        #     poi2 = poi2[filter_non_nan]
         zeros = np.zeros(q.shape)
 
         if onesideddiscovery:
-            condition = (poi2 < poi1) | (q < 0)
+            condition = (poi2_values < poi1_values) | (q < 0)
         elif onesided:
-            condition = (poi2 > poi1) | (q < 0)
+            condition = (poi2_values > poi1_values) | (q < 0)
         else:
             condition = q < 0
 

@@ -41,6 +41,9 @@ def plotlimit(poivalues, pvalues, alpha=0.05, CLs=True, ax=None):
         cls_clr = "b"
         clsb_clr = "r"
 
+    color_1sigma = "mediumseagreen"
+    color_2sigma = "gold"
+
     ax.plot(
         poivalues,
         pvalues["cls"],
@@ -100,24 +103,34 @@ def plotlimit(poivalues, pvalues, alpha=0.05, CLs=True, ax=None):
         poivalues,
         pvalues["expected"],
         pvalues["expected_p1"],
-        facecolor="lime",
+        facecolor=color_1sigma,
         label="Expected CL$_{s} \\pm 1 \\sigma$",
+        alpha=0.8,
     )
 
     ax.fill_between(
-        poivalues, pvalues["expected"], pvalues["expected_m1"], facecolor="lime"
+        poivalues,
+        pvalues["expected"],
+        pvalues["expected_m1"],
+        facecolor=color_1sigma,
+        alpha=0.8,
     )
 
     ax.fill_between(
         poivalues,
         pvalues["expected_p1"],
         pvalues["expected_p2"],
-        facecolor="yellow",
+        facecolor=color_2sigma,
         label="Expected CL$_{s} \\pm 2 \\sigma$",
+        alpha=0.8,
     )
 
     ax.fill_between(
-        poivalues, pvalues["expected_m1"], pvalues["expected_m2"], facecolor="yellow"
+        poivalues,
+        pvalues["expected_m1"],
+        pvalues["expected_m2"],
+        facecolor=color_2sigma,
+        alpha=0.8,
     )
 
     ax.set_ylim(-0.01, 1.1)

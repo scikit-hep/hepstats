@@ -53,8 +53,8 @@ class FrequentistCalculator(ToysCalculator):
         self,
         poinull: POIarray,
         poialt: POIarray,
-        onesided,
-        onesideddiscovery,
+        onesided=True,
+        onesideddiscovery=False,
         qtilde=False,
     ):
         """Computes null hypothesis values of the :math:`\\Delta` log-likelihood test statistic.
@@ -108,8 +108,8 @@ class FrequentistCalculator(ToysCalculator):
         self,
         poinull: POIarray,
         poialt: POIarray,
-        onesided,
-        onesideddiscovery,
+        onesided=True,
+        onesideddiscovery=False,
         qtilde=False,
     ):
         """Computes alternative hypothesis values of the :math:`\\Delta` log-likelihood test statistic.
@@ -175,13 +175,25 @@ class FrequentistCalculator(ToysCalculator):
             p = len(qdist[qdist >= qobs]) / len(qdist)
             return p
 
-        qnulldist = self.qnull(poinull, poialt, onesided, onesideddiscovery, qtilde)
+        qnulldist = self.qnull(
+            poinull=poinull,
+            poialt=poialt,
+            onesided=onesided,
+            onesideddiscovery=onesideddiscovery,
+            qtilde=qtilde,
+        )
         pnull = np.empty(len(poinull))
         for i, p in enumerate(poinull):
             pnull[i] = compute_pvalue(qnulldist[p], qobs[i])
 
         if poialt is not None:
-            qaltdist = self.qalt(poinull, poialt, onesided, onesideddiscovery, qtilde)
+            qaltdist = self.qalt(
+                poinull=poinull,
+                poialt=poialt,
+                onesided=onesided,
+                onesideddiscovery=onesideddiscovery,
+                qtilde=qtilde,
+            )
             palt = np.empty(len(poinull))
             for i, p in enumerate(poinull):
                 palt[i] = compute_pvalue(qaltdist[p], qobs[i])
@@ -199,8 +211,20 @@ class FrequentistCalculator(ToysCalculator):
             for ns in nsigma
         }
 
-        qnulldist = self.qnull(poinull, poialt, onesided, onesideddiscovery, qtilde)
-        qaltdist = self.qalt(poinull, poialt, onesided, onesideddiscovery, qtilde)
+        qnulldist = self.qnull(
+            poinull=poinull,
+            poialt=poialt,
+            onesided=onesided,
+            onesideddiscovery=onesideddiscovery,
+            qtilde=qtilde,
+        )
+        qaltdist = self.qalt(
+            poinull=poinull,
+            poialt=poialt,
+            onesided=onesided,
+            onesideddiscovery=onesideddiscovery,
+            qtilde=qtilde,
+        )
 
         filter_nan = lambda q: q[~(np.isnan(q) | np.isinf(q))]
 
