@@ -51,6 +51,7 @@ jobs:
       run: python -m pytest --doctest-modules --cov=hepstats --cov-report=xml
 
     - name: Upload coverage to Codecov
+      if: matrix.python-version == 3.8 && matrix.os == 'ubuntu-latest'
       uses: codecov/codecov-action@v1
       with:
         file: ./coverage.xml

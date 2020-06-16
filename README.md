@@ -9,6 +9,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3519200.svg)](https://doi.org/10.5281/zenodo.3519200)
 [![Build Status](https://dev.azure.com/matthieumarinangeli/matthieumarinangeli/_apis/build/status/scikit-hep.hepstats?branchName=master)](https://dev.azure.com/matthieumarinangeli/matthieumarinangeli/_build/latest?definitionId=4&branchName=master)
 ![CI](https://github.com/scikit-hep/hepstats/workflows/CI/badge.svg)
+[![codecov](https://codecov.io/gh/scikit-hep/hepstats/branch/master/graph/badge.svg)](https://codecov.io/gh/scikit-hep/hepstats)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/scikit-hep/hepstats/master)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
