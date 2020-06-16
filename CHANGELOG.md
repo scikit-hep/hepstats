@@ -4,7 +4,7 @@ Changelog
 master
 ------
 - Redesigned packaging system, GHA deployment.
-- `expected_poi` remove from `BaseCalculator` and `AsymptoticCalculator`
+- `expected_poi` removed from `BaseCalculator` and `AsymptoticCalculator`
 
 Version 0.2.3
 --------------
