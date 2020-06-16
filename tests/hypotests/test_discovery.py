@@ -94,6 +94,6 @@ def test_with_frequentist_calculator():
     discovery_test = Discovery(calculator, poinull)
     pnull, significance = discovery_test.result()
 
-    assert pnull == pytest.approx(0.000181818, rel=0.05, abs=0.0005)
-    assert significance == pytest.approx(3.565158501231352, rel=0.05, abs=0.1)
+    assert pnull == pytest.approx(0.0004, rel=0.05, abs=0.0005)
+    assert significance == pytest.approx(3.3527947805048592, rel=0.05, abs=0.1)
     assert significance >= 3
