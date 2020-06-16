@@ -51,3 +51,4 @@ exclude .pre-commit-config.yaml azure-pipelines.yml environment.yml
 include src/hepstats/version.py
 include README.md pyproject.toml setup.py setup.cfg
 recursive-include LICENSES *
+include CHANGELOG.md
