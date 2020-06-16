@@ -14,6 +14,11 @@ steps:
     conda env create --quiet --force --file environment.yml
   displayName: Create Anaconda environment
 
+- script: |
+    source activate hepstats-test
+    python -m pip install -e .[test]
+  displayName: 'Install package'
+
 - bash: |
     source activate hepstats-test
     pip install pytest pytest-azurepipelines pytest-cov pytest-runner
