@@ -21,10 +21,10 @@ Install `hepstats` like any other Python package:
 pip install hepstats
 ```
 
+or similar (use e.g. `virtualenv` if you wish).
+
 ## Changelog
 See the [changelog](https://github.com/scikit-hep/hepstats/blob/master/CHANGELOG.md) for a history of notable changes.
-
-or similar (use e.g. `virtualenv` if you wish).
 
 ## Getting Started
 
