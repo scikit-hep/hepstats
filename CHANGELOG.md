@@ -1,10 +1,11 @@
 Changelog
 =========
 
-master
+Version 0.2.4
 ------
 - Redesigned packaging system, GHA deployment.
 - `expected_poi` removed from `BaseCalculator` and `AsymptoticCalculator`
+- add type checks in the `hypotests` submodule
 
 Version 0.2.3
 --------------
