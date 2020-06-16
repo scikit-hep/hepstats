@@ -8,8 +8,8 @@
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hepstats)](https://pypi.org/project/hepstats/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3519200.svg)](https://doi.org/10.5281/zenodo.3519200)
 [![Build Status](https://dev.azure.com/matthieumarinangeli/matthieumarinangeli/_apis/build/status/scikit-hep.hepstats?branchName=master)](https://dev.azure.com/matthieumarinangeli/matthieumarinangeli/_build/latest?definitionId=4&branchName=master)
-![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/matthieumarinangeli/matthieumarinangeli/4)
-![Azure DevOps tests](https://img.shields.io/azure-devops/tests/matthieumarinangeli/matthieumarinangeli/4)
+![CI](https://github.com/scikit-hep/hepstats/workflows/CI/badge.svg)
+[![codecov](https://codecov.io/gh/scikit-hep/hepstats/branch/master/graph/badge.svg)](https://codecov.io/gh/scikit-hep/hepstats)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/scikit-hep/hepstats/master)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
@@ -100,13 +100,13 @@ Expected upper limit -2 sigma: Nsig = 6.400549971360598
 A full example using the **sPlot** algorithm can be found [here](https://github.com/scikit-hep/hepstats/tree/master/notebooks/splots/splot_example.ipynb). **sWeights** for different components in a data sample, modeled with a sum of extended probability density functions, are derived using the `compute_sweights` function:
 
 ```python
-from hepstats.splot import compute_sweights
+>>> from hepstats.splot import compute_sweights
 
 # using same model as above for illustration
-sweights = compute_sweights(signal + background, data)
+>>> sweights = compute_sweights(signal + background, data)
 
-bkg_sweights = sweights[Nbkg]
-sig_sweights = sweights[Nsig]
+>>> bkg_sweights = sweights[Nbkg]
+>>> sig_sweights = sweights[Nsig]
 ```
 
 The model needs to be fitted to the data for the computation of the **sWeights**, if not an error is raised.

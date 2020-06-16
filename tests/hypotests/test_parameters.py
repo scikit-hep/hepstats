@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 import pytest
 import numpy as np
 import zfit
@@ -11,8 +12,8 @@ def test_pois():
     mean = zfit.Parameter("mu", 1.2, 0.1, 2)
 
     p0 = POI(mean, 0)
-    p1 = POI(mean, 1.)
-    values = np.linspace(0., 1.0, 10)
+    p1 = POI(mean, 1.0)
+    values = np.linspace(0.0, 1.0, 10)
     pn = POIarray(mean, values)
     pnc = POIarray(mean, values)
 

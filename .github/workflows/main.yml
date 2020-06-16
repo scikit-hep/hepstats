@@ -1,0 +1,105 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: master
+  release:
+    types:
+    - published
+
+jobs:
+  pre-commit:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+    - name: set PY
+      run: echo "::set-env name=PY::$(python -c 'import hashlib, sys;print(hashlib.sha256(sys.version.encode()+sys.executable.encode()).hexdigest())')"
+    - uses: actions/cache@v1
+      with:
+        path: ~/.cache/pre-commit
+        key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
+    - uses: pre-commit/action@v1.1.0
+
+  checks:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+        - ubuntu-latest
+        - macos-latest
+        python-version:
+        - 3.6
+        - 3.7
+        - 3.8
+    name: Check Python ${{ matrix.python-version }} ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install package
+      run: python -m pip install -e .[test]
+
+    - name: Test package
+      run: python -m pytest --doctest-modules --cov=hepstats --cov-report=xml
+
+    - name: Upload coverage to Codecov
+      if: matrix.python-version == 3.8 && matrix.os == 'ubuntu-latest'
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
+
+  dist:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+
+    - name: Install wheel and SDist requirements
+      run: python -m pip install "setuptools>=42.0" "setuptools_scm[toml]>=4.1" "wheel" "twine"
+
+    - name: Build SDist
+      run: python setup.py sdist
+
+    - uses: actions/upload-artifact@v2
+      with:
+        path: dist/*
+
+    - name: Build wheel
+      run: >
+        python -m pip wheel . -w wheels
+
+    - uses: actions/upload-artifact@v2
+      with:
+        path: wheels/hepstats*.whl
+
+    - name: Check metadata
+      run: twine check dist/* wheels/*
+
+  publish:
+    needs: [dist]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'published'
+
+    steps:
+    - uses: actions/download-artifact@v2
+      with:
+        name: artifact
+        path: dist
+
+    - uses: pypa/gh-action-pypi-publish@v1.2.2
+      with:
+        user: __token__
+        password: ${{ secrets.pypi_password }}
