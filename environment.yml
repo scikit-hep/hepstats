@@ -1,4 +1,4 @@
-name: hepstats-test
+name: hepstats-demo
 channels:
   - defaults
   - conda-forge
@@ -11,3 +11,5 @@ dependencies:
   - zfit
   - asdf
   - matplotlib
+  - pip:
+    - .
