@@ -105,7 +105,6 @@ class AsymptoticCalculator(BaseCalculator):
                 >>> dataset = calc.asimov_dataset(poialt)
 
         """
-
         if poi not in self._asimov_dataset.keys():
             model = self.model
             data = self.data
@@ -166,6 +165,10 @@ class AsymptoticCalculator(BaseCalculator):
             for i, ad in enumerate(asimov_hists):
                 weights, bin_edges = ad
                 bin_centers = bin_edges[0:-1] + np.diff(bin_edges) / 2
+
+                if not model[i].is_extended:
+                    weights *= get_value(data[i].n_events)
+
                 asimov_data.append(
                     array2dataset(type(data[i]), data[i].space, bin_centers, weights)
                 )
@@ -269,7 +272,7 @@ class AsymptoticCalculator(BaseCalculator):
         return pnull
 
     def qalt(
-        self, poinull: POIarray, poialt: POI, onesided, onesideddiscovery
+        self, poinull: POIarray, poialt: POI, onesided, onesideddiscovery, qtilde=False
     ) -> np.ndarray:
         """Computes alternative hypothesis values of the :math:`\\Delta` log-likelihood test statistic using the asimov
             dataset.
@@ -280,6 +283,8 @@ class AsymptoticCalculator(BaseCalculator):
                 * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
                 * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a
                   discovery test
+                * **qtilde** (bool, optional): if `True` use the :math:`\\widetilde{q}` test statistics else (default)
+                  use the :math:`q` test statistic
 
             Returns:
                 `numpy.array`: observed values of q
@@ -288,9 +293,16 @@ class AsymptoticCalculator(BaseCalculator):
                 >>> mean = zfit.Parameter("mu", 1.2)
                 >>> poinull = POI(mean, [1.1, 1.2, 1.0])
                 >>> poialt = POI(mean, [1.2])
-                >>> q = calc.qalt([poinull], [poialt])
+                >>> q = calc.qalt(poinull, poialt)
         """
-        nll_poialt_asy = self.asimov_nll(poialt, poialt)
+        param = poialt.parameter
+
+        if qtilde and poialt.value < 0:
+            poialt_bf = POI(param, 0)
+        else:
+            poialt_bf = poialt
+
+        nll_poialt_asy = self.asimov_nll(poialt_bf, poialt)
         nll_poinull_asy = self.asimov_nll(poinull, poialt)
 
         return self.q(
@@ -334,7 +346,7 @@ class AsymptoticCalculator(BaseCalculator):
             palt += 1.0 - norm.cdf(sqrtqobs - sqrtqalt)
 
         if qtilde:
-            cond = (qobs > qalt) & (qalt > 0)
+            cond = qobs > qalt
             palt_2 = 1.0 - norm.cdf((qobs - qalt) / (2.0 * sqrtqalt))
 
             if not (onesided or onesideddiscovery):
@@ -356,7 +368,13 @@ class AsymptoticCalculator(BaseCalculator):
         needpalt = poialt is not None
 
         if needpalt:
-            qalt = self.qalt(poinull, poialt, onesided, onesideddiscovery)
+            qalt = self.qalt(
+                poinull=poinull,
+                poialt=poialt,
+                onesided=onesided,
+                onesideddiscovery=onesideddiscovery,
+                qtilde=qtilde,
+            )
             palt = self.palt(
                 qobs=qobs,
                 qalt=qalt,
