@@ -78,7 +78,7 @@ def asy_calc():
 def freq_calc():
     loss, mean = create_loss()
     calculator = FrequentistCalculator.from_yaml(
-        f"{notebooks_dir}/ci_freq_zfit_toys.yml", loss, Minuit()
+        f"{notebooks_dir}/toys/ci_freq_zfit_toys.yml", loss, Minuit()
     )
     return mean, calculator
 

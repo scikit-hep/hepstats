@@ -86,7 +86,7 @@ def test_with_frequentist_calculator():
 
     loss, (Nsig, Nbkg) = create_loss()
     calculator = FrequentistCalculator.from_yaml(
-        f"{notebooks_dir}/discovery_freq_zfit_toys.yml", loss, Minuit()
+        f"{notebooks_dir}/toys/discovery_freq_zfit_toys.yml", loss, Minuit()
     )
 
     poinull = POI(Nsig, 0)
