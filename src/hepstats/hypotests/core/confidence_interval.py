@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from scipy import interpolate
+import numpy as np
 
 from .basetest import BaseTest
 from ..exceptions import POIRangeError
+from ..parameters import POI
+from ..calculators import AsymptoticCalculator
 
 
 class ConfidenceInterval(BaseTest):
@@ -72,9 +75,10 @@ class ConfidenceInterval(BaseTest):
             pvalues (`np.array`): CLsb, CLs, expected (+/- sigma bands) p-values
         """
 
-        return self.calculator.pvalue(self.poinull, qtilde=self.qtilde, onesided=False)[
-            0
-        ]
+        poialt = None
+        return self.calculator.pvalue(
+            poinull=self.poinull, poialt=poialt, qtilde=self.qtilde, onesided=False
+        )[0]
 
     def interval(self, alpha=0.32, printlevel=1):
         """
@@ -89,8 +93,10 @@ class ConfidenceInterval(BaseTest):
 
         """
 
+        bands = {}
         poinull = self.poinull
         observed = self.calculator.bestfit.params[poinull.parameter]["value"]
+        bands["observed"] = observed
 
         if min(self.pvalues()) > alpha:
             msg = f"The minimum of the scanned p-values is {min(self.pvalues())} which is larger than the"
@@ -98,29 +104,49 @@ class ConfidenceInterval(BaseTest):
             raise POIRangeError(msg)
 
         tck = interpolate.splrep(poinull.values, self.pvalues() - alpha, s=0)
-        root = interpolate.sproot(tck)
+        roots = np.array(interpolate.sproot(tck))
 
-        bands = {}
-        bands["observed"] = observed
+        msg = f" bound on the POI `{poinull.name}` cannot not be interpolated."
 
-        if len(root) < 2:
-            msg = f" bound on the POI `{poinull.name}` cannot not be interpolated."
-            if root[0] < observed:
-                msg = "Upper" + msg + " Try to increase the maximum POI value."
-            else:
-                msg = "Low" + msg + " Try to decrease the minimum POI value."
+        if roots.size == 0:
+            msg = (
+                "Lower and upper"
+                + msg.replace("bound", "bounds")
+                + " Try to increase the maximum POI value."
+            )
             raise POIRangeError(msg)
 
+        lower_roots = roots[roots < observed]
+        upper_roots = roots[roots > observed]
+
+        if upper_roots.size == 0:
+            msg = "Upper" + msg + " Try to increase the maximum POI value."
+            raise POIRangeError(msg)
         else:
-            bands["lower"] = root[0]
-            bands["upper"] = root[1]
+            if upper_roots.size > 1:
+                # raise warnings:
+                pass
+            bands["upper"] = max(upper_roots)
+
+        if lower_roots.size == 0:
+            if self.qtilde:
+                bands["lower"] = 0.0
+            else:
+                msg = "Low" + msg + " Try to decrease the minimum POI value."
+                raise POIRangeError(msg)
+        else:
+            if lower_roots.size > 1:
+                # raise warnings:
+                pass
+            bands["lower"] = min(lower_roots)
+
+            if self.qtilde and bands["lower"] < 0.0:
+                bands["lower"] = 0.0
 
         if printlevel > 0:
 
             msg = f"\nConfidence interval on {poinull.name}:\n"
-            msg += (
-                f"\t{root[0]} < {poinull.name} < {root[1]} at {(1-alpha)*100:.1f}% C.L."
-            )
+            msg += f"\t{bands['lower']} < {poinull.name} < {bands['upper']} at {(1-alpha)*100:.1f}% C.L."
             print(msg)
 
         return bands
