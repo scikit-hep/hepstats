@@ -35,12 +35,17 @@ def pll(minimizer, loss, pois) -> float:
             param = p.parameter
             stack.enter_context(param.set_value(p.value))
             param.floating = False
-        minimum = minimizer.minimize(loss=loss)
+
+        if any(param_loss.floating for param_loss in loss.get_params()):
+            minimum = minimizer.minimize(loss=loss)
+            value = minimum.fmin
+        else:
+            value = get_value(loss.value())
 
         for p in pois:
             p.parameter.floating = True
 
-    return minimum.fmin
+    return value
 
 
 def array2dataset(dataset_cls, obs, array, weights=None):
