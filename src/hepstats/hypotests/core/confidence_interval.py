@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from scipy import interpolate
 import numpy as np
+import warnings
 
 from .basetest import BaseTest
 from ..exceptions import POIRangeError
 from ..parameters import POI
-from ..calculators import AsymptoticCalculator
+from ..calculators import AsymptoticCalculator, FrequentistCalculator
 
 
 class ConfidenceInterval(BaseTest):
@@ -115,6 +116,11 @@ class ConfidenceInterval(BaseTest):
                 + " Try to increase the maximum POI value."
             )
             raise POIRangeError(msg)
+        elif roots.size > 2:
+            msg_warn = "Multiple roots have been founds."
+            if isinstance(self.calculator, FrequentistCalculator):
+                msg_warn += " Try to increase the number of toys, 'ntoysnull', to reduce fluctuations."
+            warnings.warn(msg_warn)
 
         lower_roots = roots[roots < observed]
         upper_roots = roots[roots > observed]
@@ -123,9 +129,6 @@ class ConfidenceInterval(BaseTest):
             msg = "Upper" + msg + " Try to increase the maximum POI value."
             raise POIRangeError(msg)
         else:
-            if upper_roots.size > 1:
-                # raise warnings:
-                pass
             bands["upper"] = max(upper_roots)
 
         if lower_roots.size == 0:
@@ -135,9 +138,6 @@ class ConfidenceInterval(BaseTest):
                 msg = "Low" + msg + " Try to decrease the minimum POI value."
                 raise POIRangeError(msg)
         else:
-            if lower_roots.size > 1:
-                # raise warnings:
-                pass
             bands["lower"] = min(lower_roots)
 
             if self.qtilde and bands["lower"] < 0.0:
