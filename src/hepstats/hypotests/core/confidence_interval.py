@@ -109,14 +109,7 @@ class ConfidenceInterval(BaseTest):
 
         msg = f" bound on the POI `{poinull.name}` cannot not be interpolated."
 
-        if roots.size == 0:
-            msg = (
-                "Lower and upper"
-                + msg.replace("bound", "bounds")
-                + " Try to increase the maximum POI value."
-            )
-            raise POIRangeError(msg)
-        elif roots.size > 2:
+        if roots.size > 2:
             msg_warn = "Multiple roots have been founds."
             if isinstance(self.calculator, FrequentistCalculator):
                 msg_warn += " Try to increase the number of toys, 'ntoysnull', to reduce fluctuations."
