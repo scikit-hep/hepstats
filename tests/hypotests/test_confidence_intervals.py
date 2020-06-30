@@ -147,7 +147,7 @@ def test_with_gauss_fluctuations():
     ci.interval(alpha=0.05, printlevel=0)
 
 
-@pytest.mark.parametrize("n", [0])
+@pytest.mark.parametrize("n", [0.5])
 @pytest.mark.parametrize("min_x", [0, -10])
 def test_with_gauss_qtilde(n, min_x):
 
