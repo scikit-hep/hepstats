@@ -142,3 +142,42 @@ def test_with_gauss_fluctuations():
     ci = ConfidenceInterval(calculator, poinull, qtilde=False)
     with pytest.warns(UserWarning):
         ci.interval(alpha=0.05, printlevel=0)
+
+    ci = ConfidenceInterval(calculator, poinull, qtilde=True)
+    ci.interval(alpha=0.05, printlevel=0)
+
+
+@pytest.mark.parametrize("n", [0])
+@pytest.mark.parametrize("min_x", [0, -10])
+def test_with_gauss_qtilde(n, min_x):
+
+    sigma_x = 0.032
+
+    minimizer = Minuit()
+    bounds = (-10, 10)
+    obs = zfit.Space("x", limits=bounds)
+
+    mean = zfit.Parameter("mean", n * sigma_x)
+    sigma = zfit.Parameter("sigma", 1.0)
+    model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+
+    data = model.sample(n=1000)
+
+    nll = UnbinnedNLL(model=model, data=data)
+
+    minimum = minimizer.minimize(loss=nll)
+    minimum.hesse()
+
+    x = minimum.params[mean]["value"]
+    x_err = minimum.params[mean]["minuit_hesse"]["error"]
+
+    x_min = x - x_err * 3
+    x_max = x + x_err * 3
+
+    x_min = max([x_min, min_x])
+
+    poinull = POIarray(mean, np.linspace(x_min, x_max, 50))
+    calculator = AsymptoticCalculator(nll, minimizer)
+
+    ci = ConfidenceInterval(calculator, poinull, qtilde=True)
+    ci.interval(alpha=0.05, printlevel=1)
