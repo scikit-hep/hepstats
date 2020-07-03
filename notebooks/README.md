@@ -1,4 +1,4 @@
-# Notebooks
+# Notebooks
 
 In this directory are stored all the notebooks demo that you can either run with [binder](https://mybinder.org/v2/gh/scikit-hep/hepstats/master) or by downloading the jupyter notebooks `ipynb` files.
 
@@ -10,8 +10,8 @@ The notebooks are divided for each `submodule`:
     * upperlimit_freq_zfit.ipynb: computes the upper limit on the number signal of a gaussian signal over an exponential background, fitted with `zfit`, using the `FrequentistCalculator`.
     * confidenceinterval_asy_zfit.ipynb: computes the 68% confidence level interval on the mean of a gaussian signal over an exponential background, fitted with `zfit`, using the `AsymptoticCalculator`.
     * confidenceinterval_freq_zfit.ipynb: computes the 68% confidence level interval on the mean of a gaussian signal over an exponential background, fitted with `zfit`, using the `FrequentistCalculator`.
-    * FC_interval_asy.ipynb: computes the 90% confidence level Feldman and Cousins interval on the measured mean $x$ of a gaussian for several values of the true mean $\mu$, using the `AsymptoticCalculator`.
-    * FC_interval_asy.ipynb: computes the 90% confidence level Feldman and Cousins interval on the measured mean $x$ of a gaussian for several values of the true mean $\mu$, using the `FrequentistCalculator`.
+    * FC_interval_asy.ipynb: computes the 90% confidence level Feldman and Cousins interval on the measured mean 𝑥 of a gaussian for several values of the true mean μ, using the `AsymptoticCalculator`.
+    * FC_interval_asy.ipynb: computes the 90% confidence level Feldman and Cousins interval on the measured mean 𝑥 of a gaussian for several values of the true mean μ, using the `FrequentistCalculator`.
 - `modeling`
     * bayesian_blocks.ipynb: presentation of the Bayesian Blocks algorithm and comparison with other binning methods.
 - `splots`
