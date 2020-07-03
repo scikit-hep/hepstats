@@ -93,7 +93,7 @@ class BaseCalculator(HypotestsObject):
             param = poinull.parameter
             bestfit = self.bestfit.params[param]["value"]
 
-            if qtilde:
+            if qtilde and bestfit < 0:
                 bestfitpoi = POI(param, 0)
             else:
                 bestfitpoi = POI(param, bestfit)
@@ -115,7 +115,7 @@ class BaseCalculator(HypotestsObject):
     def pvalue(
         self,
         poinull: Union[POI, POIarray],
-        poialt: Union[POI, POIarray, None] = None,
+        poialt: Union[POI, None] = None,
         qtilde=False,
         onesided=True,
         onesideddiscovery=False,
@@ -124,7 +124,7 @@ class BaseCalculator(HypotestsObject):
 
         Args:
             * **poinull** (`hypotests.POI`, `hypotests.POIarray`): parameters of interest for the null hypothesis
-            * **poialt** (`hypotests.POI`, `hypotests.POIarray`, optional): parameters of interest for the alternative
+            * **poialt** (`hypotests.POI`, optional): parameters of interest for the alternative
               hypothesis
             * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default)
               use the :math:`q` test statistic
@@ -144,12 +144,6 @@ class BaseCalculator(HypotestsObject):
         if poialt:
             self.check_pois(poialt)
             self.check_pois_compatibility(poinull, poialt)
-
-            if qtilde and (poialt.values < 0).any():
-                poialt = POIarray(
-                    parameter=poialt.parameter,
-                    values=np.where(poialt.values < 0, 0, poialt.values),
-                )
 
         return self._pvalue_(
             poinull=poinull,
@@ -384,18 +378,32 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
         return calculator
 
     @property
-    def ntoysnull(self):
+    def ntoysnull(self) -> int:
         """
         Returns the number of toys generated for the null hypothesis.
         """
         return self._ntoysnull
 
+    @ntoysnull.setter
+    def ntoysnull(self, n: int):
+        """
+        Set the number of toys generated for the null hypothesis.
+        """
+        self._ntoysnull = n
+
     @property
-    def ntoysalt(self):
+    def ntoysalt(self) -> int:
         """
         Returns the number of toys generated for the alternative hypothesis.
         """
         return self._ntoysalt
+
+    @ntoysalt.setter
+    def ntoysalt(self, n: int):
+        """
+        Set the number of toys generated for the alternative hypothesis.
+        """
+        self._ntoysalt = n
 
     def _get_toys(self, poigen, poieval=None, qtilde=False, hypothesis="null"):
         """

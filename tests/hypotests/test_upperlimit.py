@@ -76,7 +76,7 @@ def asy_calc():
 def freq_calc():
     loss, (Nsig, Nbkg) = create_loss()
     calculator = FrequentistCalculator.from_yaml(
-        f"{notebooks_dir}/upperlimit_freq_zfit_toys.yml", loss, Minuit()
+        f"{notebooks_dir}/toys/upperlimit_freq_zfit_toys.yml", loss, Minuit()
     )
     return Nsig, calculator
 

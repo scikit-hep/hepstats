@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Version 0.2.5
+------
+- ConfidenceInterval can compute Feldman and Cousin intervals with boundaries (i.e `qtilde=True`)
+- `AsymptoticCalculator` asymov weights are now scaled to the number of entries in dataset from loss function if the loss is not extended
+- `hepstats.hypotests` can now be used even if there is no nuisances. The `pll` function in `utils/fit/diverse.py` had to be modified such that if there are no nuisances, the `pll` function returns the value of the loss function.
+- add notebooks demos for FC intervals with the `FrequentistCalculator` and `AsymptoticCalculator`.
+- add warnings when multiple roots are found in `ConfidenceInterval`
+- move toys .yml files from notebook to notebook/toys
+
 Version 0.2.4
 ------
 - Redesigned packaging system, GHA deployment.
@@ -14,7 +23,7 @@ Version 0.2.3
 
 Version 0.2.2
 --------------
-- Addition of the **Splot** algorithm
+- Addition of the **sPlot** algorithm
 
 Version 0.2.1
 --------------

@@ -6,7 +6,7 @@ import os
 from zfit.core.testing import (
     teardown_function,
 )  # allows redefinition of zfit.Parameter, needed for tests
-from zfit.loss import ExtendedUnbinnedNLL
+from zfit.loss import ExtendedUnbinnedNLL, UnbinnedNLL
 from zfit.minimize import Minuit
 
 import hepstats
@@ -78,7 +78,7 @@ def asy_calc():
 def freq_calc():
     loss, mean = create_loss()
     calculator = FrequentistCalculator.from_yaml(
-        f"{notebooks_dir}/ci_freq_zfit_toys.yml", loss, Minuit()
+        f"{notebooks_dir}/toys/ci_freq_zfit_toys.yml", loss, Minuit()
     )
     return mean, calculator
 
@@ -87,27 +87,97 @@ def freq_calc():
 def test_with_gauss_exp_example(calculator):
 
     mean, calculator = calculator()
-
-    poinull = POIarray(mean, np.linspace(1.15, 1.26, 50))
+    scan_values = np.linspace(1.15, 1.26, 50)
+    poinull = POIarray(mean, scan_values)
     ci = ConfidenceInterval(calculator, poinull)
     interval = ci.interval()
 
     assert interval["lower"] == pytest.approx(1.1810371356602791, rel=0.1)
     assert interval["upper"] == pytest.approx(1.2156701172321935, rel=0.1)
 
-    if isinstance(calculator, AsymptoticCalculator):
+    with pytest.raises(POIRangeError):
+        poinull = POIarray(
+            mean, scan_values[(scan_values >= 1.2) & (scan_values <= 1.205)]
+        )
+        ci = ConfidenceInterval(calculator, poinull)
+        ci.interval()
 
-        with pytest.raises(POIRangeError):
-            poinull = POIarray(mean, np.linspace(1.2, 1.205, 50))
-            ci = ConfidenceInterval(calculator, poinull)
-            ci.interval()
+    with pytest.raises(POIRangeError):
+        poinull = POIarray(mean, scan_values[(scan_values >= 1.2)])
+        ci = ConfidenceInterval(calculator, poinull)
+        ci.interval()
 
-        with pytest.raises(POIRangeError):
-            poinull = POIarray(mean, np.linspace(1.2, 1.26, 50))
-            ci = ConfidenceInterval(calculator, poinull)
-            ci.interval()
+    with pytest.raises(POIRangeError):
+        poinull = POIarray(mean, scan_values[(scan_values <= 1.205)])
+        ci = ConfidenceInterval(calculator, poinull)
+        ci.interval()
 
-        with pytest.raises(POIRangeError):
-            poinull = POIarray(mean, np.linspace(1.17, 1.205, 50))
-            ci = ConfidenceInterval(calculator, poinull)
-            ci.interval()
+
+def test_with_gauss_fluctuations():
+
+    x_true = -2.0
+
+    minimizer = Minuit()
+    bounds = (-10, 10)
+    obs = zfit.Space("x", limits=bounds)
+
+    mean = zfit.Parameter("mean", 0)
+    sigma = zfit.Parameter("sigma", 1.0)
+    model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+
+    npzfile = f"{notebooks_dir}/toys/FC_toys_{x_true}.npz"
+    data = zfit.data.Data.from_numpy(obs=obs, array=np.load(npzfile)["x"])
+
+    nll = UnbinnedNLL(model=model, data=data)
+
+    minimum = minimizer.minimize(loss=nll)
+    minimum.hesse()
+
+    toys_fname = f"{notebooks_dir}/toys/FC_toys_{x_true}.yml"
+    calculator = FrequentistCalculator.from_yaml(toys_fname, minimum, minimizer)
+    keys = np.unique([k[0].value for k in calculator.keys()])
+    keys.sort()
+    poinull = POIarray(mean, keys)
+
+    ci = ConfidenceInterval(calculator, poinull, qtilde=False)
+    with pytest.warns(UserWarning):
+        ci.interval(alpha=0.05, printlevel=0)
+
+    ci = ConfidenceInterval(calculator, poinull, qtilde=True)
+    ci.interval(alpha=0.05, printlevel=0)
+
+
+@pytest.mark.parametrize("n", [0.5])
+@pytest.mark.parametrize("min_x", [0, -10])
+def test_with_gauss_qtilde(n, min_x):
+
+    sigma_x = 0.032
+
+    minimizer = Minuit()
+    bounds = (-10, 10)
+    obs = zfit.Space("x", limits=bounds)
+
+    mean = zfit.Parameter("mean", n * sigma_x)
+    sigma = zfit.Parameter("sigma", 1.0)
+    model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+
+    data = model.sample(n=1000)
+
+    nll = UnbinnedNLL(model=model, data=data)
+
+    minimum = minimizer.minimize(loss=nll)
+    minimum.hesse()
+
+    x = minimum.params[mean]["value"]
+    x_err = minimum.params[mean]["minuit_hesse"]["error"]
+
+    x_min = x - x_err * 3
+    x_max = x + x_err * 3
+
+    x_min = max([x_min, min_x])
+
+    poinull = POIarray(mean, np.linspace(x_min, x_max, 50))
+    calculator = AsymptoticCalculator(nll, minimizer)
+
+    ci = ConfidenceInterval(calculator, poinull, qtilde=True)
+    ci.interval(alpha=0.05, printlevel=1)

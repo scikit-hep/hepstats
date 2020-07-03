@@ -103,12 +103,14 @@ def test_toymanager_attributes():
     loss, (Nsig, poigen, poieval) = create_loss()
 
     tm = ToysManager.from_yaml(
-        f"{notebooks_dir}/discovery_freq_zfit_toys.yml", loss, Minuit()
+        f"{notebooks_dir}/toys/discovery_freq_zfit_toys.yml", loss, Minuit()
     )
 
     with pytest.raises(ParameterNotFound):
         ToysManager.from_yaml(
-            f"{notebooks_dir}/discovery_freq_zfit_toys.yml", create_loss_1(), Minuit()
+            f"{notebooks_dir}/toys/discovery_freq_zfit_toys.yml",
+            create_loss_1(),
+            Minuit(),
         )
 
     tr = list(tm.values())[0]

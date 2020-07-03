@@ -13,8 +13,11 @@ def pltdist(data, bins, bounds):
 
 def plotfitresult(model, bounds, nbins):
     x = np.linspace(*bounds, num=1000)
-    pdf = zfit.run(model.pdf(x, norm_range=bounds) * model.get_yield())
-    plt.plot(x, ((bounds[1] - bounds[0]) / nbins) * (pdf), "-r", label="fit result")
+    if model.is_extended:
+        pdf = model.ext_pdf(x, norm_range=bounds) * ((bounds[1] - bounds[0]) / nbins)
+    else:
+        pdf = model.pdf(x, norm_range=bounds)
+    plt.plot(x, pdf, "-r", label="fit result")
 
 
 def plotlimit(poivalues, pvalues, alpha=0.05, CLs=True, ax=None):
@@ -141,13 +144,14 @@ def plotlimit(poivalues, pvalues, alpha=0.05, CLs=True, ax=None):
     return ax
 
 
-def one_minus_cl_plot(x, pvalues, alpha=0.32, ax=None):
+def one_minus_cl_plot(x, pvalues, alpha=[0.32], ax=None):
 
     if ax is None:
         ax = plt.gca()
 
     ax.plot(x, pvalues, ".--")
-    ax.axhline(alpha, color="red")
+    for a in alpha:
+        ax.axhline(a, color="red", label="$\\alpha = " + str(a) + "$")
     ax.set_ylabel("1-CL")
 
     return ax
