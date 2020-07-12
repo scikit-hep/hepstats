@@ -25,7 +25,7 @@ You can install hepstats from PyPI_ with pip:
 
    getting_started/index
    api/index
-
+   bibliography
 
 
 Indices and tables
@@ -34,7 +34,6 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
 
 .. |hepstats_logo| image:: images/logo_small.png
    :target: https://github.com/scikit-hep/hepstats

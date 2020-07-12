@@ -1,88 +1,61 @@
 hepstats.hypotests
 ------------------
 
-.. automodule:: hepstats.hypotests
-  :members:
-  :undoc-members:
-  :show-inheritance:
+.. currentmodule:: hepstats.hypotests.core.discovery
+
+.. autosummary::
+
+    Discovery
+
+.. currentmodule:: hepstats.hypotests.core.upperlimit
+
+.. autosummary::
+
+    UpperLimit
+
+.. currentmodule:: hepstats.hypotests.core.confidence_interval
+
+.. autosummary::
+
+    ConfidenceInterval
 
 Parameters
 """"""""""
 
-.. automodule:: hepstats.hypotests.parameters
-  :members:
-  :undoc-members:
-  :show-inheritance:
+.. currentmodule:: hepstats.hypotests.parameters
 
+.. autosummary::
+
+    POIarray
+    POI
 
 Calculators
 """""""""""
 
-.. automodule:: hepstats.hypotests.calculators
-  :members:
-  :undoc-members:
-  :show-inheritance:
+Module defining the base class for the calculators for statistical tests based on the likelyhood ratio.
 
-.. automodule:: hepstats.hypotests.calculators.basecalculator
-  :members:
-  :undoc-members:
-  :show-inheritance:
+Acronyms used in the code:
+    * nll = negative log-likehood, which is the value of the `loss` attribute of a calculator;
+    * obs = observed, i.e. measured on provided data.
 
-Asymptotic
-##########
+.. currentmodule:: hepstats.hypotests.calculators.asymptotic_calculator
 
-.. automodule:: hepstats.hypotests.calculators.asymptotic_calculator
-  :members:
-  :undoc-members:
-  :show-inheritance:
+.. autosummary::
 
-Frequentist
-###########
+    AsymptoticCalculator
 
-.. automodule:: hepstats.hypotests.calculators.frequentist_calculator
-  :members:
-  :undoc-members:
-  :show-inheritance:
+.. currentmodule:: hepstats.hypotests.calculators.frequentist_calculator
 
-Discovery test
-""""""""""""""
+.. autosummary::
 
-.. automodule:: hepstats.hypotests.core.discovery
-  :members:
-  :undoc-members:
-  :show-inheritance:
+    FrequentistCalculator
 
+Toys utils
+""""""""""
 
-Upper limit
-"""""""""""
+.. currentmodule:: hepstats.hypotests.toyutils
 
-.. automodule:: hepstats.hypotests.core.upperlimit
-  :members:
-  :undoc-members:
-  :show-inheritance:
+.. autosummary::
 
-
-Confidence interval
-"""""""""""""""""""
-
-.. automodule:: hepstats.hypotests.core.confidence_interval
-  :members:
-  :undoc-members:
-  :show-inheritance:
-
-
-Hypotests objects
-"""""""""""""""""
-
-.. automodule:: hepstats.hypotests.hypotests_object
-  :members:
-  :undoc-members:
-  :show-inheritance:
-
-Toy utilities
-"""""""""""""
-
-.. automodule:: hepstats.hypotests.hypotests_object
-  :members:
-  :undoc-members:
-  :show-inheritance:
+    ToyResult
+    ToysManager

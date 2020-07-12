@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from typing import Dict, Union, Tuple, List
+from typing import Union, Tuple, List
 import numpy as np
 
 from ..hypotests_object import HypotestsObject
@@ -10,8 +10,10 @@ from ..toyutils import ToysManager
 
 
 class BaseCalculator(HypotestsObject):
-    """Base class for calculator.
+    """Base class for calculator."""
 
+    def __init__(self, input, minimizer):
+        """
         Args:
             * **input** : loss or fit result
             * **minimizer** : minimizer to use to find the minimum of the loss function
@@ -29,10 +31,7 @@ class BaseCalculator(HypotestsObject):
             >>> loss = UnbinnedNLL(model=model, data=data)
 
             >>> calc = BaseCalculator(input=loss, minimizer=Minuit())
-    """
-
-    def __init__(self, input, minimizer):
-
+        """
         super(BaseCalculator, self).__init__(input, minimizer)
 
         self._obs_nll = {}
@@ -126,7 +125,7 @@ class BaseCalculator(HypotestsObject):
             * **poinull** (`hypotests.POI`, `hypotests.POIarray`): parameters of interest for the null hypothesis
             * **poialt** (`hypotests.POI`, optional): parameters of interest for the alternative
               hypothesis
-            * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default)
+            * **qtilde** (bool, optional): if `True` use the :math:`\\widetilde{q}` test statistics else (default)
               use the :math:`q` test statistic
             * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
             * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery test
@@ -307,8 +306,10 @@ class BaseToysCalculator(BaseCalculator):
             Args:
                 * **input** : loss or fit result
                 * **minimizer** : minimizer to use to find the minimum of the loss function
-                * **sampler** : function used to create sampler with models, number of events and floating parameters in the sample Default is `hepstats.fitutils.sampling.base_sampler`.
-                * **sample** : function used to get samples from the sampler. Default is `hepstats.fitutils.sampling.base_sample`.
+                * **sampler** : function used to create sampler with models, number of events and floating
+                    parameters in the sample Default is `hepstats.fitutils.sampling.base_sampler`.
+                * **sample** : function used to get samples from the sampler. Default is
+                    `hepstats.fitutils.sampling.base_sample`.
         """
         super(BaseToysCalculator, self).__init__(input, minimizer)
 
@@ -334,8 +335,10 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
                 * **minimizer** : minimizer to use to find the minimum of the loss function
                 * **ntoysnull** (int, default=100): minimum number of toys to generate for the null hypothesis
                 * **ntoysalt** (int, default=100): minimum number of toys to generate for the alternative hypothesis
-                * **sampler** : function used to create sampler with models, number of events and floating** parameters in the sample Default is `hepstats.fitutils.sampling.base_sampler`.
-                * **sample : function used to get samples from the sampler. Default is `hepstats.fitutils.sampling.base_sample`.
+                * **sampler** : function used to create sampler with models, number of events and floating** parameters
+                    in the sample Default is `hepstats.fitutils.sampling.base_sampler`.
+                * **sample : function used to get samples from the sampler. Default is
+                    `hepstats.fitutils.sampling.base_sample`.
         """
         super(ToysCalculator, self).__init__(input, minimizer, sampler, sample)
 

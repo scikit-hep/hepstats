@@ -1,15 +1,10 @@
 hepstats.modeling
 -----------------
 
-.. automodule:: hepstats.modeling
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. currentmodule:: hepstats.modeling
 
-Bayesian blocks
-"""""""""""""""
+.. autosummary::
 
-.. automodule:: hepstats.modeling.bayesian_blocks
-  :members:
-  :undoc-members:
-  :show-inheritance:
+    bayesian_blocks
+
+    

@@ -10,6 +10,7 @@ bayesian blocks python implementation found in astroML :cite:`VanderPlas_2012`.
 * Based on Scargle et al 2012 :cite:`Scargle_2013`
 * Initial Python Implementation :cite:`BB_jakevdp`
 * Initial Examination in HEP context :cite:`Pollack:2017srh`
+
 """
 from __future__ import absolute_import
 from __future__ import division
@@ -35,9 +36,8 @@ class Prior(object):
 def bayesian_blocks(data, weights=None, p0=0.05, gamma=None):
     """Bayesian Blocks Implementation.
 
-    This is a flexible implementation of the Bayesian Blocks algorithm described in Scargle 2012
-    [1]_.  It has been modified to natively accept weighted events, for ease of use in HEP
-    applications.
+    This is a flexible implementation of the Bayesian Blocks algorithm described in :cite:`Scargle_2013`.
+    It has been modified to natively accept weighted events, for ease of use in HEP applications.
 
     Args:
         * **data** (array): Input data values (one dimensional, length N). Repeat values are allowed.

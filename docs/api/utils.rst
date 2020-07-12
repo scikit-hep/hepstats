@@ -1,39 +1,59 @@
 hepstats.utils
---------------
-
-.. automodule:: hepstats.utils
-  :members:
-  :undoc-members:
-  :show-inheritance:
+==============
 
 hepstats.utils.fit
-""""""""""""""""""
-
-.. automodule:: hepstats.utils.fit
-  :members:
-  :undoc-members:
-  :show-inheritance:
+------------------
 
 hepstats.utils.fit.api_check
-""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: hepstats.utils.fit.api_check
-  :members:
-  :undoc-members:
-  :show-inheritance:
+Module for testing a fitting library validity with hepstats.
+
+A fitting library should provide six basic objects:
+
+    * model / probability density function
+    * parameters of the models
+    * data
+    * loss / likelihood function
+    * minimizer
+    * fitresult (optional)
+
+A function for each object is defined in this module, all should return `True` to work
+with hepstats.
+
+The `zfit` API is currently the standard fitting API in hepstats.
+
+
+.. currentmodule:: hepstats.utils.fit.api_check
+
+.. autosummary::
+
+    is_valid_parameter
+    is_valid_data
+    is_valid_pdf
+    is_valid_loss
+    is_valid_fitresult
+    is_valid_minimizer
 
 hepstats.utils.fit.diverse
-""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: hepstats.utils.fit.diverse
-  :members:
-  :undoc-members:
-  :show-inheritance:
+.. currentmodule:: hepstats.utils.fit.diverse
+
+.. autosummary::
+
+    get_value
+    eval_pdf
+    pll
+    array2dataset
+    get_nevents
 
 hepstats.utils.fit.sampling
-"""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: hepstats.utils.fit.sampling
-  :members:
-  :undoc-members:
-  :show-inheritance:
+.. currentmodule:: hepstats.utils.fit.sampling
+
+.. autosummary::
+
+    base_sampler
+    base_sample

@@ -1,13 +1,21 @@
 hepstats.splot
 --------------
 
-.. automodule:: hepstats.splot
-  :members:
-  :undoc-members:
-  :show-inheritance:
+hepstats.splot.sweights
+=======================
 
-sWeights
-""""""""
-.. automodule:: hepstats.splot.sweights
-  :members:
-  :undoc-members:
+.. currentmodule:: hepstats.splot.sweights
+
+.. autosummary::
+
+    compute_sweights
+    is_sum_of_extended_pdfs
+
+hepstats.splot.exceptions
+=========================
+
+.. currentmodule:: hepstats.splot.exceptions
+
+.. autosummary::
+
+    ModelNotFittedToData
