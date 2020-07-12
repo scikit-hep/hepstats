@@ -6,5 +6,3 @@ hepstats.modeling
 .. autosummary::
 
     bayesian_blocks
-
-    
