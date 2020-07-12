@@ -3,8 +3,8 @@
 """
 Module defining the parameter of interest classes, currently includes:
 
-* `POIarray`
-* `POI`
+* **POIarray**
+* **POI**
 """
 import numpy as np
 from collections.abc import Iterable
