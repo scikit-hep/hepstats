@@ -1,20 +1,31 @@
 # -*- coding: utf-8 -*-
 from scipy import interpolate
+import numpy as np
+from typing import Union, Dict
 
 from .basetest import BaseTest
-from ..calculators import AsymptoticCalculator
-from ..parameters import POI
+from ..calculators.basecalculator import BaseCalculator
+from ..parameters import POI, POIarray
 from ..exceptions import POIRangeError
 
 
 class UpperLimit(BaseTest):
-    """Class for upper limit calculation.
+    """Class for upper limit calculation."""
 
+    def __init__(
+        self,
+        calculator: BaseCalculator,
+        poinull: Union[POI, POIarray],
+        poialt: POI,
+        qtilde: bool = False,
+    ):
+        """
         Args:
-            * **calculator** (`sktats.hypotests.BaseCalculator`): calculator to use for computing the pvalues
-            * **poinull** (List[`hypotests.POI`]): parameters of interest for the null hypothesis
-            * **poialt** (List[`hypotests.POI`]): parameters of interest for the alternative hypothesis
-            * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default) use the :math:`q` test statistic
+            calculator: calculator to use for computing the pvalues.
+            poinull: parameters of interest for the null hypothesis.
+            poialt: parameters of interest for the alternative hypothesis.
+            qtilde: if `True` use the :math:`\\widetilde{q}` test statistics else (default) use the :math:`q`
+               test statistic.
 
         Example with `zfit`:
             >>> import numpy as np
@@ -54,31 +65,30 @@ class UpperLimit(BaseTest):
             Expected upper limit -1 sigma: Nsig = 8.592750403611896
             Expected upper limit +2 sigma: Nsig = 22.24864429383046
             Expected upper limit -2 sigma: Nsig = 6.400549971360598
-    """
-
-    def __init__(self, calculator, poinull, poialt, qtilde=False):
+        """
 
         super(UpperLimit, self).__init__(calculator, poinull, poialt)
 
         self._qtilde = qtilde
 
     @property
-    def qtilde(self):
+    def qtilde(self) -> bool:
         """
         Returns True if qtilde test statistic is used, else False.
         """
         return self._qtilde
 
-    def pvalues(self, CLs=True):
+    def pvalues(self, CLs: int = True) -> Dict[str, np.ndarray]:
         """
         Returns p-values scanned for the values of the parameters of interest
         in the null hypothesis.
 
         Args:
-            * **CLs** (bool, optional): if `True` uses pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}` else as :math:`p_{clsb} = p_{null}`
+            CLs: if `True` uses pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}`
+               else as :math:`p_{clsb} = p_{null}`.
 
         Returns:
-            pvalues (Dict): CLsb, CLs, expected (+/- sigma bands) p-values
+            Dictionnary of p-values for CLsb, CLs, expected (+/- sigma bands).
         """
         pvalue_func = self.calculator.pvalue
 
@@ -111,17 +121,20 @@ class UpperLimit(BaseTest):
 
         return pvalues
 
-    def upperlimit(self, alpha=0.05, CLs=True, printlevel=1):
+    def upperlimit(
+        self, alpha: float = 0.05, CLs: bool = True, printlevel: int = 1
+    ) -> Dict[str, np.ndarray]:
         """
         Returns the upper limit of the parameter of interest.
 
         Args:
-            * **alpha** (float, default=0.05): significance level
-            * **CLs** (bool, optional): if `True` uses pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}` else as :math:`p_{clsb} = p_{null}`
-            * **printlevel** (int, default=1): if > 0 print the result
+            alpha: significance level.
+            CLs: if `True` uses pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}` else as
+               :math:`p_{clsb} = p_{null}`.
+            printlevel: if > 0 print the result.
 
         Returns:
-            limits (Dict): observed, expected (+/- sigma bands) upper limits
+            Dictionnary of upper limits for observed, expected (+/- sigma bands).
 
         """
 
@@ -140,7 +153,7 @@ class UpperLimit(BaseTest):
             f"expected{i}" for i in ["", "_p1", "_m1", "_p2", "_m2"]
         ]
 
-        limits = {}
+        limits: Dict = {}
         for k in to_interpolate:
 
             pvalues = self.pvalues(CLs)[k]
