@@ -35,14 +35,14 @@ class FrequentistCalculator(ToysCalculator):
             >>> import zfit
             >>> from zfit.core.loss import UnbinnedNLL
             >>> from zfit.minimize import MinuitMinimizer
-
+            >>>
             >>> obs = zfit.Space('x', limits=(0.1, 2.0))
             >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> sigma = zfit.Parameter("sigma", 0.1)
             >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
             >>> loss = UnbinnedNLL(model=[model], data=[data], fit_range=[obs])
-
+            >>>
             >>> calc = FrequentistCalculator(input=loss, minimizer=MinuitMinimizer(), ntoysnull=1000, ntoysalt=1000)
         """
         super(FrequentistCalculator, self).__init__(

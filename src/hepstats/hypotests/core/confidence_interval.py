@@ -29,17 +29,17 @@ class ConfidenceInterval(BaseTest):
             >>> import zfit
             >>> from zfit.loss import ExtendedUnbinnedNLL
             >>> from zfit.minimize import Minuit
-
+            >>>
             >>> bounds = (0.1, 3.0)
             >>> zfit.Space('x', limits=bounds)
-
+            >>>
             >>> bkg = np.random.exponential(0.5, 300)
             >>> peak = np.random.normal(1.2, 0.1, 80)
             >>> data = np.concatenate((bkg, peak))
             >>> data = data[(data > bounds[0]) & (data < bounds[1])]
             >>> N = data.size
             >>> data = zfit.data.Data.from_numpy(obs=obs, array=data)
-
+            >>>
             >>> mean = zfit.Parameter("mean", 1.2, 0.5, 2.0)
             >>> sigma = zfit.Parameter("sigma", 0.1, 0.02, 0.2)
             >>> lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
@@ -48,11 +48,11 @@ class ConfidenceInterval(BaseTest):
             >>> signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
             >>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
             >>> loss = ExtendedUnbinnedNLL(model=signal + background, data=data)
-
+            >>>
             >>> from hepstats.hypotests.calculators import AsymptoticCalculator
             >>> from hepstats.hypotests import ConfidenceInterval
             >>> from hepstats.hypotests.parameters import POI, POIarray
-
+            >>>
             >>> calculator = AsymptoticCalculator(loss, Minuit())
             >>> poinull = POIarray(mean, np.linspace(1.15, 1.26, 100))
             >>> ci = ConfidenceInterval(calculator, poinull)

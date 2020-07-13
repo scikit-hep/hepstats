@@ -22,14 +22,14 @@ class BaseCalculator(HypotestsObject):
             >>> import zfit
             >>> from zfit.core.loss import UnbinnedNLL
             >>> from zfit.minimize import Minuit
-
+            >>>
             >>> obs = zfit.Space('x', limits=(0.1, 2.0))
             >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> sigma = zfit.Parameter("sigma", 0.1)
             >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
             >>> loss = UnbinnedNLL(model=model, data=data)
-
+            >>>
             >>> calc = BaseCalculator(input=loss, minimizer=Minuit())
         """
         super(BaseCalculator, self).__init__(input, minimizer)
