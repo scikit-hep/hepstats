@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from typing import Tuple, Union, Dict
+from typing import Tuple, Union, Dict, Any
 import numpy as np
 from scipy.stats import norm
 import warnings
@@ -9,23 +9,25 @@ from ...utils import eval_pdf, array2dataset, pll, get_value
 from ..parameters import POI, POIarray
 
 
-def generate_asimov_hist(model, params, nbins: int = 100):
+def generate_asimov_hist(
+    model, params: Dict[Any, float], nbins: int = 100
+) -> Tuple[np.ndarray, np.ndarray]:
     """ Generate the Asimov histogram using a model and dictionary of parameters.
 
-        Args:
-            * **model** : model used to generate the dataset
-            * **params** (Dict) : values of the parameters of the models
-            * **nbins** (int, optional) : number of bins
+    Args:
+        model: model used to generate the dataset.
+        params: values of the parameters of the models.
+        nbins: number of bins.
 
-        Returns:
-             (`numpy.array`, `numpy.array`) : hist, bin_edges
+    Returns:
+        Tuple of hist and bin_edges.
 
-        Example with `zfit`:
-            >>> obs = zfit.Space('x', limits=(0.1, 2.0))
-            >>> mean = zfit.Parameter("mu", 1.2)
-            >>> sigma = zfit.Parameter("sigma", 0.1)
-            >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
-            >>> hist, bin_edges = generate_asimov_hist(model, {"mean": 1.2, "sigma": 0.1})
+    Example with **zfit**:
+        >>> obs = zfit.Space('x', limits=(0.1, 2.0))
+        >>> mean = zfit.Parameter("mu", 1.2)
+        >>> sigma = zfit.Parameter("sigma", 0.1)
+        >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+        >>> hist, bin_edges = generate_asimov_hist(model, {"mean": 1.2, "sigma": 0.1})
     """
 
     space = model.space
@@ -41,34 +43,31 @@ def generate_asimov_hist(model, params, nbins: int = 100):
 
 class AsymptoticCalculator(BaseCalculator):
     """
-    Class for asymptotic calculators. Can be used only with one parameter
-    of interest.
-
-    See G. Cowan, K. Cranmer, E. Gross and O. Vitells: Asymptotic formulae for
-    likelihood- based tests of new physics. Eur. Phys. J., C71:1–19, 2011
+    Class for asymptotic calculators, using asymptotic formulae of the likelihood ratio described in
+    :cite:`Cowan:2010js`. Can be used only with one parameter of interest.
     """
 
     def __init__(self, input, minimizer, asimov_bins: int = 100):
         """Asymptotic calculator class.
 
-            Args:
-                * **input** : loss or fit result
-                * **minimizer** : minimizer to use to find the minimum of the loss function
-                * **asimov_bins** (Optional, int) : number of bins of the Asimov dataset
+        Args:
+            input: loss or fit result.
+            minimizer: minimizer to use to find the minimum of the loss function.
+            asimov_bins: number of bins of the Asimov dataset.
 
-            Example with `zfit`:
-                >>> import zfit
-                >>> from zfit.core.loss import UnbinnedNLL
-                >>> from zfit.minimize import Minuit
+        Example with **zfit**:
+            >>> import zfit
+            >>> from zfit.core.loss import UnbinnedNLL
+            >>> from zfit.minimize import Minuit
 
-                >>> obs = zfit.Space('x', limits=(0.1, 2.0))
-                >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
-                >>> mean = zfit.Parameter("mu", 1.2)
-                >>> sigma = zfit.Parameter("sigma", 0.1)
-                >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
-                >>> loss = UnbinnedNLL(model=model, data=data)
+            >>> obs = zfit.Space('x', limits=(0.1, 2.0))
+            >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
+            >>> mean = zfit.Parameter("mu", 1.2)
+            >>> sigma = zfit.Parameter("sigma", 0.1)
+            >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+            >>> loss = UnbinnedNLL(model=model, data=data)
 
-                >>> calc = AsymptoticCalculator(input=loss, minimizer=Minuit(), asimov_bins=100)
+            >>> calc = AsymptoticCalculator(input=loss, minimizer=Minuit(), asimov_bins=100)
         """
 
         super(AsymptoticCalculator, self).__init__(input, minimizer)
@@ -79,9 +78,15 @@ class AsymptoticCalculator(BaseCalculator):
         self._asimov_nll: Dict[POI, np.ndarray] = {}
 
     @staticmethod
-    def check_pois(pois: POIarray):
+    def check_pois(pois: Union[POI, POIarray]):
         """
-        Checks if the parameters of interest are all `hepstats.parameters.POI/POIarray` instances.
+        Checks if the parameter of interest is a :class:`hepstats.parameters.POIarray` instance.
+
+        Args:
+            pois: the parameter of interest to check.
+
+        Raises:
+            TypeError: if pois is not an instance of :class:`hepstats.parameters.POIarray`.
         """
 
         msg = "POI/POIarray is required."
@@ -91,18 +96,18 @@ class AsymptoticCalculator(BaseCalculator):
             msg = "Tests using the asymptotic calculator can only be used with one parameter of interest."
             raise NotImplementedError(msg)
 
-    def asimov_dataset(self, poi: POI) -> Tuple[np.ndarray, np.ndarray]:
+    def asimov_dataset(self, poi: POI):
         """Gets the Asimov dataset for a given alternative hypothesis.
 
-            Args:
-                * **poi** (`POI`): parameter of interest of the alternative hypothesis
+        Args:
+            poi: parameter of interest of the alternative hypothesis.
 
-            Returns:
-                 Dataset
+        Returns:
+             The asymov dataset.
 
-            Example with `zfit`:
-                >>> poialt = POI(mean, 1.2)
-                >>> dataset = calc.asimov_dataset(poialt)
+        Example with **zfit**:
+            >>> poialt = POI(mean, 1.2)
+            >>> dataset = calc.asimov_dataset(poialt)
 
         """
         if poi not in self._asimov_dataset.keys():
@@ -180,16 +185,15 @@ class AsymptoticCalculator(BaseCalculator):
     def asimov_loss(self, poi: POI):
         """Constructs a loss function using the Asimov dataset for a given alternative hypothesis.
 
-            Args:
-                * **poi** (`POI`): parameter of interest of the alternative hypothesis
+        Args:
+            poi: parameter of interest of the alternative hypothesis.
 
-            Returns:
-                 Loss function
+        Returns:
+             Loss function.
 
-            Example with `zfit`:
-                >>> poialt = POI(mean, 1.2)
-                >>> loss = calc.asimov_loss(poialt)
-
+        Example with **zfit**:
+            >>> poialt = POI(mean, 1.2)
+            >>> loss = calc.asimov_loss(poialt)
         """
         if poi not in self._asimov_loss.keys():
             loss = self.lossbuilder(self.model, self.asimov_dataset(poi))
@@ -199,20 +203,20 @@ class AsymptoticCalculator(BaseCalculator):
 
     def asimov_nll(self, pois: POIarray, poialt: POI) -> np.ndarray:
         """Computes negative log-likelihood values for given parameters of interest using the Asimov dataset
-            generated with a given alternative hypothesis.
+        generated with a given alternative hypothesis.
 
-            Args:
-                * **pois** (`POIarray`): parameters of interest
-                * **poialt** (`POI`): parameter of interest of the alternative hypothesis
+        Args:
+            pois: parameters of interest.
+            poialt: parameter of interest of the alternative hypothesis.
 
-            Returns:
-                 `numpy.array`: alternative nll values
+        Returns:
+            Array of nll values for the alternative hypothesis.
 
-            Example with `zfit`:
-                >>> mean = zfit.Parameter("mu", 1.2)
-                >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
-                >>> poialt = POI(mean, 1.2)
-                >>> nll = calc.asimov_nll(poinull, poialt)
+        Example with **zfit**:
+            >>> mean = zfit.Parameter("mu", 1.2)
+            >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
+            >>> poialt = POI(mean, 1.2)
+            >>> nll = calc.asimov_nll(poinull, poialt)
 
         """
         self.check_pois(pois)
@@ -232,24 +236,24 @@ class AsymptoticCalculator(BaseCalculator):
         self,
         qobs: np.ndarray,
         qalt: Union[np.ndarray, None] = None,
-        onesided=True,
-        onesideddiscovery=False,
-        qtilde=False,
+        onesided: bool = True,
+        onesideddiscovery: bool = False,
+        qtilde: bool = False,
         nsigma: int = 0,
     ) -> np.ndarray:
         """Computes the pvalue for the null hypothesis.
 
-            Args:
-                * **qobs** (`numpy.array`): observed values of the test-statistic q
-                * **qalt** (`numpy.array`): alternative values of the test-statistic q using the asimov dataset
-                * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
-                * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery
-                * **qtilde** (bool, optional): if `True` use the :math:`\\widetilde{q}` test statistics else (default)
-                  use the :math:`q` test statistic
-                * **nsigma** (float, optional): significance shift
+        Args:
+            qobs: observed values of the test-statistic q.
+            qalt: alternative values of the test-statistic q using the asimov dataset.
+            onesided: if `True` (default) computes onesided pvalues.
+            onesideddiscovery: if `True` (default) computes onesided pvalues for a discovery.
+            qtilde: if `True` use the :math:`\\widetilde{q}` test statistics else (default)
+              use the :math:`q` test statistic.
+            nsigma: significance shift.
 
-            Returns:
-                 `np.array` : array of the pvalues for the null hypothesis
+        Returns:
+             Array of the pvalues for the null hypothesis.
         """
         sqrtqobs = np.sqrt(qobs)
 
@@ -272,28 +276,33 @@ class AsymptoticCalculator(BaseCalculator):
         return pnull
 
     def qalt(
-        self, poinull: POIarray, poialt: POI, onesided, onesideddiscovery, qtilde=False
+        self,
+        poinull: POIarray,
+        poialt: POI,
+        onesided: bool,
+        onesideddiscovery: bool,
+        qtilde: bool = False,
     ) -> np.ndarray:
         """Computes alternative hypothesis values of the :math:`\\Delta` log-likelihood test statistic using the asimov
-            dataset.
+        dataset.
 
-            Args:
-                * **poinull** (`POIarray`): parameters of interest for the null hypothesis
-                * **poialt** (`POI`): parameters of interest for the alternative hypothesis
-                * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
-                * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a
-                  discovery test
-                * **qtilde** (bool, optional): if `True` use the :math:`\\widetilde{q}` test statistics else (default)
-                  use the :math:`q` test statistic
+        Args:
+            poinull: parameters of interest for the null hypothesis.
+            poialt: parameters of interest for the alternative hypothesis.
+            onesided: if `True` (default) computes onesided pvalues.
+            onesideddiscovery: if `True` (default) computes onesided pvalues for a
+              discovery test.
+            qtilde: if `True` use the :math:`\\widetilde{q}` test statistics else (default)
+              use the :math:`q` test statistic.
 
-            Returns:
-                `numpy.array`: observed values of q
+        Returns:
+            Q values for the alternative hypothesis.
 
-            Example with `zfit`:
-                >>> mean = zfit.Parameter("mu", 1.2)
-                >>> poinull = POI(mean, [1.1, 1.2, 1.0])
-                >>> poialt = POI(mean, [1.2])
-                >>> q = calc.qalt(poinull, poialt)
+        Example with **zfit**:
+            >>> mean = zfit.Parameter("mu", 1.2)
+            >>> poinull = POI(mean, [1.1, 1.2, 1.0])
+            >>> poialt = POI(mean, [1.2])
+            >>> q = calc.qalt(poinull, poialt)
         """
         param = poialt.parameter
 
@@ -318,22 +327,22 @@ class AsymptoticCalculator(BaseCalculator):
         self,
         qobs: np.ndarray,
         qalt: np.ndarray,
-        onesided=True,
-        onesideddiscovery=False,
-        qtilde=False,
+        onesided: int = True,
+        onesideddiscovery: int = False,
+        qtilde: int = False,
     ) -> np.ndarray:
         """Computes the pvalue for the alternative hypothesis.
 
-            Args:
-                * **qobs** (`np.array`): observed values of the test-statistic q
-                * **qalt** (`np.array`): alternative values of the test-statistic q using the Asimov dataset
-                * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
-                * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery
-                * **qtilde** (bool, optional): if `True` use the :math:`\\widetilde{q}` test statistics else (default)
-                  use the :math:`q` test statistic
+        Args:
+            qobs: observed values of the test-statistic q.
+            qalt: alternative values of the test-statistic q using the Asimov dataset.
+            onesided: if `True` (default) computes onesided pvalues.
+            onesideddiscovery: if `True` (default) computes onesided pvalues for a discovery.
+            qtilde: if `True` use the :math:`\\widetilde{q}` test statistics else (default)
+              use the :math:`q` test statistic.
 
-            Returns:
-                 `numpy.array` : array of the pvalues for the alternative hypothesis
+        Returns:
+             Array of the pvalues for the alternative hypothesis.
         """
         sqrtqobs = np.sqrt(qobs)
         sqrtqalt = np.sqrt(qalt)
