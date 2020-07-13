@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from typing import Union
 
 from ..utils.fit.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
 from ..utils.fit.api_check import is_valid_data, is_valid_pdf
@@ -11,8 +10,8 @@ class HypotestsObject(object):
     """Base object in `hepstats.hypotests` to manipulate a loss function and a minimizer.
 
         Args:
-            * **input** : loss or fit result
-            * **minimizer** : minimizer to use to find the minimum of the loss function
+            input: loss or fit result
+            minimizer: minimizer to use to find the minimum of the loss function
     """
 
     def __init__(self, input, minimizer):
@@ -72,8 +71,8 @@ class HypotestsObject(object):
         """
         Set the best fit values  of the model parameters.
 
-            Args:
-                * **value**: fit result
+        Args:
+            value: fit result
         """
         if not is_valid_fitresult(value):
             raise ValueError("{} is not a valid fit result!".format(input))
@@ -100,12 +99,12 @@ class HypotestsObject(object):
         """
         return self.loss.constraints
 
-    def get_parameter(self, name):
+    def get_parameter(self, name: str):
         """
         Returns the parameter in loss function with given input name.
 
         Args:
-            name (str): name of the parameter to return
+            name: name of the parameter to return
         """
         return self._parameters[name]
 
@@ -169,10 +168,11 @@ class ToysObject(HypotestsObject):
     model (within the loss function) to do toy experiments.
 
         Args:
-            * **input** : loss or fit result
-            * **minimizer** : minimizer to use to find the minimum of the loss function
-            * **sampler** : function used to create sampler with models, number of events and floating parameters in the sample.
-            * **sample** : function used to get samples from the sampler.
+            input: loss or fit result
+            minimizer: minimizer to use to find the minimum of the loss function
+            sampler: function used to create sampler with models, number of events and floating parameters
+            in the sample.
+            sample: function used to get samples from the sampler.
     """
 
     def __init__(self, input, minimizer, sampler, sample):
@@ -188,7 +188,7 @@ class ToysObject(HypotestsObject):
         Create sampler with models.
 
         Args:
-            * **floating_params** (list): floating parameters in the sampler
+            floating_params: floating parameters in the sampler
 
         Example with `zfit`:
             >>> sampler = calc.sampler(floating_params=[zfit.Parameter("mean")])
@@ -209,10 +209,10 @@ class ToysObject(HypotestsObject):
         dictionnary of samples constraints in any.
 
         Args:
-            * **sampler** (list): generator of samples
-            * **ntoys** (int): number of samples to generate
-            * **poi** (POI):  in the sampler
-            * **constraints** (list, optional): list of constraints to sample
+            sampler (list): generator of samples
+            ntoys (int): number of samples to generate
+            poi (POI):  in the sampler
+            constraints (list, optional): list of constraints to sample
 
         Example with `zfit`:
             >>> mean = zfit.Parameter("mean")
@@ -230,12 +230,12 @@ class ToysObject(HypotestsObject):
             constraints=constraints,
         )
 
-    def toys_loss(self, parameter_name):
+    def toys_loss(self, parameter_name: str):
         """
         Construct a loss function constructed with a sampler for a given floating parameter
 
         Args:
-            * **parameter_name**: name floating parameter in the sampler
+            parameter_name: name floating parameter in the sampler
         Returns:
              Loss function
 
