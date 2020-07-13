@@ -17,7 +17,7 @@ class POIarray(object):
     Class for parameters of interest with multiple values:
     """
 
-    def __init__(self, parameter, values: np.array):
+    def __init__(self, parameter, values: Union[Collection, np.array]):
         """
         Args:
             parameter: the parameter of interest
