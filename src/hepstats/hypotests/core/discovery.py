@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
 from scipy.stats import norm
+from typing import Tuple
 
 from .basetest import BaseTest
+from ..calculators.basecalculator import BaseCalculator
+from .parameters import POI
 
 
 class Discovery(BaseTest):
-    """Class for discovery test.
+    """Class for discovery test."""
 
+    def __init__(self, calculator: BaseCalculator, poinull: POI):
+        """
         Args:
-            * **calculator** (`sktats.hypotests.BaseCalculator`): calculator to use for computing the pvalues
-            * **poinull** (`POI`): parameter of interest for the null hypothesis
+            calculator: calculator to use for computing the pvalues.
+            poinull: parameter of interest for the null hypothesis.
 
-        Example with `zfit`:
+        Example with **zfit**:
             >>> import zfit
             >>> from zfit.loss import ExtendedUnbinnedNLL
             >>> from zfit.minimize import Minuit
@@ -43,21 +48,19 @@ class Discovery(BaseTest):
             >>> discovery_test.result()
             p_value for the Null hypothesis = 0.0007571045424956679
             Significance (in units of sigma) = 3.1719464825102244
-    """
-
-    def __init__(self, calculator, poinull):
+        """
 
         super(Discovery, self).__init__(calculator, poinull)
 
-    def result(self, printlevel=1):
+    def result(self, printlevel: int = 1) -> Tuple[float, float]:
         """
         Returns the result of the discovery hypothesis test.
 
-            Args:
-                * **printlevel** (int, default=1): if > 0 print the result
+        Args:
+            printlevel: if > 0 print the result.
 
-            Returns:
-                Tuple(float, float): pnull, significance
+        Returns:
+            Tuple of the p-value for the null hypothesis and the significance.
         """
         pnull, _ = self.calculator.pvalue(self.poinull, onesideddiscovery=True)
         pnull = pnull[0]

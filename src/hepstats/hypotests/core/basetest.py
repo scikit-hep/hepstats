@@ -14,7 +14,7 @@ class BaseTest(object):
         self,
         calculator: BaseCalculator,
         poinull: Union[POI, POIarray],
-        poialt: Union[POI, POIarray, None],
+        poialt: Union[POI, POIarray, None] = None,
     ):
         """Base class for hypothesis tests.
 
