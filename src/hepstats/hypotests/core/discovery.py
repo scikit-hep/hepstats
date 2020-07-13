@@ -4,7 +4,7 @@ from typing import Tuple
 
 from .basetest import BaseTest
 from ..calculators.basecalculator import BaseCalculator
-from .parameters import POI
+from ..parameters import POI
 
 
 class Discovery(BaseTest):
