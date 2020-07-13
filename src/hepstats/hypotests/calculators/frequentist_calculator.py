@@ -136,12 +136,10 @@ class FrequentistCalculator(ToysCalculator):
             >>> poialt = POI(mean, 1.2)
             >>> q = calc.qalt(poinull, poialt)
         """
-        toysresults = self.get_toys_alt(poialt, poinull, qtilde)
+        toysresult = self.get_toys_alt(poialt, poinull, qtilde)[poialt]
         ret = {}
 
         for p in poinull:
-            toysresult = toysresults[poialt]
-
             nll1 = toysresult.nlls[p]
             nll2 = toysresult.nll_bestfit
             bestfit = toysresult.bestfit

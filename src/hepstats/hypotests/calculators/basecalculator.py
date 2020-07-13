@@ -441,7 +441,7 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
     def _get_toys(
         self,
         poigen: Union[POI, POIarray],
-        poieval: Optional[POIarray] = None,
+        poieval: Union[POI, POIarray, None] = None,
         qtilde: bool = False,
         hypothesis: str = "null",
     ) -> Dict[POI, ToyResult]:
@@ -494,7 +494,7 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
     def get_toys_null(
         self,
         poigen: Union[POI, POIarray],
-        poieval: Optional[POIarray] = None,
+        poieval: Union[POI, POIarray, None] = None,
         qtilde: bool = False,
     ) -> Dict[POI, ToyResult]:
         """
@@ -519,7 +519,7 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
     def get_toys_alt(
         self,
         poigen: Union[POI, POIarray],
-        poieval: Optional[POIarray] = None,
+        poieval: Union[POI, POIarray, None] = None,
         qtilde: bool = False,
     ) -> Dict[POI, ToyResult]:
         """
