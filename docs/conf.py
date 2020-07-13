@@ -7,11 +7,8 @@
 
 # -- Path setup --------------------------------------------------------------
 
-import os
 import sys
-import shutil
 from pathlib import Path
-import easydev
 
 project_dir = Path(__file__).parents[1]
 sys.path.insert(0, str(project_dir))
