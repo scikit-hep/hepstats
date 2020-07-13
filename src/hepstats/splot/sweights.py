@@ -35,7 +35,7 @@ def compute_sweights(model, x: np.ndarray) -> Dict[Any, np.ndarray]:
     Returns:
         dictionary with yield parameters as keys, and sWeights for correspoind species as values.
 
-    Example with `zfit`:
+    Example with **zfit**:
 
         Imports:
 

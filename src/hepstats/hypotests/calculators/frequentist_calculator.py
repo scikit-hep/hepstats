@@ -31,7 +31,7 @@ class FrequentistCalculator(ToysCalculator):
             sample: function used to get samples from the sampler. Default is
               :func:`hepstats.utils.fit.sampling.base_sample`.
 
-        Example with `zfit`:
+        Example with **zfit**:
             >>> import zfit
             >>> from zfit.core.loss import UnbinnedNLL
             >>> from zfit.minimize import MinuitMinimizer
@@ -75,7 +75,7 @@ class FrequentistCalculator(ToysCalculator):
         Returns:
             Q distribution for the null hypothesis.
 
-        Example with `zfit`:
+        Example with **zfit**:
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
             >>> poialt = POI(mean, 1.2)
@@ -130,7 +130,7 @@ class FrequentistCalculator(ToysCalculator):
         Returns:
             Q distribution for the alternative hypothesis.
 
-        Example with `zfit`:
+        Example with **zfit**:
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
             >>> poialt = POI(mean, 1.2)
