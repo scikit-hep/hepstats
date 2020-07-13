@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+from typing import Union
+
 from ..calculators.basecalculator import BaseCalculator
+from ..parameters import POI, POIarray
 
 """
 Module defining the base class for hypothesis tests.
@@ -7,13 +10,21 @@ Module defining the base class for hypothesis tests.
 
 
 class BaseTest(object):
-    def __init__(self, calculator, poinull, poialt=None):
+    def __init__(
+        self,
+        calculator: BaseCalculator,
+        poinull: Union[POI, POIarray],
+        poialt=Union[POI, POIarray, None],
+    ):
         """Base class for hypothesis tests.
 
-            Args:
-                calculator (`sktats.hypotests.BaseCalculator`): calculator to use for computing the pvalues
-                poinull (List[`hypotests.POI`]): parameters of interest for the null hypothesis
-                poialt (List[`hypotests.POI`], optional): parameters of interest for the alternative hypothesis
+        Args:
+            calculator: calculator to use for computing the pvalues
+            poinull: parameters of interest for the null hypothesis
+            poialt: parameters of interest for the alternative hypothesis
+
+        Raises:
+            TypeError: if calculator is not a BaseCalculator instance
         """
 
         if not isinstance(calculator, BaseCalculator):
