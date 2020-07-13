@@ -44,6 +44,7 @@ extensions = [
     "sphinxcontrib.bibtex",
     "matplotlib.sphinxext.plot_directive",
     "sphinx_copybutton",
+    "sphinx_autodoc_typehints",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -67,7 +68,18 @@ html_theme = "pydata_sphinx_theme"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
+
 copybutton_prompt_text = ">>> "
+
+# -- autodoc settings ---------------------------------------------
+
+# also doc __init__ docstrings
+autoclass_content = 'both'
+autodoc_member_order = 'bysource'
+autodoc_default_options = {
+    'show-inheritance': True,
+}
+autodoc_inherit_docstrings = False
 
 html_static_path = []  # "_static"
 
