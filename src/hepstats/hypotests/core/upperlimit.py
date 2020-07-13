@@ -27,7 +27,7 @@ class UpperLimit(BaseTest):
             qtilde: if `True` use the :math:`\\widetilde{q}` test statistics else (default) use the :math:`q`
                test statistic.
 
-        Example with `zfit`:
+        Example with **zfit**:
             >>> import numpy as np
             >>> import zfit
             >>> from zfit.loss import ExtendedUnbinnedNLL
@@ -123,7 +123,7 @@ class UpperLimit(BaseTest):
 
     def upperlimit(
         self, alpha: float = 0.05, CLs: bool = True, printlevel: int = 1
-    ) -> Dict[str, np.ndarray]:
+    ) -> Dict[str, float]:
         """
         Returns the upper limit of the parameter of interest.
 
