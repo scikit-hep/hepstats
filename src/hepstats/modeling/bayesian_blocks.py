@@ -12,20 +12,39 @@ bayesian blocks python implementation found in astroML :cite:`VanderPlas_2012`.
 * Initial Examination in HEP context :cite:`Pollack:2017srh`
 
 """
-from __future__ import absolute_import
-from __future__ import division
 import numpy as np
 import pandas as pd
+from typing import Optional, Union, Iterable
 
 
 class Prior(object):
     """Helper class for calculating the prior on the fitness function."""
 
-    def __init__(self, p0=0.05, gamma=None):
+    def __init__(self, p0: float = 0.05, gamma: Optional[float] = None):
+        """
+        Args:
+            * p0: False-positive rate, between 0 and 1.  A lower number places a stricter penalty
+              against creating more bin edges, thus reducing the potential for false-positive bin edges. In general,
+              the larger the number of bins, the small the p0 should be to prevent the creation of spurious, jagged
+              bins. Defaults to 0.05.
+
+            * gamma: If specified, then use this gamma to compute the general prior form,
+              p ~ gamma^N. If gamma is specified, p0 is ignored. Defaults to None.
+        """
+
         self.p0 = p0
         self.gamma = gamma
 
-    def calc(self, N):
+    def __call__(self, N: int) -> float:
+        """
+        Computes the prior.
+
+        Args:
+            * N: N-th change point.
+
+        Return:
+            the prior.
+        """
         if self.gamma is not None:
             return -np.log(self.gamma)
         else:
@@ -33,28 +52,29 @@ class Prior(object):
             return 4 - np.log(73.53 * self.p0 * (N ** -0.478))
 
 
-def bayesian_blocks(data, weights=None, p0=0.05, gamma=None):
+def bayesian_blocks(data: Union[Iterable, np.ndarray], weights: Union[Iterable, np.ndarray, None] = None,
+                    p0: float = 0.05, gamma: Optional[float] = None) -> np.ndarray:
     """Bayesian Blocks Implementation.
 
     This is a flexible implementation of the Bayesian Blocks algorithm described in :cite:`Scargle_2013`.
     It has been modified to natively accept weighted events, for ease of use in HEP applications.
 
     Args:
-        * **data** (array): Input data values (one dimensional, length N). Repeat values are allowed.
+        * data: Input data values (one dimensional, length N). Repeat values are allowed.
 
-        * **weights** (array_like, optional): Weights for data (otherwise assume all data points have a weight of 1).
+        * weights: Weights for data (otherwise assume all data points have a weight of 1).
           Must be same length as data. Defaults to None.
 
-        * **p0** (float, optional): False-positive rate, between 0 and 1.  A lower number places a stricter penalty
+        * p0: False-positive rate, between 0 and 1.  A lower number places a stricter penalty
           against creating more bin edges, thus reducing the potential for false-positive bin edges. In general,
           the larger the number of bins, the small the p0 should be to prevent the creation of spurious, jagged
           bins. Defaults to 0.05.
 
-        * **gamma** (float, optional): If specified, then use this gamma to compute the general prior form,
+        * gamma: If specified, then use this gamma to compute the general prior form,
           p ~ gamma^N. If gamma is specified, p0 is ignored. Defaults to None.
 
     Returns:
-        * **edges** (ndarray): Array containing the (N+1) bin edges
+        * edges: Array containing the (N+1) bin edges
 
     Examples:
         Unweighted data:
@@ -125,7 +145,7 @@ def bayesian_blocks(data, weights=None, p0=0.05, gamma=None):
         fit_vec = N_k * (np.log(N_k / T_k))
 
         # penalize function with prior
-        A_R = fit_vec - prior.calc(R + 1)
+        A_R = fit_vec - prior(R + 1)
         A_R[1:] += best[:R]
 
         i_max = np.argmax(A_R)
