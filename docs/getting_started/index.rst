@@ -11,5 +11,6 @@ guide to each submodule:
 
     modeling
     hypotests
+    splot
 
 The `binder <https://mybinder.org/v2/gh/scikit-hep/hepstats/master>`_ examples are also a good way to get started.
