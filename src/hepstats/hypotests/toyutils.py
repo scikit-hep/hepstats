@@ -4,12 +4,13 @@ import os
 import numpy as np
 import warnings
 from contextlib import ExitStack
-from typing import Union, List, Callable, Optional, Dict
+from typing import List, Callable, Dict, Any
 
 from .parameters import POI, POIarray
 from .exceptions import ParameterNotFound, FormatError
 from ..utils import pll, base_sampler, base_sample
 from .hypotests_object import ToysObject
+
 
 """
 Module defining the classes to perform and store the results of toy experiments.
@@ -92,14 +93,16 @@ class ToyResult(object):
         """
         return len(self.bestfit)
 
-    def add_entries(self, bestfit, nll_bestfit, nlls):
+    def add_entries(
+        self, bestfit: np.ndarray, nll_bestfit: np.ndarray, nlls: Dict[POI, np.ndarray]
+    ):
         """
         Add new result entries.
 
         Args:
-            bestfit (`numpy.array`): best fitted values of the POI
-            nll_bestfit (`numpy.array`): NLL  evaluated at the best fitted values of the POI
-            nlls (Dict(`POI`, `numpy.array`)): NLL  evaluated at the best fitted values of the POI
+            bestfit: best fitted values of the POI
+            nll_bestfit: NLL evaluated at the best fitted values of the POI
+            nlls: NLL evaluated at the best fitted values of the POI
         """
         if not all(k in nlls.keys() for k in self.poieval):
             missing_keys = [k for k in self.poieval if k not in nlls.keys()]
@@ -153,11 +156,10 @@ class ToysManager(ToysObject):
         Args:
             input: loss or fit result
             minimizer: minimizer to use to find the minimum of the loss function
-            ntoysnull (int, default=100): minimum number of toys to generate for the null hypothesis
-            ntoysalt (int, default=100): minimum number of toys to generate for the alternative hypothesis
             sampler: function used to create sampler with models, number of events and floating parameters in the
-            sample. Default is `hepstats.fitutils.sampling.base_sampler`.
-            sample: function used to get samples from the sampler. Default is `hepstats.fitutils.sampling.base_sample`.
+               sample. Default is :func:`hepstats.utils.fit.sampling.base_sampler`.
+            sample: function used to get samples from the sampler. Default is
+               :func:`hepstats.utils.fit.sampling.base_sample`.
         """
 
         super(ToysManager, self).__init__(
@@ -335,7 +337,7 @@ class ToysManager(ToysObject):
 
     def toyresults_to_dict(self) -> List[Dict]:
         """
-        Returns a list of all the toy results converted into dictionnaries
+        Returns a list of all the toy results converted into dictionnaries.
         """
         return [v.to_dict() for v in self.values()]
 
@@ -403,12 +405,13 @@ class ToysManager(ToysObject):
         Read the toys from a yaml file.
 
         Args:
-            filename**: the yaml file name.
+            filename: the yaml file name.
             input: loss or fit result
             minimizer: minimizer to use to find the minimum of the loss function
             sampler: function used to create sampler with models, number of events and floating parameters in the
-            sample. Default is `hepstats.fitutils.sampling.base_sampler`.
-            sample: function used to get samples from the sampler. Default is `hepstats.fitutils.sampling.base_sample`.
+               sample. Default is :func:`hepstats.utils.fit.sampling.base_sampler`.
+            sample: function used to get samples from the sampler. Default is
+               :func:`hepstats.utils.fit.sampling.base_sample`.
         """
 
         toyscollection = cls(input, minimizer, sampler, sample)

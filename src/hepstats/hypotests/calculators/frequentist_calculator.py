@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from scipy.stats import norm
+from typing import Callable, Union
 
 from .basecalculator import ToysCalculator
 from ...utils import base_sampler, base_sample
@@ -8,17 +9,27 @@ from ..parameters import POI, POIarray
 
 
 class FrequentistCalculator(ToysCalculator):
-    """Frequentist calculator class.
+    """Frequentist calculator class."""
 
+    def __init__(
+        self,
+        input,
+        minimizer,
+        ntoysnull: int = 100,
+        ntoysalt: int = 100,
+        sampler: Callable = base_sampler,
+        sample: Callable = base_sample,
+    ):
+        """
         Args:
-            * **input** : loss or fit result
-            * **minimizer** : minimizer to use to find the minimum of the loss function
-            * **ntoysnull** (int, default=100): minimum number of toys to generate for the null hypothesis
-            * **ntoysalt** (int, default=100): minimum number of toys to generate for the alternative hypothesis
-            * **sampler** : function used to create sampler with models, number of events and floating parameters
-              in the sample. Default is `hepstats.fitutils.sampling.base_sampler`.
-            * **sample** : function used to get samples from the sampler. Default is
-              `hepstats.fitutils.sampling.base_sample`.
+            input: loss or fit result
+            minimizer: minimizer to use to find the minimum of the loss function.
+            ntoysnull: minimum number of toys to generate for the null hypothesis.
+            ntoysalt: minimum number of toys to generate for the alternative hypothesis.
+            sampler: function used to create sampler with models, number of events and floating parameters
+              in the sample. Default is :func:`hepstats.utils.fit.sampling.base_sampler`.
+            sample: function used to get samples from the sampler. Default is
+              :func:`hepstats.utils.fit.sampling.base_sample`.
 
         Example with `zfit`:
             >>> import zfit
@@ -33,48 +44,42 @@ class FrequentistCalculator(ToysCalculator):
             >>> loss = UnbinnedNLL(model=[model], data=[data], fit_range=[obs])
 
             >>> calc = FrequentistCalculator(input=loss, minimizer=MinuitMinimizer(), ntoysnull=1000, ntoysalt=1000)
-    """
-
-    def __init__(
-        self,
-        input,
-        minimizer,
-        ntoysnull=100,
-        ntoysalt=100,
-        sampler=base_sampler,
-        sample=base_sample,
-    ):
-
+        """
         super(FrequentistCalculator, self).__init__(
-            input, minimizer, ntoysnull, ntoysalt, sampler, sample
+            input=input,
+            minimizer=minimizer,
+            ntoysnull=ntoysnull,
+            ntoysalt=ntoysalt,
+            sampler=sampler,
+            sample=sample,
         )
 
     def qnull(
         self,
-        poinull: POIarray,
-        poialt: POIarray,
-        onesided=True,
-        onesideddiscovery=False,
-        qtilde=False,
+        poinull: Union[POI, POIarray],
+        poialt: POI,
+        onesided: bool = True,
+        onesideddiscovery: bool = False,
+        qtilde: bool = False,
     ):
         """Computes null hypothesis values of the :math:`\\Delta` log-likelihood test statistic.
 
-            Args:
-                * **poinull** (`POIarray`): parameters of interest for the null hypothesis
-                * **poialt** (`POIarray`): parameters of interest for the alternative hypothesis
-                * **onesided** (bool): if `True` computes onesided pvalues
-                * **onesideddiscovery** (bool): if `True` computes onesided pvalues for a discovery test
-                * **qtilde** (bool): if `True` use the :math:`\\widetilde{q}` test statistics else use the :math:`q`
-                  test statistic
+        Args:
+            poinull: parameters of interest for the null hypothesis.
+            poialt: parameters of interest for the alternative hypothesis.
+            onesided: if `True` computes onesided pvalues.
+            onesideddiscovery: if `True` computes onesided pvalues for a discovery test.
+            qtilde: if `True` use the :math:`\\widetilde{q}` test statistics else use the :math:`q`
+              test statistic.
 
-            Returns:
-                `numpy.array`: observed values of q
+        Returns:
+            Q distribution for the null hypothesis.
 
-            Example with `zfit`:
-                >>> mean = zfit.Parameter("mu", 1.2)
-                >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
-                >>> poialt = POI(mean, 1.2)
-                >>> q = calc.qnull(poinull, poialt)
+        Example with `zfit`:
+            >>> mean = zfit.Parameter("mu", 1.2)
+            >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
+            >>> poialt = POI(mean, 1.2)
+            >>> q = calc.qnull(poinull, poialt)
         """
         toysresults = self.get_toys_null(poinull, poialt, qtilde)
         ret = {}
@@ -106,31 +111,30 @@ class FrequentistCalculator(ToysCalculator):
 
     def qalt(
         self,
-        poinull: POIarray,
-        poialt: POIarray,
-        onesided=True,
-        onesideddiscovery=False,
-        qtilde=False,
+        poinull: Union[POI, POIarray],
+        poialt: POI,
+        onesided: bool = True,
+        onesideddiscovery: bool = False,
+        qtilde: bool = False,
     ):
         """Computes alternative hypothesis values of the :math:`\\Delta` log-likelihood test statistic.
 
-            Args:
-                * **poinull** (`POIarray`): parameters of interest for the null hypothesis
-                * **poialt** (`POIarray`): parameters of interest for the alternative hypothesis
-                * **onesided** (bool): if `True` computes onesided pvalues
-                * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a
-                  discovery test
-                * ** qtilde** (bool): if `True` use the :math:`\\widetilde{q}` test statistics else use the
-                  :math:`q` test statistic
+        Args:
+            poinull: parameters of interest for the null hypothesis.
+            poialt: parameters of interest for the alternative hypothesis.
+            onesided: if `True` computes onesided pvalues.
+            onesideddiscovery: if `True` computes onesided pvalues for a discovery test.
+            qtilde: if `True` use the :math:`\\widetilde{q}` test statistics else use the :math:`q`
+              test statistic.
 
-            Returns:
-                `numpy.array`: observed values of q
+        Returns:
+            Q distribution for the alternative hypothesis.
 
-            Example with `zfit`:
-                >>> mean = zfit.Parameter("mu", 1.2)
-                >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
-                >>> poialt = POI(mean, 1.2)
-                >>> q = calc.qalt(poinull, poialt)
+        Example with `zfit`:
+            >>> mean = zfit.Parameter("mu", 1.2)
+            >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
+            >>> poialt = POI(mean, 1.2)
+            >>> q = calc.qalt(poinull, poialt)
         """
         toysresults = self.get_toys_alt(poialt, poinull, qtilde)
         ret = {}
