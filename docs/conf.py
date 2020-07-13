@@ -74,10 +74,10 @@ copybutton_prompt_text = ">>> "
 # -- autodoc settings ---------------------------------------------
 
 # also doc __init__ docstrings
-autoclass_content = 'both'
-autodoc_member_order = 'bysource'
+autoclass_content = "both"
+autodoc_member_order = "bysource"
 autodoc_default_options = {
-    'show-inheritance': True,
+    "show-inheritance": True,
 }
 autodoc_inherit_docstrings = False
 
