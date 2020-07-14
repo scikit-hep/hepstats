@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from scipy.stats import norm
-from typing import Callable, Union
+from typing import Callable, Union, Optional
 
 from .basecalculator import ToysCalculator
 from ...utils import base_sampler, base_sample
@@ -57,7 +57,7 @@ class FrequentistCalculator(ToysCalculator):
     def qnull(
         self,
         poinull: Union[POI, POIarray],
-        poialt: POI,
+        poialt: Optional[POI] = None,
         onesided: bool = True,
         onesideddiscovery: bool = False,
         qtilde: bool = False,
@@ -98,7 +98,7 @@ class FrequentistCalculator(ToysCalculator):
             poi1 = POIarray(poinull.parameter, np.full(nll1.size, p.value))
             poi2 = POIarray(poinull.parameter, bestfit)
 
-            ret[p] = self.q(
+            q_p = self.q(
                 nll1=nll1,
                 nll2=nll2,
                 poi1=poi1,
@@ -106,6 +106,8 @@ class FrequentistCalculator(ToysCalculator):
                 onesided=onesided,
                 onesideddiscovery=onesideddiscovery,
             )
+
+            ret[p] = q_p[~np.isnan(q_p)]
 
         return ret
 
@@ -152,7 +154,7 @@ class FrequentistCalculator(ToysCalculator):
             poi1 = POIarray(poialt.parameter, np.full(nll1.size, p.value))
             poi2 = POIarray(poialt.parameter, bestfit)
 
-            ret[p] = self.q(
+            q_p = self.q(
                 nll1=nll1,
                 nll2=nll2,
                 poi1=poi1,
@@ -160,6 +162,8 @@ class FrequentistCalculator(ToysCalculator):
                 onesided=onesided,
                 onesideddiscovery=onesideddiscovery,
             )
+
+            ret[p] = q_p[~np.isnan(q_p)]
 
         return ret
 
