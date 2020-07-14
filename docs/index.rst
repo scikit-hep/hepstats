@@ -24,6 +24,7 @@ You can install hepstats from PyPI_ with pip:
    :maxdepth: 2
 
    getting_started/index
+   whats_new
    api/index
    bibliography
 

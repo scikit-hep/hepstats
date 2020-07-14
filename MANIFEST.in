@@ -21,4 +21,4 @@ include README.md pyproject.toml setup.py setup.cfg
 include *.yaml
 include *.yml
 recursive-include LICENSES *
-include CHANGELOG.md
+include CHANGELOG.rst
