@@ -72,8 +72,8 @@ We give here a simple example of an upper limit calculation of the yield of a Ga
 >>> lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
 >>> Nsig = zfit.Parameter("Nsig", 1., -20., N)
 >>> Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
->>> signal = zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1).create_sampler(Nsig)
->>> background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_sampler(Nbkg)
+>>> signal = zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1).create_extended(Nsig)
+>>> background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
 >>> total = zfit.pdf.SumPDF([signal, background])
 >>> loss = ExtendedUnbinnedNLL(model=total, data=data)
 
