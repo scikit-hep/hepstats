@@ -1,4 +1,5 @@
-<img src="https://raw.githubusercontent.com/scikit-hep/hepstats/master/docs/source/logo.png" width="450">
+<img src="https://raw.githubusercontent.com/scikit-hep/hepstats/master/docs/images/logo.png" width="450">
+
 
 # Scikit-HEP project `hepstats` package: statistics tools and utilities
 
