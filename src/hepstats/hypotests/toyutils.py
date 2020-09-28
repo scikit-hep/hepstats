@@ -4,12 +4,13 @@ import os
 import numpy as np
 import warnings
 from contextlib import ExitStack
-from typing import Union, List
+from typing import List, Callable, Dict, Any
 
 from .parameters import POI, POIarray
 from .exceptions import ParameterNotFound, FormatError
 from ..utils import pll, base_sampler, base_sample
 from .hypotests_object import ToysObject
+
 
 """
 Module defining the classes to perform and store the results of toy experiments.
@@ -23,14 +24,19 @@ class ToyResult(object):
     """
     Class to store the results of toys generated for a given value of a POI.
     The best fit value of the POI, the NLL evaluate at the best fit, and the NLL evaluated
-    at several values of the POI are stored. The results can serialized using the `to_dict` method.
-
-    Args:
-        * **poigen** (POI): POI used to generate the toys
-        * **poieval** (POIarray): POI values to evaluate the loss function
+    at several values of the POI are stored. The results can serialized using the **to_dict** method.
     """
 
     def __init__(self, poigen: POI, poieval: POIarray):
+        """
+        Args:
+            poigen: POI used to generate the toys.
+            poieval: POI values to evaluate the loss function.
+
+        Raises:
+            TypeError: if poigen is not a POI instance.
+            TypeError: if poieval is not a POIarray instance.
+        """
 
         if not isinstance(poigen, POI):
             raise TypeError("A `hypotests.parameters.POI` is required for poigen.")
@@ -87,14 +93,16 @@ class ToyResult(object):
         """
         return len(self.bestfit)
 
-    def add_entries(self, bestfit, nll_bestfit, nlls):
+    def add_entries(
+        self, bestfit: np.ndarray, nll_bestfit: np.ndarray, nlls: Dict[POI, np.ndarray]
+    ):
         """
         Add new result entries.
 
         Args:
-            * **bestfit** (`numpy.array`): best fitted values of the POI
-            * **nll_bestfit** (`numpy.array`): NLL  evaluated at the best fitted values of the POI
-            * **nlls** (Dict(`POI`, `numpy.array`)): NLL  evaluated at the best fitted values of the POI
+            bestfit: best fitted values of the POI
+            nll_bestfit: NLL evaluated at the best fitted values of the POI
+            nlls: NLL evaluated at the best fitted values of the POI
         """
         if not all(k in nlls.keys() for k in self.poieval):
             missing_keys = [k for k in self.poieval if k not in nlls.keys()]
@@ -109,16 +117,16 @@ class ToyResult(object):
 
         self._nlls = {p: np.concatenate([v, nlls[p]]) for p, v in self.nlls.items()}
 
-    def to_dict(self):
+    def to_dict(self) -> Dict:
         """
         Returns dictionary of the toy results.
 
         Keys:
-            * **poi**: name of the parameter of interest
-            * **genvalues**: fixed vale of the poi used to generate the toys
-            * **evalvalues**: values to evaluate the NLL
-            * **bestfit**: array of best fitted values of the poi for each toy
-            * **nlls**: dictionary of NLL values for each value in `evalvalues` and best fit
+            poi: name of the parameter of interest
+            genvalues: fixed vale of the poi used to generate the toys
+            evalvalues: values to evaluate the NLL
+            bestfit: array of best fitted values of the poi for each toy
+            nlls: dictionary of NLL values for each value in `evalvalues` and best fit
         """
         ret = {"poi": self.poigen.name, "bestfit": self.bestfit}
         ret["nlls"] = {n.value: nll for n, nll in self.nlls.items()}
@@ -133,19 +141,26 @@ class FitFailuresWarning(UserWarning):
 
 
 class ToysManager(ToysObject):
-    """Class handling the toy generation and fit, results are stored in `ToyResult` instances stored
+    """Class handling the toy generation and fit, results are stored in **ToyResult** instances stored
         themselves in a dictionary.
-
-        Args:
-            * **input** : loss or fit result
-            * **minimizer** : minimizer to use to find the minimum of the loss function
-            * **ntoysnull** (int, default=100): minimum number of toys to generate for the null hypothesis
-            * **ntoysalt** (int, default=100): minimum number of toys to generate for the alternative hypothesis
-            * **sampler** : function used to create sampler with models, number of events and floating parameters in the sample. Default is `hepstats.fitutils.sampling.base_sampler`.
-            * **sample** : function used to get samples from the sampler. Default is `hepstats.fitutils.sampling.base_sample`.
     """
 
-    def __init__(self, input, minimizer, sampler=base_sampler, sample=base_sample):
+    def __init__(
+        self,
+        input,
+        minimizer,
+        sampler: Callable = base_sampler,
+        sample: Callable = base_sample,
+    ):
+        """
+        Args:
+            input: loss or fit result
+            minimizer: minimizer to use to find the minimum of the loss function
+            sampler: function used to create sampler with models, number of events and floating parameters in the
+               sample. Default is :func:`hepstats.utils.fit.sampling.base_sampler`.
+            sample: function used to get samples from the sampler. Default is
+               :func:`hepstats.utils.fit.sampling.base_sample`.
+        """
 
         super(ToysManager, self).__init__(
             input=input, minimizer=minimizer, sampler=sampler, sample=sample
@@ -157,11 +172,8 @@ class ToysManager(ToysObject):
         Getter function.
 
         Args:
-            * **poigen** (POI): POI used to generate the toys
-            * **poieval** (POIarray): POI values to evaluate the loss function
-
-        Returns:
-            `ToyResult`
+            poigen: POI used to generate the toys
+            poieval: POI values to evaluate the loss function
         """
 
         index = (poigen, poieval)
@@ -182,7 +194,7 @@ class ToysManager(ToysObject):
         Add ToyResult to the manager.
 
         Args:
-            * **toy**: (`ToyResult`)
+            toy: the toy result to add
         """
         if not isinstance(toy, ToyResult):
             raise TypeError("A `hypotests.toyutils.ToyResult` is required for toy.")
@@ -197,11 +209,8 @@ class ToysManager(ToysObject):
         of the same POI.
 
         Args:
-            * **poigen** (POI): POI used to generate the toys
-            * **poieval** (POIarray, optional): POI values to evaluate the loss function
-
-        Returns:
-            int
+            poigen: POI used to generate the toys
+            poieval: POI values to evaluate the loss function
         """
         try:
             return self.get_toyresult(poigen, poieval).ntoys
@@ -209,17 +218,17 @@ class ToysManager(ToysObject):
             return 0
 
     def generate_and_fit_toys(
-        self, ntoys, poigen: POI, poieval: POIarray, printfreq=0.2
+        self, ntoys: int, poigen: POI, poieval: POIarray, printfreq: float = 0.2,
     ):
         """
         Generate and fit toys for at a given POI (poigen). The toys are then fitted, and the likelihood
         is profiled at the values of poigen and poieval.
 
         Args:
-            * **ntoys** (int): number of toys to generate
-            * **poigen** (POI): POI used to generate the toys
-            * **poieval** (POIarray, optional): POI values to evaluate the loss function
-            * **printfreq** : print frequency of the toys generation
+            ntoys: number of toys to generate
+            poigen: POI used to generate the toys
+            poieval: POI values to evaluate the loss function
+            printfreq: print frequency of the toys generation
         """
 
         self.set_params_to_bestfit()
@@ -315,29 +324,29 @@ class ToysManager(ToysObject):
 
     def keys(self):
         """
-        Returns keys of the `ToysManager` instance defined as `key = (toy.poigen, toy.poieval)` for a
-        given `ToyResult` instance `toy`.
+        Returns keys of the **ToysManager** instance defined as **key = (toy.poigen, toy.poieval)** for a
+        given **ToyResult** instance `toy`.
         """
         return self._toys.keys()
 
     def values(self):
         """
-        Returns values of `ToysManager` instance that are `ToyResult` instances.
+        Returns values of **ToysManager** instance that are **ToyResult** instances.
         """
         return self._toys.values()
 
-    def toyresults_to_dict(self):
+    def toyresults_to_dict(self) -> List[Dict]:
         """
-        Returns a list of all the toy results converted into dictionnaries
+        Returns a list of all the toy results converted into dictionnaries.
         """
         return [v.to_dict() for v in self.values()]
 
     def to_yaml(self, filename: str):
         """
-        Save the toys into a yaml file under the key `toys`.
+        Save the toys into a yaml file under the key **toys**.
 
         Args:
-            * **filename** (str)
+            filename: the yaml file name.
         """
         if os.path.isfile(filename):
             tree = asdf.open(filename).tree
@@ -353,10 +362,7 @@ class ToysManager(ToysObject):
         Extract toy results from a yaml file.
 
         Args:
-            * **filename** (str)
-
-        Returns:
-            list(`ToyResult`)
+            filename: the yaml file name.
         """
         ret = []
         try:
@@ -388,22 +394,24 @@ class ToysManager(ToysObject):
 
     @classmethod
     def from_yaml(
-        cls, filename, input, minimizer, sampler=base_sampler, sample=base_sample
+        cls,
+        filename: str,
+        input,
+        minimizer,
+        sampler: Callable = base_sampler,
+        sample: Callable = base_sample,
     ):
         """
         Read the toys from a yaml file.
 
         Args:
-            * **filename** (str)
-            * **input** : loss or fit result
-            * **minimizer** : minimizer to use to find the minimum of the loss function
-            * **ntoysnull** (int, default=100): minimum number of toys to generate for the null hypothesis
-            * **ntoysalt** (int, default=100): minimum number of toys to generate for the alternative hypothesis
-            * **sampler** : function used to create sampler with models, number of events and floating parameters in the sample. Default is `hepstats.fitutils.sampling.base_sampler`.
-            * **sample** : function used to get samples from the sampler. Default is `hepstats.fitutils.sampling.base_sample`.
-
-        Returns
-            `ToysManager`
+            filename: the yaml file name.
+            input: loss or fit result
+            minimizer: minimizer to use to find the minimum of the loss function
+            sampler: function used to create sampler with models, number of events and floating parameters in the
+               sample. Default is :func:`hepstats.utils.fit.sampling.base_sampler`.
+            sample: function used to get samples from the sampler. Default is
+               :func:`hepstats.utils.fit.sampling.base_sample`.
         """
 
         toyscollection = cls(input, minimizer, sampler, sample)

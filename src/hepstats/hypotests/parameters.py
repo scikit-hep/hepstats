@@ -3,11 +3,11 @@
 """
 Module defining the parameter of interest classes, currently includes:
 
-* `POIarray`
-* `POI`
+* **POIarray**
+* **POI**
 """
 import numpy as np
-from collections.abc import Iterable
+from typing import Union, Collection
 
 from ..utils.fit.api_check import is_valid_parameter
 
@@ -15,22 +15,27 @@ from ..utils.fit.api_check import is_valid_parameter
 class POIarray(object):
     """
     Class for parameters of interest with multiple values:
+    """
 
+    def __init__(self, parameter, values: Union[Collection, np.array]):
+        """
         Args:
-            * **parameter**: the parameter of interest
-            * **values** (`list(float)`,`numpy.array`): values of the parameter of interest
+            parameter: the parameter of interest
+            values: values of the parameter of interest
+
+        Raises:
+            ValueError: if is_valid_parameter(parameter) returns False
+            TypeError: if parameter is not an iterable
 
         Example with `zfit`:
             >>> Nsig = zfit.Parameter("Nsig")
             >>> poi = POIarray(Nsig, value=np.linspace(0,10,10))
-    """
-
-    def __init__(self, parameter, values):
+        """
 
         if not is_valid_parameter(parameter):
             raise ValueError(f"{parameter} is not a valid parameter!")
 
-        if not isinstance(values, Iterable):
+        if not isinstance(values, Collection):
             raise TypeError("A list/array of values of the POI is required.")
 
         self.parameter = parameter
@@ -42,7 +47,7 @@ class POIarray(object):
     @property
     def values(self):
         """
-        Returns the values of the `POIarray`.
+        Returns the values of the **POIarray**.
         """
         return self._values
 
@@ -51,7 +56,7 @@ class POIarray(object):
 
     def __getitem__(self, i):
         """
-        Get the i-th element the array of values of the `POIarray`.
+        Get the i-th element the array of values of the **POIarray**.
         """
         return POI(self.parameter, self.values[i])
 
@@ -79,25 +84,25 @@ class POIarray(object):
     @property
     def ndim(self):
         """
-        Returns the number of dimension of the `POIarray`.
+        Returns the number of dimension of the **POIarray**.
         """
         return self._ndim
 
     @property
     def shape(self):
         """
-        Returns the shape of the `POIarray`.
+        Returns the shape of the **POIarray**.
         """
         return self._shape
 
-    def append(self, values):
+    def append(self, values: Union[int, float, Collection, np.ndarray]):
         """
-        Append values in the `POIarray`.
+        Append values in the **POIarray**.
 
         Args:
-            * **values** (`list(float)`,`numpy.array`): values to append
+            values: values to append
         """
-        if not isinstance(values, Iterable):
+        if not isinstance(values, Collection):
             values = [values]
         values = np.concatenate([self.values, values])
         return POIarray(parameter=self.parameter, values=values)
@@ -106,18 +111,22 @@ class POIarray(object):
 class POI(POIarray):
     """
     Class for single value parameter of interest:
+    """
 
+    def __init__(self, parameter, value: Union[int, float]):
+        """
         Args:
-            * **parameter**: the parameter of interest
-            * **values** (`float`, `int`): value of the parameter of interest
+            parameter: the parameter of interest
+            values: value of the parameter of interest
+
+        Raises:
+            TypeError: if value is an iterable
 
         Example with `zfit`:
             >>> Nsig = zfit.Parameter("Nsig")
             >>> poi = POI(Nsig, value=0)
-    """
-
-    def __init__(self, parameter, value):
-        if isinstance(value, Iterable):
+        """
+        if isinstance(value, Collection):
             raise TypeError("A single value for the POI is required.")
 
         super(POI, self).__init__(parameter=parameter, values=[value])
@@ -126,7 +135,7 @@ class POI(POIarray):
     @property
     def value(self):
         """
-        Returns the value of the `POI`.
+        Returns the value of the **POI**.
         """
         return self._value
 
@@ -145,8 +154,11 @@ class POI(POIarray):
         return hash((self.name, self.value))
 
 
-def asarray(POI):
+def asarray(poi: POI) -> POIarray:
     """
-    Transforms a `POI` instance into a `POIarray` instance.
+    Transforms a **POI** instance into a **POIarray** instance.
+
+    Args:
+        poi: the parameter of interest.
     """
-    return POIarray(parameter=POI.parameter, values=POI.values)
+    return POIarray(parameter=poi.parameter, values=poi.values)

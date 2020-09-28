@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from .api_check import is_valid_pdf
-from .diverse import get_value
-
 """
 Module providing basic sampling methods.
 """
+
+from .api_check import is_valid_pdf
+from .diverse import get_value
 
 
 def base_sampler(models, nevents, floating_params=None):
@@ -15,6 +15,9 @@ def base_sampler(models, nevents, floating_params=None):
         models (list(model)): models to sample
         nevents (list(int)): number of in each sampler
         floating_params (list(parameter), optionnal): floating parameter in the samplers
+
+    Returns:
+        Samplers
     """
 
     assert all(is_valid_pdf(m) for m in models)
@@ -45,7 +48,7 @@ def base_sampler(models, nevents, floating_params=None):
 
 def base_sample(samplers, ntoys, parameter=None, value=None, constraints=None):
     """
-    Sample from samplers. The parameters that are floating in the samplers can be set to a specific value
+    Samples from samplers. The parameters that are floating in the samplers can be set to a specific value
     using the `parameter` and `value` argument.
 
     Args:

@@ -21,7 +21,7 @@ jobs:
       with:
         path: ~/.cache/pre-commit
         key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
-    - uses: pre-commit/action@v1.1.0
+    - uses: pre-commit/action@v2.0.0
 
   checks:
     runs-on: ${{ matrix.os }}
@@ -87,6 +87,34 @@ jobs:
 
     - name: Check metadata
       run: twine check dist/* wheels/*
+
+  docs:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install --ignore-installed -U -q --no-cache-dir -e .[docs]
+        python -m pip list
+    - name: build docs
+      run: |
+        python setup.py build_sphinx
+        touch docs/_build/html/.nojekyll
+    - name: Deploy docs to GitHub Pages
+      if: success() && github.event_name == 'push' && github.ref == 'refs/heads/master'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/_build/html
+        force_orphan: true
+        user_name: 'github-actions[bot]'
+        user_email: 'github-actions[bot]@users.noreply.github.com'
+        commit_message: Deploy to GitHub pages
 
   publish:
     needs: [dist]

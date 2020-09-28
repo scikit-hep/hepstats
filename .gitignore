@@ -5,11 +5,11 @@ build/
 dist/
 .tox/
 .python-version
-
-
 .ipynb_checkpoints
 .pytest_cache
 *.gv*
 /src/hepstats/version.py
 /.mypy_cache/*
 /pip-wheel-metadata
+/docs/_build/*
+/docs/source/*

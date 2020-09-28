@@ -1,38 +1,37 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from typing import Dict, Union, Tuple, List
+from typing import Union, Tuple, List, Optional, Callable, Any, Dict
 import numpy as np
 
 from ..hypotests_object import HypotestsObject
 from ..parameters import POI, POIarray, asarray
 from ...utils import pll, base_sampler, base_sample
-from ..toyutils import ToysManager
+from ..toyutils import ToysManager, ToyResult
 
 
 class BaseCalculator(HypotestsObject):
-    """Base class for calculator.
+    """Base class for calculator."""
 
+    def __init__(self, input, minimizer):
+        """
         Args:
-            * **input** : loss or fit result
-            * **minimizer** : minimizer to use to find the minimum of the loss function
+            input: loss or fit result
+            minimizer: minimizer to use to find the minimum of the loss function
 
-        Example with `zfit`:
+        Example with **zfit**:
             >>> import zfit
             >>> from zfit.core.loss import UnbinnedNLL
             >>> from zfit.minimize import Minuit
-
+            >>>
             >>> obs = zfit.Space('x', limits=(0.1, 2.0))
             >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> sigma = zfit.Parameter("sigma", 0.1)
             >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
             >>> loss = UnbinnedNLL(model=model, data=data)
-
+            >>>
             >>> calc = BaseCalculator(input=loss, minimizer=Minuit())
-    """
-
-    def __init__(self, input, minimizer):
-
+        """
         super(BaseCalculator, self).__init__(input, minimizer)
 
         self._obs_nll = {}
@@ -43,19 +42,18 @@ class BaseCalculator(HypotestsObject):
                 self._parameters[d.name] = d
 
     def obs_nll(self, pois: POIarray) -> np.ndarray:
-        """ Compute observed negative log-likelihood values for given parameters of interest.
+        """Compute observed negative log-likelihood values for given parameters of interest.
 
-            Args:
-                * **pois** (`hypotests.POIarray`): parameters of interest
+        Args:
+            pois: parameters of interest.
 
-            Returns:
-                 `numpy.array`: observed nll values
+        Returns:
+            Observed nll values.
 
-            Example with `zfit`:
-                >>> mean = zfit.Parameter("mu", 1.2)
-                >>> poi = POI(mean, [1.1, 1.2, 1.0])
-                >>> nll = calc.obs_nll(poi)
-
+        Example with **zfit**:
+            >>> mean = zfit.Parameter("mu", 1.2)
+            >>> poi = POI(mean, [1.1, 1.2, 1.0])
+            >>> nll = calc.obs_nll(poi)
         """
 
         ret = np.empty(pois.shape)
@@ -66,24 +64,30 @@ class BaseCalculator(HypotestsObject):
             ret[i] = self._obs_nll[p]
         return ret
 
-    def qobs(self, poinull: POI, onesided=True, onesideddiscovery=False, qtilde=False):
+    def qobs(
+        self,
+        poinull: POI,
+        onesided: bool = True,
+        onesideddiscovery: bool = False,
+        qtilde: bool = False,
+    ):
         """Computes observed values of the :math:`\\Delta` log-likelihood test statistic.
 
-            Args:
-                * **poinull** (`hypotests.POI`): parameters of interest for the null hypothesis
-                * **qtilde** (bool, optional): if `True` use the :math:`\\tilde{q}` test statistics else (default)
-                  use the :math:`q` test statistic
-                * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
-                * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a
-                  discovery test
+        Args:
+            poinull: parameters of interest for the null hypothesis.
+            qtilde: if `True` use the :math:`\\tilde{q}` test statistics else (default)
+              use the :math:`q` test statistic.
+            onesided: if `True` (default) computes onesided pvalues.
+            onesideddiscovery: if `True` (default) computes onesided pvalues for a
+              discovery test.
 
-            Returns:
-                `numpy.array`: observed values of q
+        Returns:
+            Observed values of q.
 
-            Example with `zfit`:
-                >>> mean = zfit.Parameter("mu", 1.2)
-                >>> poi = POI(mean, [1.1, 1.2, 1.0])
-                >>> q = calc.qobs(poi)
+        Example with **zfit**:
+            >>> mean = zfit.Parameter("mu", 1.2)
+            >>> poi = POI(mean, [1.1, 1.2, 1.0])
+            >>> q = calc.qobs(poi)
         """
 
         self.check_pois(poinull)
@@ -115,26 +119,25 @@ class BaseCalculator(HypotestsObject):
     def pvalue(
         self,
         poinull: Union[POI, POIarray],
-        poialt: Union[POI, None] = None,
-        qtilde=False,
-        onesided=True,
-        onesideddiscovery=False,
+        poialt: Optional[POI] = None,
+        qtilde: bool = False,
+        onesided: bool = True,
+        onesideddiscovery: bool = False,
     ) -> Tuple[np.ndarray, np.ndarray]:
         """Computes pvalues for the null and alternative hypothesis.
 
         Args:
-            * **poinull** (`hypotests.POI`, `hypotests.POIarray`): parameters of interest for the null hypothesis
-            * **poialt** (`hypotests.POI`, optional): parameters of interest for the alternative
-              hypothesis
-            * **qtilde** (bool, optional): if `True` use the :math:`\widetilde{q}` test statistics else (default)
-              use the :math:`q` test statistic
-            * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
-            * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery test
+            poinull: parameters of interest for the null hypothesis.
+            poialt: parameters of interest for the alternative hypothesis.
+            qtilde: if `True` use the :math:`\\widetilde{q}` test statistics else (default)
+              use the :math:`q` test statistic.
+            onesided: if `True` (default) computes onesided pvalues.
+            onesideddiscovery: if `True` (default) computes onesided pvalues for a discovery test.
 
         Returns:
-            Tuple(`numpy.array`, `numpy.array`): pnull, palt
+            Tuple of arrays for pnull, palt
 
-        Example with `zfit`:
+        Example with **zfit**:
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> poinull = POI(mean, [1.1, 1.2, 1.0])
             >>> poialt = POI(mean, 1.2)
@@ -164,29 +167,28 @@ class BaseCalculator(HypotestsObject):
         poinull: Union[POI, POIarray],
         poialt: Union[POI, POIarray],
         nsigma: List[int],
-        CLs=False,
-        qtilde=False,
-        onesided=True,
-        onesideddiscovery=False,
+        CLs: bool = False,
+        qtilde: bool = False,
+        onesided: bool = True,
+        onesideddiscovery: bool = False,
     ) -> List[np.array]:
         """Computes the expected pvalues and error bands for different values of :math:`\\sigma` (0=expected/median)
 
         Args:
-            * **poinull** (`hypotests.POI`, `hypotests.POIarray`): parameters of interest for the null hypothesis
-            * **poialt** (`hypotests.POI`, `hypotests.POIarray`, optional): parameters of interest for the alternative
-              hypothesis
-            * **nsigma** (list(int)): list of values of :math:`\\sigma` to compute the expected pvalue
-            * **CLs** (bool, optional): if `True` computes pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}`
-              else as :math:`p_{clsb} = p_{null}`
-            * **qtilde** (bool, optional): if `True` use the :math:`\\widetilde{q}` test statistics else (default)
-              use the :math:`q` test statistic
-            * **onesided** (bool, optional): if `True` (default) computes onesided pvalues
-            * **onesideddiscovery** (bool, optional): if `True` (default) computes onesided pvalues for a discovery
+            poinull: parameters of interest for the null hypothesis.
+            poialt: parameters of interest for the alternative hypothesis.
+            nsigma: list of values of :math:`\\sigma` to compute the expected pvalue.
+            CLs: if `True` computes pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}`
+              else as :math:`p_{clsb} = p_{null}`.
+            qtilde: if `True` use the :math:`\\widetilde{q}` test statistics else (default)
+              use the :math:`q` test statistic.
+            onesided: if `True` (default) computes onesided pvalues.
+            onesideddiscovery: if `True` (default) computes onesided pvalues for a discovery.
 
         Returns:
-            `numpy.array`: array of expected pvalues for each :math:`\\sigma` value
+            Array of expected pvalues for each :math:`\\sigma` value
 
-        Example with `zfit`:
+        Example with **zfit**:
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> poinull = POI(mean, [1.1, 1.2, 1.0])
             >>> poialt = POI(mean, 1.2)
@@ -222,9 +224,15 @@ class BaseCalculator(HypotestsObject):
         raise NotImplementedError
 
     @staticmethod
-    def check_pois(pois: POIarray):
+    def check_pois(pois: Union[POI, POIarray]):
         """
-        Checks if the parameters of interest are all `hepstats.parameters.POI/POIarray` instances.
+        Checks if the parameter of interest is a :class:`hepstats.parameters.POIarray` instance.
+
+        Args:
+            pois: the parameter of interest to check.
+
+        Raises:
+            TypeError: if pois is not an instance of :class:`hepstats.parameters.POIarray`.
         """
 
         msg = "POI/POIarray is required."
@@ -235,9 +243,19 @@ class BaseCalculator(HypotestsObject):
             raise NotImplementedError(msg)
 
     @staticmethod
-    def check_pois_compatibility(poi1: POIarray, poi2: POIarray):
+    def check_pois_compatibility(
+        poi1: Union[POI, POIarray], poi2: Union[POI, POIarray]
+    ):
         """
-        Checks compatibility between two lists of `hepstats.parameters.POIarray` instances.
+        Checks compatibility between two lists of :func:`hepstats.parameters.POIarray` instances.
+
+        Args:
+            poi1: the first parameter of interest.
+            poi2: the second parameter of interest.
+
+        Raises:
+            ValueError: if the two parameters of interests don't have the same parameters, check by their
+               names.
         """
 
         if poi1.ndim != poi2.ndim:
@@ -257,22 +275,22 @@ class BaseCalculator(HypotestsObject):
         nll2: np.array,
         poi1: POIarray,
         poi2: POIarray,
-        onesided=True,
-        onesideddiscovery=False,
+        onesided: bool = True,
+        onesideddiscovery: bool = False,
     ) -> np.ndarray:
         """Compute values of the test statistic q defined as the difference between negative log-likelihood
-            values :math:`q = nll1 - nll2`.
+        values :math:`q = nll1 - nll2`.
 
-            Args:
-                * **nll1** (`numpy.array`): array of nll values #1, evaluated with poi1
-                * **nll2** (`numpy.array`): array of nll values #2, evaluated with poi2
-                * **poi1** (`hypotests.POIarray`): POI's #1
-                * **poi2** (`hypotests.POIarray`): POI's #2
-                * **onesided** (bool, optional, default=True)
-                * **onesideddiscovery** (bool, optional, default=True)
+        Args:
+            nll1: array of nll values #1, evaluated with poi1.
+            nll2: array of nll values #2, evaluated with poi2.
+            poi1: POI's #1.
+            poi2: POI's #2.
+            onesided: if `True` (default) computes onesided pvalues.
+            onesideddiscovery: if `True` (default) computes onesided pvalues for a discovery.
 
-            Returns:
-                `numpy.array`: array of :math:`q` values
+        Returns:
+            Array of :math:`q` values.
         """
 
         self.check_pois(poi1)
@@ -301,14 +319,15 @@ class BaseCalculator(HypotestsObject):
 
 
 class BaseToysCalculator(BaseCalculator):
-    def __init__(self, input, minimizer, sampler, sample):
+    def __init__(self, input, minimizer, sampler: Callable, sample: Callable):
         """Basis for toys calculator class.
 
-            Args:
-                * **input** : loss or fit result
-                * **minimizer** : minimizer to use to find the minimum of the loss function
-                * **sampler** : function used to create sampler with models, number of events and floating parameters in the sample Default is `hepstats.fitutils.sampling.base_sampler`.
-                * **sample** : function used to get samples from the sampler. Default is `hepstats.fitutils.sampling.base_sample`.
+        Args:
+            input: loss or fit result.
+            minimizer: minimizer to use to find the minimum of the loss function.
+            sampler: function used to create sampler with models, number of events and floating
+               parameters in the sample.
+            sample: function used to get samples from the sampler.
         """
         super(BaseToysCalculator, self).__init__(input, minimizer)
 
@@ -322,20 +341,22 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
         self,
         input,
         minimizer,
-        ntoysnull=100,
-        ntoysalt=100,
-        sampler=base_sampler,
-        sample=base_sample,
+        ntoysnull: int = 100,
+        ntoysalt: int = 100,
+        sampler: Callable = base_sampler,
+        sample: Callable = base_sample,
     ):
         """Toys calculator class.
 
-            Args:
-                * **input** : loss or fit result
-                * **minimizer** : minimizer to use to find the minimum of the loss function
-                * **ntoysnull** (int, default=100): minimum number of toys to generate for the null hypothesis
-                * **ntoysalt** (int, default=100): minimum number of toys to generate for the alternative hypothesis
-                * **sampler** : function used to create sampler with models, number of events and floating** parameters in the sample Default is `hepstats.fitutils.sampling.base_sampler`.
-                * **sample : function used to get samples from the sampler. Default is `hepstats.fitutils.sampling.base_sample`.
+        Args:
+            input: loss or fit result.
+            minimizer: minimizer to use to find the minimum of the loss function.
+            ntoysnull: minimum number of toys to generate for the null hypothesis.
+            ntoysalt: minimum number of toys to generate for the alternative hypothesis.
+            sampler: function used to create sampler with models, number of events and floating** parameters.
+                in the sample Default is :func:`hepstats.utils.fit.sampling.base_sampler`.
+            sample: function used to get samples from the sampler. Default is
+                :func:`hepstats.utils.fit..sampling.base_sample`.
         """
         super(ToysCalculator, self).__init__(input, minimizer, sampler, sample)
 
@@ -345,31 +366,37 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
     @classmethod
     def from_yaml(
         cls,
-        filename,
-        loss,
+        filename: str,
+        input,
         minimizer,
-        ntoysnull=100,
-        ntoysalt=100,
-        sampler=base_sampler,
-        sample=base_sample,
+        sampler: Callable = base_sampler,
+        sample: Callable = base_sample,
+        **kwargs: Any,
     ):
         """
         ToysCalculator constructor with the toys loaded from a yaml file.
 
         Args:
-            * **filename** (str)
-            * **input** : loss or fit result
-            * **minimizer** : minimizer to use to find the minimum of the loss function
-            * **ntoysnull** (int, default=100): minimum number of toys to generate for the null hypothesis
-            * **ntoysalt** (int, default=100): minimum number of toys to generate for the alternative hypothesis
-            * **sampler** : function used to create sampler with models, number of events and floating parameters in the sample Default is `hepstats.fitutils.sampling.base_sampler`.
-            * **sample** : function used to get samples from the sampler. Default is `hepstats.fitutils.sampling.base_sample`.
-
-        Returns
-            ToysCalculator
+            filename: the yaml file name.
+            input: loss or fit result.
+            minimizer: minimizer to use to find the minimum of the loss function.
+            sampler: function used to create sampler with models, number of events and floating
+               parameters in the sample Default is :func:`hepstats.utils.fit.sampling.base_sampler`.
+            sample: function used to get samples from the sampler. Default is
+               :func:`hepstats.fitutils.sampling.base_sample`.
         """
 
-        calculator = cls(loss, minimizer, ntoysnull, ntoysalt, sampler, sample)
+        ntoysnull = kwargs.get("ntoysnull", 100)
+        ntoysalt = kwargs.get("ntoysall", 100)
+
+        calculator = cls(
+            input=input,
+            minimizer=minimizer,
+            ntoysnull=ntoysnull,
+            ntoysalt=ntoysalt,
+            sampler=sampler,
+            sample=sample,
+        )
         toysresults = calculator.toysresults_from_yaml(filename)
 
         for t in toysresults:
@@ -388,6 +415,9 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
     def ntoysnull(self, n: int):
         """
         Set the number of toys generated for the null hypothesis.
+
+        Args:
+            n: number of toys
         """
         self._ntoysnull = n
 
@@ -402,18 +432,27 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
     def ntoysalt(self, n: int):
         """
         Set the number of toys generated for the alternative hypothesis.
+
+        Args:
+            n: number of toys
         """
         self._ntoysalt = n
 
-    def _get_toys(self, poigen, poieval=None, qtilde=False, hypothesis="null"):
+    def _get_toys(
+        self,
+        poigen: Union[POI, POIarray],
+        poieval: Union[POI, POIarray, None] = None,
+        qtilde: bool = False,
+        hypothesis: str = "null",
+    ) -> Dict[POI, ToyResult]:
         """
         Return the generated toys for a given POI.
 
         Args:
-            * **poigen** (POI): POI used to generate the toys
-            * **poieval** (POIarray): POI values to evaluate the loss function
-            * **qtilde** (bool, optional): if `True` use the :math:`\tilde{q}` test statistics else (default) use the :math:`q` test statistic
-            * **hypothesis** : `null` or `alternative`
+            poigen: POI used to generate the toys.
+            poieval: POI values to evaluate the loss function.
+            qtilde: if `True` use the :math:`\tilde{q}` test statistics else (default) use the :math:`q` test statistic.
+            hypothesis: `null` or `alternative`.
         """
 
         assert hypothesis in ["null", "alternative"]
@@ -426,18 +465,16 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
         ret = {}
 
         for p in poigen:
-            poieval_p = poieval
 
-            if poieval_p is None:
-                poieval_p = POIarray(poigen.parameter, [p.value])
+            if poieval is None:
+                poieval_p = asarray(p)
             else:
+                poieval_p = poieval
                 if p not in poieval_p:
                     poieval_p = poieval_p.append(p.value)
 
             if qtilde and 0.0 not in poieval_p.values:
                 poieval_p = poieval_p.append(0.0)
-
-            poieval_p = asarray(poieval_p)
 
             ngenerated = self.ntoys(p, poieval_p)
             if ngenerated < ntoys:
@@ -454,17 +491,21 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
 
         return ret
 
-    def get_toys_null(self, poigen, poieval, qtilde=False):
+    def get_toys_null(
+        self,
+        poigen: Union[POI, POIarray],
+        poieval: Union[POI, POIarray, None] = None,
+        qtilde: bool = False,
+    ) -> Dict[POI, ToyResult]:
         """
         Return the generated toys for the null hypothesis.
 
         Args:
-            * **poigen** (POI): POI used to generate the toys
-            * **ntoys** (int): number of toys to generate
-            * **poieval** (POIarray): POI values to evaluate the loss function
-            * **qtilde** (bool, optional): if `True` use the :math:`\tilde{q}` test statistics else (default) use the :math:`q` test statistic
+            poigen: POI used to generate the toys.
+            poieval: POI values to evaluate the loss function.
+            qtilde: if `True` use the :math:`\tilde{q}` test statistics else (default) use the :math:`q` test statistic.
 
-        Example with `zfit`:
+        Example with **zfit**:
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
             >>> poialt = POI(mean, 1.2)
@@ -475,17 +516,21 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
             poigen=poigen, poieval=poieval, qtilde=qtilde, hypothesis="null"
         )
 
-    def get_toys_alt(self, poigen, poieval, qtilde=False):
+    def get_toys_alt(
+        self,
+        poigen: Union[POI, POIarray],
+        poieval: Union[POI, POIarray, None] = None,
+        qtilde: bool = False,
+    ) -> Dict[POI, ToyResult]:
         """
         Return the generated toys for the alternative hypothesis.
 
         Args:
-            * **poigen** (POI): POI used to generate the toys
-            * **ntoys** (int): number of toys to generate
-            * **poieval** (POIarray): POI values to evaluate the loss function
-            * **qtilde** (bool, optional): if `True` use the :math:`\tilde{q}` test statistics else (default) use the :math:`q` test statistic
+            poigen: POI used to generate the toys.
+            poieval: POI values to evaluate the loss function.
+            qtilde: if `True` use the :math:`\tilde{q}` test statistics else (default) use the :math:`q` test statistic.
 
-        Example with `zfit`:
+        Example with **zfit**:
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
             >>> poialt = POI(mean, 1.2)

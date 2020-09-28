@@ -1,64 +1,91 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+from typing import Dict, Any
 
-from ..utils import eval_pdf, get_value
+from ..utils import eval_pdf
 from ..utils.fit.api_check import is_valid_pdf
 from .exceptions import ModelNotFittedToData
 
 
-def is_sum_of_extended_pdfs(model):
+def is_sum_of_extended_pdfs(model) -> bool:
+    """Checks if the input model is a sum of extended models.
+
+       Args:
+            model: the input model/pdf
+
+       Returns:
+            True if the model is a sum of extended models, False if not.
+    """
     if not hasattr(model, "get_models"):
         return False
 
     return all(m.is_extended for m in model.get_models())
 
 
-def compute_sweights(model, x):
+def compute_sweights(model, x: np.ndarray) -> Dict[Any, np.ndarray]:
     """Computes sWeights from probability density functions for different components/species in a fit model
     (for instance signal and background) fitted on some data `x`.
 
-        i.e. model = Nsig * pdf_signal + Nbkg * pdf_bkg
+    i.e. model = Nsig * pdf_signal + Nbkg * pdf_bkg
 
-        Args:
-            * **model**: sum of extended pdfs.
-            * **x** (`np.array`): data on which `model` is fitted
+    Args:
+        model: sum of extended pdfs.
+        x: data on which `model` is fitted
 
-        Returns:
-            * `dict(`yield`, `np.array`)`: dictionary with yield parameters as keys, and sWeights for
-              correspoind species as values.
+    Returns:
+        dictionary with yield parameters as keys, and sWeights for correspoind species as values.
 
-        Example with `zfit`:
-            >>> import numpy as np
-            >>> import zfit
-            >>> from zfit.loss import ExtendedUnbinnedNLL
-            >>> from zfit.minimize import Minuit
+    Example with **zfit**:
 
-            >>> bounds = (0.0, 3.0)
-            >>> nbkg = 10000
-            >>> nsig = 5000
-            >>> zfit.Space('x', limits=bounds)
+        Imports:
 
-            >>> bkg = np.random.exponential(0.5, nbkg)
-            >>> peak = np.random.normal(1.2, 0.1, nsig)
-            >>> data = np.concatenate((bkg, peak))
-            >>> data = data[(data > bounds[0]) & (data < bounds[1])]
-            >>> N = data.size
-            >>> data = zfit.data.Data.from_numpy(obs=obs, array=data)
+        >>> import numpy as np
+        >>> import zfit
+        >>> from zfit.loss import ExtendedUnbinnedNLL
+        >>> from zfit.minimize import Minuit
 
-            >>> mean = zfit.Parameter("mean", 1.2, 0.5, 2.0)
-            >>> sigma = zfit.Parameter("sigma", 0.1, 0.02, 0.2)
-            >>> lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
-            >>> Nsig = zfit.Parameter("Nsig", nsig, 0., N)
-            >>> Nbkg = zfit.Parameter("Nbkg", nbkg, 0., N)
-            >>> signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
-            >>> background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
-            >>> loss = ExtendedUnbinnedNLL(model=signal + background, data=data)
-            >>> minimizer = Minuit()
-            >>> minimum = minimizer.minimize(loss)
+        Definition of the bounds and yield of background and signal species:
 
-            >>> from hepstats.splot import compute_sweights
+        >>> bounds = (0.0, 3.0)
+        >>> nbkg = 10000
+        >>> nsig = 5000
+        >>> obs = zfit.Space('x', limits=bounds)
 
-            >>> sweights = compute_sweights(tot_model, data)
+        Generation of data:
+
+        >>> bkg = np.random.exponential(0.5, nbkg)
+        >>> peak = np.random.normal(1.2, 0.1, nsig)
+        >>> data = np.concatenate((bkg, peak))
+        >>> data = data[(data > bounds[0]) & (data < bounds[1])]
+        >>> N = data.size
+        >>> data = zfit.data.Data.from_numpy(obs=obs, array=data)
+
+        Model definition:
+
+        >>> mean = zfit.Parameter("mean", 1.2, 0.5, 2.0)
+        >>> sigma = zfit.Parameter("sigma", 0.1, 0.02, 0.2)
+        >>> lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
+        >>> Nsig = zfit.Parameter("Nsig", nsig, 0., N)
+        >>> Nbkg = zfit.Parameter("Nbkg", nbkg, 0., N)
+        >>> signal = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma).create_extended(Nsig)
+        >>> background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
+        >>> tot_model = zfit.pdf.SumPDF([signal, background])
+
+        Loss construction and minimization:
+
+        >>> loss = ExtendedUnbinnedNLL(model=signal + background, data=data)
+        >>> minimizer = Minuit()
+        >>> minimum = minimizer.minimize(loss)
+
+        sWeights computation:
+
+        >>> from hepstats.splot import compute_sweights
+        >>> sweights = compute_sweights(tot_model, data)
+        >>> print(sweights)
+        {<zfit.Parameter 'Nsig' floating=True value=4985>: array([-0.09953299, -0.09953299, -0.09953299, ...,
+        0.78689884, 1.08823111,  1.05948873]),
+        <zfit.Parameter 'Nbkg' floating=True value=9989>: array([ 1.09953348,  1.09953348,  1.09953348, ...,
+        0.21310097, -0.08823153, -0.05948912])}
     """
 
     if not is_valid_pdf(model):
