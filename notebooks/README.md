@@ -12,6 +12,7 @@ The notebooks are divided for each `submodule`:
     * confidenceinterval_freq_zfit.ipynb: computes the 68% confidence level interval on the mean of a gaussian signal over an exponential background, fitted with `zfit`, using the `FrequentistCalculator`.
     * FC_interval_asy.ipynb: computes the 90% confidence level Feldman and Cousins interval on the measured mean 𝑥 of a gaussian for several values of the true mean μ, using the `AsymptoticCalculator`.
     * FC_interval_asy.ipynb: computes the 90% confidence level Feldman and Cousins interval on the measured mean 𝑥 of a gaussian for several values of the true mean μ, using the `FrequentistCalculator`.
+    * counting.ipynb: shows examples of inferences with `hepstats` using a counting analysis instead of a shape analysis.
 - `modeling`
     * bayesian_blocks.ipynb: presentation of the Bayesian Blocks algorithm and comparison with other binning methods.
 - `splots`
