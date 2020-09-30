@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 0.2.6
+*************
+* New documentation style
+* `hepstats` can now do hypothesis tests, and compute upper limits and confidence intervals for counting analysis
+* Progess bars are used to see the progression of the generation of the toys
+
 Version 0.2.5
 *************
 * ConfidenceInterval can compute Feldman and Cousin intervals with boundaries (i.e ``qtilde=True``)
