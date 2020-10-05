@@ -96,11 +96,12 @@ class AsymptoticCalculator(BaseCalculator):
             msg = "Tests using the asymptotic calculator can only be used with one parameter of interest."
             raise NotImplementedError(msg)
 
-    def asimov_dataset(self, poi: POI):
+    def asimov_dataset(self, poi: POI, ntrials_fit: int = 5):
         """Gets the Asimov dataset for a given alternative hypothesis.
 
         Args:
             poi: parameter of interest of the alternative hypothesis.
+            ntrials_fit: maximum number of fits to perform
 
         Returns:
              The asymov dataset.
@@ -145,7 +146,7 @@ class AsymptoticCalculator(BaseCalculator):
                                     )
                     else:
                         msg = "No valid minimum was found when fitting the loss function for the alternative"
-                        msg += f"hypothesis ({poi})."
+                        msg += f"hypothesis ({poi}), after {ntrials_fit} trials."
                         warnings.warn(msg)
 
                 print(minimum)

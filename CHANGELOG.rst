@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Version 0.2.6
+Version 0.3.0
 *************
 * New documentation style
 * `hepstats` can now do hypothesis tests, and compute upper limits and confidence intervals for counting analysis
