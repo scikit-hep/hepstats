@@ -10,7 +10,7 @@ from ..parameters import POI, POIarray
 
 
 def generate_asimov_hist(
-    model, params: Dict[Any, float], nbins: int = 100
+    model, params: Dict[Any, Dict[str, Any]], nbins: int = 100
 ) -> Tuple[np.ndarray, np.ndarray]:
     """ Generate the Asimov histogram using a model and dictionary of parameters.
 
@@ -96,11 +96,12 @@ class AsymptoticCalculator(BaseCalculator):
             msg = "Tests using the asymptotic calculator can only be used with one parameter of interest."
             raise NotImplementedError(msg)
 
-    def asimov_dataset(self, poi: POI):
+    def asimov_dataset(self, poi: POI, ntrials_fit: int = 5):
         """Gets the Asimov dataset for a given alternative hypothesis.
 
         Args:
             poi: parameter of interest of the alternative hypothesis.
+            ntrials_fit: maximum number of fits to perform
 
         Returns:
              The asymov dataset.
@@ -125,34 +126,36 @@ class AsymptoticCalculator(BaseCalculator):
             print(msg)
 
             self.set_params_to_bestfit()
-
             poiparam.floating = False
 
-            with poiparam.set_value(poivalue):
-                for trial in range(5):
-                    minimum = minimizer.minimize(loss=self.loss)
-                    if minimum.valid:
-                        break
+            if not self.loss.get_params():
+                values = {poiparam: {"value": poivalue}}
+
+            else:
+                with poiparam.set_value(poivalue):
+                    for trial in range(5):
+                        minimum = minimizer.minimize(loss=self.loss)
+                        if minimum.valid:
+                            break
+                        else:
+                            # shift other parameter values to change starting point of minimization
+                            for p in self.parameters:
+                                if p != poiparam:
+                                    p.set_value(
+                                        get_value(p) * np.random.normal(1, 0.02, 1)[0]
+                                    )
                     else:
-                        # shift other parameter values to change starting point of minimization
-                        for p in self.parameters:
-                            if p != poiparam:
-                                p.set_value(
-                                    get_value(p) * np.random.normal(1, 0.02, 1)[0]
-                                )
-                else:
-                    msg = "No valid minimum was found when fitting the loss function for the alternative"
-                    msg += f"hypothesis ({poi})."
-                    warnings.warn(msg)
+                        msg = "No valid minimum was found when fitting the loss function for the alternative"
+                        msg += f"hypothesis ({poi}), after {ntrials_fit} trials."
+                        warnings.warn(msg)
+
+                print(minimum)
+
+                values = dict(minimum.params)
+                values[poiparam] = {"value": poivalue}
 
             poiparam.floating = True
-
-            print(minimum)
-
             minimizer.verbosity = oldverbose
-
-            values = minimum.params
-            values[poiparam] = {"value": poivalue}
 
             asimov_data = []
 
@@ -162,13 +165,9 @@ class AsymptoticCalculator(BaseCalculator):
                 asimov_bins = self._asimov_bins
                 assert len(asimov_bins) == len(data)
 
-            asimov_hists = [
-                generate_asimov_hist(m, values, bins)
-                for m, bins in zip(model, asimov_bins)
-            ]
+            for i, (m, nbins) in enumerate(zip(model, asimov_bins)):
 
-            for i, ad in enumerate(asimov_hists):
-                weights, bin_edges = ad
+                weights, bin_edges = generate_asimov_hist(m, values, nbins)
                 bin_centers = bin_edges[0:-1] + np.diff(bin_edges) / 2
 
                 if not model[i].is_extended:

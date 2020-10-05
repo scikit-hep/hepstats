@@ -53,7 +53,7 @@ The modeling submodule includes the [Bayesian Block algorithm](https://arxiv.org
 
 This submodule provides tools to do hypothesis tests such as discovery test and computations of upper limits or confidence intervals. hepstats needs a fitting backend to perform computations such as [zfit](https://github.com/zfit/zfit). Any fitting library can be used if their API is compatible  with hepstats (see [api checks](https://github.com/scikit-hep/hepstats/blob/master/hepstats/hypotests/utils/fit/api_check.py)).
 
-We give here a simple example of an upper limit calculation of the yield of a Gaussian signal with known mean and sigma over an exponential background. The fitting backend used is the [zfit](https://github.com/zfit/zfit) package.
+We give here a simple example of an upper limit calculation of the yield of a Gaussian signal with known mean and sigma over an exponential background. The fitting backend used is the [zfit](https://github.com/zfit/zfit) package. An example with a **counting experiment** analysis is also given in the [binder](https://mybinder.org/v2/gh/scikit-hep/hepstats/master) examples.
 
 ```python
 >>> import zfit

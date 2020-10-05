@@ -6,8 +6,13 @@ import zfit
 from zfit.core.testing import (
     teardown_function,
 )  # allows redefinition of zfit.Parameter, needed for tests
-from zfit.core.loss import ExtendedUnbinnedNLL
+from zfit.core.loss import ExtendedUnbinnedNLL, UnbinnedNLL
 from zfit.minimize import Minuit
+
+from zfit.models.dist_tfp import WrapDistribution
+import tensorflow_probability as tfp
+from zfit.util import ztyping
+from collections import OrderedDict
 
 import hepstats
 from hepstats.hypotests.calculators.basecalculator import BaseCalculator
@@ -97,3 +102,73 @@ def test_with_frequentist_calculator():
     assert pnull == pytest.approx(0.0004, rel=0.05, abs=0.0005)
     assert significance == pytest.approx(3.3527947805048592, rel=0.05, abs=0.1)
     assert significance >= 3
+
+
+class Poisson(WrapDistribution):
+    _N_OBS = 1
+
+    def __init__(
+        self,
+        lamb: ztyping.ParamTypeInput,
+        obs: ztyping.ObsTypeInput,
+        name: str = "Poisson",
+    ):
+        """
+        Temporary class
+        """
+        (lamb,) = self._check_input_params(lamb)
+        params = OrderedDict((("lamb", lamb),))
+        dist_params = dict(rate=lamb)
+        distribution = tfp.distributions.Poisson
+        super().__init__(
+            distribution=distribution,
+            dist_params=dist_params,
+            obs=obs,
+            params=params,
+            name=name,
+        )
+
+
+def create_loss_counting():
+
+    n = 370
+    nbkg = 340
+
+    Nsig = zfit.Parameter("Nsig", 0, -100.0, 100)
+    Nbkg = zfit.Parameter("Nbkg", nbkg, floating=False)
+    Nobs = zfit.ComposedParameter("Nobs", lambda a, b: a + b, params=[Nsig, Nbkg])
+
+    obs = zfit.Space("N", limits=(0, 800))
+    model = Poisson(obs=obs, lamb=Nobs)
+
+    data = zfit.data.Data.from_numpy(obs=obs, array=np.array([n]))
+
+    loss = UnbinnedNLL(model=model, data=data)
+
+    return loss, Nsig
+
+
+def test_counting_with_asymptotic_calculator():
+
+    loss, Nsig, = create_loss_counting()
+    calculator = AsymptoticCalculator(loss, Minuit())
+
+    poinull = POI(Nsig, 0)
+
+    discovery_test = Discovery(calculator, poinull)
+    pnull, significance = discovery_test.result()
+
+    assert significance < 2
+
+
+def test_counting_with_frequentist_calculator():
+
+    loss, Nsig, = create_loss_counting()
+    calculator = FrequentistCalculator(loss, Minuit(), ntoysnull=1000)
+
+    poinull = POI(Nsig, 0)
+
+    discovery_test = Discovery(calculator, poinull)
+    pnull, significance = discovery_test.result()
+
+    assert significance < 2

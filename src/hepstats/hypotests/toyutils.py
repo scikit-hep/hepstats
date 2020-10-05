@@ -5,6 +5,7 @@ import numpy as np
 import warnings
 from contextlib import ExitStack
 from typing import List, Callable, Dict, Any
+from tqdm.auto import tqdm
 
 from .parameters import POI, POIarray
 from .exceptions import ParameterNotFound, FormatError
@@ -218,7 +219,7 @@ class ToysManager(ToysObject):
             return 0
 
     def generate_and_fit_toys(
-        self, ntoys: int, poigen: POI, poieval: POIarray, printfreq: float = 0.2,
+        self, ntoys: int, poigen: POI, poieval: POIarray,
     ):
         """
         Generate and fit toys for at a given POI (poigen). The toys are then fitted, and the likelihood
@@ -228,7 +229,6 @@ class ToysManager(ToysObject):
             ntoys: number of toys to generate
             poigen: POI used to generate the toys
             poieval: POI values to evaluate the loss function
-            printfreq: print frequency of the toys generation
         """
 
         self.set_params_to_bestfit()
@@ -242,8 +242,6 @@ class ToysManager(ToysObject):
         bestfit = np.empty(ntoys)
         nll_bestfit = np.empty(ntoys)
         nlls = {p: np.empty(ntoys) for p in poieval}
-
-        printfreq = ntoys * printfreq
 
         samples = self.sample(
             sampler=sampler,
@@ -262,10 +260,11 @@ class ToysManager(ToysObject):
         nfailures = 0
         ntrials = 0
 
+        progressbar = tqdm(total=ntoys)
+
         for i in range(ntoys):
             ntrials += 1
             converged = False
-            toprint = i % printfreq == 0
             while converged is False:
                 try:
                     param_dict = next(samples)
@@ -307,12 +306,13 @@ class ToysManager(ToysObject):
                 for p in poieval:
                     nlls[p][i] = pll(minimizer, toys_loss, p)
 
-            if toprint:
-                print("{0} toys generated, fitted and scanned!".format(i))
+            progressbar.update(1)
 
             if i > ntoys:
                 break
             i += 1
+
+        progressbar.close()
 
         if (poigen, poieval) not in self.keys():
             toysresult = ToyResult(p, poieval)
