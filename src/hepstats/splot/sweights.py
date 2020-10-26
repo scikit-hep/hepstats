@@ -114,6 +114,7 @@ def compute_sweights(model, x: np.ndarray) -> Dict[Any, np.ndarray]:
         for y, mlsr in zip(yields, MLSR):
             msg += f"\t {y.name}: {mlsr}\n"
         msg += f"should be equal to 1.0 with an absolute tolerance of {tolerance}."
+        return msg
 
     if not np.allclose(MLSR, 1, atol=atol_exceptions):
         msg = msg_fn(atol_exceptions)
