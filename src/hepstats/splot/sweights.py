@@ -109,8 +109,10 @@ def compute_sweights(model, x: np.ndarray) -> Dict[Any, np.ndarray]:
     atol_exceptions = 1e-1
 
     def msg_fn(tolerance):
-        msg = "The Maximum Likelihood Sum Rule sanity check, described in equation 17 of arXiv:physics/0402083"
-        msg += ", failed. According to this check the following printed quantities\n"
+        msg = (
+            "The Maximum Likelihood Sum Rule sanity check, described in equation 17 of"
+        )
+        msg += " arXiv:physics/0402083, failed. According to this check the following quantities\n"
         for y, mlsr in zip(yields, MLSR):
             msg += f"\t* {y.name}: {mlsr},\n"
         msg += f"should be equal to 1.0 with an absolute tolerance of {tolerance}."
