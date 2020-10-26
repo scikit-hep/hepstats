@@ -14,6 +14,7 @@ from hepstats.splot import compute_sweights
 from hepstats.splot.sweights import is_sum_of_extended_pdfs
 from hepstats.utils.fit import get_value
 from hepstats.splot.exceptions import ModelNotFittedToData
+from hepstats.splot.warnings import AboveToleranceWarning
 
 
 def get_data_and_loss():
@@ -106,6 +107,11 @@ def test_sweights():
     hist_bkg_sweights_p = np.histogram(p, weights=sweights[Nbkg], **hist_conf)[0][sel]
 
     assert chisquare(hist_bkg_sweights_p, hist_bkg_true_p)[-1] < 0.01
+
+    with pytest.warns(AboveToleranceWarning):
+        compute_sweights(
+            loss.model[0], np.concatenate([mass, np.random.normal(0.8, 0.1, 100)])
+        )
 
     with pytest.raises(ModelNotFittedToData):
         compute_sweights(
