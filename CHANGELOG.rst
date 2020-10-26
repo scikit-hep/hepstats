@@ -1,6 +1,12 @@
 Changelog
 =========
 
+master
+******
+* sPlot: Increase the tolerance of the sanity check from 1e-3 to 1e-1, if above the tolerance a ModelNotFittedToData
+exception is raised. In addition if the the check is above the 5e-3 tolerance a warning message is printed.
+
+
 Version 0.3.0
 *************
 * New documentation style
