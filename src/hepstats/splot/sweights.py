@@ -106,7 +106,7 @@ def compute_sweights(model, x: np.ndarray) -> Dict[Any, np.ndarray]:
 
     MLSR = pN.sum(axis=0)
     atol_warning = 5e-3
-    atol_exceptions = 1e-1
+    atol_exceptions = 5e-2
 
     def msg_fn(tolerance):
         msg = (

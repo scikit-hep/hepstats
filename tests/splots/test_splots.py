@@ -44,7 +44,7 @@ def get_data_and_loss():
     data = zfit.data.Data.from_numpy(obs=obs, array=mass)
 
     mean = zfit.Parameter("mean", 1.2, 0.5, 2.0)
-    sigma = zfit.Parameter("sigma", 0.1, 0.02, 0.2)
+    sigma = zfit.Parameter("sigma", 0.1, 0.02, 0.3)
     lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
     Nsig = zfit.Parameter("Nsig", nsig, 0.0, N)
     Nbkg = zfit.Parameter("Nbkg", nbkg, 0.0, N)
