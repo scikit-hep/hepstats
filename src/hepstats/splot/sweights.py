@@ -104,7 +104,7 @@ def compute_sweights(model, x: np.ndarray) -> Dict[Any, np.ndarray]:
 
     if not np.allclose(pN.sum(axis=0), 1, atol=1e-3):
         raise ModelNotFittedToData(
-            "The model needs to fitted to input data in order to comput the sWeights."
+            "The model needs to fitted to input data in order to compute the sWeights."
         )
 
     Vinv = (pN).T.dot(pN)
