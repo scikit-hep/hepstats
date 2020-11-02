@@ -9,9 +9,9 @@ from .parameters import POI
 class HypotestsObject(object):
     """Base object in `hepstats.hypotests` to manipulate a loss function and a minimizer.
 
-        Args:
-            input: loss or fit result
-            minimizer: minimizer to use to find the minimum of the loss function
+    Args:
+        input: loss or fit result
+        minimizer: minimizer to use to find the minimum of the loss function
     """
 
     def __init__(self, input, minimizer):
@@ -123,22 +123,22 @@ class HypotestsObject(object):
             param.set_value(self.bestfit.params[param]["value"])
 
     def lossbuilder(self, model, data, weights=None):
-        """ Method to build a new loss function.
+        """Method to build a new loss function.
 
-            Args:
-                * **model** (List): The model or models to evaluate the data on
-                * **data** (List): Data to use
-                * **weights** (optional, List): the data weights
+        Args:
+            * **model** (List): The model or models to evaluate the data on
+            * **data** (List): Data to use
+            * **weights** (optional, List): the data weights
 
-            Example with `zfit`:
-                >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
-                >>> mean = zfit.Parameter("mu", 1.2)
-                >>> sigma = zfit.Parameter("sigma", 0.1)
-                >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
-                >>> loss = calc.lossbuilder(model, data)
+        Example with `zfit`:
+            >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
+            >>> mean = zfit.Parameter("mu", 1.2)
+            >>> sigma = zfit.Parameter("sigma", 0.1)
+            >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+            >>> loss = calc.lossbuilder(model, data)
 
-            Returns:
-                Loss function
+        Returns:
+            Loss function
 
         """
 

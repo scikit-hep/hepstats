@@ -150,7 +150,10 @@ def create_loss_counting():
 
 def test_counting_with_asymptotic_calculator():
 
-    loss, Nsig, = create_loss_counting()
+    (
+        loss,
+        Nsig,
+    ) = create_loss_counting()
     calculator = AsymptoticCalculator(loss, Minuit())
 
     poinull = POI(Nsig, 0)
@@ -163,7 +166,10 @@ def test_counting_with_asymptotic_calculator():
 
 def test_counting_with_frequentist_calculator():
 
-    loss, Nsig, = create_loss_counting()
+    (
+        loss,
+        Nsig,
+    ) = create_loss_counting()
     calculator = FrequentistCalculator(loss, Minuit(), ntoysnull=1000)
 
     poinull = POI(Nsig, 0)

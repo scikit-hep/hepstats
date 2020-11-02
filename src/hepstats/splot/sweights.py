@@ -12,11 +12,11 @@ from .warnings import AboveToleranceWarning
 def is_sum_of_extended_pdfs(model) -> bool:
     """Checks if the input model is a sum of extended models.
 
-       Args:
-            model: the input model/pdf
+    Args:
+         model: the input model/pdf
 
-       Returns:
-            True if the model is a sum of extended models, False if not.
+    Returns:
+         True if the model is a sum of extended models, False if not.
     """
     if not hasattr(model, "get_models"):
         return False

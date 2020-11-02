@@ -143,7 +143,7 @@ class FitFailuresWarning(UserWarning):
 
 class ToysManager(ToysObject):
     """Class handling the toy generation and fit, results are stored in **ToyResult** instances stored
-        themselves in a dictionary.
+    themselves in a dictionary.
     """
 
     def __init__(
@@ -219,7 +219,10 @@ class ToysManager(ToysObject):
             return 0
 
     def generate_and_fit_toys(
-        self, ntoys: int, poigen: POI, poieval: POIarray,
+        self,
+        ntoys: int,
+        poigen: POI,
+        poieval: POIarray,
     ):
         """
         Generate and fit toys for at a given POI (poigen). The toys are then fitted, and the likelihood
