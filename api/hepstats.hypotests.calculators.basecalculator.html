@@ -1,0 +1,1347 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>hepstats.hypotests.calculators.basecalculator module &#8212; hepstats 0.2.5 documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    <a class="navbar-brand" href="../index.html">
+    
+      <img src="../_static/logo.png" class="logo" alt="logo" />
+    
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../getting_started/index.html">Quickstart</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../whats_new.html">What’s new</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="index.html">API reference</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../bibliography.html">Bibliography</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/scikit-hep/hepstats" target="_blank" rel="noopener">
+              <span><i class="fab fa-github-square"></i></span>
+            </a>
+          </li>
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search hepstats..." aria-label="Search hepstats..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+    <div class="bd-toc-item active">
+    
+  
+    <ul class="nav bd-sidenav">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+      </ul>
+  
+  </nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+    </ul>
+</nav>
+
+
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/scikit-hep/hepstats/edit/master/docs/api/hepstats.hypotests.calculators.basecalculator.rst">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="module-hepstats.hypotests.calculators.basecalculator">
+<span id="hepstats-hypotests-calculators-basecalculator-module"></span><h1>hepstats.hypotests.calculators.basecalculator module<a class="headerlink" href="#module-hepstats.hypotests.calculators.basecalculator" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator">
+<em class="property">class </em><code class="sig-prename descclassname">hepstats.hypotests.calculators.basecalculator.</code><code class="sig-name descname">BaseCalculator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em>, <em class="sig-param"><span class="n">minimizer</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#BaseCalculator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="hepstats.hypotests.hypotests_object.html#hepstats.hypotests.hypotests_object.HypotestsObject" title="hepstats.hypotests.hypotests_object.HypotestsObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">hepstats.hypotests.hypotests_object.HypotestsObject</span></code></a></p>
+<p>Base class for calculator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – loss or fit result</p></li>
+<li><p><strong>minimizer</strong> – minimizer to use to find the minimum of the loss function</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">zfit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">zfit.core.loss</span> <span class="kn">import</span> <span class="n">UnbinnedNLL</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">zfit.minimize</span> <span class="kn">import</span> <span class="n">Minuit</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obs</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Space</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sigma</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">pdf</span><span class="o">.</span><span class="n">Gauss</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">UnbinnedNLL</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc</span> <span class="o">=</span> <span class="n">BaseCalculator</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span> <span class="n">minimizer</span><span class="o">=</span><span class="n">Minuit</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.obs_nll">
+<code class="sig-name descname">obs_nll</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pois</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#BaseCalculator.obs_nll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.obs_nll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute observed negative log-likelihood values for given parameters of interest.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pois</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>) – parameters of interest.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Observed nll values.</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poi</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nll</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">obs_nll</span><span class="p">(</span><span class="n">poi</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.qobs">
+<code class="sig-name descname">qobs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poinull</span></em>, <em class="sig-param"><span class="n">onesided</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">onesideddiscovery</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">qtilde</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#BaseCalculator.qobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.qobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes observed values of the <span class="math notranslate nohighlight">\(\Delta\)</span> log-likelihood test statistic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poinull</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>) – parameters of interest for the null hypothesis.</p></li>
+<li><p><strong>qtilde</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\tilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+<li><p><strong>onesided</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues for a
+discovery test.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Observed values of q.</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poi</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">qobs</span><span class="p">(</span><span class="n">poi</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.pvalue">
+<code class="sig-name descname">pvalue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poinull</span></em>, <em class="sig-param"><span class="n">poialt</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">qtilde</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">onesided</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">onesideddiscovery</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#BaseCalculator.pvalue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.pvalue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes pvalues for the null and alternative hypothesis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poinull</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – parameters of interest for the null hypothesis.</p></li>
+<li><p><strong>poialt</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>]) – parameters of interest for the alternative hypothesis.</p></li>
+<li><p><strong>qtilde</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+<li><p><strong>onesided</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues for a discovery test.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple of arrays for pnull, palt</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poinull</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poialt</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pvalues</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">pavalue</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.expected_pvalue">
+<code class="sig-name descname">expected_pvalue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poinull</span></em>, <em class="sig-param"><span class="n">poialt</span></em>, <em class="sig-param"><span class="n">nsigma</span></em>, <em class="sig-param"><span class="n">CLs</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">qtilde</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">onesided</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">onesideddiscovery</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#BaseCalculator.expected_pvalue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.expected_pvalue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the expected pvalues and error bands for different values of <span class="math notranslate nohighlight">\(\sigma\)</span> (0=expected/median)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poinull</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – parameters of interest for the null hypothesis.</p></li>
+<li><p><strong>poialt</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – parameters of interest for the alternative hypothesis.</p></li>
+<li><p><strong>nsigma</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – list of values of <span class="math notranslate nohighlight">\(\sigma\)</span> to compute the expected pvalue.</p></li>
+<li><p><strong>CLs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> computes pvalues as <span class="math notranslate nohighlight">\(p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}\)</span>
+else as <span class="math notranslate nohighlight">\(p_{clsb} = p_{null}\)</span>.</p></li>
+<li><p><strong>qtilde</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+<li><p><strong>onesided</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues for a discovery.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Array of expected pvalues for each <span class="math notranslate nohighlight">\(\sigma\)</span> value</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poinull</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poialt</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nll</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">expected_pvalue</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.check_pois">
+<em class="property">static </em><code class="sig-name descname">check_pois</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pois</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#BaseCalculator.check_pois"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.check_pois" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the parameter of interest is a <code class="xref py py-class docutils literal notranslate"><span class="pre">hepstats.parameters.POIarray</span></code> instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pois</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – the parameter of interest to check.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TypeError</strong> – if pois is not an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">hepstats.parameters.POIarray</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.check_pois_compatibility">
+<em class="property">static </em><code class="sig-name descname">check_pois_compatibility</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poi1</span></em>, <em class="sig-param"><span class="n">poi2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#BaseCalculator.check_pois_compatibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.check_pois_compatibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks compatibility between two lists of <code class="xref py py-func docutils literal notranslate"><span class="pre">hepstats.parameters.POIarray()</span></code> instances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poi1</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – the first parameter of interest.</p></li>
+<li><p><strong>poi2</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – the second parameter of interest.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – if the two parameters of interests don’t have the same parameters, check by their
+    names.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.q">
+<code class="sig-name descname">q</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nll1</span></em>, <em class="sig-param"><span class="n">nll2</span></em>, <em class="sig-param"><span class="n">poi1</span></em>, <em class="sig-param"><span class="n">poi2</span></em>, <em class="sig-param"><span class="n">onesided</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">onesideddiscovery</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#BaseCalculator.q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute values of the test statistic q defined as the difference between negative log-likelihood
+values <span class="math notranslate nohighlight">\(q = nll1 - nll2\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nll1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code>) – array of nll values #1, evaluated with poi1.</p></li>
+<li><p><strong>nll2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code>) – array of nll values #2, evaluated with poi2.</p></li>
+<li><p><strong>poi1</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>) – POI’s #1.</p></li>
+<li><p><strong>poi2</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>) – POI’s #2.</p></li>
+<li><p><strong>onesided</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues for a discovery.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Array of <span class="math notranslate nohighlight">\(q\)</span> values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.bestfit">
+<em class="property">property </em><code class="sig-name descname">bestfit</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.bestfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the best fit values of the model parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.constraints">
+<em class="property">property </em><code class="sig-name descname">constraints</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the constraints on the loss / likehood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.data">
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.get_parameter">
+<code class="sig-name descname">get_parameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.get_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the parameter in loss function with given input name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – name of the parameter to return</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.loss">
+<em class="property">property </em><code class="sig-name descname">loss</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the loss / likelihood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.lossbuilder">
+<code class="sig-name descname">lossbuilder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">weights</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.lossbuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to build a new loss function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>*</em>) – The model or models to evaluate the data on</p></li>
+<li><p><strong>data</strong> (<em>*</em>) – Data to use</p></li>
+<li><p><strong>weights</strong> (<em>*</em>) – the data weights</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>Example with <cite>zfit</cite>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sigma</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">pdf</span><span class="o">.</span><span class="n">Gauss</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">lossbuilder</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Loss function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.minimizer">
+<em class="property">property </em><code class="sig-name descname">minimizer</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.minimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the minimizer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.model">
+<em class="property">property </em><code class="sig-name descname">model</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.parameters">
+<em class="property">property </em><code class="sig-name descname">parameters</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of free parameters in loss / likelihood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseCalculator.set_params_to_bestfit">
+<code class="sig-name descname">set_params_to_bestfit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator.set_params_to_bestfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the values of the parameters in the models to the best fit values</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator">
+<em class="property">class </em><code class="sig-prename descclassname">hepstats.hypotests.calculators.basecalculator.</code><code class="sig-name descname">BaseToysCalculator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em>, <em class="sig-param"><span class="n">minimizer</span></em>, <em class="sig-param"><span class="n">sampler</span></em>, <em class="sig-param"><span class="n">sample</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#BaseToysCalculator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#hepstats.hypotests.calculators.basecalculator.BaseCalculator" title="hepstats.hypotests.calculators.basecalculator.BaseCalculator"><code class="xref py py-class docutils literal notranslate"><span class="pre">hepstats.hypotests.calculators.basecalculator.BaseCalculator</span></code></a></p>
+<p>Basis for toys calculator class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – loss or fit result.</p></li>
+<li><p><strong>minimizer</strong> – minimizer to use to find the minimum of the loss function.</p></li>
+<li><p><strong>sampler</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>) – function used to create sampler with models, number of events and floating
+parameters in the sample.</p></li>
+<li><p><strong>sample</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>) – function used to get samples from the sampler.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.bestfit">
+<em class="property">property </em><code class="sig-name descname">bestfit</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.bestfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the best fit values of the model parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.check_pois">
+<em class="property">static </em><code class="sig-name descname">check_pois</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pois</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.check_pois" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the parameter of interest is a <code class="xref py py-class docutils literal notranslate"><span class="pre">hepstats.parameters.POIarray</span></code> instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pois</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – the parameter of interest to check.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TypeError</strong> – if pois is not an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">hepstats.parameters.POIarray</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.check_pois_compatibility">
+<em class="property">static </em><code class="sig-name descname">check_pois_compatibility</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poi1</span></em>, <em class="sig-param"><span class="n">poi2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.check_pois_compatibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks compatibility between two lists of <code class="xref py py-func docutils literal notranslate"><span class="pre">hepstats.parameters.POIarray()</span></code> instances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poi1</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – the first parameter of interest.</p></li>
+<li><p><strong>poi2</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – the second parameter of interest.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – if the two parameters of interests don’t have the same parameters, check by their
+    names.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.constraints">
+<em class="property">property </em><code class="sig-name descname">constraints</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the constraints on the loss / likehood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.data">
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.expected_pvalue">
+<code class="sig-name descname">expected_pvalue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poinull</span></em>, <em class="sig-param"><span class="n">poialt</span></em>, <em class="sig-param"><span class="n">nsigma</span></em>, <em class="sig-param"><span class="n">CLs</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">qtilde</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">onesided</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">onesideddiscovery</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.expected_pvalue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the expected pvalues and error bands for different values of <span class="math notranslate nohighlight">\(\sigma\)</span> (0=expected/median)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poinull</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – parameters of interest for the null hypothesis.</p></li>
+<li><p><strong>poialt</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – parameters of interest for the alternative hypothesis.</p></li>
+<li><p><strong>nsigma</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – list of values of <span class="math notranslate nohighlight">\(\sigma\)</span> to compute the expected pvalue.</p></li>
+<li><p><strong>CLs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> computes pvalues as <span class="math notranslate nohighlight">\(p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}\)</span>
+else as <span class="math notranslate nohighlight">\(p_{clsb} = p_{null}\)</span>.</p></li>
+<li><p><strong>qtilde</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+<li><p><strong>onesided</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues for a discovery.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Array of expected pvalues for each <span class="math notranslate nohighlight">\(\sigma\)</span> value</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poinull</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poialt</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nll</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">expected_pvalue</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.get_parameter">
+<code class="sig-name descname">get_parameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.get_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the parameter in loss function with given input name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – name of the parameter to return</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.loss">
+<em class="property">property </em><code class="sig-name descname">loss</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the loss / likelihood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.lossbuilder">
+<code class="sig-name descname">lossbuilder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">weights</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.lossbuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to build a new loss function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>*</em>) – The model or models to evaluate the data on</p></li>
+<li><p><strong>data</strong> (<em>*</em>) – Data to use</p></li>
+<li><p><strong>weights</strong> (<em>*</em>) – the data weights</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>Example with <cite>zfit</cite>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sigma</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">pdf</span><span class="o">.</span><span class="n">Gauss</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">lossbuilder</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Loss function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.minimizer">
+<em class="property">property </em><code class="sig-name descname">minimizer</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.minimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the minimizer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.model">
+<em class="property">property </em><code class="sig-name descname">model</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.obs_nll">
+<code class="sig-name descname">obs_nll</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pois</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.obs_nll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute observed negative log-likelihood values for given parameters of interest.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pois</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>) – parameters of interest.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Observed nll values.</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poi</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nll</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">obs_nll</span><span class="p">(</span><span class="n">poi</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.parameters">
+<em class="property">property </em><code class="sig-name descname">parameters</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of free parameters in loss / likelihood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.pvalue">
+<code class="sig-name descname">pvalue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poinull</span></em>, <em class="sig-param"><span class="n">poialt</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">qtilde</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">onesided</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">onesideddiscovery</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.pvalue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes pvalues for the null and alternative hypothesis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poinull</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – parameters of interest for the null hypothesis.</p></li>
+<li><p><strong>poialt</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>]) – parameters of interest for the alternative hypothesis.</p></li>
+<li><p><strong>qtilde</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+<li><p><strong>onesided</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues for a discovery test.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple of arrays for pnull, palt</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poinull</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poialt</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pvalues</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">pavalue</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.q">
+<code class="sig-name descname">q</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nll1</span></em>, <em class="sig-param"><span class="n">nll2</span></em>, <em class="sig-param"><span class="n">poi1</span></em>, <em class="sig-param"><span class="n">poi2</span></em>, <em class="sig-param"><span class="n">onesided</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">onesideddiscovery</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute values of the test statistic q defined as the difference between negative log-likelihood
+values <span class="math notranslate nohighlight">\(q = nll1 - nll2\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nll1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code>) – array of nll values #1, evaluated with poi1.</p></li>
+<li><p><strong>nll2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code>) – array of nll values #2, evaluated with poi2.</p></li>
+<li><p><strong>poi1</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>) – POI’s #1.</p></li>
+<li><p><strong>poi2</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>) – POI’s #2.</p></li>
+<li><p><strong>onesided</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues for a discovery.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Array of <span class="math notranslate nohighlight">\(q\)</span> values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.qobs">
+<code class="sig-name descname">qobs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poinull</span></em>, <em class="sig-param"><span class="n">onesided</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">onesideddiscovery</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">qtilde</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.qobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes observed values of the <span class="math notranslate nohighlight">\(\Delta\)</span> log-likelihood test statistic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poinull</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>) – parameters of interest for the null hypothesis.</p></li>
+<li><p><strong>qtilde</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\tilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+<li><p><strong>onesided</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues for a
+discovery test.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Observed values of q.</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poi</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">qobs</span><span class="p">(</span><span class="n">poi</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.set_params_to_bestfit">
+<code class="sig-name descname">set_params_to_bestfit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator.set_params_to_bestfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the values of the parameters in the models to the best fit values</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator">
+<em class="property">class </em><code class="sig-prename descclassname">hepstats.hypotests.calculators.basecalculator.</code><code class="sig-name descname">ToysCalculator</code><span class="sig-paren">(</span><em class="sig-param">input</em>, <em class="sig-param">minimizer</em>, <em class="sig-param">ntoysnull=100</em>, <em class="sig-param">ntoysalt=100</em>, <em class="sig-param">sampler=&lt;function base_sampler&gt;</em>, <em class="sig-param">sample=&lt;function base_sample&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#ToysCalculator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#hepstats.hypotests.calculators.basecalculator.BaseToysCalculator" title="hepstats.hypotests.calculators.basecalculator.BaseToysCalculator"><code class="xref py py-class docutils literal notranslate"><span class="pre">hepstats.hypotests.calculators.basecalculator.BaseToysCalculator</span></code></a>, <a class="reference internal" href="hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToysManager" title="hepstats.hypotests.toyutils.ToysManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">hepstats.hypotests.toyutils.ToysManager</span></code></a></p>
+<p>Class for calculators using toys.</p>
+<p>Toys calculator class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – loss or fit result.</p></li>
+<li><p><strong>minimizer</strong> – minimizer to use to find the minimum of the loss function.</p></li>
+<li><p><strong>ntoysnull</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – minimum number of toys to generate for the null hypothesis.</p></li>
+<li><p><strong>ntoysalt</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – minimum number of toys to generate for the alternative hypothesis.</p></li>
+<li><p><strong>sampler</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>) – function used to create sampler with models, number of events and floating** parameters.
+in the sample Default is <a class="reference internal" href="hepstats.utils.fit.sampling.html#hepstats.utils.fit.sampling.base_sampler" title="hepstats.utils.fit.sampling.base_sampler"><code class="xref py py-func docutils literal notranslate"><span class="pre">hepstats.utils.fit.sampling.base_sampler()</span></code></a>.</p></li>
+<li><p><strong>sample</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>) – function used to get samples from the sampler. Default is
+<code class="xref py py-func docutils literal notranslate"><span class="pre">hepstats.utils.fit..sampling.base_sample()</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.from_yaml">
+<em class="property">classmethod </em><code class="sig-name descname">from_yaml</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">input</em>, <em class="sig-param">minimizer</em>, <em class="sig-param">sampler=&lt;function base_sampler&gt;</em>, <em class="sig-param">sample=&lt;function base_sample&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#ToysCalculator.from_yaml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.from_yaml" title="Permalink to this definition">¶</a></dt>
+<dd><p>ToysCalculator constructor with the toys loaded from a yaml file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the yaml file name.</p></li>
+<li><p><strong>input</strong> – loss or fit result.</p></li>
+<li><p><strong>minimizer</strong> – minimizer to use to find the minimum of the loss function.</p></li>
+<li><p><strong>sampler</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>) – function used to create sampler with models, number of events and floating
+parameters in the sample Default is <a class="reference internal" href="hepstats.utils.fit.sampling.html#hepstats.utils.fit.sampling.base_sampler" title="hepstats.utils.fit.sampling.base_sampler"><code class="xref py py-func docutils literal notranslate"><span class="pre">hepstats.utils.fit.sampling.base_sampler()</span></code></a>.</p></li>
+<li><p><strong>sample</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>) – function used to get samples from the sampler. Default is
+<code class="xref py py-func docutils literal notranslate"><span class="pre">hepstats.fitutils.sampling.base_sample()</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.ntoysnull">
+<em class="property">property </em><code class="sig-name descname">ntoysnull</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.ntoysnull" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of toys generated for the null hypothesis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.ntoysalt">
+<em class="property">property </em><code class="sig-name descname">ntoysalt</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.ntoysalt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of toys generated for the alternative hypothesis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.add_toyresult">
+<code class="sig-name descname">add_toyresult</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">toy</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.add_toyresult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add ToyResult to the manager.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>toy</strong> (<a class="reference internal" href="hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToyResult" title="hepstats.hypotests.toyutils.ToyResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToyResult</span></code></a>) – the toy result to add</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.bestfit">
+<em class="property">property </em><code class="sig-name descname">bestfit</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.bestfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the best fit values of the model parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.check_pois">
+<em class="property">static </em><code class="sig-name descname">check_pois</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pois</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.check_pois" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the parameter of interest is a <code class="xref py py-class docutils literal notranslate"><span class="pre">hepstats.parameters.POIarray</span></code> instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pois</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – the parameter of interest to check.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TypeError</strong> – if pois is not an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">hepstats.parameters.POIarray</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.check_pois_compatibility">
+<em class="property">static </em><code class="sig-name descname">check_pois_compatibility</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poi1</span></em>, <em class="sig-param"><span class="n">poi2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.check_pois_compatibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks compatibility between two lists of <code class="xref py py-func docutils literal notranslate"><span class="pre">hepstats.parameters.POIarray()</span></code> instances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poi1</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – the first parameter of interest.</p></li>
+<li><p><strong>poi2</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – the second parameter of interest.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – if the two parameters of interests don’t have the same parameters, check by their
+    names.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.constraints">
+<em class="property">property </em><code class="sig-name descname">constraints</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the constraints on the loss / likehood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.data">
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.expected_pvalue">
+<code class="sig-name descname">expected_pvalue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poinull</span></em>, <em class="sig-param"><span class="n">poialt</span></em>, <em class="sig-param"><span class="n">nsigma</span></em>, <em class="sig-param"><span class="n">CLs</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">qtilde</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">onesided</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">onesideddiscovery</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.expected_pvalue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the expected pvalues and error bands for different values of <span class="math notranslate nohighlight">\(\sigma\)</span> (0=expected/median)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poinull</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – parameters of interest for the null hypothesis.</p></li>
+<li><p><strong>poialt</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – parameters of interest for the alternative hypothesis.</p></li>
+<li><p><strong>nsigma</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – list of values of <span class="math notranslate nohighlight">\(\sigma\)</span> to compute the expected pvalue.</p></li>
+<li><p><strong>CLs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> computes pvalues as <span class="math notranslate nohighlight">\(p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}\)</span>
+else as <span class="math notranslate nohighlight">\(p_{clsb} = p_{null}\)</span>.</p></li>
+<li><p><strong>qtilde</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+<li><p><strong>onesided</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues for a discovery.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Array of expected pvalues for each <span class="math notranslate nohighlight">\(\sigma\)</span> value</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poinull</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poialt</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nll</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">expected_pvalue</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.generate_and_fit_toys">
+<code class="sig-name descname">generate_and_fit_toys</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ntoys</span></em>, <em class="sig-param"><span class="n">poigen</span></em>, <em class="sig-param"><span class="n">poieval</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.generate_and_fit_toys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate and fit toys for at a given POI (poigen). The toys are then fitted, and the likelihood
+is profiled at the values of poigen and poieval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ntoys</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – number of toys to generate</p></li>
+<li><p><strong>poigen</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>) – POI used to generate the toys</p></li>
+<li><p><strong>poieval</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>) – POI values to evaluate the loss function</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.get_parameter">
+<code class="sig-name descname">get_parameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.get_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the parameter in loss function with given input name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – name of the parameter to return</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.get_toyresult">
+<code class="sig-name descname">get_toyresult</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poigen</span></em>, <em class="sig-param"><span class="n">poieval</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.get_toyresult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poigen</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>) – POI used to generate the toys</p></li>
+<li><p><strong>poieval</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>) – POI values to evaluate the loss function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToyResult" title="hepstats.hypotests.toyutils.ToyResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToyResult</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.get_toys_null">
+<code class="sig-name descname">get_toys_null</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poigen</span></em>, <em class="sig-param"><span class="n">poieval</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">qtilde</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#ToysCalculator.get_toys_null"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.get_toys_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the generated toys for the null hypothesis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poigen</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – POI used to generate the toys.</p></li>
+<li><p><strong>poieval</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – POI values to evaluate the loss function.</p></li>
+<li><p><strong>qtilde</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> use the :math:`   ilde{q}` test statistics else (default) use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poinull</span> <span class="o">=</span> <span class="n">POIarray</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poialt</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">poinull</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">calc</span><span class="o">.</span><span class="n">get_toys_alt</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">poieval</span><span class="o">=</span><span class="n">poialt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToyResult" title="hepstats.hypotests.toyutils.ToyResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToyResult</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.keys">
+<code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns keys of the <strong>ToysManager</strong> instance defined as <strong>key = (toy.poigen, toy.poieval)</strong> for a
+given <strong>ToyResult</strong> instance <cite>toy</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.loss">
+<em class="property">property </em><code class="sig-name descname">loss</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the loss / likelihood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.lossbuilder">
+<code class="sig-name descname">lossbuilder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">weights</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.lossbuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to build a new loss function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>*</em>) – The model or models to evaluate the data on</p></li>
+<li><p><strong>data</strong> (<em>*</em>) – Data to use</p></li>
+<li><p><strong>weights</strong> (<em>*</em>) – the data weights</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>Example with <cite>zfit</cite>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sigma</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">pdf</span><span class="o">.</span><span class="n">Gauss</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">lossbuilder</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Loss function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.minimizer">
+<em class="property">property </em><code class="sig-name descname">minimizer</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.minimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the minimizer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.model">
+<em class="property">property </em><code class="sig-name descname">model</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.ntoys">
+<code class="sig-name descname">ntoys</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poigen</span></em>, <em class="sig-param"><span class="n">poieval</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.ntoys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of toys generated from given value of a POI, and scanned/evaluated for given values_equal
+of the same POI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poigen</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>) – POI used to generate the toys</p></li>
+<li><p><strong>poieval</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>) – POI values to evaluate the loss function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.obs_nll">
+<code class="sig-name descname">obs_nll</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pois</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.obs_nll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute observed negative log-likelihood values for given parameters of interest.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pois</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>) – parameters of interest.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Observed nll values.</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poi</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nll</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">obs_nll</span><span class="p">(</span><span class="n">poi</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.parameters">
+<em class="property">property </em><code class="sig-name descname">parameters</code><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of free parameters in loss / likelihood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.pvalue">
+<code class="sig-name descname">pvalue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poinull</span></em>, <em class="sig-param"><span class="n">poialt</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">qtilde</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">onesided</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">onesideddiscovery</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.pvalue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes pvalues for the null and alternative hypothesis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poinull</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – parameters of interest for the null hypothesis.</p></li>
+<li><p><strong>poialt</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>]) – parameters of interest for the alternative hypothesis.</p></li>
+<li><p><strong>qtilde</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+<li><p><strong>onesided</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues for a discovery test.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple of arrays for pnull, palt</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poinull</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poialt</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pvalues</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">pavalue</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.q">
+<code class="sig-name descname">q</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nll1</span></em>, <em class="sig-param"><span class="n">nll2</span></em>, <em class="sig-param"><span class="n">poi1</span></em>, <em class="sig-param"><span class="n">poi2</span></em>, <em class="sig-param"><span class="n">onesided</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">onesideddiscovery</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute values of the test statistic q defined as the difference between negative log-likelihood
+values <span class="math notranslate nohighlight">\(q = nll1 - nll2\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nll1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code>) – array of nll values #1, evaluated with poi1.</p></li>
+<li><p><strong>nll2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code>) – array of nll values #2, evaluated with poi2.</p></li>
+<li><p><strong>poi1</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>) – POI’s #1.</p></li>
+<li><p><strong>poi2</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>) – POI’s #2.</p></li>
+<li><p><strong>onesided</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues for a discovery.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Array of <span class="math notranslate nohighlight">\(q\)</span> values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.qobs">
+<code class="sig-name descname">qobs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poinull</span></em>, <em class="sig-param"><span class="n">onesided</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">onesideddiscovery</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">qtilde</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.qobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes observed values of the <span class="math notranslate nohighlight">\(\Delta\)</span> log-likelihood test statistic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poinull</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>) – parameters of interest for the null hypothesis.</p></li>
+<li><p><strong>qtilde</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\tilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+<li><p><strong>onesided</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> (default) computes onesided pvalues for a
+discovery test.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Observed values of q.</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poi</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">qobs</span><span class="p">(</span><span class="n">poi</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.sample">
+<code class="sig-name descname">sample</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sampler</span></em>, <em class="sig-param"><span class="n">ntoys</span></em>, <em class="sig-param"><span class="n">poi</span></em>, <em class="sig-param"><span class="n">constraints</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator function of samples from the sampler for a given value of a parameter of interest. Returns a
+dictionnary of samples constraints in any.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sampler</strong> (<em>list</em>) – generator of samples</p></li>
+<li><p><strong>ntoys</strong> (<em>int</em>) – number of samples to generate</p></li>
+<li><p><strong>poi</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><em>POI</em></a>) – in the sampler</p></li>
+<li><p><strong>constraints</strong> (<em>list</em><em>, </em><em>optional</em>) – list of constraints to sample</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>Example with <cite>zfit</cite>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">sampler</span><span class="p">(</span><span class="n">floating_params</span><span class="o">=</span><span class="p">[</span><span class="n">mean</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">sampler</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dictionnary of sampled values of the constraints at each iteration</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.sampler">
+<code class="sig-name descname">sampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">floating_params</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.sampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create sampler with models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>floating_params</strong> – floating parameters in the sampler</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <cite>zfit</cite>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">sampler</span><span class="p">(</span><span class="n">floating_params</span><span class="o">=</span><span class="p">[</span><span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">)])</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.set_params_to_bestfit">
+<code class="sig-name descname">set_params_to_bestfit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.set_params_to_bestfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the values of the parameters in the models to the best fit values</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.to_yaml">
+<code class="sig-name descname">to_yaml</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.to_yaml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the toys into a yaml file under the key <strong>toys</strong>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the yaml file name.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.toyresults_to_dict">
+<code class="sig-name descname">toyresults_to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.toyresults_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all the toy results converted into dictionnaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.toys_loss">
+<code class="sig-name descname">toys_loss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameter_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.toys_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a loss function constructed with a sampler for a given floating parameter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parameter_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – name floating parameter in the sampler</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Loss function</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <cite>zfit</cite>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">toys_loss</span><span class="p">(</span><span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.toysresults_from_yaml">
+<code class="sig-name descname">toysresults_from_yaml</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.toysresults_from_yaml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract toy results from a yaml file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the yaml file name.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToyResult" title="hepstats.hypotests.toyutils.ToyResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToyResult</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.values">
+<code class="sig-name descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns values of <strong>ToysManager</strong> instance that are <strong>ToyResult</strong> instances.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.calculators.basecalculator.ToysCalculator.get_toys_alt">
+<code class="sig-name descname">get_toys_alt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poigen</span></em>, <em class="sig-param"><span class="n">poieval</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">qtilde</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/basecalculator.html#ToysCalculator.get_toys_alt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.calculators.basecalculator.ToysCalculator.get_toys_alt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the generated toys for the alternative hypothesis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poigen</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>]) – POI used to generate the toys.</p></li>
+<li><p><strong>poieval</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – POI values to evaluate the loss function.</p></li>
+<li><p><strong>qtilde</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite> use the :math:`   ilde{q}` test statistics else (default) use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poinull</span> <span class="o">=</span> <span class="n">POIarray</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poialt</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc</span><span class="o">.</span><span class="n">get_toys_alt</span><span class="p">(</span><span class="n">poialt</span><span class="p">,</span> <span class="n">poieval</span><span class="o">=</span><span class="n">poinull</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a>, <a class="reference internal" href="hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToyResult" title="hepstats.hypotests.toyutils.ToyResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToyResult</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Matthieu Marinangeli.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

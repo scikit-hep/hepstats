@@ -1,0 +1,468 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>hepstats.hypotests.hypotests_object module &#8212; hepstats 0.2.5 documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    <a class="navbar-brand" href="../index.html">
+    
+      <img src="../_static/logo.png" class="logo" alt="logo" />
+    
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../getting_started/index.html">Quickstart</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../whats_new.html">What’s new</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="index.html">API reference</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../bibliography.html">Bibliography</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/scikit-hep/hepstats" target="_blank" rel="noopener">
+              <span><i class="fab fa-github-square"></i></span>
+            </a>
+          </li>
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search hepstats..." aria-label="Search hepstats..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+    <div class="bd-toc-item active">
+    
+  
+    <ul class="nav bd-sidenav">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+      </ul>
+  
+  </nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+    </ul>
+</nav>
+
+
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/scikit-hep/hepstats/edit/master/docs/api/hepstats.hypotests.hypotests_object.rst">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="module-hepstats.hypotests.hypotests_object">
+<span id="hepstats-hypotests-hypotests-object-module"></span><h1>hepstats.hypotests.hypotests_object module<a class="headerlink" href="#module-hepstats.hypotests.hypotests_object" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="hepstats.hypotests.hypotests_object.HypotestsObject">
+<em class="property">class </em><code class="sig-prename descclassname">hepstats.hypotests.hypotests_object.</code><code class="sig-name descname">HypotestsObject</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em>, <em class="sig-param"><span class="n">minimizer</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/hypotests_object.html#HypotestsObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.hypotests_object.HypotestsObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base object in <cite>hepstats.hypotests</cite> to manipulate a loss function and a minimizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – loss or fit result</p></li>
+<li><p><strong>minimizer</strong> – minimizer to use to find the minimum of the loss function</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.HypotestsObject.loss">
+<em class="property">property </em><code class="sig-name descname">loss</code><a class="headerlink" href="#hepstats.hypotests.hypotests_object.HypotestsObject.loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the loss / likelihood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.HypotestsObject.minimizer">
+<em class="property">property </em><code class="sig-name descname">minimizer</code><a class="headerlink" href="#hepstats.hypotests.hypotests_object.HypotestsObject.minimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the minimizer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.HypotestsObject.bestfit">
+<em class="property">property </em><code class="sig-name descname">bestfit</code><a class="headerlink" href="#hepstats.hypotests.hypotests_object.HypotestsObject.bestfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the best fit values of the model parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.HypotestsObject.model">
+<em class="property">property </em><code class="sig-name descname">model</code><a class="headerlink" href="#hepstats.hypotests.hypotests_object.HypotestsObject.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.HypotestsObject.data">
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#hepstats.hypotests.hypotests_object.HypotestsObject.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.HypotestsObject.constraints">
+<em class="property">property </em><code class="sig-name descname">constraints</code><a class="headerlink" href="#hepstats.hypotests.hypotests_object.HypotestsObject.constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the constraints on the loss / likehood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.HypotestsObject.get_parameter">
+<code class="sig-name descname">get_parameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/hypotests_object.html#HypotestsObject.get_parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.hypotests_object.HypotestsObject.get_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the parameter in loss function with given input name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – name of the parameter to return</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.HypotestsObject.parameters">
+<em class="property">property </em><code class="sig-name descname">parameters</code><a class="headerlink" href="#hepstats.hypotests.hypotests_object.HypotestsObject.parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of free parameters in loss / likelihood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.HypotestsObject.set_params_to_bestfit">
+<code class="sig-name descname">set_params_to_bestfit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/hypotests_object.html#HypotestsObject.set_params_to_bestfit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.hypotests_object.HypotestsObject.set_params_to_bestfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the values of the parameters in the models to the best fit values</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.HypotestsObject.lossbuilder">
+<code class="sig-name descname">lossbuilder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">weights</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/hypotests_object.html#HypotestsObject.lossbuilder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.hypotests_object.HypotestsObject.lossbuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to build a new loss function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>*</em>) – The model or models to evaluate the data on</p></li>
+<li><p><strong>data</strong> (<em>*</em>) – Data to use</p></li>
+<li><p><strong>weights</strong> (<em>*</em>) – the data weights</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>Example with <cite>zfit</cite>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sigma</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">pdf</span><span class="o">.</span><span class="n">Gauss</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">lossbuilder</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Loss function</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="hepstats.hypotests.hypotests_object.ToysObject">
+<em class="property">class </em><code class="sig-prename descclassname">hepstats.hypotests.hypotests_object.</code><code class="sig-name descname">ToysObject</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em>, <em class="sig-param"><span class="n">minimizer</span></em>, <em class="sig-param"><span class="n">sampler</span></em>, <em class="sig-param"><span class="n">sample</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/hypotests_object.html#ToysObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.hypotests_object.ToysObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#hepstats.hypotests.hypotests_object.HypotestsObject" title="hepstats.hypotests.hypotests_object.HypotestsObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">hepstats.hypotests.hypotests_object.HypotestsObject</span></code></a></p>
+<p>Base object in <cite>hepstats.hypotests</cite> to manipulate a loss function, a minimizer and sample a
+model (within the loss function) to do toy experiments.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Args:</dt><dd><p>input: loss or fit result
+minimizer: minimizer to use to find the minimum of the loss function
+sampler: function used to create sampler with models, number of events and floating parameters
+in the sample.
+sample: function used to get samples from the sampler.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.ToysObject.bestfit">
+<em class="property">property </em><code class="sig-name descname">bestfit</code><a class="headerlink" href="#hepstats.hypotests.hypotests_object.ToysObject.bestfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the best fit values of the model parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.ToysObject.constraints">
+<em class="property">property </em><code class="sig-name descname">constraints</code><a class="headerlink" href="#hepstats.hypotests.hypotests_object.ToysObject.constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the constraints on the loss / likehood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.ToysObject.data">
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#hepstats.hypotests.hypotests_object.ToysObject.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.ToysObject.get_parameter">
+<code class="sig-name descname">get_parameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.hypotests_object.ToysObject.get_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the parameter in loss function with given input name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – name of the parameter to return</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.ToysObject.loss">
+<em class="property">property </em><code class="sig-name descname">loss</code><a class="headerlink" href="#hepstats.hypotests.hypotests_object.ToysObject.loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the loss / likelihood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.ToysObject.lossbuilder">
+<code class="sig-name descname">lossbuilder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">weights</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.hypotests_object.ToysObject.lossbuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to build a new loss function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>*</em>) – The model or models to evaluate the data on</p></li>
+<li><p><strong>data</strong> (<em>*</em>) – Data to use</p></li>
+<li><p><strong>weights</strong> (<em>*</em>) – the data weights</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>Example with <cite>zfit</cite>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sigma</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">pdf</span><span class="o">.</span><span class="n">Gauss</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">lossbuilder</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Loss function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.ToysObject.minimizer">
+<em class="property">property </em><code class="sig-name descname">minimizer</code><a class="headerlink" href="#hepstats.hypotests.hypotests_object.ToysObject.minimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the minimizer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.ToysObject.model">
+<em class="property">property </em><code class="sig-name descname">model</code><a class="headerlink" href="#hepstats.hypotests.hypotests_object.ToysObject.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.ToysObject.parameters">
+<em class="property">property </em><code class="sig-name descname">parameters</code><a class="headerlink" href="#hepstats.hypotests.hypotests_object.ToysObject.parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of free parameters in loss / likelihood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.ToysObject.sampler">
+<code class="sig-name descname">sampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">floating_params</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/hypotests_object.html#ToysObject.sampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.hypotests_object.ToysObject.sampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create sampler with models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>floating_params</strong> – floating parameters in the sampler</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <cite>zfit</cite>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">sampler</span><span class="p">(</span><span class="n">floating_params</span><span class="o">=</span><span class="p">[</span><span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">)])</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.ToysObject.set_params_to_bestfit">
+<code class="sig-name descname">set_params_to_bestfit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.hypotests_object.ToysObject.set_params_to_bestfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the values of the parameters in the models to the best fit values</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.ToysObject.sample">
+<code class="sig-name descname">sample</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sampler</span></em>, <em class="sig-param"><span class="n">ntoys</span></em>, <em class="sig-param"><span class="n">poi</span></em>, <em class="sig-param"><span class="n">constraints</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/hypotests_object.html#ToysObject.sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.hypotests_object.ToysObject.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator function of samples from the sampler for a given value of a parameter of interest. Returns a
+dictionnary of samples constraints in any.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sampler</strong> (<em>list</em>) – generator of samples</p></li>
+<li><p><strong>ntoys</strong> (<em>int</em>) – number of samples to generate</p></li>
+<li><p><strong>poi</strong> (<a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><em>POI</em></a>) – in the sampler</p></li>
+<li><p><strong>constraints</strong> (<em>list</em><em>, </em><em>optional</em>) – list of constraints to sample</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>Example with <cite>zfit</cite>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">sampler</span><span class="p">(</span><span class="n">floating_params</span><span class="o">=</span><span class="p">[</span><span class="n">mean</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">sampler</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dictionnary of sampled values of the constraints at each iteration</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hepstats.hypotests.hypotests_object.ToysObject.toys_loss">
+<code class="sig-name descname">toys_loss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameter_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/hypotests_object.html#ToysObject.toys_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hepstats.hypotests.hypotests_object.ToysObject.toys_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a loss function constructed with a sampler for a given floating parameter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parameter_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – name floating parameter in the sampler</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Loss function</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <cite>zfit</cite>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">toys_loss</span><span class="p">(</span><span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Matthieu Marinangeli.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

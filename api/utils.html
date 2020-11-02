@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>hepstats.utils &#8212; hepstats 0.2.5 documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Bibliography" href="../bibliography.html" />
+    <link rel="prev" title="hepstats.splot" href="splot.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    <a class="navbar-brand" href="../index.html">
+    
+      <img src="../_static/logo.png" class="logo" alt="logo" />
+    
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../getting_started/index.html">Quickstart</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../whats_new.html">What’s new</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">API reference</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../bibliography.html">Bibliography</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/scikit-hep/hepstats" target="_blank" rel="noopener">
+              <span><i class="fab fa-github-square"></i></span>
+            </a>
+          </li>
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search hepstats..." aria-label="Search hepstats..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+    <div class="bd-toc-item active">
+    
+  
+    <ul class="nav bd-sidenav">
+        
+        
+        
+        
+        
+        
+          
+            
+                <li class="">
+                    <a href="modeling.html">hepstats.modeling</a>
+                </li>
+            
+          
+            
+                <li class="">
+                    <a href="hypotests.html">hepstats.hypotests</a>
+                </li>
+            
+          
+            
+                <li class="">
+                    <a href="splot.html">hepstats.splot</a>
+                </li>
+            
+          
+            
+                <li class="active">
+                    <a href="">hepstats.utils</a>
+                </li>
+            
+          
+        
+        
+        
+        
+      </ul>
+  
+  </nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#hepstats-utils-fit" class="nav-link">hepstats.utils.fit</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hepstats-utils-fit-api-check" class="nav-link">hepstats.utils.fit.api_check</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hepstats-utils-fit-diverse" class="nav-link">hepstats.utils.fit.diverse</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hepstats-utils-fit-sampling" class="nav-link">hepstats.utils.fit.sampling</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+    </ul>
+</nav>
+
+
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/scikit-hep/hepstats/edit/master/docs/api/utils.rst">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="hepstats-utils">
+<h1>hepstats.utils<a class="headerlink" href="#hepstats-utils" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="hepstats-utils-fit">
+<h2>hepstats.utils.fit<a class="headerlink" href="#hepstats-utils-fit" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="hepstats-utils-fit-api-check">
+<h3>hepstats.utils.fit.api_check<a class="headerlink" href="#hepstats-utils-fit-api-check" title="Permalink to this headline">¶</a></h3>
+<p>Module for testing a fitting library validity with hepstats.</p>
+<p>A fitting library should provide six basic objects:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>model / probability density function</p></li>
+<li><p>parameters of the models</p></li>
+<li><p>data</p></li>
+<li><p>loss / likelihood function</p></li>
+<li><p>minimizer</p></li>
+<li><p>fitresult (optional)</p></li>
+</ul>
+</div></blockquote>
+<p>A function for each object is defined in this module, all should return <cite>True</cite> to work
+with hepstats.</p>
+<p>The <cite>zfit</cite> API is currently the standard fitting API in hepstats.</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="hepstats.utils.fit.api_check.html#hepstats.utils.fit.api_check.is_valid_parameter" title="hepstats.utils.fit.api_check.is_valid_parameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid_parameter</span></code></a>(object)</p></td>
+<td><p>Checks if a parameter has the following attributes/methods:</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hepstats.utils.fit.api_check.html#hepstats.utils.fit.api_check.is_valid_data" title="hepstats.utils.fit.api_check.is_valid_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid_data</span></code></a>(object)</p></td>
+<td><p>Checks if the data object has the following attributes/methods:</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="hepstats.utils.fit.api_check.html#hepstats.utils.fit.api_check.is_valid_pdf" title="hepstats.utils.fit.api_check.is_valid_pdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid_pdf</span></code></a>(object)</p></td>
+<td><p>Checks if the pdf object has the following attributes/methods:</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hepstats.utils.fit.api_check.html#hepstats.utils.fit.api_check.is_valid_loss" title="hepstats.utils.fit.api_check.is_valid_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid_loss</span></code></a>(object)</p></td>
+<td><p>Checks if the loss object has the following attributes/methods:</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="hepstats.utils.fit.api_check.html#hepstats.utils.fit.api_check.is_valid_fitresult" title="hepstats.utils.fit.api_check.is_valid_fitresult"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid_fitresult</span></code></a>(object)</p></td>
+<td><p>Checks if the fit result object has the following attributes/methods:</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hepstats.utils.fit.api_check.html#hepstats.utils.fit.api_check.is_valid_minimizer" title="hepstats.utils.fit.api_check.is_valid_minimizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid_minimizer</span></code></a>(object)</p></td>
+<td><p>Checks if the minimzer object has the following attributes/methods:</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="hepstats-utils-fit-diverse">
+<h3>hepstats.utils.fit.diverse<a class="headerlink" href="#hepstats-utils-fit-diverse" title="Permalink to this headline">¶</a></h3>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="hepstats.utils.fit.diverse.html#hepstats.utils.fit.diverse.get_value" title="hepstats.utils.fit.diverse.get_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_value</span></code></a>(value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hepstats.utils.fit.diverse.html#hepstats.utils.fit.diverse.eval_pdf" title="hepstats.utils.fit.diverse.eval_pdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_pdf</span></code></a>(model, x[, params, allow_extended])</p></td>
+<td><p>Compute pdf of model at a given point x and for given parameters values</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="hepstats.utils.fit.diverse.html#hepstats.utils.fit.diverse.pll" title="hepstats.utils.fit.diverse.pll"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pll</span></code></a>(minimizer, loss, pois)</p></td>
+<td><p>Compute minimum profile likelihood for fixed given parameters values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hepstats.utils.fit.diverse.html#hepstats.utils.fit.diverse.array2dataset" title="hepstats.utils.fit.diverse.array2dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array2dataset</span></code></a>(dataset_cls, obs, array[, weights])</p></td>
+<td><p>dataset_cls: only used to get the class in which array/weights will be converted.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="hepstats.utils.fit.diverse.html#hepstats.utils.fit.diverse.get_nevents" title="hepstats.utils.fit.diverse.get_nevents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_nevents</span></code></a>(dataset)</p></td>
+<td><p>Returns the number of events in the dataset</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="hepstats-utils-fit-sampling">
+<h3>hepstats.utils.fit.sampling<a class="headerlink" href="#hepstats-utils-fit-sampling" title="Permalink to this headline">¶</a></h3>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="hepstats.utils.fit.sampling.html#hepstats.utils.fit.sampling.base_sampler" title="hepstats.utils.fit.sampling.base_sampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">base_sampler</span></code></a>(models, nevents[, floating_params])</p></td>
+<td><p>Creates samplers from models.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hepstats.utils.fit.sampling.html#hepstats.utils.fit.sampling.base_sample" title="hepstats.utils.fit.sampling.base_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">base_sample</span></code></a>(samplers, ntoys[, parameter, …])</p></td>
+<td><p>Samples from samplers.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="splot.html" title="previous page">hepstats.splot</a>
+    <a class='right-next' id="next-link" href="../bibliography.html" title="next page">Bibliography</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Matthieu Marinangeli.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
