@@ -12,7 +12,7 @@ from ..parameters import POI, POIarray
 def generate_asimov_hist(
     model, params: Dict[Any, Dict[str, Any]], nbins: int = 100
 ) -> Tuple[np.ndarray, np.ndarray]:
-    """ Generate the Asimov histogram using a model and dictionary of parameters.
+    """Generate the Asimov histogram using a model and dictionary of parameters.
 
     Args:
         model: model used to generate the dataset.

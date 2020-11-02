@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from typing import Dict, Any
+import warnings
 
 from ..utils import eval_pdf
 from ..utils.fit.api_check import is_valid_pdf
 from .exceptions import ModelNotFittedToData
+from .warnings import AboveToleranceWarning
 
 
 def is_sum_of_extended_pdfs(model) -> bool:
     """Checks if the input model is a sum of extended models.
 
-       Args:
-            model: the input model/pdf
+    Args:
+         model: the input model/pdf
 
-       Returns:
-            True if the model is a sum of extended models, False if not.
+    Returns:
+         True if the model is a sum of extended models, False if not.
     """
     if not hasattr(model, "get_models"):
         return False
@@ -102,10 +104,29 @@ def compute_sweights(model, x: np.ndarray) -> Dict[Any, np.ndarray]:
     Nx = eval_pdf(model, x, allow_extended=True)
     pN = p / Nx[:, None]
 
-    if not np.allclose(pN.sum(axis=0), 1, atol=1e-3):
-        raise ModelNotFittedToData(
-            "The model needs to fitted to input data in order to compute the sWeights."
+    MLSR = pN.sum(axis=0)
+    atol_warning = 5e-3
+    atol_exceptions = 5e-2
+
+    def msg_fn(tolerance):
+        msg = (
+            "The Maximum Likelihood Sum Rule sanity check, described in equation 17 of"
+            + " arXiv:physics/0402083, failed. According to this check the following quantities\n"
         )
+        for y, mlsr in zip(yields, MLSR):
+            msg += f"\t* {y.name}: {mlsr},\n"
+        msg += f"should be equal to 1.0 with an absolute tolerance of {tolerance}."
+        return msg
+
+    if not np.allclose(MLSR, 1, atol=atol_exceptions):
+        msg = msg_fn(atol_exceptions)
+        msg += " The numbers suggest that the model is not fitted to the data. Please check your fit."
+        raise ModelNotFittedToData(msg)
+
+    if not np.allclose(MLSR, 1, atol=atol_warning):
+        msg = msg_fn(atol_warning)
+        msg += " If the fit to the data is good please ignore this warning."
+        warnings.warn(msg, AboveToleranceWarning)
 
     Vinv = (pN).T.dot(pN)
     V = np.linalg.inv(Vinv)
