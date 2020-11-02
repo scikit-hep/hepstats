@@ -106,7 +106,7 @@ A full example using the **sPlot** algorithm can be found [here](https://github.
 >>> from hepstats.splot import compute_sweights
 
 # using same model as above for illustration
->>> sweights = compute_sweights(signal + background, data)
+>>> sweights = compute_sweights(zfit.pdf.SumPDF([signal, background]), data)
 
 >>> bkg_sweights = sweights[Nbkg]
 >>> sig_sweights = sweights[Nsig]
