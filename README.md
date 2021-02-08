@@ -1,17 +1,20 @@
 <img src="https://raw.githubusercontent.com/scikit-hep/hepstats/master/docs/images/logo.png" width="450">
 
 
-# Scikit-HEP project `hepstats` package: statistics tools and utilities
+# `hepstats` package: statistics tools and utilities
 
 [![Scikit-HEP][sk-badge]](https://scikit-hep.org/)
 
 [![PyPI](https://img.shields.io/pypi/v/hepstats)](https://pypi.org/project/hepstats/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hepstats)](https://pypi.org/project/hepstats/)
+[![Conda latest release](https://img.shields.io/conda/vn/conda-forge/hepstats.svg)](https://anaconda.org/conda-forge/hepstats)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3519200.svg)](https://doi.org/10.5281/zenodo.3519200)
+
 ![CI](https://github.com/scikit-hep/hepstats/workflows/CI/badge.svg)
 [![codecov](https://codecov.io/gh/scikit-hep/hepstats/branch/master/graph/badge.svg)](https://codecov.io/gh/scikit-hep/hepstats)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/scikit-hep/hepstats/master)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/scikit-hep/hepstats/master)
 
 ## Installation
 
