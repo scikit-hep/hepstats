@@ -1,13 +1,13 @@
-import pytest
-import numpy as np
-import zfit
 import os
-from zfit.core.testing import teardown_function # allows redefinition of zfit.Parameter, needed for tests
+
+import numpy as np
+import pytest
+import zfit
 from zfit.core.loss import ExtendedUnbinnedNLL, UnbinnedNLL
 from zfit.minimize import Minuit
 
-from hepstats.hypotests.parameters import POI, POIarray
 from hepstats.hypotests.exceptions import ParameterNotFound
+from hepstats.hypotests.parameters import POI, POIarray
 from hepstats.hypotests.toyutils import ToyResult, ToysManager
 from hepstats.utils.fit.api_check import is_valid_loss, is_valid_data
 
@@ -21,7 +21,7 @@ def create_loss():
     # Data and signal
     np.random.seed(0)
     tau = -2.0
-    beta = -1/tau
+    beta = -1 / tau
     bkg = np.random.exponential(beta, 300)
     peak = np.random.normal(1.2, 0.1, 25)
     data = np.concatenate((bkg, peak))
@@ -31,11 +31,11 @@ def create_loss():
 
     lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
     Nsig = zfit.Parameter("Nsig", 20., -20., N)
-    Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
+    Nbkg = zfit.Parameter("Nbkg", N, 0., N * 1.1)
 
-    signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)
-    background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
-    tot_model = signal + background
+    signal = zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1).create_extended(Nsig)
+    background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
+    tot_model = zfit.pdf.SumPDF([signal, background])
 
     loss = ExtendedUnbinnedNLL(model=tot_model, data=data)
 
@@ -69,7 +69,6 @@ def test_constructors():
 
 
 def test_toyresult_attributes():
-
     _, (_, poigen, poieval) = create_loss()
     tr = ToyResult(poigen, poieval)
 
@@ -94,7 +93,6 @@ def test_toyresult_attributes():
 
 
 def test_toymanager_attributes():
-
     loss, (Nsig, poigen, poieval) = create_loss()
 
     tm = ToysManager.from_yaml(f"{pwd}/discovery_freq_zfit_toys.yaml", loss, Minuit())

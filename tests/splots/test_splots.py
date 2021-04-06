@@ -3,7 +3,6 @@ import pytest
 from scipy.stats import chisquare
 
 import zfit
-from zfit.core.testing import teardown_function  # allows redefinition of zfit.Parameter, needed for tests
 from zfit.loss import ExtendedUnbinnedNLL
 from zfit.minimize import Minuit
 
@@ -46,9 +45,9 @@ def get_data_and_loss():
     Nsig = zfit.Parameter("Nsig", nsig, 0., N)
     Nbkg = zfit.Parameter("Nbkg", nbkg, 0., N)
 
-    signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
-    background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
-    tot_model = signal + background
+    signal =  zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma).create_extended(Nsig)
+    background =  zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
+    tot_model = zfit.pdf.SumPDF([signal, background])
 
     loss = ExtendedUnbinnedNLL(model=tot_model, data=data)
 

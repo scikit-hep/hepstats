@@ -38,9 +38,8 @@ class BaseCalculator(HypotestsObject):
         self._obs_nll = {}
 
         self._parameters = {}
-        for m in self.model:
-            for d in m.get_dependents():
-                self._parameters[d.name] = d
+        for d in self.loss.get_params():
+            self._parameters[d.name] = d
 
     def obs_nll(self, pois) -> np.ndarray:
         """ Compute observed negative log-likelihood values for given parameters of interest.

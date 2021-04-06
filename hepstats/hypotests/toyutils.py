@@ -344,7 +344,7 @@ class ToysManager(ToysObject):
 
         for t in toys:
             poiparam = None
-            for p in self.loss.get_dependents():
+            for p in self.loss.get_params():
                 if t["poi"] == p.name:
                     poiparam = p
 

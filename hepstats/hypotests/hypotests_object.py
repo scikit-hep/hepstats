@@ -30,7 +30,7 @@ class HypotestsObject(object):
 
         self._parameters = {}
         for m in self.model:
-            for d in m.get_dependents():
+            for d in m.get_params():
                 self._parameters[d.name] = d
 
     @property
@@ -109,7 +109,7 @@ class HypotestsObject(object):
         Set the values of the parameters in the models to the best fit values
         """
         for m in self.model:
-            for d in m.get_dependents():
+            for d in m.get_params():
                 d.set_value(self.bestfit.params[d]["value"])
 
     def lossbuilder(self, model, data, weights=None):
@@ -147,7 +147,7 @@ class HypotestsObject(object):
             for d, w in zip(data, weights):
                 d.set_weights(w)
 
-        loss = type(self.loss)(model=model, data=data)
+        loss = type(self.loss)(model=model, data=data, options={'subtr_const': False})
         loss.add_constraints(self.constraints)
 
         return loss

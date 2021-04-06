@@ -2,7 +2,6 @@ import pytest
 import numpy as np
 import zfit
 import os
-from zfit.core.testing import teardown_function # allows redefinition of zfit.Parameter, needed for tests
 from zfit.loss import ExtendedUnbinnedNLL
 from zfit.minimize import Minuit
 
@@ -35,9 +34,9 @@ def create_loss():
     Nsig = zfit.Parameter("Nsig", 20., -20., N)
     Nbkg = zfit.Parameter("Nbkg", N, 0., N*1.1)
 
-    signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)
-    background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)
-    tot_model = signal + background
+    signal = zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1).create_extended(Nsig)
+    background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
+    tot_model = zfit.pdf.SumPDF([signal, background])
 
     loss = ExtendedUnbinnedNLL(model=tot_model, data=data)
 

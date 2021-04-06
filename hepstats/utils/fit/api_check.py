@@ -45,11 +45,11 @@ def is_valid_data(object):
 
 
 def is_valid_pdf(object):
-    has_get_dependents = hasattr(object, "get_dependents")
-    if not has_get_dependents:
+    has_get_params = hasattr(object, "get_params")
+    if not has_get_params:
         return False
     else:
-        params = object.get_dependents()
+        params = object.get_params()
 
     all_valid_params = all(is_valid_parameter(p) for p in params)
     has_pdf = hasattr(object, "pdf")

@@ -31,7 +31,7 @@ def base_sampler(models, nevents, floating_params=None):
             else:
                 return False
 
-        fixed = [p for p in m.get_dependents() if not to_fix(p)]
+        fixed = [p for p in m.get_params() if not to_fix(p)]
         fixed_params.append(fixed)
 
     for i, (m, p) in enumerate(zip(models, fixed_params)):

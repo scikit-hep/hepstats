@@ -21,3 +21,21 @@ def data_gen():
     data2 = np.random.normal(2, 1, size=1000)
     weights = np.random.uniform(1, 2, size=1000)
     return data1, data2, weights
+
+@pytest.fixture(autouse=True)
+def setup_teardown():
+    import zfit
+    old_chunksize = zfit.run.chunking.max_n_points
+    old_active = zfit.run.chunking.active
+
+    yield
+
+    from zfit.core.parameter import ZfitParameterMixin
+    ZfitParameterMixin._existing_params.clear()
+
+    from zfit.util.cache import clear_graph_cache
+    clear_graph_cache()
+    zfit.run.chunking.active = old_active
+    zfit.run.chunking.max_n_points = old_chunksize
+    zfit.run.set_graph_mode()
+    zfit.run.set_autograd_mode()

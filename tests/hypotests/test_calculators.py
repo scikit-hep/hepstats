@@ -3,7 +3,6 @@ import pytest
 import numpy as np
 
 import zfit
-from zfit.core.testing import teardown_function  # allows redefinition of zfit.Parameter, needed for tests
 from zfit.core.loss import UnbinnedNLL
 from zfit.minimize import Minuit
 

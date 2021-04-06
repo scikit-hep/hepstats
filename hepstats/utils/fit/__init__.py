@@ -18,7 +18,7 @@ def eval_pdf(model, x, params={}, allow_extended=False):
         return get_value(ret)
 
     with ExitStack() as stack:
-        for param in model.get_dependents():
+        for param in model.get_params():
             if param in params:
                 value = params[param]["value"]
                 stack.enter_context(param.set_value(value))
