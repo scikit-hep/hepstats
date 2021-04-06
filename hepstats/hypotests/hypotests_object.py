@@ -1,6 +1,5 @@
-from ..utils.fit.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
-from ..utils.fit.api_check import is_valid_data, is_valid_pdf
 from ..utils.fit import get_nevents
+from ..utils.fit.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer, is_valid_data, is_valid_pdf
 
 
 class HypotestsObject(object):
@@ -147,7 +146,13 @@ class HypotestsObject(object):
             for d, w in zip(data, weights):
                 d.set_weights(w)
 
-        loss = type(self.loss)(model=model, data=data, options={'subtr_const': False})
+        # fix for newly introduce https://github.com/zfit/zfit-development/issues/68
+        subtractions = getattr(self.loss, '_subtractions', None)
+        if subtractions is not None:
+            loss = type(self.loss)(model=model, data=data,
+                                   options={'subtr_const': subtractions.get('subtr_const')})
+        else:
+            loss = type(self.loss)(model=model, data=data)
         loss.add_constraints(self.constraints)
 
         return loss
