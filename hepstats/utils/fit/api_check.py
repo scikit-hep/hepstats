@@ -16,6 +16,7 @@ with hepstats.
 The `zfit` API is currently the standard fitting API in hepstats.
 
 """
+import warnings
 
 
 def is_valid_parameter(object):
@@ -73,11 +74,14 @@ def is_valid_loss(object):
         data = object.data
 
     has_constraints = hasattr(object, "constraints")
-    has_fit_range = hasattr(object, "fit_range")
+    has_create_new = hasattr(object, "create_new")
+    if not has_create_new:
+        warnings.warn("Loss should have a `create_new` method.", FutureWarning, stacklevel=3)
+        has_create_new = True
     all_valid_pdfs = all(is_valid_pdf(m) for m in model)
     all_valid_datasets = all(is_valid_data(d) for d in data)
 
-    return all_valid_pdfs and all_valid_datasets and has_constraints and has_fit_range
+    return all_valid_pdfs and all_valid_datasets and has_constraints and has_create_new
 
 
 def is_valid_fitresult(object):
