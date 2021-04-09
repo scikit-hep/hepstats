@@ -8,7 +8,8 @@ dependencies:
   - iminuit
   - uproot
   - matplotlib
-  - tensorflow=>1.14
+  - tensorflow =>2.4
   - tensorflow-probability
-  - zfit
   - asdf
+  - pip:
+      - zfit =>0.6.3

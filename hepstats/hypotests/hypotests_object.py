@@ -1,3 +1,5 @@
+import warnings
+
 from ..utils.fit import get_nevents
 from ..utils.fit.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer, is_valid_data, is_valid_pdf
 
@@ -147,13 +149,13 @@ class HypotestsObject(object):
                 d.set_weights(w)
 
         # fix for newly introduce https://github.com/zfit/zfit-development/issues/68
-        subtractions = getattr(self.loss, '_subtractions', None)
-        if subtractions is not None:
-            loss = type(self.loss)(model=model, data=data,
-                                   options={'subtr_const': subtractions.get('subtr_const')})
+        if hasattr(self.loss, 'create_new'):
+            loss = self.loss.create_new(model=model, data=data, constraints=self.constraints)
         else:
+            warnings.warn("A loss should have a `create_new` method. If you are using zfit, please make sure to"
+                          "upgrade to >= 0.6.3", FutureWarning)
             loss = type(self.loss)(model=model, data=data)
-        loss.add_constraints(self.constraints)
+            loss.add_constraints(self.constraints)
 
         return loss
 
