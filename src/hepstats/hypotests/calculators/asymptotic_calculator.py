@@ -116,7 +116,7 @@ class AsymptoticCalculator(BaseCalculator):
             data = self.data
             minimizer = self.minimizer
             oldverbose = minimizer.verbosity
-            minimizer.verbosity = 5
+            minimizer.verbosity = 0
 
             poiparam = poi.parameter
             poivalue = poi.value

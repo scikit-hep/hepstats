@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import warnings
 
 from ..utils.fit.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
 from ..utils.fit.api_check import is_valid_data, is_valid_pdf
@@ -157,8 +158,18 @@ class HypotestsObject(object):
             for d, w in zip(data, weights):
                 d.set_weights(w)
 
-        loss = type(self.loss)(model=model, data=data)
-        loss.add_constraints(self.constraints)
+        if hasattr(self.loss, "create_new"):
+            loss = self.loss.create_new(
+                model=model, data=data, constraints=self.constraints
+            )
+        else:
+            warnings.warn(
+                "A loss should have a `create_new` method. If you are using zfit, please make sure to"
+                "upgrade to >= 0.6.3",
+                FutureWarning,
+            )
+            loss = type(self.loss)(model=model, data=data)
+            loss.add_constraints(self.constraints)
 
         return loss
 
