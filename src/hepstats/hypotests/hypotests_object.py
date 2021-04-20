@@ -165,7 +165,7 @@ class HypotestsObject(object):
         else:
             warnings.warn(
                 "A loss should have a `create_new` method. If you are using zfit, please make sure to"
-                "upgrade to >= 0.6.3",
+                "upgrade to >= 0.6.4",
                 FutureWarning,
             )
             loss = type(self.loss)(model=model, data=data)

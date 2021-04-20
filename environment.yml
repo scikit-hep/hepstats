@@ -13,4 +13,4 @@ dependencies:
   - matplotlib
   - pip:
     - .
-    - zfit =>0.6.4
+    - zfit >=0.6.4
