@@ -20,6 +20,8 @@ def get_version():
     return g["__version__"]
 
 
+with open('README.md') as file:
+    readme = file.read()
 setup(
     name='hepstats',
     author='Matthieu Marinangeli',
@@ -28,7 +30,7 @@ setup(
     maintainer_email='scikit-hep-admins@googlegroups.com',
     version=get_version(),
     description='statistics tools and utilities',
-    long_description=open('README.md').read(),
+    long_description=readme,
     long_description_content_type="text/markdown",
     url='https://github.com/scikit-hep/hepstats',
     license='BSD 3-Clause License',
