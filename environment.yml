@@ -6,11 +6,11 @@ dependencies:
   - numpy
   - scipy
   - iminuit
-  - tensorflow>=2.0
+  - tensorflow>=2.4
   - tensorflow-probability
   #- zfit
   - asdf
   - matplotlib
   - pip:
     - .
-    - zfit
+    - zfit >=0.6.4

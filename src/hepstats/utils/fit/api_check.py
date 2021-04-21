@@ -118,7 +118,12 @@ def is_valid_loss(object):
 
     has_get_params = hasattr(object, "get_params")
     has_constraints = hasattr(object, "constraints")
-    has_fit_range = hasattr(object, "fit_range")
+    has_create_new = hasattr(object, "create_new")
+    if not has_create_new:
+        warnings.warn(
+            "Loss should have a `create_new` method.", FutureWarning, stacklevel=3
+        )
+        has_create_new = True  # TODO: allowed now, will be dropped in the future
     all_valid_pdfs = all(is_valid_pdf(m) for m in model)
     all_valid_datasets = all(is_valid_data(d) for d in data)
 
@@ -126,7 +131,7 @@ def is_valid_loss(object):
         all_valid_pdfs
         and all_valid_datasets
         and has_constraints
-        and has_fit_range
+        and has_create_new
         and has_get_params
     )
 

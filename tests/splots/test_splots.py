@@ -4,9 +4,6 @@ import pytest
 from scipy.stats import chisquare
 
 import zfit
-from zfit.core.testing import (
-    teardown_function,
-)  # allows redefinition of zfit.Parameter, needed for tests
 from zfit.loss import ExtendedUnbinnedNLL
 from zfit.minimize import Minuit
 
