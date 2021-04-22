@@ -4,6 +4,12 @@ Changelog
 master
 ******
 
+
+Version 0.4.0
+*************
+
+* loss: upgrade API to use `create_new` to make sure that the losses are comparable. Compatible with zfit 0.6.4+
+
 Version 0.3.1
 *************
 * sPlot: Increase the tolerance of the sanity check from 1e-3 to 5e-2, if above the tolerance a ModelNotFittedToData
