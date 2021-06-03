@@ -4,10 +4,12 @@ Changelog
 master
 ******
 
+Version 0.5.0
+*************
+* Upgrade to Python 3.9 and drop support for 3.6
 
 Version 0.4.0
 *************
-
 * loss: upgrade API to use `create_new` to make sure that the losses are comparable. Compatible with zfit 0.6.4+
 
 Version 0.3.1
