@@ -8,7 +8,7 @@ def get_value(value):
 
 
 def eval_pdf(model, x, params={}, allow_extended=False):
-    """ Compute pdf of model at a given point x and for given parameters values """
+    """Compute pdf of model at a given point x and for given parameters values"""
 
     def pdf(model, x):
         if model.is_extended and allow_extended:
@@ -27,7 +27,7 @@ def eval_pdf(model, x, params={}, allow_extended=False):
 
 
 def pll(minimizer, loss, pois) -> float:
-    """ Compute minimum profile likelihood for fixed given parameters values. """
+    """Compute minimum profile likelihood for fixed given parameters values."""
 
     with ExitStack() as stack:
         for p in pois:
@@ -60,6 +60,6 @@ def array2dataset(dataset_cls, obs, array, weights=None):
 
 
 def get_nevents(dataset):
-    """ Returns the number of events in the dataset """
+    """Returns the number of events in the dataset"""
 
     return get_value(dataset.nevents)

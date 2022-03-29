@@ -49,7 +49,7 @@ class Prior(object):
             return -np.log(self.gamma)
         else:
             # eq. 21 from Scargle 2012
-            return 4 - np.log(73.53 * self.p0 * (N ** -0.478))
+            return 4 - np.log(73.53 * self.p0 * (N**-0.478))
 
 
 def bayesian_blocks(
