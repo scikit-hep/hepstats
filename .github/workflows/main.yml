@@ -14,8 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
-    - uses: pre-commit/action@v2.0.2
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-python@v3
+    - uses: pre-commit/action@v2.0.3
 
   checks:
     runs-on: ${{ matrix.os }}
@@ -26,15 +28,18 @@ jobs:
         - ubuntu-latest
         - macos-latest
         python-version:
-        - 3.7
-        - 3.8
-        - 3.9
+        - "3.7"
+        - "3.8"
+        - "3.9"
+        - "3.10"
     name: Check Python ${{ matrix.python-version }} ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
 
     - name: Setup Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -45,7 +50,7 @@ jobs:
       run: python -m pytest --doctest-modules --cov=hepstats --cov-report=xml
 
     - name: Upload coverage to Codecov
-      if: matrix.python-version == 3.8 && matrix.os == 'ubuntu-latest'
+      if: matrix.python-version == '3.8' && matrix.os == 'ubuntu-latest'
       uses: codecov/codecov-action@v1
       with:
         file: ./coverage.xml
@@ -56,7 +61,9 @@ jobs:
   dist:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
 
     - name: Build
       run: pipx run build
@@ -72,10 +79,12 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-python@v1
+    - uses: actions/checkout@v2
       with:
-        python-version: 3.8
+        fetch-depth: 0
+    - uses: actions/setup-python@v3
+      with:
+        python-version: "3.8"
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip setuptools wheel
@@ -107,6 +116,6 @@ jobs:
         name: artifact
         path: dist
 
-    - uses: pypa/gh-action-pypi-publish@v1.4.2
+    - uses: pypa/gh-action-pypi-publish@v1.5.0
       with:
         password: ${{ secrets.pypi_password }}
