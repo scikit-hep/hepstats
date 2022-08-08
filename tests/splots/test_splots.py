@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pytest
-from scipy.stats import chisquare
+from scipy.stats import chisquare, ks_2samp
 
 import zfit
 from zfit.loss import ExtendedUnbinnedNLL
@@ -15,32 +15,18 @@ from hepstats.splot.warnings import AboveToleranceWarning
 
 
 def get_data_and_loss():
-
     bounds = (0.0, 3.0)
     obs = zfit.Space("x", limits=bounds)
     nbkg = 10000
     nsig = 5000
 
     # Data and signal
+    def get_sel(arr):
+        return (arr > bounds[0]) & (arr < bounds[1])
 
     np.random.seed(0)
-    tau = -2.0
-    beta = -1 / tau
-    bkg = np.random.exponential(beta, nbkg)
-    peak = np.random.normal(1.2, 0.2, nsig)
-    mass = np.concatenate((bkg, peak))
 
-    sig_p = np.random.normal(5, 1, size=nsig)
-    bck_p = np.random.normal(3, 1, size=nbkg)
-    p = np.concatenate([bck_p, sig_p])
-
-    sel = (mass > bounds[0]) & (mass < bounds[1])
-    mass = mass[sel]
-    p = p[sel]
-
-    N = len(mass)
-    data = zfit.data.Data.from_numpy(obs=obs, array=mass)
-
+    N = nsig + nbkg
     mean = zfit.Parameter("mean", 1.2, 0.5, 2.0)
     sigma = zfit.Parameter("sigma", 0.1, 0.02, 0.3)
     lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
@@ -51,13 +37,35 @@ def get_data_and_loss():
     background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
     tot_model = zfit.pdf.SumPDF([signal, background])
 
+    tau = -2.0
+    beta = -1 / tau
+
+    # bkg = np.random.exponential(beta, nbkg * 2)
+    with lambda_.set_value(-2.1):
+        bkg = background.sample(nbkg * 2).numpy()
+    bkg_sel = get_sel(bkg)
+    bkg = bkg[bkg_sel][:nbkg]
+
+    with sigma.set_value(0.2):
+        peak = signal.sample(nsig * 2).numpy()
+    # peak = np.random.normal(1.2, 0.2, nsig * 2)
+
+    peak_sel = get_sel(peak)
+    peak = peak[peak_sel][:nsig]
+    mass = np.concatenate((bkg, peak))
+
+    bck_p = np.random.normal(3, 1, size=nbkg)
+    sig_p = np.random.normal(5, 1, size=nsig)
+    p = np.concatenate([bck_p, sig_p])
+
+    data = zfit.data.Data.from_numpy(obs=obs, array=mass)
+
     loss = ExtendedUnbinnedNLL(model=tot_model, data=data)
 
     return mass, p, loss, Nsig, Nbkg, sig_p, bck_p
 
 
 def test_sweights_constructor():
-
     mass, p, loss, Nsig, Nbkg, sig_p, bkg_p = get_data_and_loss()
 
     with pytest.raises(ValueError):
@@ -68,14 +76,14 @@ def test_sweights_constructor():
 
 
 def test_sweights():
-
     minimizer = Minuit()
     mass, p, loss, Nsig, Nbkg, sig_p, bkg_p = get_data_and_loss()
 
     with pytest.raises(ModelNotFittedToData):
         compute_sweights(loss.model[0], mass)
 
-    minimizer.minimize(loss)
+    result = minimizer.minimize(loss)
+    assert result.valid
 
     model = loss.model[0]
     assert is_sum_of_extended_pdfs(model)
@@ -96,14 +104,14 @@ def test_sweights():
     hist_sig_true_p = hist_sig_true_p[sel]
     hist_sig_sweights_p = np.histogram(p, weights=sweights[Nsig], **hist_conf)[0][sel]
 
-    assert chisquare(hist_sig_sweights_p, hist_sig_true_p)[-1] < 0.01
+    assert ks_2samp(hist_sig_sweights_p, hist_sig_true_p)[-1] > 0.001
 
     hist_bkg_true_p, _ = np.histogram(bkg_p, **hist_conf)
     sel = hist_bkg_true_p != 0
     hist_bkg_true_p = hist_bkg_true_p[sel]
     hist_bkg_sweights_p = np.histogram(p, weights=sweights[Nbkg], **hist_conf)[0][sel]
 
-    assert chisquare(hist_bkg_sweights_p, hist_bkg_true_p)[-1] < 0.01
+    assert ks_2samp(hist_bkg_sweights_p, hist_bkg_true_p)[-1] > 0.001
 
     with pytest.warns(AboveToleranceWarning):
         compute_sweights(
