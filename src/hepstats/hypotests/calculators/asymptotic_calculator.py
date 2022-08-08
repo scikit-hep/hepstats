@@ -133,7 +133,7 @@ class AsymptoticCalculator(BaseCalculator):
 
             else:
                 with poiparam.set_value(poivalue):
-                    for trial in range(5):
+                    for trial in range(ntrials_fit):
                         minimum = minimizer.minimize(loss=self.loss)
                         if minimum.valid:
                             break
