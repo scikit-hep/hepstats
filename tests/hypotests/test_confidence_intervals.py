@@ -166,7 +166,7 @@ def test_with_gauss_qtilde(n, min_x):
     minimum.hesse()
 
     x = minimum.params[mean]["value"]
-    x_err = minimum.params[mean]["minuit_hesse"]["error"]
+    x_err = minimum.params[mean]["hesse"]["error"]
 
     x_min = x - x_err * 3
     x_max = x + x_err * 3
