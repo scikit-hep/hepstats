@@ -88,7 +88,7 @@ class UpperLimit(BaseTest):
                else as :math:`p_{clsb} = p_{null}`.
 
         Returns:
-            Dictionnary of p-values for CLsb, CLs, expected (+/- sigma bands).
+            Dictionary of p-values for CLsb, CLs, expected (+/- sigma bands).
         """
         pvalue_func = self.calculator.pvalue
 
@@ -154,9 +154,10 @@ class UpperLimit(BaseTest):
         ]
 
         limits: Dict = {}
-        for k in to_interpolate:
 
-            pvalues = self.pvalues(CLs)[k]
+        all_pvalues = self.pvalues(CLs)
+        for k in to_interpolate:
+            pvalues = all_pvalues[k]
             values = poinull.values
 
             if k == observed_key:
