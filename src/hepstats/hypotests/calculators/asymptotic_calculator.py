@@ -194,7 +194,7 @@ class AsymptoticCalculator(BaseCalculator):
             >>> poialt = POI(mean, 1.2)
             >>> loss = calc.asimov_loss(poialt)
         """
-        if poi not in self._asimov_loss.keys():
+        if poi not in self._asimov_loss:
             loss = self.lossbuilder(self.model, self.asimov_dataset(poi))
             self._asimov_loss[poi] = loss
 
