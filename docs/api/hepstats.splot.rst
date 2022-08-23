@@ -15,3 +15,4 @@ Submodules
 
    hepstats.splot.exceptions
    hepstats.splot.sweights
+   hepstats.splot.warnings

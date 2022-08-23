@@ -9,6 +9,7 @@
 
 import sys
 from pathlib import Path
+from hepstats import __version__ as version
 
 project_dir = Path(__file__).parents[1]
 sys.path.insert(0, str(project_dir))
@@ -21,7 +22,8 @@ copyright = "2020, Matthieu Marinangeli"
 author = "Matthieu Marinangeli"
 
 # The full version, including alpha/beta/rc tags
-release = "0.2.5"
+
+release = version
 
 
 # -- General configuration ---------------------------------------------------
@@ -44,6 +46,9 @@ extensions = [
     "sphinx_autodoc_typehints",
 ]
 
+bibtex_bibfiles = [
+    str(project_dir / "docs" / "references.bib")
+]  # TODO: currently string, Path doesn't work: https://github.com/mcmtroffaes/sphinxcontrib-bibtex/issues/314
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
