@@ -21,7 +21,7 @@ def is_sum_of_extended_pdfs(model) -> bool:
     if not hasattr(model, "get_models"):
         return False
 
-    return all(m.is_extended for m in model.get_models())
+    return all(m.is_extended for m in model.get_models()) and model.is_extended
 
 
 def compute_sweights(model, x: np.ndarray) -> Dict[Any, np.ndarray]:
