@@ -12,19 +12,32 @@ from hepstats.hypotests.calculators import AsymptoticCalculator, FrequentistCalc
 from hepstats.hypotests.parameters import POI, POIarray
 from hepstats.utils.fit.api_check import is_valid_loss, is_valid_data
 
-
 true_mu = 1.2
 true_sigma = 0.1
 
 
-def create_loss(constraint=False):
+def create_loss(constraint=False, nbins=None, make2d=False):
+    if not isinstance(nbins, list):
+        nbins = [nbins]
+    obs1 = zfit.Space("x", limits=(0.1, 2.0), binning=nbins[0])
+    if make2d:
+        obs2 = zfit.Space("y", limits=(-0.1, 3.0), binning=nbins[1])
+        obs = obs1 * obs2
 
-    obs = zfit.Space("x", limits=(0.1, 2.0))
-    data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
+    array1 = np.random.normal(1.2, 0.1, (10000, 2 if make2d else 1))
+    data = zfit.data.Data.from_numpy(obs=obs1.with_binning(None), array=array1)
     mean = zfit.Parameter("mu", true_mu)
     sigma = zfit.Parameter("sigma", true_sigma)
-    model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
-    loss = UnbinnedNLL(model=model, data=data)
+    model = zfit.pdf.Gauss(obs=obs1, mu=mean, sigma=sigma)
+    if make2d:
+        model2 = zfit.pdf.Gauss(obs=obs2.with_binning(None), mu=mean, sigma=sigma)
+        model = model * model2
+        if nbins[1] is not None:
+            model = zfit.pdf.BinnedFromUnbinnedPDF(model, space=obs)
+    if nbins[0] is None:
+        loss = UnbinnedNLL(model=model, data=data)
+    else:
+        loss = zfit.loss.BinnedNLL(model=model, data=data)
 
     if constraint:
         loss.add_constraints(
@@ -37,8 +50,14 @@ def create_loss(constraint=False):
 
 
 @pytest.mark.parametrize(
-    "calculator", [BaseCalculator, AsymptoticCalculator, FrequentistCalculator]
+    "calculator",
+    [
+        BaseCalculator,
+        # AsymptoticCalculator,
+        FrequentistCalculator,
+    ],
 )
+@pytest.mark.parametrize
 def test_base_calculator(calculator):
     with pytest.raises(TypeError):
         calculator()

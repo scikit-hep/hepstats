@@ -3,12 +3,20 @@ from contextlib import ExitStack
 import numpy as np
 
 
+def get_ndims(dataset):
+    """Return the number of dimensions in the dataset"""
+    return len(dataset.obs)
+
+
 def get_value(value):
     return np.array(value)
 
 
-def eval_pdf(model, x, params={}, allow_extended=False):
+def eval_pdf(model, x, params=None, allow_extended=False):
     """Compute pdf of model at a given point x and for given parameters values"""
+
+    if params is None:
+        params = {}
 
     def pdf(model, x):
         if model.is_extended and allow_extended:

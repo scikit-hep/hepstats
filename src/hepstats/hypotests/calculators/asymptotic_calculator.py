@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from typing import Tuple, Union, Dict, Any
+import math
+from typing import Tuple, Union, Dict, Any, Optional, Iterable, List
 import numpy as np
 from scipy.stats import norm
 import warnings
@@ -7,10 +8,11 @@ import warnings
 from .basecalculator import BaseCalculator
 from ...utils import eval_pdf, array2dataset, pll, get_value
 from ..parameters import POI, POIarray
+from ...utils.fit.diverse import get_ndims
 
 
 def generate_asimov_hist(
-    model, params: Dict[Any, Dict[str, Any]], nbins: int = 100
+    model, params: Dict[Any, Dict[str, Any]], nbins: Optional[int] = None
 ) -> Tuple[np.ndarray, np.ndarray]:
     """Generate the Asimov histogram using a model and dictionary of parameters.
 
@@ -29,11 +31,17 @@ def generate_asimov_hist(
         >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
         >>> hist, bin_edges = generate_asimov_hist(model, {"mean": 1.2, "sigma": 0.1})
     """
-
+    if nbins is None:
+        nbins = 100
     space = model.space
+    # if hasattr(space, "binning"):
+    #     binning = space.binning
+    #     if binning is None:  # the PDF is not yet binned
+    #         space = space.with_binning(nbins)  # TODO: what's the right number of bins for asimov? in ndim?
+    #         model = to_binned(model, space)
     bounds = space.limit1d
     bin_edges = np.linspace(*bounds, nbins + 1)
-    bin_centers = bin_edges[0:-1] + np.diff(bin_edges) / 2
+    bin_centers = bin_edges[:-1] + np.diff(bin_edges) / 2
 
     hist = eval_pdf(model, bin_centers, params, allow_extended=True)
     hist *= space.area() / nbins
@@ -47,7 +55,9 @@ class AsymptoticCalculator(BaseCalculator):
     :cite:`Cowan:2010js`. Can be used only with one parameter of interest.
     """
 
-    def __init__(self, input, minimizer, asimov_bins: int = 100):
+    def __init__(
+        self, input, minimizer, asimov_bins: Optional[Union[int, List[int]]] = None
+    ):
         """Asymptotic calculator class.
 
         Args:
@@ -57,7 +67,7 @@ class AsymptoticCalculator(BaseCalculator):
 
         Example with **zfit**:
             >>> import zfit
-            >>> from zfit.core.loss import UnbinnedNLL
+            >>> from zfit.loss import UnbinnedNLL
             >>> from zfit.minimize import Minuit
             >>>
             >>> obs = zfit.Space('x', limits=(0.1, 2.0))
@@ -71,11 +81,69 @@ class AsymptoticCalculator(BaseCalculator):
         """
 
         super(AsymptoticCalculator, self).__init__(input, minimizer)
-        self._asimov_bins = asimov_bins
+        loss = input.loss if hasattr(input, "loss") else input
+        self._asimov_bins = self._check_convert_asimov_bins(asimov_bins, loss.data)
         self._asimov_dataset: Dict = {}
         self._asimov_loss: Dict = {}
         # cache of nll values computed with the asimov dataset
         self._asimov_nll: Dict[POI, np.ndarray] = {}
+
+    @staticmethod
+    def _check_convert_asimov_bins(
+        asimov_bins, datasets
+    ):  # TODO: we want to allow axes from UHI
+        nsimultaneous = len(datasets)
+        ndims = [get_ndims(dataset) for dataset in datasets]
+        if asimov_bins is None:
+            asimov_bins = [math.ceil(100 / ndim**0.5) for ndim in ndims]
+        if isinstance(asimov_bins, int):
+            if nsimultaneous == 1:
+                asimov_bins = [[asimov_bins] * ndim for ndim in ndims]
+            else:
+                raise ValueError(
+                    "asimov_bins is an int but there are multiple datasets. "
+                    "Please provide a list of int for each dataset."
+                )
+        elif isinstance(asimov_bins, list):
+            if len(asimov_bins) != nsimultaneous:
+                raise ValueError(
+                    "asimov_bins is a list but the number of elements is different from the number of datasets."
+                )
+        else:
+            raise TypeError(
+                f"asimov_bins must be an int or a list of int (or list of list of int), not {type(asimov_bins)}"
+            )
+
+        for i, (asimov_bin, ndim) in enumerate(zip(asimov_bins, ndims)):
+            if isinstance(asimov_bin, int):
+                if ndim == 1:
+                    asimov_bins[i] = [asimov_bin]
+                else:
+                    raise ValueError(
+                        f"asimov_bins[{i}] is not a list but the dataset has {ndim} dimensions."
+                    )
+            elif isinstance(asimov_bin, list):
+                if len(asimov_bin) != ndim:
+                    raise ValueError(
+                        f"asimov_bins[{i}] is a list with {len(asimov_bin)} elements but the"
+                        f" dataset has {ndim} dimensions."
+                    )
+                if not all(isinstance(x, int) for x in asimov_bin):
+                    raise ValueError(
+                        f"asimov_bins[{i}] is a list with non-int elements."
+                    )
+            else:
+                raise TypeError(
+                    f"asimov_bins[{i}] is not an int or a list but a {type(asimov_bin)}."
+                )
+        assert isinstance(
+            asimov_bins, list
+        ), "INTERNAL ERROR: Could not correctly convert asimov_bins"
+        assert all(
+            isinstance(asimov_bin, list) and len(asimov_bin) == ndim
+            for ndim, asimov_bin in zip(ndims, asimov_bins)
+        ), "INTERNAL ERROR: Could not correctly convert asimov_bins, dimensions wrong"
+        return asimov_bins
 
     @staticmethod
     def check_pois(pois: Union[POI, POIarray]):
@@ -158,12 +226,8 @@ class AsymptoticCalculator(BaseCalculator):
             minimizer.verbosity = oldverbose
 
             asimov_data = []
-
-            if not isinstance(self._asimov_bins, list):
-                asimov_bins = [self._asimov_bins] * len(data)
-            else:
-                asimov_bins = self._asimov_bins
-                assert len(asimov_bins) == len(data)
+            asimov_bins = self._asimov_bins
+            assert len(asimov_bins) == len(data)
 
             for i, (m, nbins) in enumerate(zip(model, asimov_bins)):
 
