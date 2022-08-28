@@ -7,7 +7,7 @@ from ..utils.fit import get_nevents
 from .parameters import POI
 
 
-class HypotestsObject(object):
+class HypotestsObject:
     """Base object in `hepstats.hypotests` to manipulate a loss function and a minimizer.
 
     Args:
@@ -24,9 +24,7 @@ class HypotestsObject(object):
             self._loss = input
             self._bestfit = None
         else:
-            raise ValueError(
-                "{} is not a valid loss funtion or fit result!".format(input)
-            )
+            raise ValueError(f"{input} is not a valid loss function or fit result!")
 
         if not is_valid_minimizer(minimizer):
             raise ValueError("{} is not a valid minimizer !".format(minimizer))
@@ -34,9 +32,7 @@ class HypotestsObject(object):
         self._minimizer = minimizer
         self.minimizer.verbosity = 0
 
-        self._parameters = {}
-        for param in self.loss.get_params():
-            self._parameters[param.name] = param
+        self._parameters = {param.name: param for param in self.loss.get_params()}
 
     @property
     def loss(self):
@@ -63,9 +59,9 @@ class HypotestsObject(object):
             print("Get fit best values!")
             old_verbosity = self.minimizer.verbosity
             self.minimizer.verbosity = 5
-            mininum = self.minimizer.minimize(loss=self.loss)
+            minimum = self.minimizer.minimize(loss=self.loss)
             self.minimizer.verbosity = old_verbosity
-            self._bestfit = mininum
+            self._bestfit = minimum
             return self._bestfit
 
     @bestfit.setter
@@ -77,7 +73,7 @@ class HypotestsObject(object):
             value: fit result
         """
         if not is_valid_fitresult(value):
-            raise ValueError("{} is not a valid fit result!".format(input))
+            raise ValueError(f"{input} is not a valid fit result!")
         self._bestfit = value
 
     @property

@@ -17,20 +17,22 @@ from hepstats.hypotests.calculators import AsymptoticCalculator, FrequentistCalc
 from hepstats.hypotests import Discovery
 from hepstats.hypotests.parameters import POI
 
-notebooks_dir = os.path.dirname(hepstats.__file__) + "/../../notebooks/hypotests"
+notebooks_dir = f"{os.path.dirname(hepstats.__file__)}/../../notebooks/hypotests"
 
 
 def create_loss():
 
-    bounds = (0.1, 3.0)
+    bounds = (0.09, 3.0)
     obs = zfit.Space("x", limits=bounds)
 
     # Data and signal
-    np.random.seed(0)
+    np.random.seed(2)
     tau = -2.0
     beta = -1 / tau
     bkg = np.random.exponential(beta, 300)
-    peak = np.random.normal(1.2, 0.1, 25)
+    sig_mu = 1.2
+    sig_sigma = 0.1
+    peak = np.random.normal(sig_mu, sig_sigma, 25)
     data = np.concatenate((bkg, peak))
     data = data[(data > bounds[0]) & (data < bounds[1])]
     N = len(data)
@@ -40,7 +42,7 @@ def create_loss():
     Nsig = zfit.Parameter("Nsig", 20.0, -20.0, N)
     Nbkg = zfit.Parameter("Nbkg", N, 0.0, N * 1.1)
 
-    signal = zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1).create_extended(Nsig)
+    signal = zfit.pdf.Gauss(obs=obs, mu=sig_mu, sigma=sig_sigma).create_extended(Nsig)
     background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
     tot_model = zfit.pdf.SumPDF([signal, background])
 

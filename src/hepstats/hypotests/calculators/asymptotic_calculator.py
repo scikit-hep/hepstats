@@ -119,7 +119,7 @@ class AsymptoticCalculator(BaseCalculator):
         """Converts the loss to binned if necessary."""
 
         for unbinned_loss, binned_loss in self.UNBINNED_TO_BINNED_LOSS.items():
-            if isinstance(loss, unbinned_loss):
+            if type(loss) == unbinned_loss:
                 datasets = []
                 models = []
                 for d, m, nbins in zip(loss.data, loss.model, asimov_bins):
@@ -228,7 +228,7 @@ class AsymptoticCalculator(BaseCalculator):
         """
         if ntrials_fit is None:
             ntrials_fit = 5
-        if poi not in self._asimov_dataset.keys():
+        if poi not in self._asimov_dataset:
             model = self.model
             data = self.data
             minimizer = self.minimizer
