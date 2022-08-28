@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import math
-from typing import Tuple, Union, Dict, Any, Optional, Iterable, List
+from typing import Tuple, Union, Dict, Any, Optional, List
 import numpy as np
 from scipy.stats import norm
 import warnings
@@ -8,6 +8,7 @@ import warnings
 from .basecalculator import BaseCalculator
 from ...utils import eval_pdf, array2dataset, pll, get_value
 from ..parameters import POI, POIarray
+from ...utils.fit.api_check import is_valid_fitresult, is_valid_loss
 from ...utils.fit.diverse import get_ndims
 
 
@@ -55,8 +56,25 @@ class AsymptoticCalculator(BaseCalculator):
     :cite:`Cowan:2010js`. Can be used only with one parameter of interest.
     """
 
+    UNBINNED_TO_BINNED_LOSS = {}
+    try:
+        from zfit.loss import (
+            UnbinnedNLL,
+            BinnedNLL,
+            ExtendedUnbinnedNLL,
+            ExtendedBinnedNLL,
+        )
+    except ImportError:
+        pass
+    else:
+        UNBINNED_TO_BINNED_LOSS[UnbinnedNLL] = BinnedNLL
+        UNBINNED_TO_BINNED_LOSS[ExtendedUnbinnedNLL] = ExtendedBinnedNLL
+
     def __init__(
-        self, input, minimizer, asimov_bins: Optional[Union[int, List[int]]] = None
+        self,
+        input,
+        minimizer,
+        asimov_bins: Optional[Union[int, List[int]]] = None,
     ):
         """Asymptotic calculator class.
 
@@ -79,23 +97,52 @@ class AsymptoticCalculator(BaseCalculator):
             >>>
             >>> calc = AsymptoticCalculator(input=loss, minimizer=Minuit(), asimov_bins=100)
         """
+        if is_valid_fitresult(input):
+            loss = input.loss
+            result = input
+        elif is_valid_loss(input):
+            loss = input
+            result = None
+        else:
+            raise ValueError("input must be a fitresult or a loss")
+        asimov_bins_converted = self._check_convert_asimov_bins(asimov_bins, loss.data)
+        input = self._convert_to_binned(loss, result, asimov_bins_converted)
 
         super(AsymptoticCalculator, self).__init__(input, minimizer)
-        loss = input.loss if hasattr(input, "loss") else input
-        self._asimov_bins = self._check_convert_asimov_bins(asimov_bins, loss.data)
+        self._asimov_bins = asimov_bins_converted
         self._asimov_dataset: Dict = {}
         self._asimov_loss: Dict = {}
         # cache of nll values computed with the asimov dataset
         self._asimov_nll: Dict[POI, np.ndarray] = {}
 
+    def _convert_to_binned(self, loss, result, asimov_bins):
+        """Converts the loss to binned if necessary."""
+
+        for unbinned_loss, binned_loss in self.UNBINNED_TO_BINNED_LOSS.items():
+            if isinstance(loss, unbinned_loss):
+                datasets = []
+                models = []
+                for d, m, nbins in zip(loss.data, loss.model, asimov_bins):
+                    binnings = d.space.with_binning(nbins)
+                    model_binned = m.to_binned(binnings)
+                    data_binned = d.to_binned(binnings)
+                    datasets.append(data_binned)
+                    models.append(model_binned)
+                loss = binned_loss(model=models, data=datasets)
+                result = None  # result is not valid anymore, we created a new loss
+                # TODO: we could add a fit here directly using the result as a good starting point
+                break
+
+        return loss if result is None else result
+
     @staticmethod
     def _check_convert_asimov_bins(
         asimov_bins, datasets
-    ):  # TODO: we want to allow axes from UHI
+    ) -> List[List[int]]:  # TODO: we want to allow axes from UHI
         nsimultaneous = len(datasets)
         ndims = [get_ndims(dataset) for dataset in datasets]
         if asimov_bins is None:
-            asimov_bins = [math.ceil(100 / ndim**0.5) for ndim in ndims]
+            asimov_bins = [[math.ceil(100 / ndim**0.5)] * ndim for ndim in ndims]
         if isinstance(asimov_bins, int):
             if nsimultaneous == 1:
                 asimov_bins = [[asimov_bins] * ndim for ndim in ndims]
@@ -164,12 +211,12 @@ class AsymptoticCalculator(BaseCalculator):
             msg = "Tests using the asymptotic calculator can only be used with one parameter of interest."
             raise NotImplementedError(msg)
 
-    def asimov_dataset(self, poi: POI, ntrials_fit: int = 5):
+    def asimov_dataset(self, poi: POI, ntrials_fit: Optional[int] = None):
         """Gets the Asimov dataset for a given alternative hypothesis.
 
         Args:
             poi: parameter of interest of the alternative hypothesis.
-            ntrials_fit: maximum number of fits to perform
+            ntrials_fit: (default: 5) maximum number of fits to perform
 
         Returns:
              The asymov dataset.
@@ -179,6 +226,8 @@ class AsymptoticCalculator(BaseCalculator):
             >>> dataset = calc.asimov_dataset(poialt)
 
         """
+        if ntrials_fit is None:
+            ntrials_fit = 5
         if poi not in self._asimov_dataset.keys():
             model = self.model
             data = self.data
@@ -228,18 +277,32 @@ class AsymptoticCalculator(BaseCalculator):
             asimov_data = []
             asimov_bins = self._asimov_bins
             assert len(asimov_bins) == len(data)
-
+            is_binned_loss = isinstance(
+                self.loss, tuple(self.UNBINNED_TO_BINNED_LOSS.values())
+            )
             for i, (m, nbins) in enumerate(zip(model, asimov_bins)):
+                nsample = None
+                if not m.is_extended:
+                    nsample = get_value(data[i].n_events)
+                if is_binned_loss:
+                    dataset = m.sample(nsample)
+                else:
+                    if len(nbins) > 1:  # meaning we have multiple dimensions
+                        raise ValueError(
+                            "Currently, only one dimension is supported for models that do not follow"
+                            " the new binned loss convention. New losses can be registered with the"
+                            " asymtpotic calculator."
+                        )
+                    weights, bin_edges = generate_asimov_hist(m, values, nbins[0])
+                    bin_centers = bin_edges[:-1] + np.diff(bin_edges) / 2
 
-                weights, bin_edges = generate_asimov_hist(m, values, nbins)
-                bin_centers = bin_edges[0:-1] + np.diff(bin_edges) / 2
+                    if nsample is not None:  # It's not extended
+                        weights *= nsample
 
-                if not model[i].is_extended:
-                    weights *= get_value(data[i].n_events)
-
-                asimov_data.append(
-                    array2dataset(type(data[i]), data[i].space, bin_centers, weights)
-                )
+                    dataset = array2dataset(
+                        type(data[i]), data[i].space, bin_centers, weights
+                    )
+                asimov_data.append(dataset)
 
             self._asimov_dataset[poi] = asimov_data
 

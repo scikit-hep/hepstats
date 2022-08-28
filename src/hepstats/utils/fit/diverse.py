@@ -2,6 +2,8 @@
 from contextlib import ExitStack
 import numpy as np
 
+from .api_check import is_valid_pdf
+
 
 def get_ndims(dataset):
     """Return the number of dimensions in the dataset"""
@@ -62,9 +64,9 @@ def array2dataset(dataset_cls, obs, array, weights=None):
     """
 
     if hasattr(dataset_cls, "from_numpy"):
-        return dataset_cls.from_numpy(obs=obs, array=array, weights=weights)
+        return dataset_cls.from_numpy(obs, array=array, weights=weights)
     else:
-        return dataset_cls(obs=obs, array=array, weights=weights)
+        return dataset_cls(obs, array=array, weights=weights)
 
 
 def get_nevents(dataset):

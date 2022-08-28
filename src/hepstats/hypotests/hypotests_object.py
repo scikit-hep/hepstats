@@ -61,9 +61,10 @@ class HypotestsObject(object):
             return self._bestfit
         else:
             print("Get fit best values!")
+            old_verbosity = self.minimizer.verbosity
             self.minimizer.verbosity = 5
             mininum = self.minimizer.minimize(loss=self.loss)
-            self.minimizer.verbosity = 0
+            self.minimizer.verbosity = old_verbosity
             self._bestfit = mininum
             return self._bestfit
 
