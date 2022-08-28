@@ -26,6 +26,9 @@ repos:
   rev: "0.48"
   hooks:
   - id: check-manifest
+    args:
+      - --update
+    additional_dependencies: [setuptools-scm]
 - repo: https://github.com/pre-commit/mirrors-mypy
   rev: v0.971
   hooks:
