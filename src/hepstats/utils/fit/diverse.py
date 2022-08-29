@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager
 import numpy as np
 
 from .api_check import is_valid_pdf
@@ -55,6 +55,16 @@ def pll(minimizer, loss, pois) -> float:
             p.parameter.floating = True
 
     return value
+
+
+@contextmanager
+def set_values(params, values):
+    old_values = [p.value() for p in params]
+    for p, v in zip(params, values):
+        p.set_value(v)
+    yield
+    for p, v in zip(params, old_values):
+        p.set_value(v)
 
 
 def array2dataset(dataset_cls, obs, array, weights=None):
