@@ -68,7 +68,7 @@ class BaseCalculator(HypotestsObject):
         self,
         poinull: POI,
         onesided: bool = True,
-        onesideddiscovery: bool = False,
+        onesideddiscovery: bool = True,
         qtilde: bool = False,
     ):
         """Computes observed values of the :math:`\\Delta` log-likelihood test statistic.
