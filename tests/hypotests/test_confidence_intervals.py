@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 import zfit
 import os
-from zfit.loss import ExtendedUnbinnedNLL, UnbinnedNLL
+from zfit.loss import ExtendedUnbinnedNLL, UnbinnedNLL, ExtendedBinnedNLL, BinnedNLL
 from zfit.minimize import Minuit
 
 import hepstats
@@ -16,42 +16,11 @@ from hepstats.hypotests.exceptions import POIRangeError
 notebooks_dir = os.path.dirname(hepstats.__file__) + "/../../notebooks/hypotests"
 
 
-def create_loss():
-
-    bounds = (0.1, 3.0)
-    obs = zfit.Space("x", limits=bounds)
-
-    # Data and signal
-    np.random.seed(0)
-    tau = -2.0
-    beta = -1 / tau
-    bkg = np.random.exponential(beta, 300)
-    peak = np.random.normal(1.2, 0.1, 80)
-    data = np.concatenate((bkg, peak))
-    data = data[(data > bounds[0]) & (data < bounds[1])]
-    N = len(data)
-    data = zfit.data.Data.from_numpy(obs=obs, array=data)
-
-    mean = zfit.Parameter("mean", 1.2, 0.5, 2.0)
-    sigma = zfit.Parameter("sigma", 0.1, 0.02, 0.2)
-    lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
-    Nsig = zfit.Parameter("Ns", 20.0, -20.0, N)
-    Nbkg = zfit.Parameter("Nbkg", N, 0.0, N * 1.1)
-
-    signal = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma).create_extended(Nsig)
-    background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
-    tot_model = zfit.pdf.SumPDF([signal, background])
-
-    loss = ExtendedUnbinnedNLL(model=tot_model, data=data)
-
-    return loss, mean
-
-
-def test_constructor():
+def test_constructor(create_loss):
     with pytest.raises(TypeError):
         ConfidenceInterval()
 
-    loss, mean = create_loss()
+    loss, (_, __, mean, _) = create_loss(npeak=80)
     calculator = BaseCalculator(loss, Minuit())
 
     poi_1 = POI(mean, 1.5)
@@ -67,13 +36,13 @@ def test_constructor():
         ConfidenceInterval(calculator, [poi_1], [poi_2], qtilde=False)
 
 
-def asy_calc():
-    loss, mean = create_loss()
+def asy_calc(create_loss, nbins=None):
+    loss, (_, __, mean, ___) = create_loss(npeak=80, nbins=nbins)
     return mean, AsymptoticCalculator(loss, Minuit())
 
 
-def freq_calc():
-    loss, mean = create_loss()
+def freq_calc(create_loss, nbins=None):
+    loss, (_, __, mean, ___) = create_loss(npeak=80, nbins=nbins)
     calculator = FrequentistCalculator.from_yaml(
         f"{notebooks_dir}/toys/ci_freq_zfit_toys.yml", loss, Minuit()
     )
@@ -81,9 +50,10 @@ def freq_calc():
 
 
 @pytest.mark.parametrize("calculator", [asy_calc, freq_calc])
-def test_with_gauss_exp_example(calculator):
+@pytest.mark.parametrize("nbins", [None, 47, 300], ids=lambda x: f"nbins={x}")
+def test_with_gauss_exp_example(create_loss, calculator, nbins):
 
-    mean, calculator = calculator()
+    mean, calculator = calculator(create_loss, nbins=nbins)
     scan_values = np.linspace(1.15, 1.26, 50)
     poinull = POIarray(mean, scan_values)
     ci = ConfidenceInterval(calculator, poinull)

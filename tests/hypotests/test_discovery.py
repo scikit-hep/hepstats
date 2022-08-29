@@ -2,6 +2,7 @@
 import os
 import pytest
 import numpy as np
+import tqdm
 import zfit
 from zfit.loss import ExtendedUnbinnedNLL, UnbinnedNLL
 from zfit.minimize import Minuit
@@ -20,42 +21,12 @@ from hepstats.hypotests.parameters import POI
 notebooks_dir = f"{os.path.dirname(hepstats.__file__)}/../../notebooks/hypotests"
 
 
-def create_loss():
-
-    bounds = (0.09, 3.0)
-    obs = zfit.Space("x", limits=bounds)
-
-    # Data and signal
-    np.random.seed(2)
-    tau = -2.0
-    beta = -1 / tau
-    bkg = np.random.exponential(beta, 300)
-    sig_mu = 1.2
-    sig_sigma = 0.1
-    peak = np.random.normal(sig_mu, sig_sigma, 25)
-    data = np.concatenate((bkg, peak))
-    data = data[(data > bounds[0]) & (data < bounds[1])]
-    N = len(data)
-    data = zfit.data.Data.from_numpy(obs=obs, array=data)
-
-    lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
-    Nsig = zfit.Parameter("Nsig", 20.0, -20.0, N)
-    Nbkg = zfit.Parameter("Nbkg", N, 0.0, N * 1.1)
-
-    signal = zfit.pdf.Gauss(obs=obs, mu=sig_mu, sigma=sig_sigma).create_extended(Nsig)
-    background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
-    tot_model = zfit.pdf.SumPDF([signal, background])
-
-    loss = ExtendedUnbinnedNLL(model=tot_model, data=data)
-
-    return loss, (Nsig, Nbkg)
-
-
-def test_constructor():
+@pytest.mark.parametrize("nbins", [None, 30], ids=["unbinned", "binned"])
+def test_constructor(create_loss, nbins):
     with pytest.raises(TypeError):
         Discovery()
 
-    loss, (Nsig, Nbkg) = create_loss()
+    loss, (Nsig, Nbkg, _, _) = create_loss(nbins=nbins, npeak=25)
     calculator = BaseCalculator(loss, Minuit())
 
     poi_1 = POI(Nsig, 0.0)
@@ -71,9 +42,14 @@ def test_constructor():
         Discovery(calculator, [poi_1], [poi_2])
 
 
-def test_with_asymptotic_calculator():
+@pytest.mark.parametrize(
+    "nbins", [None, 49, 153], ids=lambda x: "unbinned" if x is None else f"nbin={x}"
+)
+def test_with_asymptotic_calculator(create_loss, nbins):
 
-    loss, (Nsig, Nbkg) = create_loss()
+    loss, (Nsig, Nbkg, mean, sigma) = create_loss(npeak=25, nbins=nbins)
+    mean.floating = False
+    sigma.floating = False
     calculator = AsymptoticCalculator(loss, Minuit())
 
     poinull = POI(Nsig, 0)
@@ -81,25 +57,86 @@ def test_with_asymptotic_calculator():
     discovery_test = Discovery(calculator, poinull)
     pnull, significance = discovery_test.result()
 
-    assert pnull == pytest.approx(0.0007571045089567185, abs=0.05)
-    assert significance == pytest.approx(3.1719464953752565, abs=0.05)
+    # check with legacy version of creating the asimov set
+    try:
+        OLD_CONFIG = AsymptoticCalculator.UNBINNED_TO_BINNED_LOSS
+        AsymptoticCalculator.UNBINNED_TO_BINNED_LOSS = {}
+        calculator_old = AsymptoticCalculator(loss, Minuit())
+        discovery_test_old = Discovery(calculator_old, poinull)
+        pnull_old, significance_old = discovery_test_old.result()
+    finally:
+        AsymptoticCalculator.UNBINNED_TO_BINNED_LOSS = OLD_CONFIG
+
+    param_vals = np.linspace(5, 35, 50)
+    nlls_unbinned = []
+    nlls_old = []
+    nlls_new = []
+    Nsig.floating = False
+    minimizer = Minuit()
+    old_loss = calculator_old.loss
+    new_loss = calculator.loss
+    for param_val in tqdm.tqdm(param_vals):
+        Nsig.set_value(param_val)
+        minimizer.minimize(loss)
+        nlls_unbinned.append(loss.value())
+        minimizer.minimize(old_loss)
+        nlls_old.append(old_loss.value())
+        minimizer.minimize(new_loss)
+        nlls_new.append(new_loss.value())
+
+    losses = [nlls_unbinned, nlls_old, nlls_new]
+    losses = [np.array(l) for l in losses]
+    losses = [l - np.min(l) for l in losses]
+    nlls_unbinned, nlls_old, nlls_new = losses
+
+    import matplotlib.pyplot as plt
+
+    plt.plot(param_vals, nlls_unbinned, "x", label="unbinned")
+    plt.plot(param_vals, nlls_old, label="old")
+    plt.plot(param_vals, nlls_new, label="new")
+    plt.legend()
+    plt.show()
+
+    print(f"pnull: {pnull}, pnull_old: {pnull_old}")
+    print(f"significance: {significance}, significance_old: {significance_old}")
+    uncertainty = 0.05
+    if nbins is not None and nbins < 80:
+        uncertainty *= 4
+    assert pnull == pytest.approx(pnull_old, rel=uncertainty, abs=0.0005)
+    assert significance == pytest.approx(significance_old, rel=uncertainty, abs=0.0005)
+    assert significance >= 3
+
+    assert pnull == pytest.approx(0.0007571045089567185, abs=uncertainty)
+    assert significance == pytest.approx(3.1719464953752565, abs=uncertainty)
     assert significance >= 3
 
 
-def test_with_frequentist_calculator():
+@pytest.mark.parametrize(
+    "nbins", [None, 95, 153], ids=lambda x: "unbinned" if x is None else f"nbin={x}"
+)
+def test_with_frequentist_calculator(create_loss, nbins):
 
-    loss, (Nsig, Nbkg) = create_loss()
+    loss, (Nsig, Nbkg, mean, sigma) = create_loss(npeak=25, nbins=nbins)
+    mean.floating = False
+    sigma.floating = False
     calculator = FrequentistCalculator.from_yaml(
         f"{notebooks_dir}/toys/discovery_freq_zfit_toys.yml", loss, Minuit()
     )
+    # calculator = FrequentistCalculator(loss, Minuit(), ntoysnull=500, ntoysalt=500)
 
     poinull = POI(Nsig, 0)
 
     discovery_test = Discovery(calculator, poinull)
     pnull, significance = discovery_test.result()
 
-    assert pnull == pytest.approx(0.0004, rel=0.05, abs=0.0005)
-    assert significance == pytest.approx(3.3527947805048592, rel=0.05, abs=0.1)
+    abserr = 0.1
+    if nbins is not None and nbins < 120:
+        abserr *= 4
+    abserr_pnull = 0.0005
+    if nbins is not None and nbins < 120:
+        abserr_pnull *= 4
+    assert pnull == pytest.approx(0.0004, rel=0.05, abs=abserr_pnull)
+    assert significance == pytest.approx(3.3427947805048592, rel=0.05, abs=abserr)
     assert significance >= 3
 
 
