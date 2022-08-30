@@ -169,7 +169,6 @@ class AsymptoticCalculator(BaseCalculator):
                 loss = binned_loss(
                     model=models, data=datasets, constraints=loss.constraints
                 )
-                # TODO: we could add a fit here directly using the result as a good starting point
                 break
             elif type(loss) == binned_loss:
                 break

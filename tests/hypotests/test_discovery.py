@@ -43,10 +43,9 @@ def test_constructor(create_loss, nbins):
 
 
 @pytest.mark.parametrize(
-    "nbins", [None, 49, 153], ids=lambda x: "unbinned" if x is None else f"nbin={x}"
+    "nbins", [None, 76, 253], ids=lambda x: "unbinned" if x is None else f"nbin={x}"
 )
 def test_with_asymptotic_calculator(create_loss, nbins):
-
     loss, (Nsig, Nbkg, mean, sigma) = create_loss(npeak=25, nbins=nbins)
     mean.floating = False
     sigma.floating = False
@@ -67,47 +66,18 @@ def test_with_asymptotic_calculator(create_loss, nbins):
     finally:
         AsymptoticCalculator.UNBINNED_TO_BINNED_LOSS = OLD_CONFIG
 
-    param_vals = np.linspace(5, 35, 50)
-    nlls_unbinned = []
-    nlls_old = []
-    nlls_new = []
-    Nsig.floating = False
-    minimizer = Minuit()
-    old_loss = calculator_old.loss
-    new_loss = calculator.loss
-    for param_val in tqdm.tqdm(param_vals):
-        Nsig.set_value(param_val)
-        minimizer.minimize(loss)
-        nlls_unbinned.append(loss.value())
-        minimizer.minimize(old_loss)
-        nlls_old.append(old_loss.value())
-        minimizer.minimize(new_loss)
-        nlls_new.append(new_loss.value())
-
-    losses = [nlls_unbinned, nlls_old, nlls_new]
-    losses = [np.array(l) for l in losses]
-    losses = [l - np.min(l) for l in losses]
-    nlls_unbinned, nlls_old, nlls_new = losses
-
-    import matplotlib.pyplot as plt
-
-    plt.plot(param_vals, nlls_unbinned, "x", label="unbinned")
-    plt.plot(param_vals, nlls_old, label="old")
-    plt.plot(param_vals, nlls_new, label="new")
-    plt.legend()
-    plt.show()
-
-    print(f"pnull: {pnull}, pnull_old: {pnull_old}")
-    print(f"significance: {significance}, significance_old: {significance_old}")
     uncertainty = 0.05
     if nbins is not None and nbins < 80:
         uncertainty *= 4
+
+    # check with legacy version of creating the asimov set
     assert pnull == pytest.approx(pnull_old, rel=uncertainty, abs=0.0005)
     assert significance == pytest.approx(significance_old, rel=uncertainty, abs=0.0005)
     assert significance >= 3
 
-    assert pnull == pytest.approx(0.0007571045089567185, abs=uncertainty)
-    assert significance == pytest.approx(3.1719464953752565, abs=uncertainty)
+    # check absolute significance
+    assert pnull == pytest.approx(0.000757, abs=uncertainty)
+    assert significance == pytest.approx(3.17, abs=uncertainty)
     assert significance >= 3
 
 
@@ -115,7 +85,6 @@ def test_with_asymptotic_calculator(create_loss, nbins):
     "nbins", [None, 95, 153], ids=lambda x: "unbinned" if x is None else f"nbin={x}"
 )
 def test_with_frequentist_calculator(create_loss, nbins):
-
     loss, (Nsig, Nbkg, mean, sigma) = create_loss(npeak=25, nbins=nbins)
     mean.floating = False
     sigma.floating = False
@@ -166,7 +135,6 @@ class Poisson(WrapDistribution):
 
 
 def create_loss_counting():
-
     n = 370
     nbkg = 340
 
@@ -185,7 +153,6 @@ def create_loss_counting():
 
 
 def test_counting_with_asymptotic_calculator():
-
     (
         loss,
         Nsig,
@@ -201,7 +168,6 @@ def test_counting_with_asymptotic_calculator():
 
 
 def test_counting_with_frequentist_calculator():
-
     (
         loss,
         Nsig,
