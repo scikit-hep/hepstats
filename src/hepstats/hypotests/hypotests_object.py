@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import warnings
 
 from ..utils.fit.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
@@ -7,7 +6,7 @@ from ..utils.fit import get_nevents
 from .parameters import POI
 
 
-class HypotestsObject(object):
+class HypotestsObject:
     """Base object in `hepstats.hypotests` to manipulate a loss function and a minimizer.
 
     Args:
@@ -25,11 +24,11 @@ class HypotestsObject(object):
             self._bestfit = None
         else:
             raise ValueError(
-                "{} is not a valid loss funtion or fit result!".format(input)
+                f"{input} is not a valid loss funtion or fit result!"
             )
 
         if not is_valid_minimizer(minimizer):
-            raise ValueError("{} is not a valid minimizer !".format(minimizer))
+            raise ValueError(f"{minimizer} is not a valid minimizer !")
 
         self._minimizer = minimizer
         self.minimizer.verbosity = 0
@@ -76,7 +75,7 @@ class HypotestsObject(object):
             value: fit result
         """
         if not is_valid_fitresult(value):
-            raise ValueError("{} is not a valid fit result!".format(input))
+            raise ValueError(f"{input} is not a valid fit result!")
         self._bestfit = value
 
     @property
@@ -188,7 +187,7 @@ class ToysObject(HypotestsObject):
 
     def __init__(self, input, minimizer, sampler, sample):
 
-        super(ToysObject, self).__init__(input, minimizer)
+        super().__init__(input, minimizer)
         self._toys = {}
         self._sampler = sampler
         self._sample = sample

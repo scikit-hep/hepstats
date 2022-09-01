@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
+
 from scipy import interpolate
 import numpy as np
 import warnings
-from typing import Dict
 
 from .basetest import BaseTest
 from ..exceptions import POIRangeError
@@ -60,7 +60,7 @@ class ConfidenceInterval(BaseTest):
             Confidence interval on mean:
                 1.1810371356602791 < mean < 1.2156701172321935 at 68.0% C.L.
         """
-        super(ConfidenceInterval, self).__init__(calculator, poinull)
+        super().__init__(calculator, poinull)
 
         self._qtilde = qtilde
 
@@ -85,7 +85,7 @@ class ConfidenceInterval(BaseTest):
             poinull=self.poinull, poialt=poialt, qtilde=self.qtilde, onesided=False
         )[0]
 
-    def interval(self, alpha: float = 0.32, printlevel: int = 1) -> Dict[str, float]:
+    def interval(self, alpha: float = 0.32, printlevel: int = 1) -> dict[str, float]:
         """
         Returns the confidence level on the parameter of interest.
 
