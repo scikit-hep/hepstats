@@ -13,7 +13,7 @@ jobs:
     name: Format
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - uses: actions/setup-python@v4
@@ -41,7 +41,7 @@ jobs:
             python-version: "3.10"
     name: Check Python ${{ matrix.python-version }} ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
@@ -68,7 +68,7 @@ jobs:
   dist:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
@@ -85,7 +85,7 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - uses: actions/setup-python@v4
@@ -97,7 +97,7 @@ jobs:
         pip list
     - name: build docs
       run: |
-        sphinx-build -b html docs _build/html
+        sphinx-build -b html docs docs/_build/html
         touch docs/_build/html/.nojekyll
 
     - name: Deploy docs to GitHub Pages
