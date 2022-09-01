@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Specific exceptions for the `splot` submodule
 """

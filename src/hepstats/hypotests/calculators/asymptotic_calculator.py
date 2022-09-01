@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
-from typing import Tuple, Union, Dict, Any
+from __future__ import annotations
+
+from typing import Union, Any
 import numpy as np
 from scipy.stats import norm
 import warnings
@@ -10,8 +11,8 @@ from ..parameters import POI, POIarray
 
 
 def generate_asimov_hist(
-    model, params: Dict[Any, Dict[str, Any]], nbins: int = 100
-) -> Tuple[np.ndarray, np.ndarray]:
+    model, params: dict[Any, dict[str, Any]], nbins: int = 100
+) -> tuple[np.ndarray, np.ndarray]:
     """Generate the Asimov histogram using a model and dictionary of parameters.
 
     Args:
@@ -70,12 +71,12 @@ class AsymptoticCalculator(BaseCalculator):
             >>> calc = AsymptoticCalculator(input=loss, minimizer=Minuit(), asimov_bins=100)
         """
 
-        super(AsymptoticCalculator, self).__init__(input, minimizer)
+        super().__init__(input, minimizer)
         self._asimov_bins = asimov_bins
-        self._asimov_dataset: Dict = {}
-        self._asimov_loss: Dict = {}
+        self._asimov_dataset: dict = {}
+        self._asimov_loss: dict = {}
         # cache of nll values computed with the asimov dataset
-        self._asimov_nll: Dict[POI, np.ndarray] = {}
+        self._asimov_nll: dict[POI, np.ndarray] = {}
 
     @staticmethod
     def check_pois(pois: Union[POI, POIarray]):

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Licensed under a 3-clause BSD style license, see LICENSE and LICENSE_ASTROML
 """
 Bayesian Block implementation
@@ -12,12 +11,15 @@ bayesian blocks python implementation found in astroML :cite:`VanderPlas_2012`.
 * Initial Examination in HEP context :cite:`Pollack:2017srh`
 
 """
+from __future__ import annotations
+
+from collections.abc import Iterable
 import numpy as np
 import pandas as pd
-from typing import Optional, Union, Iterable
+from typing import Optional, Union
 
 
-class Prior(object):
+class Prior:
     """Helper class for calculating the prior on the fitness function."""
 
     def __init__(self, p0: float = 0.05, gamma: Optional[float] = None):

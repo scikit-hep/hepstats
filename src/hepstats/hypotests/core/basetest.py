@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from typing import Union
 
 from ..calculators.basecalculator import BaseCalculator
@@ -9,7 +8,7 @@ Module defining the base class for hypothesis tests.
 """
 
 
-class BaseTest(object):
+class BaseTest:
     def __init__(
         self,
         calculator: BaseCalculator,
