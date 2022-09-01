@@ -1,5 +1,5 @@
 hepstats.splot.warnings module
-==============================
+================================
 
 .. automodule:: hepstats.splot.warnings
    :members:

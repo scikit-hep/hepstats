@@ -1,7 +1,9 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
+
+from collections.abc import Callable
 import numpy as np
 from scipy.stats import norm
-from typing import Callable, Union, Optional
+from typing import Union, Optional
 
 from .basecalculator import ToysCalculator
 from ...utils import base_sampler, base_sample
@@ -45,7 +47,7 @@ class FrequentistCalculator(ToysCalculator):
             >>>
             >>> calc = FrequentistCalculator(input=loss, minimizer=MinuitMinimizer(), ntoysnull=1000, ntoysalt=1000)
         """
-        super(FrequentistCalculator, self).__init__(
+        super().__init__(
             input=input,
             minimizer=minimizer,
             ntoysnull=ntoysnull,
@@ -56,8 +58,8 @@ class FrequentistCalculator(ToysCalculator):
 
     def qnull(
         self,
-        poinull: Union[POI, POIarray],
-        poialt: Optional[POI] = None,
+        poinull: POI | POIarray,
+        poialt: POI | None = None,
         onesided: bool = True,
         onesideddiscovery: bool = False,
         qtilde: bool = False,
@@ -113,7 +115,7 @@ class FrequentistCalculator(ToysCalculator):
 
     def qalt(
         self,
-        poinull: Union[POI, POIarray],
+        poinull: POI | POIarray,
         poialt: POI,
         onesided: bool = True,
         onesideddiscovery: bool = False,

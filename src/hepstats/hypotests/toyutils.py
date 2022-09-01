@@ -1,10 +1,12 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
+
+from collections.abc import Callable
 import asdf
 import os
 import numpy as np
 import warnings
 from contextlib import ExitStack
-from typing import List, Callable, Dict, Any
+from typing import Any
 from tqdm.auto import tqdm
 
 from .parameters import POI, POIarray
@@ -20,7 +22,7 @@ Acronyms used in the code:
 """
 
 
-class ToyResult(object):
+class ToyResult:
     """
     Class to store the results of toys generated for a given value of a POI.
     The best fit value of the POI, the NLL evaluate at the best fit, and the NLL evaluated
@@ -94,7 +96,7 @@ class ToyResult(object):
         return len(self.bestfit)
 
     def add_entries(
-        self, bestfit: np.ndarray, nll_bestfit: np.ndarray, nlls: Dict[POI, np.ndarray]
+        self, bestfit: np.ndarray, nll_bestfit: np.ndarray, nlls: dict[POI, np.ndarray]
     ):
         """
         Add new result entries.
@@ -117,7 +119,7 @@ class ToyResult(object):
 
         self._nlls = {p: np.concatenate([v, nlls[p]]) for p, v in self.nlls.items()}
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         """
         Returns dictionary of the toy results.
 
@@ -162,7 +164,7 @@ class ToysManager(ToysObject):
                :func:`hepstats.utils.fit.sampling.base_sample`.
         """
 
-        super(ToysManager, self).__init__(
+        super().__init__(
             input=input, minimizer=minimizer, sampler=sampler, sample=sample
         )
         self._toys = {}
@@ -337,7 +339,7 @@ class ToysManager(ToysObject):
         """
         return self._toys.values()
 
-    def toyresults_to_dict(self) -> List[Dict]:
+    def toyresults_to_dict(self) -> list[dict]:
         """
         Returns a list of all the toy results converted into dictionnaries.
         """
@@ -360,7 +362,7 @@ class ToysManager(ToysObject):
         af.write_to(filename)
         af.close()
 
-    def toysresults_from_yaml(self, filename: str) -> List[ToyResult]:
+    def toysresults_from_yaml(self, filename: str) -> list[ToyResult]:
         """
         Extract toy results from a yaml file.
 

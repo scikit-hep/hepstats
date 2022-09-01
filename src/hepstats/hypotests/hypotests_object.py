@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import warnings
 
 import numpy as np
@@ -29,7 +28,7 @@ class HypotestsObject:
             raise ValueError(f"{input} is not a valid loss function or fit result!")
 
         if not is_valid_minimizer(minimizer):
-            raise ValueError("{} is not a valid minimizer !".format(minimizer))
+            raise ValueError(f"{minimizer} is not a valid minimizer !")
 
         self._minimizer = minimizer
         self.minimizer.verbosity = 0
@@ -190,7 +189,7 @@ class ToysObject(HypotestsObject):
 
     def __init__(self, input, minimizer, sampler, sample):
 
-        super(ToysObject, self).__init__(input, minimizer)
+        super().__init__(input, minimizer)
         self._toys = {}
         self._sampler = sampler
         self._sample = sample

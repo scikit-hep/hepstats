@@ -1,6 +1,9 @@
+from __future__ import annotations
+
+from collections.abc import Callable
+
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
-from typing import Union, Tuple, List, Optional, Callable, Any, Dict
+from typing import Union, Optional, Any
 import numpy as np
 
 from ..hypotests_object import HypotestsObject
@@ -32,7 +35,7 @@ class BaseCalculator(HypotestsObject):
             >>>
             >>> calc = BaseCalculator(input=loss, minimizer=Minuit())
         """
-        super(BaseCalculator, self).__init__(input, minimizer)
+        super().__init__(input, minimizer)
 
         self._obs_nll = {}
 
@@ -118,12 +121,12 @@ class BaseCalculator(HypotestsObject):
 
     def pvalue(
         self,
-        poinull: Union[POI, POIarray],
-        poialt: Optional[POI] = None,
+        poinull: POI | POIarray,
+        poialt: POI | None = None,
         qtilde: bool = False,
         onesided: bool = True,
         onesideddiscovery: bool = False,
-    ) -> Tuple[np.ndarray, np.ndarray]:
+    ) -> tuple[np.ndarray, np.ndarray]:
         """Computes pvalues for the null and alternative hypothesis.
 
         Args:
@@ -164,14 +167,14 @@ class BaseCalculator(HypotestsObject):
 
     def expected_pvalue(
         self,
-        poinull: Union[POI, POIarray],
-        poialt: Union[POI, POIarray],
-        nsigma: List[int],
+        poinull: POI | POIarray,
+        poialt: POI | POIarray,
+        nsigma: list[int],
         CLs: bool = False,
         qtilde: bool = False,
         onesided: bool = True,
         onesideddiscovery: bool = False,
-    ) -> List[np.array]:
+    ) -> list[np.array]:
         """Computes the expected pvalues and error bands for different values of :math:`\\sigma` (0=expected/median)
 
         Args:
@@ -224,7 +227,7 @@ class BaseCalculator(HypotestsObject):
         raise NotImplementedError
 
     @staticmethod
-    def check_pois(pois: Union[POI, POIarray]):
+    def check_pois(pois: POI | POIarray):
         """
         Checks if the parameter of interest is a :class:`hepstats.parameters.POIarray` instance.
 
@@ -243,9 +246,7 @@ class BaseCalculator(HypotestsObject):
             raise NotImplementedError(msg)
 
     @staticmethod
-    def check_pois_compatibility(
-        poi1: Union[POI, POIarray], poi2: Union[POI, POIarray]
-    ):
+    def check_pois_compatibility(poi1: POI | POIarray, poi2: POI | POIarray):
         """
         Checks compatibility between two lists of :func:`hepstats.parameters.POIarray` instances.
 
@@ -329,7 +330,7 @@ class BaseToysCalculator(BaseCalculator):
                parameters in the sample.
             sample: function used to get samples from the sampler.
         """
-        super(BaseToysCalculator, self).__init__(input, minimizer)
+        super().__init__(input, minimizer)
 
 
 class ToysCalculator(BaseToysCalculator, ToysManager):
@@ -358,7 +359,7 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
             sample: function used to get samples from the sampler. Default is
                 :func:`hepstats.utils.fit..sampling.base_sample`.
         """
-        super(ToysCalculator, self).__init__(input, minimizer, sampler, sample)
+        super().__init__(input, minimizer, sampler, sample)
 
         self._ntoysnull = ntoysnull
         self._ntoysalt = ntoysalt
@@ -440,11 +441,11 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
 
     def _get_toys(
         self,
-        poigen: Union[POI, POIarray],
-        poieval: Union[POI, POIarray, None] = None,
+        poigen: POI | POIarray,
+        poieval: POI | POIarray | None = None,
         qtilde: bool = False,
         hypothesis: str = "null",
-    ) -> Dict[POI, ToyResult]:
+    ) -> dict[POI, ToyResult]:
         """
         Return the generated toys for a given POI.
 
@@ -493,10 +494,10 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
 
     def get_toys_null(
         self,
-        poigen: Union[POI, POIarray],
-        poieval: Union[POI, POIarray, None] = None,
+        poigen: POI | POIarray,
+        poieval: POI | POIarray | None = None,
         qtilde: bool = False,
-    ) -> Dict[POI, ToyResult]:
+    ) -> dict[POI, ToyResult]:
         """
         Return the generated toys for the null hypothesis.
 
@@ -518,10 +519,10 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
 
     def get_toys_alt(
         self,
-        poigen: Union[POI, POIarray],
-        poieval: Union[POI, POIarray, None] = None,
+        poigen: POI | POIarray,
+        poieval: POI | POIarray | None = None,
         qtilde: bool = False,
-    ) -> Dict[POI, ToyResult]:
+    ) -> dict[POI, ToyResult]:
         """
         Return the generated toys for the alternative hypothesis.
 

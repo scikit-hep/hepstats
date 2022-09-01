@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
+
 import math
-from typing import Tuple, Union, Dict, Any, Optional, List
+from typing import Union, Any, Optional, List
 import numpy as np
 from scipy.stats import norm
 import warnings
@@ -13,8 +14,8 @@ from ...utils.fit.diverse import get_ndims
 
 
 def generate_asimov_hist(
-    model, params: Dict[Any, Dict[str, Any]], nbins: Optional[int] = None
-) -> Tuple[np.ndarray, np.ndarray]:
+    model, params: dict[Any, dict[str, Any]], nbins: int | None = None
+) -> tuple[np.ndarray, np.ndarray]:
     """Generate the Asimov histogram using a model and dictionary of parameters.
 
     Args:
@@ -107,7 +108,7 @@ class AsymptoticCalculator(BaseCalculator):
         self,
         input,
         minimizer,
-        asimov_bins: Optional[Union[int, List[int]]] = None,
+        asimov_bins: int | list[int] | None = None,
     ):
         """Asymptotic calculator class using Wilk's and Wald's asymptotic formulae.
 
@@ -145,13 +146,13 @@ class AsymptoticCalculator(BaseCalculator):
 
         asimov_bins_converted = self._check_convert_asimov_bins(asimov_bins, loss.data)
 
-        super(AsymptoticCalculator, self).__init__(input, minimizer)
+        super().__init__(input, minimizer)
         self._asimov_bins = asimov_bins_converted
-        self._asimov_dataset: Dict = {}
-        self._asimov_loss: Dict = {}
+        self._asimov_dataset: dict = {}
+        self._asimov_loss: dict = {}
         self._binned_loss = None
         # cache of nll values computed with the asimov dataset
-        self._asimov_nll: Dict[POI, np.ndarray] = {}
+        self._asimov_nll: dict[POI, np.ndarray] = {}
 
     def _convert_to_binned(self, loss, asimov_bins):
         """Converts the loss to binned if necessary."""
@@ -188,7 +189,7 @@ class AsymptoticCalculator(BaseCalculator):
     @staticmethod
     def _check_convert_asimov_bins(
         asimov_bins, datasets
-    ) -> List[List[int]]:  # TODO: we want to allow axes from UHI
+    ) -> list[list[int]]:  # TODO: we want to allow axes from UHI
         nsimultaneous = len(datasets)
         ndims = [get_ndims(dataset) for dataset in datasets]
         if asimov_bins is None:
@@ -243,7 +244,7 @@ class AsymptoticCalculator(BaseCalculator):
         return asimov_bins
 
     @staticmethod
-    def check_pois(pois: Union[POI, POIarray]):
+    def check_pois(pois: POI | POIarray):
         """
         Checks if the parameter of interest is a :class:`hepstats.parameters.POIarray` instance.
 
@@ -261,7 +262,7 @@ class AsymptoticCalculator(BaseCalculator):
             msg = "Tests using the asymptotic calculator can only be used with one parameter of interest."
             raise NotImplementedError(msg)
 
-    def asimov_dataset(self, poi: POI, ntrials_fit: Optional[int] = None):
+    def asimov_dataset(self, poi: POI, ntrials_fit: int | None = None):
         """Gets the Asimov dataset for a given alternative hypothesis.
 
         Args:
@@ -405,7 +406,7 @@ class AsymptoticCalculator(BaseCalculator):
     def pnull(
         self,
         qobs: np.ndarray,
-        qalt: Union[np.ndarray, None] = None,
+        qalt: np.ndarray | None = None,
         onesided: bool = True,
         onesideddiscovery: bool = False,
         qtilde: bool = False,

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Specific warnings for the `splot` submodule
 """

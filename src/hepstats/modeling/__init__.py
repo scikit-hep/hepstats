@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Licensed under a 3-clause BSD style license, see LICENSE.
 """
 Module for algorithms and methods used to model distributions.
@@ -11,6 +10,5 @@ This module contains in particular:
 # -----------------------------------------------------------------------------
 # Import statements
 # -----------------------------------------------------------------------------
-from __future__ import absolute_import
 
 from .bayesian_blocks import bayesian_blocks

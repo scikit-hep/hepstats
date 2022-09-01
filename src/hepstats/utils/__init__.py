@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from .fit import (
     eval_pdf,
     array2dataset,

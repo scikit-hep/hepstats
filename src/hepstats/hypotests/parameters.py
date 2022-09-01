@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Licensed under a 3-clause BSD style license, see LICENSE
 """
 Module defining the parameter of interest classes, currently includes:
@@ -6,18 +5,21 @@ Module defining the parameter of interest classes, currently includes:
 * **POIarray**
 * **POI**
 """
+from __future__ import annotations
+
+from collections.abc import Collection
 import numpy as np
-from typing import Union, Collection
+from typing import Union
 
 from ..utils.fit.api_check import is_valid_parameter
 
 
-class POIarray(object):
+class POIarray:
     """
     Class for parameters of interest with multiple values:
     """
 
-    def __init__(self, parameter, values: Union[Collection, np.array]):
+    def __init__(self, parameter, values: Collection | np.array):
         """
         Args:
             parameter: the parameter of interest
@@ -52,7 +54,7 @@ class POIarray(object):
         return self._values
 
     def __repr__(self):
-        return "POIarray('{0}', values={1})".format(self.name, self.values)
+        return f"POIarray('{self.name}', values={self.values})"
 
     def __getitem__(self, i):
         """
@@ -95,7 +97,7 @@ class POIarray(object):
         """
         return self._shape
 
-    def append(self, values: Union[int, float, Collection, np.ndarray]):
+    def append(self, values: int | float | Collection | np.ndarray):
         """
         Append values in the **POIarray**.
 
@@ -113,7 +115,7 @@ class POI(POIarray):
     Class for single value parameter of interest:
     """
 
-    def __init__(self, parameter, value: Union[int, float]):
+    def __init__(self, parameter, value: int | float):
         """
         Args:
             parameter: the parameter of interest
@@ -129,7 +131,7 @@ class POI(POIarray):
         if isinstance(value, Collection):
             raise TypeError("A single value for the POI is required.")
 
-        super(POI, self).__init__(parameter=parameter, values=[value])
+        super().__init__(parameter=parameter, values=[value])
         self._value = value
 
     @property
@@ -148,7 +150,7 @@ class POI(POIarray):
         return value_equal and name_equal
 
     def __repr__(self):
-        return "POI('{0}', value={1})".format(self.name, self.value)
+        return f"POI('{self.name}', value={self.value})"
 
     def __hash__(self):
         return hash((self.name, self.value))
