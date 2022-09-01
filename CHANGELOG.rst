@@ -58,6 +58,7 @@ Version 0.2.1
 **************
 * Addition of the **FrequentistCalculator** to performs hypothesis test, upper limit and interval calculations
   with toys. Toys can be saved and loaded in / from yaml files using the methods:
+
    * `to_yaml`
    * `from_yaml`
 
