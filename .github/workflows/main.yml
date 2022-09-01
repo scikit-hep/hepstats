@@ -97,8 +97,9 @@ jobs:
         pip list
     - name: build docs
       run: |
-        python setup.py build_sphinx
+        sphinx-build doc -b html docs _build/html
         touch docs/_build/html/.nojekyll
+
     - name: Deploy docs to GitHub Pages
       if: success() && github.event_name == 'push' && github.ref == 'refs/heads/master'
       uses: peaceiris/actions-gh-pages@v3

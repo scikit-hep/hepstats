@@ -47,7 +47,7 @@ extensions = [
 ]
 
 bibtex_bibfiles = [
-    str(project_dir / "docs" / "references.bib")
+    str(project_dir / "docs" / "bib" / "references.bib")
 ]  # TODO: currently string, Path doesn't work: https://github.com/mcmtroffaes/sphinxcontrib-bibtex/issues/314
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
