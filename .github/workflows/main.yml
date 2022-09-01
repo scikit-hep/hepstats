@@ -97,7 +97,7 @@ jobs:
         pip list
     - name: build docs
       run: |
-        sphinx-build doc -b html docs _build/html
+        sphinx-build doc -b html docs docs/_build/html
         touch docs/_build/html/.nojekyll
 
     - name: Deploy docs to GitHub Pages
