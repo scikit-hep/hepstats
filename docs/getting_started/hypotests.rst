@@ -22,8 +22,8 @@ from `iminuit <https://github.com/scikit-hep/iminuit>`_.
     >>> from zfit.minimize import Minuit
     >>> import numpy as np
 
-Then we construct the data sample which consists 300 points are drawn from an exponential distribution with -2
-slope, the background, and 10 points are drawn from a Gaussian distribution of mean 1.2 and width 0.1, the signal. The
+Then we construct the data sample which consists of 300 points that are drawn from an exponential distribution with -2
+slope, constituting the background, whereas 10 points drawn from a Gaussian distribution of mean 1.2 and width 0.1, is the signal. The
 fit range is defined between 0.1 and 3.0 meaning that some points of the background distribution are filtered
 out. The data, which is a numpy array, is then transformed into a zfit **Data** object.
 
