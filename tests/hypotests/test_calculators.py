@@ -1,4 +1,6 @@
 #!/usr/bin/python
+import copy
+
 import pytest
 import numpy as np
 
@@ -53,11 +55,7 @@ def create_loss(constraint=False, nbins=None, make2d=False):
 
 @pytest.mark.parametrize(
     "calculator",
-    [
-        BaseCalculator,
-        AsymptoticCalculator,
-        FrequentistCalculator,
-    ],
+    [BaseCalculator, AsymptoticCalculator, FrequentistCalculator, "AsymptoticOld"],
 )
 @pytest.mark.parametrize("make2d", [False, True], ids=["1d", "2d"])
 @pytest.mark.parametrize(
@@ -66,6 +64,17 @@ def create_loss(constraint=False, nbins=None, make2d=False):
     ids=lambda x: f"Binning {x}" if x is not None else "Unbinned",
 )
 def test_base_calculator(calculator, make2d, nbins):
+    if calculator == "AsymptoticOld":
+        if make2d:
+            pytest.skip("AsymptoticOld does not support 2D")
+        if nbins is not None:
+            pytest.skip("AsymptoticOld does not support binned")
+
+        class calculator(AsymptoticCalculator):
+            UNBINNED_TO_BINNED_LOSS = {}
+
+        assert calculator is not AsymptoticCalculator, "Must not be the same"
+        assert AsymptoticCalculator.UNBINNED_TO_BINNED_LOSS, "Has to be filled"
     with pytest.raises(TypeError):
         calculator()
 

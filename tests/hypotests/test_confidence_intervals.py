@@ -40,6 +40,17 @@ def asy_calc(create_loss, nbins=None):
     return mean, AsymptoticCalculator(loss, Minuit())
 
 
+def asy_calc_old(create_loss, nbins=None):
+    loss, (_, __, mean, ___) = create_loss(npeak=80, nbins=nbins)
+
+    class calculator(AsymptoticCalculator):
+        UNBINNED_TO_BINNED_LOSS = {}
+
+    assert calculator is not AsymptoticCalculator, "Must not be the same"
+    assert AsymptoticCalculator.UNBINNED_TO_BINNED_LOSS, "Has to be filled"
+    return mean, calculator(loss, Minuit())
+
+
 def freq_calc(create_loss, nbins=None):
     loss, (_, __, mean, ___) = create_loss(npeak=80, nbins=nbins)
     calculator = FrequentistCalculator.from_yaml(
@@ -48,33 +59,31 @@ def freq_calc(create_loss, nbins=None):
     return mean, calculator
 
 
-@pytest.mark.parametrize("calculator", [asy_calc, freq_calc])
+@pytest.mark.parametrize("calculator", [asy_calc, freq_calc, asy_calc_old])
 @pytest.mark.parametrize("nbins", [None, 47, 300], ids=lambda x: f"nbins={x}")
 def test_with_gauss_exp_example(create_loss, calculator, nbins):
-
+    if calculator is asy_calc_old and nbins is not None:
+        pytest.skip("Not implemented for old calculator")
     mean, calculator = calculator(create_loss, nbins=nbins)
     scan_values = np.linspace(1.15, 1.26, 50)
     poinull = POIarray(mean, scan_values)
     ci = ConfidenceInterval(calculator, poinull)
     interval = ci.interval()
-
     assert interval["lower"] == pytest.approx(1.1810371356602791, rel=0.1)
     assert interval["upper"] == pytest.approx(1.2156701172321935, rel=0.1)
-
     with pytest.raises(POIRangeError):
         poinull = POIarray(
             mean, scan_values[(scan_values >= 1.2) & (scan_values <= 1.205)]
         )
+
         ci = ConfidenceInterval(calculator, poinull)
         ci.interval()
-
     with pytest.raises(POIRangeError):
-        poinull = POIarray(mean, scan_values[(scan_values >= 1.2)])
+        poinull = POIarray(mean, scan_values[scan_values >= 1.2])
         ci = ConfidenceInterval(calculator, poinull)
         ci.interval()
-
     with pytest.raises(POIRangeError):
-        poinull = POIarray(mean, scan_values[(scan_values <= 1.205)])
+        poinull = POIarray(mean, scan_values[scan_values <= 1.205])
         ci = ConfidenceInterval(calculator, poinull)
         ci.interval()
 

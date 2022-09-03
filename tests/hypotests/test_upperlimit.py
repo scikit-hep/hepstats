@@ -64,11 +64,22 @@ def test_constructor(create_loss):
         UpperLimit(calculator, [poi_1], poi_2)
 
 
+class AsymptoticCalculatorOld(AsymptoticCalculator):
+    UNBINNED_TO_BINNED_LOSS = {}
+
+
 def asy_calc(create_loss, nbins):
     loss, (Nsig, Nbkg, mean, sigma) = create_loss(npeak=10, nbins=nbins)
     mean.floating = False
     sigma.floating = False
     return Nsig, AsymptoticCalculator(loss, Minuit())
+
+
+def asy_calc_old(create_loss, nbins):
+    loss, (Nsig, Nbkg, mean, sigma) = create_loss(npeak=10, nbins=nbins)
+    mean.floating = False
+    sigma.floating = False
+    return Nsig, AsymptoticCalculatorOld(loss, Minuit())
 
 
 def freq_calc(create_loss, nbins):
@@ -87,6 +98,8 @@ def freq_calc(create_loss, nbins):
 )
 @pytest.mark.parametrize("calculator", [asy_calc, freq_calc])
 def test_with_gauss_exp_example(create_loss, calculator, nbins):
+    if calculator is asy_calc_old and nbins is not None:
+        pytest.skip("Old asymptotic calculator does not support binned loss")
     Nsig, calculator = calculator(create_loss, nbins)
 
     poinull = POIarray(Nsig, np.linspace(0.0, 25, 15))

@@ -41,29 +41,27 @@ def test_constructor(create_loss, nbins):
         Discovery(calculator, [poi_1], [poi_2])
 
 
+class AsymptoticCalculatorOld(AsymptoticCalculator):
+    UNBINNED_TO_BINNED_LOSS = {}
+
+
 @pytest.mark.parametrize(
     "nbins", [None, 76, 253], ids=lambda x: "unbinned" if x is None else f"nbin={x}"
 )
-def test_with_asymptotic_calculator(create_loss, nbins):
+@pytest.mark.parametrize("Calculator", [AsymptoticCalculator, AsymptoticCalculatorOld])
+def test_with_asymptotic_calculator(create_loss, nbins, Calculator):
+    if Calculator is AsymptoticCalculatorOld and nbins is not None:
+        pytest.skip("Old AsymptoticCalculator does not support binned loss")
+
     loss, (Nsig, Nbkg, mean, sigma) = create_loss(npeak=25, nbins=nbins)
     mean.floating = False
     sigma.floating = False
-    calculator = AsymptoticCalculator(loss, Minuit())
+    calculator = Calculator(loss, Minuit())
 
     poinull = POI(Nsig, 0)
 
     discovery_test = Discovery(calculator, poinull)
     pnull, significance = discovery_test.result()
-
-    # check with legacy version of creating the asimov set
-    try:
-        OLD_CONFIG = AsymptoticCalculator.UNBINNED_TO_BINNED_LOSS
-        AsymptoticCalculator.UNBINNED_TO_BINNED_LOSS = {}
-        calculator_old = AsymptoticCalculator(loss, Minuit())
-        discovery_test_old = Discovery(calculator_old, poinull)
-        pnull_old, significance_old = discovery_test_old.result()
-    finally:
-        AsymptoticCalculator.UNBINNED_TO_BINNED_LOSS = OLD_CONFIG
 
     uncertainty = 0.05
     if nbins is not None and nbins < 80:
