@@ -96,7 +96,7 @@ def freq_calc(create_loss, nbins):
 @pytest.mark.parametrize(
     "nbins", [None, 73, 211], ids=lambda x: "unbinned" if x is None else f"nbins={x}"
 )
-@pytest.mark.parametrize("calculator", [asy_calc, freq_calc])
+@pytest.mark.parametrize("calculator", [asy_calc, freq_calc, asy_calc_old])
 def test_with_gauss_exp_example(create_loss, calculator, nbins):
     if calculator is asy_calc_old and nbins is not None:
         pytest.skip("Old asymptotic calculator does not support binned loss")
