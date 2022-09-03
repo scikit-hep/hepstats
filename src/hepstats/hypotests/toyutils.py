@@ -1,17 +1,18 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
+
+from collections.abc import Callable
 import asdf
 import os
 import numpy as np
 import warnings
 from contextlib import ExitStack
-from typing import List, Callable, Dict, Any
+from typing import Any
 from tqdm.auto import tqdm
 
 from .parameters import POI, POIarray
 from .exceptions import ParameterNotFound, FormatError
 from ..utils import pll, base_sampler, base_sample
 from .hypotests_object import ToysObject
-
 
 """
 Module defining the classes to perform and store the results of toy experiments.
@@ -21,7 +22,7 @@ Acronyms used in the code:
 """
 
 
-class ToyResult(object):
+class ToyResult:
     """
     Class to store the results of toys generated for a given value of a POI.
     The best fit value of the POI, the NLL evaluate at the best fit, and the NLL evaluated
@@ -95,7 +96,7 @@ class ToyResult(object):
         return len(self.bestfit)
 
     def add_entries(
-        self, bestfit: np.ndarray, nll_bestfit: np.ndarray, nlls: Dict[POI, np.ndarray]
+        self, bestfit: np.ndarray, nll_bestfit: np.ndarray, nlls: dict[POI, np.ndarray]
     ):
         """
         Add new result entries.
@@ -118,7 +119,7 @@ class ToyResult(object):
 
         self._nlls = {p: np.concatenate([v, nlls[p]]) for p, v in self.nlls.items()}
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         """
         Returns dictionary of the toy results.
 
@@ -163,7 +164,7 @@ class ToysManager(ToysObject):
                :func:`hepstats.utils.fit.sampling.base_sample`.
         """
 
-        super(ToysManager, self).__init__(
+        super().__init__(
             input=input, minimizer=minimizer, sampler=sampler, sample=sample
         )
         self._toys = {}
@@ -338,7 +339,7 @@ class ToysManager(ToysObject):
         """
         return self._toys.values()
 
-    def toyresults_to_dict(self) -> List[Dict]:
+    def toyresults_to_dict(self) -> list[dict]:
         """
         Returns a list of all the toy results converted into dictionnaries.
         """
@@ -359,8 +360,9 @@ class ToysManager(ToysObject):
         tree["toys"] = self.toyresults_to_dict()
         af = asdf.AsdfFile(tree)
         af.write_to(filename)
+        af.close()
 
-    def toysresults_from_yaml(self, filename: str) -> List[ToyResult]:
+    def toysresults_from_yaml(self, filename: str) -> list[ToyResult]:
         """
         Extract toy results from a yaml file.
 
@@ -368,30 +370,35 @@ class ToysManager(ToysObject):
             filename: the yaml file name.
         """
         ret = []
-        try:
-            toys = asdf.open(filename).tree["toys"]
-        except KeyError:
-            raise FormatError(f"The key `toys` is not found in {filename}.")
+        with asdf.open(filename) as asdf_file:
+            try:
+                toys = asdf_file.tree["toys"]
+            except KeyError as error:
+                raise FormatError(
+                    f"The key `toys` is not found in {filename}, not a valid toy file."
+                ) from error
 
-        for t in toys:
-            poiparam = None
-            for p in self.loss.get_params():
-                if t["poi"] == p.name:
-                    poiparam = p
+            for t in toys:
+                poiparam = None
+                for p in self.loss.get_params():
+                    if t["poi"] == p.name:
+                        poiparam = p
 
-            if poiparam is None:
-                raise ParameterNotFound(f"Parameter with name {t['poi']} is not found.")
+                if poiparam is None:
+                    raise ParameterNotFound(
+                        f"Parameter with name {t['poi']} is not found."
+                    )
 
-            poigen = POI(poiparam, t["genvalue"])
-            poieval = POIarray(poiparam, np.asarray(t["evalvalues"]))
+                poigen = POI(poiparam, t["genvalue"])
+                poieval = POIarray(poiparam, np.asarray(t["evalvalues"]))
 
-            bestfit = t["bestfit"]
-            nll_bestfit = t["nlls"]["bestfit"]
-            nlls = {p: t["nlls"][p.value] for p in poieval}
+                bestfit = t["bestfit"]
+                nll_bestfit = t["nlls"]["bestfit"]
+                nlls = {p: t["nlls"][p.value] for p in poieval}
 
-            t = ToyResult(poigen, poieval)
-            t.add_entries(bestfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
-            ret.append(t)
+                t = ToyResult(poigen, poieval)
+                t.add_entries(bestfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
+                ret.append(t)
 
         return ret
 

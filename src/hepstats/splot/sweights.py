@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
+
 import numpy as np
-from typing import Dict, Any
+from typing import Any
 import warnings
 
 from ..utils import eval_pdf
@@ -21,10 +22,10 @@ def is_sum_of_extended_pdfs(model) -> bool:
     if not hasattr(model, "get_models"):
         return False
 
-    return all(m.is_extended for m in model.get_models())
+    return all(m.is_extended for m in model.get_models()) and model.is_extended
 
 
-def compute_sweights(model, x: np.ndarray) -> Dict[Any, np.ndarray]:
+def compute_sweights(model, x: np.ndarray) -> dict[Any, np.ndarray]:
     """Computes sWeights from probability density functions for different components/species in a fit model
     (for instance signal and background) fitted on some data `x`.
 
@@ -91,11 +92,9 @@ def compute_sweights(model, x: np.ndarray) -> Dict[Any, np.ndarray]:
     """
 
     if not is_valid_pdf(model):
-        raise ValueError("{} is not a valid pdf!".format(model))
+        raise ValueError(f"{model} is not a valid pdf!")
     if not is_sum_of_extended_pdfs(model):
-        raise ValueError(
-            "Input model, {}, should be a sum of extended pdfs!".format(model)
-        )
+        raise ValueError(f"Input model, {model}, should be a sum of extended pdfs!")
 
     models = model.get_models()
     yields = [m.get_yield() for m in models]

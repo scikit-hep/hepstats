@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
 import os
 import pytest
 import numpy as np
+import tqdm
 import zfit
 from zfit.loss import ExtendedUnbinnedNLL, UnbinnedNLL
 from zfit.minimize import Minuit
@@ -17,43 +17,15 @@ from hepstats.hypotests.calculators import AsymptoticCalculator, FrequentistCalc
 from hepstats.hypotests import Discovery
 from hepstats.hypotests.parameters import POI
 
-notebooks_dir = os.path.dirname(hepstats.__file__) + "/../../notebooks/hypotests"
+notebooks_dir = f"{os.path.dirname(hepstats.__file__)}/../../notebooks/hypotests"
 
 
-def create_loss():
-
-    bounds = (0.1, 3.0)
-    obs = zfit.Space("x", limits=bounds)
-
-    # Data and signal
-    np.random.seed(0)
-    tau = -2.0
-    beta = -1 / tau
-    bkg = np.random.exponential(beta, 300)
-    peak = np.random.normal(1.2, 0.1, 25)
-    data = np.concatenate((bkg, peak))
-    data = data[(data > bounds[0]) & (data < bounds[1])]
-    N = len(data)
-    data = zfit.data.Data.from_numpy(obs=obs, array=data)
-
-    lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
-    Nsig = zfit.Parameter("Nsig", 20.0, -20.0, N)
-    Nbkg = zfit.Parameter("Nbkg", N, 0.0, N * 1.1)
-
-    signal = zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1).create_extended(Nsig)
-    background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
-    tot_model = zfit.pdf.SumPDF([signal, background])
-
-    loss = ExtendedUnbinnedNLL(model=tot_model, data=data)
-
-    return loss, (Nsig, Nbkg)
-
-
-def test_constructor():
+@pytest.mark.parametrize("nbins", [None, 30], ids=["unbinned", "binned"])
+def test_constructor(create_loss, nbins):
     with pytest.raises(TypeError):
         Discovery()
 
-    loss, (Nsig, Nbkg) = create_loss()
+    loss, (Nsig, Nbkg, _, _) = create_loss(nbins=nbins, npeak=25)
     calculator = BaseCalculator(loss, Minuit())
 
     poi_1 = POI(Nsig, 0.0)
@@ -69,35 +41,63 @@ def test_constructor():
         Discovery(calculator, [poi_1], [poi_2])
 
 
-def test_with_asymptotic_calculator():
+class AsymptoticCalculatorOld(AsymptoticCalculator):
+    UNBINNED_TO_BINNED_LOSS = {}
 
-    loss, (Nsig, Nbkg) = create_loss()
-    calculator = AsymptoticCalculator(loss, Minuit())
+
+@pytest.mark.parametrize(
+    "nbins", [None, 76, 253], ids=lambda x: "unbinned" if x is None else f"nbin={x}"
+)
+@pytest.mark.parametrize("Calculator", [AsymptoticCalculator, AsymptoticCalculatorOld])
+def test_with_asymptotic_calculator(create_loss, nbins, Calculator):
+    if Calculator is AsymptoticCalculatorOld and nbins is not None:
+        pytest.skip("Old AsymptoticCalculator does not support binned loss")
+
+    loss, (Nsig, Nbkg, mean, sigma) = create_loss(npeak=25, nbins=nbins)
+    mean.floating = False
+    sigma.floating = False
+    calculator = Calculator(loss, Minuit())
 
     poinull = POI(Nsig, 0)
 
     discovery_test = Discovery(calculator, poinull)
     pnull, significance = discovery_test.result()
 
-    assert pnull == pytest.approx(0.0007571045089567185, abs=0.05)
-    assert significance == pytest.approx(3.1719464953752565, abs=0.05)
+    uncertainty = 0.05
+    if nbins is not None and nbins < 80:
+        uncertainty *= 4
+
+    # check absolute significance
+    assert pnull == pytest.approx(0.000757, abs=uncertainty)
+    assert significance == pytest.approx(3.17, abs=uncertainty)
     assert significance >= 3
 
 
-def test_with_frequentist_calculator():
-
-    loss, (Nsig, Nbkg) = create_loss()
+@pytest.mark.parametrize(
+    "nbins", [None, 95, 153], ids=lambda x: "unbinned" if x is None else f"nbin={x}"
+)
+def test_with_frequentist_calculator(create_loss, nbins):
+    loss, (Nsig, Nbkg, mean, sigma) = create_loss(npeak=25, nbins=nbins)
+    mean.floating = False
+    sigma.floating = False
     calculator = FrequentistCalculator.from_yaml(
         f"{notebooks_dir}/toys/discovery_freq_zfit_toys.yml", loss, Minuit()
     )
+    # calculator = FrequentistCalculator(loss, Minuit(), ntoysnull=500, ntoysalt=500)
 
     poinull = POI(Nsig, 0)
 
     discovery_test = Discovery(calculator, poinull)
     pnull, significance = discovery_test.result()
 
-    assert pnull == pytest.approx(0.0004, rel=0.05, abs=0.0005)
-    assert significance == pytest.approx(3.3527947805048592, rel=0.05, abs=0.1)
+    abserr = 0.1
+    if nbins is not None and nbins < 120:
+        abserr *= 4
+    abserr_pnull = 0.0005
+    if nbins is not None and nbins < 120:
+        abserr_pnull *= 4
+    assert pnull == pytest.approx(0.0004, rel=0.05, abs=abserr_pnull)
+    assert significance == pytest.approx(3.3427947805048592, rel=0.05, abs=abserr)
     assert significance >= 3
 
 
@@ -127,7 +127,6 @@ class Poisson(WrapDistribution):
 
 
 def create_loss_counting():
-
     n = 370
     nbkg = 340
 
@@ -146,7 +145,6 @@ def create_loss_counting():
 
 
 def test_counting_with_asymptotic_calculator():
-
     (
         loss,
         Nsig,
@@ -162,7 +160,6 @@ def test_counting_with_asymptotic_calculator():
 
 
 def test_counting_with_frequentist_calculator():
-
     (
         loss,
         Nsig,

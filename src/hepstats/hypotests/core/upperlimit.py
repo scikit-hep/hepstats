@@ -1,7 +1,8 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
+
 from scipy import interpolate
 import numpy as np
-from typing import Union, Dict
+from typing import Union
 
 from .basetest import BaseTest
 from ..calculators.basecalculator import BaseCalculator
@@ -15,7 +16,7 @@ class UpperLimit(BaseTest):
     def __init__(
         self,
         calculator: BaseCalculator,
-        poinull: Union[POI, POIarray],
+        poinull: POI | POIarray,
         poialt: POI,
         qtilde: bool = False,
     ):
@@ -67,7 +68,7 @@ class UpperLimit(BaseTest):
             Expected upper limit -2 sigma: Nsig = 6.400549971360598
         """
 
-        super(UpperLimit, self).__init__(calculator, poinull, poialt)
+        super().__init__(calculator, poinull, poialt)
 
         self._qtilde = qtilde
 
@@ -78,7 +79,7 @@ class UpperLimit(BaseTest):
         """
         return self._qtilde
 
-    def pvalues(self, CLs: int = True) -> Dict[str, np.ndarray]:
+    def pvalues(self, CLs: int = True) -> dict[str, np.ndarray]:
         """
         Returns p-values scanned for the values of the parameters of interest
         in the null hypothesis.
@@ -88,7 +89,7 @@ class UpperLimit(BaseTest):
                else as :math:`p_{clsb} = p_{null}`.
 
         Returns:
-            Dictionnary of p-values for CLsb, CLs, expected (+/- sigma bands).
+            Dictionary of p-values for CLsb, CLs, expected (+/- sigma bands).
         """
         pvalue_func = self.calculator.pvalue
 
@@ -123,7 +124,7 @@ class UpperLimit(BaseTest):
 
     def upperlimit(
         self, alpha: float = 0.05, CLs: bool = True, printlevel: int = 1
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """
         Returns the upper limit of the parameter of interest.
 
@@ -153,10 +154,11 @@ class UpperLimit(BaseTest):
             f"expected{i}" for i in ["", "_p1", "_m1", "_p2", "_m2"]
         ]
 
-        limits: Dict = {}
-        for k in to_interpolate:
+        limits: dict = {}
 
-            pvalues = self.pvalues(CLs)[k]
+        all_pvalues = self.pvalues(CLs)
+        for k in to_interpolate:
+            pvalues = all_pvalues[k]
             values = poinull.values
 
             if k == observed_key:

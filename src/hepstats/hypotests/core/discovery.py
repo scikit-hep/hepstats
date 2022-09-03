@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
+
 from scipy.stats import norm
-from typing import Tuple
 
 from .basetest import BaseTest
 from ..calculators.basecalculator import BaseCalculator
@@ -50,11 +50,13 @@ class Discovery(BaseTest):
             Significance (in units of sigma) = 3.1719464825102244
         """
 
-        super(Discovery, self).__init__(calculator, poinull)
+        super().__init__(calculator, poinull)
 
-    def result(self, printlevel: int = 1) -> Tuple[float, float]:
-        """
-        Returns the result of the discovery hypothesis test.
+    def result(self, printlevel: int = 1) -> tuple[float, float]:
+        """Return the result of the discovery hypothesis test.
+
+        The result can be (0.0, inf), which means that the numerical precision is not high enough or that the
+        number of toys is not large enough. For example if all toys are rejected, the result is (0.0, inf).
 
         Args:
             printlevel: if > 0 print the result.
@@ -68,7 +70,7 @@ class Discovery(BaseTest):
         significance = norm.ppf(1.0 - pnull)
 
         if printlevel > 0:
-            print("\np_value for the Null hypothesis = {0}".format(pnull))
-            print("Significance (in units of sigma) = {0}".format(significance))
+            print(f"\np_value for the Null hypothesis = {pnull}")
+            print(f"Significance (in units of sigma) = {significance}")
 
         return pnull, significance

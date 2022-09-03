@@ -18,10 +18,10 @@ A fitting library should provide six basic objects:
     * minimizer
     * fitresult (optional)
 
-A function for each object is defined in this module, all should return `True` to work
+A function for each object is defined in this module, all should return ``True`` to work
 with hepstats.
 
-The `zfit` API is currently the standard fitting API in hepstats.
+The **zfit** API is currently the standard fitting API in hepstats.
 
 
 .. currentmodule:: hepstats.utils.fit.api_check

@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
 import warnings
+
+import numpy as np
 
 from ..utils.fit.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
 from ..utils.fit.api_check import is_valid_data, is_valid_pdf
@@ -7,7 +8,7 @@ from ..utils.fit import get_nevents
 from .parameters import POI
 
 
-class HypotestsObject(object):
+class HypotestsObject:
     """Base object in `hepstats.hypotests` to manipulate a loss function and a minimizer.
 
     Args:
@@ -24,19 +25,15 @@ class HypotestsObject(object):
             self._loss = input
             self._bestfit = None
         else:
-            raise ValueError(
-                "{} is not a valid loss funtion or fit result!".format(input)
-            )
+            raise ValueError(f"{input} is not a valid loss function or fit result!")
 
         if not is_valid_minimizer(minimizer):
-            raise ValueError("{} is not a valid minimizer !".format(minimizer))
+            raise ValueError(f"{minimizer} is not a valid minimizer !")
 
         self._minimizer = minimizer
         self.minimizer.verbosity = 0
 
-        self._parameters = {}
-        for param in self.loss.get_params():
-            self._parameters[param.name] = param
+        self._parameters = {param.name: param for param in self.loss.get_params()}
 
     @property
     def loss(self):
@@ -61,10 +58,11 @@ class HypotestsObject(object):
             return self._bestfit
         else:
             print("Get fit best values!")
+            old_verbosity = self.minimizer.verbosity
             self.minimizer.verbosity = 5
-            mininum = self.minimizer.minimize(loss=self.loss)
-            self.minimizer.verbosity = 0
-            self._bestfit = mininum
+            minimum = self.minimizer.minimize(loss=self.loss)
+            self.minimizer.verbosity = old_verbosity
+            self._bestfit = minimum
             return self._bestfit
 
     @bestfit.setter
@@ -76,7 +74,7 @@ class HypotestsObject(object):
             value: fit result
         """
         if not is_valid_fitresult(value):
-            raise ValueError("{} is not a valid fit result!".format(input))
+            raise ValueError(f"{input} is not a valid fit result!")
         self._bestfit = value
 
     @property
@@ -123,13 +121,14 @@ class HypotestsObject(object):
         for param in self.parameters:
             param.set_value(self.bestfit.params[param]["value"])
 
-    def lossbuilder(self, model, data, weights=None):
+    def lossbuilder(self, model, data, weights=None, oldloss=None):
         """Method to build a new loss function.
 
         Args:
             * **model** (List): The model or models to evaluate the data on
             * **data** (List): Data to use
             * **weights** (optional, List): the data weights
+            * **oldloss**: Previous loss that has data, models, type
 
         Example with `zfit`:
             >>> data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
@@ -143,6 +142,8 @@ class HypotestsObject(object):
 
         """
 
+        if oldloss is None:
+            oldloss = self.loss
         assert all(is_valid_pdf(m) for m in model)
         assert all(is_valid_data(d) for d in data)
 
@@ -158,8 +159,8 @@ class HypotestsObject(object):
             for d, w in zip(data, weights):
                 d.set_weights(w)
 
-        if hasattr(self.loss, "create_new"):
-            loss = self.loss.create_new(
+        if hasattr(oldloss, "create_new"):
+            loss = oldloss.create_new(
                 model=model, data=data, constraints=self.constraints
             )
         else:
@@ -168,7 +169,7 @@ class HypotestsObject(object):
                 "upgrade to >= 0.6.4",
                 FutureWarning,
             )
-            loss = type(self.loss)(model=model, data=data)
+            loss = type(oldloss)(model=model, data=data)
             loss.add_constraints(self.constraints)
 
         return loss
@@ -188,7 +189,7 @@ class ToysObject(HypotestsObject):
 
     def __init__(self, input, minimizer, sampler, sample):
 
-        super(ToysObject, self).__init__(input, minimizer)
+        super().__init__(input, minimizer)
         self._toys = {}
         self._sampler = sampler
         self._sample = sample
@@ -207,10 +208,13 @@ class ToysObject(HypotestsObject):
         self.set_params_to_bestfit()
         nevents = []
         for m, d in zip(self.loss.model, self.loss.data):
+            nevents_data = get_nevents(d)
             if m.is_extended:
-                nevents.append("extended")
+                nevents.append(
+                    np.random.poisson(lam=nevents_data)
+                )  # TODO: handle constraint yields correctly?
             else:
-                nevents.append(get_nevents(d))
+                nevents.append(nevents_data)
 
         return self._sampler(self.loss.model, nevents, floating_params)
 
