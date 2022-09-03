@@ -40,7 +40,7 @@ out. The data, which is a numpy array, is then transformed into a zfit **Data** 
 Now we build the model. For the background an exponential pdf with **lambda_**, the slope of the exponential as
 a free parameter. For the signal a Gaussian pdf is used with mean and width fixed to 1.2 and 0.1 respectively.
 The background and signal pdfs are extended using the yield parameters **Nbkg** and **Nsig** respectively, which
-are free. The extended negative log-likelihood is then construct using the background and signal models summed
+are free. The extended negative log-likelihood is then constructed using the background and signal models summed
 and the data.
 
 .. code-block:: pycon
@@ -82,7 +82,7 @@ Parameters
 | lambda |  -1.93 |  +/-    0.14  |  False    |
 +--------+--------+---------------+-----------+
 
-So the fitted number of signal candidates is 4.518 +/- 5.8, so consistent with zero. We can compute an
+So the fitted number of signal candidates is 4.518 +/- 5.8, which is consistent with zero. We can then compute an
 upper limit on this number which should be approximately equal to 4.5 + 2 * 5.8 ≈ 16.
 First we import from the :py:mod:`~hepstats.hypotests.calculators` submodule of :py:mod:`~hepstats.hypotests`
 the :py:class:`~hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator` which takes as input
