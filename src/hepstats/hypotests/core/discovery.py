@@ -53,8 +53,10 @@ class Discovery(BaseTest):
         super().__init__(calculator, poinull)
 
     def result(self, printlevel: int = 1) -> tuple[float, float]:
-        """
-        Returns the result of the discovery hypothesis test.
+        """Return the result of the discovery hypothesis test.
+
+        The result can be (0.0, inf), which means that the numerical precision is not high enough or that the
+        number of toys is not large enough. For example if all toys are rejected, the result is (0.0, inf).
 
         Args:
             printlevel: if > 0 print the result.

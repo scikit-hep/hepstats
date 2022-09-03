@@ -1,13 +1,23 @@
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager
 import numpy as np
+
+from .api_check import is_valid_pdf
+
+
+def get_ndims(dataset):
+    """Return the number of dimensions in the dataset"""
+    return len(dataset.obs)
 
 
 def get_value(value):
     return np.array(value)
 
 
-def eval_pdf(model, x, params={}, allow_extended=False):
+def eval_pdf(model, x, params=None, allow_extended=False):
     """Compute pdf of model at a given point x and for given parameters values"""
+
+    if params is None:
+        params = {}
 
     def pdf(model, x):
         if model.is_extended and allow_extended:
@@ -46,6 +56,16 @@ def pll(minimizer, loss, pois) -> float:
     return value
 
 
+@contextmanager
+def set_values(params, values):
+    old_values = [p.value() for p in params]
+    for p, v in zip(params, values):
+        p.set_value(v)
+    yield
+    for p, v in zip(params, old_values):
+        p.set_value(v)
+
+
 def array2dataset(dataset_cls, obs, array, weights=None):
     """
     dataset_cls: only used to get the class in which array/weights will be
@@ -53,9 +73,9 @@ def array2dataset(dataset_cls, obs, array, weights=None):
     """
 
     if hasattr(dataset_cls, "from_numpy"):
-        return dataset_cls.from_numpy(obs=obs, array=array, weights=weights)
+        return dataset_cls.from_numpy(obs, array=array, weights=weights)
     else:
-        return dataset_cls(obs=obs, array=array, weights=weights)
+        return dataset_cls(obs, array=array, weights=weights)
 
 
 def get_nevents(dataset):

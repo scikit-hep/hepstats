@@ -13,7 +13,7 @@ Version 0.5.0
 
 Version 0.4.0
 *************
-* loss: upgrade API to use `create_new` to make sure that the losses are comparable. Compatible with zfit 0.6.4+
+* loss: upgrade API to use ``create_new`` to make sure that the losses are comparable. Compatible with zfit 0.6.4+
 
 Version 0.3.1
 *************
@@ -24,7 +24,7 @@ Version 0.3.1
 Version 0.3.0
 *************
 * New documentation style
-* `hepstats` can now do hypothesis tests, and compute upper limits and confidence intervals for counting analysis
+* **hepstats** can now do hypothesis tests, and compute upper limits and confidence intervals for counting analysis
 * Progess bars are used to see the progression of the generation of the toys
 
 Version 0.2.5
@@ -34,8 +34,8 @@ Version 0.2.5
   function if the loss is not extended
 * **hepstats.hypotests** can now be used even if there is no nuisances. The **pll** function in **utils/fit/diverse.py**
   had to be modified such that if there are no nuisances, the **pll** function returns the value of the loss function.
-* add notebooks demos for FC intervals with the `FrequentistCalculator` and `AsymptoticCalculator`.
-* add warnings when multiple roots are found in `ConfidenceInterval`
+* add notebooks demos for FC intervals with the ``FrequentistCalculator`` and ``AsymptoticCalculator``.
+* add warnings when multiple roots are found in ``ConfidenceInterval``
 * move toys .yml files from notebook to notebook/toys
 
 Version 0.2.4
@@ -59,8 +59,8 @@ Version 0.2.1
 * Addition of the **FrequentistCalculator** to performs hypothesis test, upper limit and interval calculations
   with toys. Toys can be saved and loaded in / from yaml files using the methods:
 
-   * `to_yaml`
-   * `from_yaml`
+   * ``to_yaml``
+   * ``from_yaml``
 
 Version 0.2.0
 **************

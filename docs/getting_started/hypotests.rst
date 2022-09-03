@@ -110,13 +110,13 @@ signal hypothesis, in hepstats this done using :py:class:`~hepstats.hypotests.pa
 A :py:class:`~hepstats.hypotests.parameters.POI` takes as input the parameter **Nsig** and a single value for a
 given hypothesis, for **poialt** it's 0 because this is the background only hypothesis. Similarly :py:class:`~hepstats.hypotests.parameters.POIarray`
 takes as input the parameter **Nsig** and an array of values to scan for **Nsig**, from 0 to 25. A range is needed
-because the **calculator** instance will compute a `p-value` for each value in **poinull**, the upper limit for
-a given confidence level :math:`\alpha` is defined as the value of **Nsig** for which the `p-value` is equal
+because the **calculator** instance will compute a *p-value* for each value in **poinull**, the upper limit for
+a given confidence level :math:`\alpha` is defined as the value of **Nsig** for which the *p-value* is equal
 to :math:`1 - \alpha`.
 
 We can now create an :py:class:`~hepstats.hypotests.core.upperlimit.UpperLimit` instance which takes as input
 the **calculator**, **poinull** and **poialt**. The :py:class:`~hepstats.hypotests.core.upperlimit.UpperLimit`
-instance will ask the **calculator** to compute the `p-values` for each value in **poinull** and eventually find
+instance will ask the **calculator** to compute the *p-values* for each value in **poinull** and eventually find
 the value of the upper limit on **Nsig** (if the upper limit is in the range of the **poinull** values). Below
 is an example on how to compute a CLs upper limit at 95 % confidence level.
 

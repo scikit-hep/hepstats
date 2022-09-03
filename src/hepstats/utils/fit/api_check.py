@@ -16,6 +16,9 @@ with hepstats.
 The `zfit` API is currently the standard fitting API in hepstats.
 
 """
+import warnings
+
+import uhi.typing.plottable
 
 
 def is_valid_parameter(object):
@@ -54,7 +57,10 @@ def is_valid_data(object):
     has_weights = hasattr(object, "weights")
     has_set_weights = hasattr(object, "set_weights")
     has_space = hasattr(object, "space")
-    return has_nevents and has_weights and has_set_weights and has_space
+    is_histlike = isinstance(object, uhi.typing.plottable.PlottableHistogram)
+    return (
+        has_nevents and has_weights and has_set_weights and has_space
+    ) or is_histlike
 
 
 def is_valid_pdf(object):

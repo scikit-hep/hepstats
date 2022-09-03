@@ -14,7 +14,6 @@ from .exceptions import ParameterNotFound, FormatError
 from ..utils import pll, base_sampler, base_sample
 from .hypotests_object import ToysObject
 
-
 """
 Module defining the classes to perform and store the results of toy experiments.
 
@@ -361,6 +360,7 @@ class ToysManager(ToysObject):
         tree["toys"] = self.toyresults_to_dict()
         af = asdf.AsdfFile(tree)
         af.write_to(filename)
+        af.close()
 
     def toysresults_from_yaml(self, filename: str) -> list[ToyResult]:
         """
@@ -370,30 +370,35 @@ class ToysManager(ToysObject):
             filename: the yaml file name.
         """
         ret = []
-        try:
-            toys = asdf.open(filename).tree["toys"]
-        except KeyError:
-            raise FormatError(f"The key `toys` is not found in {filename}.")
+        with asdf.open(filename) as asdf_file:
+            try:
+                toys = asdf_file.tree["toys"]
+            except KeyError as error:
+                raise FormatError(
+                    f"The key `toys` is not found in {filename}, not a valid toy file."
+                ) from error
 
-        for t in toys:
-            poiparam = None
-            for p in self.loss.get_params():
-                if t["poi"] == p.name:
-                    poiparam = p
+            for t in toys:
+                poiparam = None
+                for p in self.loss.get_params():
+                    if t["poi"] == p.name:
+                        poiparam = p
 
-            if poiparam is None:
-                raise ParameterNotFound(f"Parameter with name {t['poi']} is not found.")
+                if poiparam is None:
+                    raise ParameterNotFound(
+                        f"Parameter with name {t['poi']} is not found."
+                    )
 
-            poigen = POI(poiparam, t["genvalue"])
-            poieval = POIarray(poiparam, np.asarray(t["evalvalues"]))
+                poigen = POI(poiparam, t["genvalue"])
+                poieval = POIarray(poiparam, np.asarray(t["evalvalues"]))
 
-            bestfit = t["bestfit"]
-            nll_bestfit = t["nlls"]["bestfit"]
-            nlls = {p: t["nlls"][p.value] for p in poieval}
+                bestfit = t["bestfit"]
+                nll_bestfit = t["nlls"]["bestfit"]
+                nlls = {p: t["nlls"][p.value] for p in poieval}
 
-            t = ToyResult(poigen, poieval)
-            t.add_entries(bestfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
-            ret.append(t)
+                t = ToyResult(poigen, poieval)
+                t.add_entries(bestfit=bestfit, nll_bestfit=nll_bestfit, nlls=nlls)
+                ret.append(t)
 
         return ret
 

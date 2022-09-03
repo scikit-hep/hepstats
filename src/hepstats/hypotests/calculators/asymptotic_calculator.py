@@ -1,17 +1,20 @@
 from __future__ import annotations
 
-from typing import Union, Any
+import math
+from typing import Union, Any, Optional, List
 import numpy as np
 from scipy.stats import norm
 import warnings
 
 from .basecalculator import BaseCalculator
-from ...utils import eval_pdf, array2dataset, pll, get_value
+from ...utils import eval_pdf, array2dataset, pll, get_value, set_values
 from ..parameters import POI, POIarray
+from ...utils.fit.api_check import is_valid_fitresult, is_valid_loss
+from ...utils.fit.diverse import get_ndims
 
 
 def generate_asimov_hist(
-    model, params: dict[Any, dict[str, Any]], nbins: int = 100
+    model, params: dict[Any, dict[str, Any]], nbins: int | None = None
 ) -> tuple[np.ndarray, np.ndarray]:
     """Generate the Asimov histogram using a model and dictionary of parameters.
 
@@ -30,16 +33,55 @@ def generate_asimov_hist(
         >>> model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
         >>> hist, bin_edges = generate_asimov_hist(model, {"mean": 1.2, "sigma": 0.1})
     """
-
+    if nbins is None:
+        nbins = 100
     space = model.space
     bounds = space.limit1d
     bin_edges = np.linspace(*bounds, nbins + 1)
-    bin_centers = bin_edges[0:-1] + np.diff(bin_edges) / 2
+    bin_centers = bin_edges[:-1] + np.diff(bin_edges) / 2
 
     hist = eval_pdf(model, bin_centers, params, allow_extended=True)
     hist *= space.area() / nbins
 
     return hist, bin_edges
+
+
+def generate_asimov_dataset(data, model, is_binned, nbins, values):
+    """Generate the Asimov dataset using a model and dictionary of parameters.
+
+    Args:
+        data: Data, the same class should be used for the generated dataset.
+        model: Model to use for the generation. Can be binned or unbinned.
+        is_binned: If the model is binned.
+        nbins: Number of bins for the asimov dataset.
+        values: Dictionary of parameters values.
+
+    Returns:
+        Dataset with the asimov dataset.
+    """
+    nsample = None
+    if not model.is_extended:
+        nsample = get_value(data.n_events)
+    if is_binned:
+        with set_values(list(values), [v["value"] for v in values.values()]):
+            dataset = model.to_binneddata()
+            if nsample is not None:
+                dataset = type(dataset).from_hist(dataset.to_hist() * nsample)
+    else:
+        if len(nbins) > 1:  # meaning we have multiple dimensions
+            raise ValueError(
+                "Currently, only one dimension is supported for models that do not follow"
+                " the new binned loss convention. New losses can be registered with the"
+                " asymtpotic calculator."
+            )
+        weights, bin_edges = generate_asimov_hist(model, values, nbins[0])
+        bin_centers = bin_edges[:-1] + np.diff(bin_edges) / 2
+
+        if nsample is not None:  # It's not extended
+            weights *= nsample
+
+        dataset = array2dataset(type(data), data.space, bin_centers, weights)
+    return dataset
 
 
 class AsymptoticCalculator(BaseCalculator):
@@ -48,8 +90,31 @@ class AsymptoticCalculator(BaseCalculator):
     :cite:`Cowan:2010js`. Can be used only with one parameter of interest.
     """
 
-    def __init__(self, input, minimizer, asimov_bins: int = 100):
-        """Asymptotic calculator class.
+    UNBINNED_TO_BINNED_LOSS = {}
+    try:
+        from zfit.loss import (
+            UnbinnedNLL,
+            BinnedNLL,
+            ExtendedUnbinnedNLL,
+            ExtendedBinnedNLL,
+        )
+    except ImportError:
+        pass
+    else:
+        UNBINNED_TO_BINNED_LOSS[UnbinnedNLL] = BinnedNLL
+        UNBINNED_TO_BINNED_LOSS[ExtendedUnbinnedNLL] = ExtendedBinnedNLL
+
+    def __init__(
+        self,
+        input,
+        minimizer,
+        asimov_bins: int | list[int] | None = None,
+    ):
+        """Asymptotic calculator class using Wilk's and Wald's asymptotic formulae.
+
+        The asympotic formula is significantly faster than the Frequentist calculator, as it does not
+        require the calculation of the frequentist p-value, which involves the calculation of toys (sample-and-fit).
+
 
         Args:
             input: loss or fit result.
@@ -58,7 +123,7 @@ class AsymptoticCalculator(BaseCalculator):
 
         Example with **zfit**:
             >>> import zfit
-            >>> from zfit.core.loss import UnbinnedNLL
+            >>> from zfit.loss import UnbinnedNLL
             >>> from zfit.minimize import Minuit
             >>>
             >>> obs = zfit.Space('x', limits=(0.1, 2.0))
@@ -70,13 +135,113 @@ class AsymptoticCalculator(BaseCalculator):
             >>>
             >>> calc = AsymptoticCalculator(input=loss, minimizer=Minuit(), asimov_bins=100)
         """
+        if is_valid_fitresult(input):
+            loss = input.loss
+            result = input
+        elif is_valid_loss(input):
+            loss = input
+            result = None
+        else:
+            raise ValueError("input must be a fitresult or a loss")
+
+        asimov_bins_converted = self._check_convert_asimov_bins(asimov_bins, loss.data)
 
         super().__init__(input, minimizer)
-        self._asimov_bins = asimov_bins
+        self._asimov_bins = asimov_bins_converted
         self._asimov_dataset: dict = {}
         self._asimov_loss: dict = {}
+        self._binned_loss = None
         # cache of nll values computed with the asimov dataset
         self._asimov_nll: dict[POI, np.ndarray] = {}
+
+    def _convert_to_binned(self, loss, asimov_bins):
+        """Converts the loss to binned if necessary."""
+
+        for unbinned_loss, binned_loss in self.UNBINNED_TO_BINNED_LOSS.items():
+            if type(loss) == unbinned_loss:
+                datasets = []
+                models = []
+                for d, m, nbins in zip(loss.data, loss.model, asimov_bins):
+                    binnings = m.space.with_binning(nbins)
+                    model_binned = m.to_binned(binnings)
+                    data_binned = d.to_binned(binnings)
+                    datasets.append(data_binned)
+                    models.append(model_binned)
+                loss = binned_loss(
+                    model=models, data=datasets, constraints=loss.constraints
+                )
+                break
+            elif type(loss) == binned_loss:
+                break
+        else:
+            loss = False
+
+        return loss
+
+    def _get_binned_loss(self):
+        """Returns the binned loss."""
+        binned_loss = self._binned_loss
+        if binned_loss is None:
+            binned_loss = self._convert_to_binned(self.loss, self._asimov_bins)
+            self._binned_loss = binned_loss
+        return binned_loss
+
+    @staticmethod
+    def _check_convert_asimov_bins(
+        asimov_bins, datasets
+    ) -> list[list[int]]:  # TODO: we want to allow axes from UHI
+        nsimultaneous = len(datasets)
+        ndims = [get_ndims(dataset) for dataset in datasets]
+        if asimov_bins is None:
+            asimov_bins = [[math.ceil(100 / ndim**0.5)] * ndim for ndim in ndims]
+        if isinstance(asimov_bins, int):
+            if nsimultaneous == 1:
+                asimov_bins = [[asimov_bins] * ndim for ndim in ndims]
+            else:
+                raise ValueError(
+                    "asimov_bins is an int but there are multiple datasets. "
+                    "Please provide a list of int for each dataset."
+                )
+        elif isinstance(asimov_bins, list):
+            if len(asimov_bins) != nsimultaneous:
+                raise ValueError(
+                    "asimov_bins is a list but the number of elements is different from the number of datasets."
+                )
+        else:
+            raise TypeError(
+                f"asimov_bins must be an int or a list of int (or list of list of int), not {type(asimov_bins)}"
+            )
+
+        for i, (asimov_bin, ndim) in enumerate(zip(asimov_bins, ndims)):
+            if isinstance(asimov_bin, int):
+                if ndim == 1:
+                    asimov_bins[i] = [asimov_bin]
+                else:
+                    raise ValueError(
+                        f"asimov_bins[{i}] is not a list but the dataset has {ndim} dimensions."
+                    )
+            elif isinstance(asimov_bin, list):
+                if len(asimov_bin) != ndim:
+                    raise ValueError(
+                        f"asimov_bins[{i}] is a list with {len(asimov_bin)} elements but the"
+                        f" dataset has {ndim} dimensions."
+                    )
+                if not all(isinstance(x, int) for x in asimov_bin):
+                    raise ValueError(
+                        f"asimov_bins[{i}] is a list with non-int elements."
+                    )
+            else:
+                raise TypeError(
+                    f"asimov_bins[{i}] is not an int or a list but a {type(asimov_bin)}."
+                )
+        assert isinstance(
+            asimov_bins, list
+        ), "INTERNAL ERROR: Could not correctly convert asimov_bins"
+        assert all(
+            isinstance(asimov_bin, list) and len(asimov_bin) == ndim
+            for ndim, asimov_bin in zip(ndims, asimov_bins)
+        ), "INTERNAL ERROR: Could not correctly convert asimov_bins, dimensions wrong"
+        return asimov_bins
 
     @staticmethod
     def check_pois(pois: POI | POIarray):
@@ -97,12 +262,12 @@ class AsymptoticCalculator(BaseCalculator):
             msg = "Tests using the asymptotic calculator can only be used with one parameter of interest."
             raise NotImplementedError(msg)
 
-    def asimov_dataset(self, poi: POI, ntrials_fit: int = 5):
+    def asimov_dataset(self, poi: POI, ntrials_fit: int | None = None):
         """Gets the Asimov dataset for a given alternative hypothesis.
 
         Args:
             poi: parameter of interest of the alternative hypothesis.
-            ntrials_fit: maximum number of fits to perform
+            ntrials_fit: (default: 5) maximum number of fits to perform
 
         Returns:
              The asymov dataset.
@@ -112,9 +277,18 @@ class AsymptoticCalculator(BaseCalculator):
             >>> dataset = calc.asimov_dataset(poialt)
 
         """
-        if poi not in self._asimov_dataset.keys():
-            model = self.model
-            data = self.data
+        if ntrials_fit is None:
+            ntrials_fit = 5
+        if poi not in self._asimov_dataset:
+            binned_loss = self._get_binned_loss()
+            if binned_loss is False:  # LEGACY
+                model = self.model
+                data = self.data
+                loss = self.loss
+            else:
+                model = binned_loss.model
+                data = binned_loss.data
+                loss = binned_loss
             minimizer = self.minimizer
             oldverbose = minimizer.verbosity
             minimizer.verbosity = 0
@@ -135,7 +309,7 @@ class AsymptoticCalculator(BaseCalculator):
             else:
                 with poiparam.set_value(poivalue):
                     for trial in range(ntrials_fit):
-                        minimum = minimizer.minimize(loss=self.loss)
+                        minimum = minimizer.minimize(loss=loss)
                         if minimum.valid:
                             break
                         else:
@@ -159,24 +333,14 @@ class AsymptoticCalculator(BaseCalculator):
             minimizer.verbosity = oldverbose
 
             asimov_data = []
-
-            if not isinstance(self._asimov_bins, list):
-                asimov_bins = [self._asimov_bins] * len(data)
-            else:
-                asimov_bins = self._asimov_bins
-                assert len(asimov_bins) == len(data)
-
-            for i, (m, nbins) in enumerate(zip(model, asimov_bins)):
-
-                weights, bin_edges = generate_asimov_hist(m, values, nbins)
-                bin_centers = bin_edges[0:-1] + np.diff(bin_edges) / 2
-
-                if not model[i].is_extended:
-                    weights *= get_value(data[i].n_events)
-
-                asimov_data.append(
-                    array2dataset(type(data[i]), data[i].space, bin_centers, weights)
-                )
+            asimov_bins = self._asimov_bins
+            assert len(asimov_bins) == len(data)
+            is_binned_loss = isinstance(
+                loss, tuple(self.UNBINNED_TO_BINNED_LOSS.values())
+            )
+            for i, (m, d, nbins) in enumerate(zip(model, data, asimov_bins)):
+                dataset = generate_asimov_dataset(d, m, is_binned_loss, nbins, values)
+                asimov_data.append(dataset)
 
             self._asimov_dataset[poi] = asimov_data
 
@@ -195,8 +359,15 @@ class AsymptoticCalculator(BaseCalculator):
             >>> poialt = POI(mean, 1.2)
             >>> loss = calc.asimov_loss(poialt)
         """
+        oldloss = self._get_binned_loss()
+        if oldloss is False:  # LEGACY
+            oldloss = self.loss
+        if oldloss is None:
+            raise ValueError("No loss function was provided.")
         if poi not in self._asimov_loss:
-            loss = self.lossbuilder(self.model, self.asimov_dataset(poi))
+            loss = self.lossbuilder(
+                oldloss.model, self.asimov_dataset(poi), oldloss=oldloss
+            )
             self._asimov_loss[poi] = loss
 
         return self._asimov_loss[poi]
@@ -225,7 +396,7 @@ class AsymptoticCalculator(BaseCalculator):
         minimizer = self.minimizer
         ret = np.empty(pois.shape)
         for i, p in enumerate(pois):
-            if p not in self._asimov_nll.keys():
+            if p not in self._asimov_nll:
                 loss = self.asimov_loss(poialt)
                 nll = pll(minimizer, loss, p)
                 self._asimov_nll[p] = nll
