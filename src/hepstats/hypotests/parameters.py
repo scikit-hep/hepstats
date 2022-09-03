@@ -19,7 +19,7 @@ class POIarray:
     Class for parameters of interest with multiple values:
     """
 
-    def __init__(self, parameter, values: Union[Collection, np.array]):
+    def __init__(self, parameter, values: Collection | np.array):
         """
         Args:
             parameter: the parameter of interest
@@ -97,7 +97,7 @@ class POIarray:
         """
         return self._shape
 
-    def append(self, values: Union[int, float, Collection, np.ndarray]):
+    def append(self, values: int | float | Collection | np.ndarray):
         """
         Append values in the **POIarray**.
 
@@ -115,7 +115,7 @@ class POI(POIarray):
     Class for single value parameter of interest:
     """
 
-    def __init__(self, parameter, value: Union[int, float]):
+    def __init__(self, parameter, value: int | float):
         """
         Args:
             parameter: the parameter of interest

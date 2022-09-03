@@ -23,9 +23,7 @@ class HypotestsObject:
             self._loss = input
             self._bestfit = None
         else:
-            raise ValueError(
-                f"{input} is not a valid loss funtion or fit result!"
-            )
+            raise ValueError(f"{input} is not a valid loss funtion or fit result!")
 
         if not is_valid_minimizer(minimizer):
             raise ValueError(f"{minimizer} is not a valid minimizer !")

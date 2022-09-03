@@ -22,7 +22,7 @@ from typing import Optional, Union
 class Prior:
     """Helper class for calculating the prior on the fitness function."""
 
-    def __init__(self, p0: float = 0.05, gamma: Optional[float] = None):
+    def __init__(self, p0: float = 0.05, gamma: float | None = None):
         """
         Args:
             p0: False-positive rate, between 0 and 1.  A lower number places a stricter penalty
@@ -55,10 +55,10 @@ class Prior:
 
 
 def bayesian_blocks(
-    data: Union[Iterable, np.ndarray],
-    weights: Union[Iterable, np.ndarray, None] = None,
+    data: Iterable | np.ndarray,
+    weights: Iterable | np.ndarray | None = None,
     p0: float = 0.05,
-    gamma: Optional[float] = None,
+    gamma: float | None = None,
 ) -> np.ndarray:
     """Bayesian Blocks Implementation.
 

@@ -16,7 +16,7 @@ class UpperLimit(BaseTest):
     def __init__(
         self,
         calculator: BaseCalculator,
-        poinull: Union[POI, POIarray],
+        poinull: POI | POIarray,
         poialt: POI,
         qtilde: bool = False,
     ):

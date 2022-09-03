@@ -94,9 +94,7 @@ def compute_sweights(model, x: np.ndarray) -> dict[Any, np.ndarray]:
     if not is_valid_pdf(model):
         raise ValueError(f"{model} is not a valid pdf!")
     if not is_sum_of_extended_pdfs(model):
-        raise ValueError(
-            f"Input model, {model}, should be a sum of extended pdfs!"
-        )
+        raise ValueError(f"Input model, {model}, should be a sum of extended pdfs!")
 
     models = model.get_models()
     yields = [m.get_yield() for m in models]

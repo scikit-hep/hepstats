@@ -58,8 +58,8 @@ class FrequentistCalculator(ToysCalculator):
 
     def qnull(
         self,
-        poinull: Union[POI, POIarray],
-        poialt: Optional[POI] = None,
+        poinull: POI | POIarray,
+        poialt: POI | None = None,
         onesided: bool = True,
         onesideddiscovery: bool = False,
         qtilde: bool = False,
@@ -115,7 +115,7 @@ class FrequentistCalculator(ToysCalculator):
 
     def qalt(
         self,
-        poinull: Union[POI, POIarray],
+        poinull: POI | POIarray,
         poialt: POI,
         onesided: bool = True,
         onesideddiscovery: bool = False,

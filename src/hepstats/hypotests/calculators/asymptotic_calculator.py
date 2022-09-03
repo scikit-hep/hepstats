@@ -79,7 +79,7 @@ class AsymptoticCalculator(BaseCalculator):
         self._asimov_nll: dict[POI, np.ndarray] = {}
 
     @staticmethod
-    def check_pois(pois: Union[POI, POIarray]):
+    def check_pois(pois: POI | POIarray):
         """
         Checks if the parameter of interest is a :class:`hepstats.parameters.POIarray` instance.
 
@@ -235,7 +235,7 @@ class AsymptoticCalculator(BaseCalculator):
     def pnull(
         self,
         qobs: np.ndarray,
-        qalt: Union[np.ndarray, None] = None,
+        qalt: np.ndarray | None = None,
         onesided: bool = True,
         onesideddiscovery: bool = False,
         qtilde: bool = False,
