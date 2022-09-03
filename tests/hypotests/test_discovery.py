@@ -67,11 +67,6 @@ def test_with_asymptotic_calculator(create_loss, nbins, Calculator):
     if nbins is not None and nbins < 80:
         uncertainty *= 4
 
-    # check with legacy version of creating the asimov set
-    assert pnull == pytest.approx(pnull_old, rel=uncertainty, abs=0.0005)
-    assert significance == pytest.approx(significance_old, rel=uncertainty, abs=0.0005)
-    assert significance >= 3
-
     # check absolute significance
     assert pnull == pytest.approx(0.000757, abs=uncertainty)
     assert significance == pytest.approx(3.17, abs=uncertainty)
