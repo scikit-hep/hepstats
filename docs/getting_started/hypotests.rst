@@ -126,12 +126,12 @@ is an example on how to compute a CLs upper limit at 95 % confidence level.
     >>> ul = UpperLimit(calculator, poinull, poialt)
     >>> ul.upperlimit(alpha=0.05, CLs=True)
 
-    Observed upper limit: Nsig = 15.725784747406346
-    Expected upper limit: Nsig = 11.927442041887158
-    Expected upper limit +1 sigma: Nsig = 16.596396280677116
-    Expected upper limit -1 sigma: Nsig = 8.592750403611896
-    Expected upper limit +2 sigma: Nsig = 22.24864429383046
-    Expected upper limit -2 sigma: Nsig = 6.400549971360598
+Observed upper limit: Nsig = 15.725784747406346
+Expected upper limit: Nsig = 11.927442041887158
+Expected upper limit +1 sigma: Nsig = 16.596396280677116
+Expected upper limit -1 sigma: Nsig = 8.592750403611896
+Expected upper limit +2 sigma: Nsig = 22.24864429383046
+Expected upper limit -2 sigma: Nsig = 6.400549971360598
 
 In the result you obtain the observed and expected limits. The observed limit is the limit based on the observation
 of 4.518 +/- 5.8 signal candidates in data. The expected limit is the limit under the background only hypothesis.
