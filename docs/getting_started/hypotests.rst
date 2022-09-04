@@ -31,7 +31,7 @@ out. The data, which is a numpy array, is then transformed into a zfit **Data** 
 
     >>> bounds = (0.1, 3.0)
     >>> obs = zfit.Space('x', limits=bounds)
-    >>> bkg = np.random.exponential(-1/2, 300)
+    >>> bkg = np.random.exponential(1/2, 300)
     >>> peak = np.random.normal(1.2, 0.1, 10)
     >>> data = np.concatenate((bkg, peak))
     >>> data = data[(data > bounds[0]) & (data < bounds[1])]
