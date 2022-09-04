@@ -51,7 +51,7 @@ and the data.
     >>> signal = zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1).create_extended(Nsig)
     >>> background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
     >>> total = zfit.pdf.SumPDF([signal, background])
-    >>> loss = ExtendedUnbinnedNLL(model=total, data=data)
+    >>> nll = ExtendedUnbinnedNLL(model=total, data=data)
 
 The background plus signal can then be fitted to the data.
 
