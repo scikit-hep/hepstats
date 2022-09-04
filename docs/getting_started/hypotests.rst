@@ -51,7 +51,7 @@ and the data.
     >>> signal = zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1).create_extended(Nsig)
     >>> background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
     >>> total = zfit.pdf.SumPDF([signal, background])
-    >>> nll = ExtendedUnbinnedNLL(model=total, data=data)
+    >>> nll_loss = ExtendedUnbinnedNLL(model=total, data=data)
 
 The background plus signal can then be fitted to the data.
 
@@ -60,7 +60,7 @@ The background plus signal can then be fitted to the data.
     >>> # Instantiate a minuit minimizer
     >>> minimizer = Minuit()
     >>> # minimisation of the loss function
-    >>> minimum = minimizer.minimize(loss=nll)
+    >>> minimum = minimizer.minimize(loss=nll_loss)
     >>> minimum.hesse()
     >>> print(minimum)
 
@@ -91,7 +91,7 @@ the loss function and minimizer.
 
 
     >>> from hepstats.hypotests.calculators import AsymptoticCalculator
-    >>> calculator = AsymptoticCalculator(loss, Minuit(), asimov_bins=100)
+    >>> calculator = AsymptoticCalculator(nll_loss, Minuit(), asimov_bins=100)
 
 The :py:class:`~hepstats.hypotests.parameters.POI` and :py:class:`~hepstats.hypotests.parameters.POIarray`
 classes are also imported, POI stands for parameter of interest. In our case the POI is **Nsig**. To compute
