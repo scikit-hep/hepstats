@@ -1,6 +1,6 @@
 repos:
 - repo: https://github.com/psf/black
-  rev: 22.6.0
+  rev: 22.8.0
   hooks:
   - id: black
 - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -81,7 +81,7 @@ repos:
       args: [ '--futures=true' ]
 
 - repo: https://github.com/shssoichiro/oxipng
-  rev: acdd66b4c5a5fda8b08281ad9b3216327b6847b4
+  rev: v6.0.0
   hooks:
     - id: oxipng
 
