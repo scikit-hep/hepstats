@@ -22,8 +22,8 @@ from `iminuit <https://github.com/scikit-hep/iminuit>`_.
     >>> from zfit.minimize import Minuit
     >>> import numpy as np
 
-Then we construct the data sample which consists 300 points are drawn from an exponential distribution with -2
-slope, the background, and 10 points are drawn from a Gaussian distribution of mean 1.2 and width 0.1, the signal. The
+Then we construct the data sample which consists of 300 points that are drawn from an exponential distribution with -2
+slope, constituting the background, whereas 10 points drawn from a Gaussian distribution of mean 1.2 and width 0.1, is the signal. The
 fit range is defined between 0.1 and 3.0 meaning that some points of the background distribution are filtered
 out. The data, which is a numpy array, is then transformed into a zfit **Data** object.
 
@@ -31,7 +31,7 @@ out. The data, which is a numpy array, is then transformed into a zfit **Data** 
 
     >>> bounds = (0.1, 3.0)
     >>> obs = zfit.Space('x', limits=bounds)
-    >>> bkg = np.random.exponential(-1/2, 300)
+    >>> bkg = np.random.exponential(1/2, 300)
     >>> peak = np.random.normal(1.2, 0.1, 10)
     >>> data = np.concatenate((bkg, peak))
     >>> data = data[(data > bounds[0]) & (data < bounds[1])]
@@ -40,7 +40,7 @@ out. The data, which is a numpy array, is then transformed into a zfit **Data** 
 Now we build the model. For the background an exponential pdf with **lambda_**, the slope of the exponential as
 a free parameter. For the signal a Gaussian pdf is used with mean and width fixed to 1.2 and 0.1 respectively.
 The background and signal pdfs are extended using the yield parameters **Nbkg** and **Nsig** respectively, which
-are free. The extended negative log-likelihood is then construct using the background and signal models summed
+are free. The extended negative log-likelihood is then constructed using the background and signal models summed
 and the data.
 
 .. code-block:: pycon
@@ -51,7 +51,7 @@ and the data.
     >>> signal = zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1).create_extended(Nsig)
     >>> background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
     >>> total = zfit.pdf.SumPDF([signal, background])
-    >>> loss = ExtendedUnbinnedNLL(model=total, data=data)
+    >>> nll = ExtendedUnbinnedNLL(model=total, data=data)
 
 The background plus signal can then be fitted to the data.
 
@@ -82,7 +82,7 @@ Parameters
 | lambda |  -1.93 |  +/-    0.14  |  False    |
 +--------+--------+---------------+-----------+
 
-So the fitted number of signal candidates is 4.518 +/- 5.8, so consistent with zero. We can compute an
+So the fitted number of signal candidates is 4.518 +/- 5.8, which is consistent with zero. We can then compute an
 upper limit on this number which should be approximately equal to 4.5 + 2 * 5.8 ≈ 16.
 First we import from the :py:mod:`~hepstats.hypotests.calculators` submodule of :py:mod:`~hepstats.hypotests`
 the :py:class:`~hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator` which takes as input
@@ -91,7 +91,7 @@ the loss function and minimizer.
 
 
     >>> from hepstats.hypotests.calculators import AsymptoticCalculator
-    >>> calculator = AsymptoticCalculator(loss, Minuit(), asimov_bins=100)
+    >>> calculator = AsymptoticCalculator(nll, Minuit(), asimov_bins=100)
 
 The :py:class:`~hepstats.hypotests.parameters.POI` and :py:class:`~hepstats.hypotests.parameters.POIarray`
 classes are also imported, POI stands for parameter of interest. In our case the POI is **Nsig**. To compute
@@ -126,12 +126,12 @@ is an example on how to compute a CLs upper limit at 95 % confidence level.
     >>> ul = UpperLimit(calculator, poinull, poialt)
     >>> ul.upperlimit(alpha=0.05, CLs=True)
 
-    Observed upper limit: Nsig = 15.725784747406346
-    Expected upper limit: Nsig = 11.927442041887158
-    Expected upper limit +1 sigma: Nsig = 16.596396280677116
-    Expected upper limit -1 sigma: Nsig = 8.592750403611896
-    Expected upper limit +2 sigma: Nsig = 22.24864429383046
-    Expected upper limit -2 sigma: Nsig = 6.400549971360598
+Observed upper limit: Nsig = 15.725784747406346
+Expected upper limit: Nsig = 11.927442041887158
+Expected upper limit +1 sigma: Nsig = 16.596396280677116
+Expected upper limit -1 sigma: Nsig = 8.592750403611896
+Expected upper limit +2 sigma: Nsig = 22.24864429383046
+Expected upper limit -2 sigma: Nsig = 6.400549971360598
 
 In the result you obtain the observed and expected limits. The observed limit is the limit based on the observation
 of 4.518 +/- 5.8 signal candidates in data. The expected limit is the limit under the background only hypothesis.
