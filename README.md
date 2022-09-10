@@ -16,6 +16,9 @@
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/scikit-hep/hepstats/master)
 
+hepstats is a library for statistical inference aiming to cover the needs High Energy Physics.
+It is part of the [Scikit-HEP project](https://scikit-hep.org/).
+
 ## Installation
 
 Install `hepstats` like any other Python package:

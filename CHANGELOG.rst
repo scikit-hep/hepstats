@@ -4,8 +4,13 @@ Changelog
 master
 ******
 
-* Upgrade to Python 3.10 and zfit 0.10.0
+Version 0.6.0
+*************
+
+* Upgrade to Python 3.10 and zfit >= 0.10.0
 * Enhanced speed toy limit calculation
+* Add multidimensionl PDF support
+* Add support for binned data and models
 
 Version 0.5.0
 *************
