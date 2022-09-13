@@ -82,7 +82,7 @@ repos:
         args: [ '--futures=true' ]
 
   - repo: https://github.com/shssoichiro/oxipng
-    rev: v6.0.0
+    rev: v6.0.1
     hooks:
       - id: oxipng
 
