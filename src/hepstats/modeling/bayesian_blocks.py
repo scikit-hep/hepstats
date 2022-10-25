@@ -37,7 +37,7 @@ class Prior:
         self.p0 = p0
         self.gamma = gamma
 
-    def calc(self, N: int) -> float:
+    def calc(self, N):
         """
         Computes the prior.
 
@@ -151,7 +151,7 @@ def bayesian_blocks(
         fit_vec = N_k * (np.log(N_k / T_k))
 
         # penalize function with prior
-        A_R = fit_vec - prior.calc(R + 1)
+        A_R = fit_vec - prior.calc(N_k)
         A_R[1:] += best[:R]
 
         i_max = np.argmax(A_R)
