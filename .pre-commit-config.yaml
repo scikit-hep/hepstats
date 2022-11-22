@@ -27,7 +27,7 @@ repos:
         args: [ --update, --no-build-isolation ]
         additional_dependencies: [ setuptools-scm ]
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.990
+    rev: v0.991
     hooks:
       - id: mypy
         files: src
@@ -92,7 +92,7 @@ repos:
       - id: rm-unneeded-f-str
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.19.1
+    rev: 0.19.2
     hooks:
       - id: check-github-workflows
       - id: check-github-actions
