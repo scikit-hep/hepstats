@@ -60,7 +60,7 @@ repos:
 
   # Notebook formatting
   - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.5.3
+    rev: 1.6.1
     hooks:
       - id: nbqa-isort
         additional_dependencies: [ isort==5.6.4 ]
@@ -82,7 +82,7 @@ repos:
         args: [ '--futures=true' ]
 
   - repo: https://github.com/shssoichiro/oxipng
-    rev: v7.0.0
+    rev: v8.0.0
     hooks:
       - id: oxipng
 
@@ -92,7 +92,7 @@ repos:
       - id: rm-unneeded-f-str
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.19.2
+    rev: 0.20.0
     hooks:
       - id: check-github-workflows
       - id: check-github-actions
