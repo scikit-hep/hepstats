@@ -38,7 +38,7 @@ repos:
       - id: jupyter-notebook-cleanup
 
   - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.9.0
+    rev: v1.10.0
     hooks:
       - id: python-use-type-annotations
       - id: python-check-mock-methods
@@ -87,7 +87,7 @@ repos:
       - id: oxipng
 
   - repo: https://github.com/dannysepler/rm_unneeded_f_str
-    rev: v0.1.0
+    rev: v0.2.0
     hooks:
       - id: rm-unneeded-f-str
 
