@@ -65,6 +65,7 @@ jobs:
         if: matrix.python-version == '3.10' && matrix.os == 'ubuntu-latest'
         uses: codecov/codecov-action@v3
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}  # technically not needed, but prevents failures: https://community.codecov.com/t/upload-issues-unable-to-locate-build-via-github-actions-api/3954
           file: ./coverage.xml
           flags: unittests
           name: codecov-umbrella
