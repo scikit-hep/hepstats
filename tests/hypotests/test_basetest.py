@@ -10,7 +10,6 @@ from hepstats.hypotests.parameters import POI, POIarray
 
 
 def create_loss():
-
     obs = zfit.Space("x", limits=(0.1, 2.0))
     data = zfit.data.Data.from_numpy(obs=obs, array=np.random.normal(1.2, 0.1, 10000))
     mean = zfit.Parameter("mu", 1.2)
@@ -42,7 +41,6 @@ def test_constructor():
 
 
 def test_attributes():
-
     loss, (mean, sigma) = create_loss()
     calculator = BaseCalculator(loss, Minuit())
 

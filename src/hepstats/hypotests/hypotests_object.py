@@ -17,7 +17,6 @@ class HypotestsObject:
     """
 
     def __init__(self, input, minimizer):
-
         if is_valid_fitresult(input):
             self._loss = input.loss
             self._bestfit = input
@@ -188,7 +187,6 @@ class ToysObject(HypotestsObject):
     """
 
     def __init__(self, input, minimizer, sampler, sample):
-
         super().__init__(input, minimizer)
         self._toys = {}
         self._sampler = sampler

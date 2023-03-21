@@ -96,7 +96,6 @@ class BaseCalculator(HypotestsObject):
         self.check_pois(poinull)
 
         if poinull.ndim == 1:
-
             param = poinull.parameter
             bestfit = self.bestfit.params[param]["value"]
 
@@ -264,7 +263,6 @@ class BaseCalculator(HypotestsObject):
             raise ValueError(msg)
 
         if poi1.ndim == 1:
-
             if poi1.name != poi2.name:
                 msg = "The variables used in the parameters of interest should have the same names,"
                 msg += f" poi1={poi1.name}, poi2={poi2.name}"
@@ -466,7 +464,6 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
         ret = {}
 
         for p in poigen:
-
             if poieval is None:
                 poieval_p = asarray(p)
             else:

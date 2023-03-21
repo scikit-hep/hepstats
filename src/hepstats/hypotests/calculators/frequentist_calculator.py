@@ -170,7 +170,6 @@ class FrequentistCalculator(ToysCalculator):
         return ret
 
     def _pvalue_(self, poinull, poialt, qtilde, onesided, onesideddiscovery):
-
         qobs = self.qobs(
             poinull,
             onesided=onesided,
@@ -213,7 +212,6 @@ class FrequentistCalculator(ToysCalculator):
     def _expected_pvalue_(
         self, poinull, poialt, nsigma, CLs, onesided, onesideddiscovery, qtilde
     ):
-
         ps = {
             ns: {"p_clsb": np.empty(len(poinull)), "p_clb": np.empty(len(poinull))}
             for ns in nsigma
@@ -237,7 +235,6 @@ class FrequentistCalculator(ToysCalculator):
         filter_nan = lambda q: q[~(np.isnan(q) | np.isinf(q))]
 
         for i, p in enumerate(poinull):
-
             qaltdist_p = filter_nan(qaltdist[p])
             lqaltdist = len(qaltdist_p)
 

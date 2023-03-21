@@ -7,7 +7,6 @@ answer_dir = os.path.dirname(hepstats.__file__) + "/../../tests/modeling/data"
 
 
 def test_bayesian_blocks(cmdopt, data_gen):
-
     be1 = bayesian_blocks(data_gen[0], p0=0.05)
     be2 = bayesian_blocks(data_gen[0], gamma=0.1)
     be3 = bayesian_blocks(data_gen[0], weights=data_gen[2])
