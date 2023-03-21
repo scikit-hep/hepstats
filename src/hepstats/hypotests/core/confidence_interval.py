@@ -141,7 +141,6 @@ class ConfidenceInterval(BaseTest):
                 bands["lower"] = 0.0
 
         if printlevel > 0:
-
             msg = f"\nConfidence interval on {poinull.name}:\n"
             msg += f"\t{bands['lower']} < {poinull.name} < {bands['upper']} at {(1-alpha)*100:.1f}% C.L."
             print(msg)

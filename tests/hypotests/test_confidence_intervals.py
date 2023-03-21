@@ -89,7 +89,6 @@ def test_with_gauss_exp_example(create_loss, calculator, nbins):
 
 
 def test_with_gauss_fluctuations():
-
     x_true = -2.0
 
     minimizer = Minuit()
@@ -125,7 +124,6 @@ def test_with_gauss_fluctuations():
 @pytest.mark.parametrize("n", [0.5])
 @pytest.mark.parametrize("min_x", [0, -10])
 def test_with_gauss_qtilde(n, min_x):
-
     sigma_x = 0.032
 
     minimizer = Minuit()

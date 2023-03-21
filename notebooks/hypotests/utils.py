@@ -145,7 +145,6 @@ def plotlimit(ul, alpha=0.05, CLs=True, ax=None):
 
 
 def one_minus_cl_plot(x, pvalues, alpha=[0.32], ax=None):
-
     if ax is None:
         ax = plt.gca()
 

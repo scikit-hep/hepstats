@@ -70,7 +70,6 @@ def test_constructors():
 
 
 def test_toyresult_attributes():
-
     _, (_, poigen, poieval) = create_loss()
     tr = ToyResult(poigen, poieval)
 
@@ -95,7 +94,6 @@ def test_toyresult_attributes():
 
 
 def test_toymanager_attributes():
-
     loss, (Nsig, poigen, poieval) = create_loss()
 
     tm = ToysManager.from_yaml(

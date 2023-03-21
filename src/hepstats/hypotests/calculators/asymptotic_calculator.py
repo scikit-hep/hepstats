@@ -537,7 +537,6 @@ class AsymptoticCalculator(BaseCalculator):
         return palt
 
     def _pvalue_(self, poinull, poialt, qtilde, onesided, onesideddiscovery):
-
         qobs = self.qobs(
             poinull,
             onesided=onesided,
@@ -579,7 +578,6 @@ class AsymptoticCalculator(BaseCalculator):
     def _expected_pvalue_(
         self, poinull, poialt, nsigma, CLs, onesided, onesideddiscovery, qtilde
     ):
-
         qalt = self.qalt(
             poinull, poialt, onesided=onesided, onesideddiscovery=onesideddiscovery
         )
