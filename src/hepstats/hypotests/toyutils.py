@@ -283,7 +283,8 @@ class ToysManager(ToysObject):
                     param_dict = next(samples)
 
                 with ExitStack() as stack:
-                    for param, value in param_dict:
+                    for param in param_dict:
+                        value = param_dict[param]
                         stack.enter_context(param.set_value(value))
 
                     for minimize_trial in range(2):
