@@ -70,7 +70,7 @@ def test_base_calculator(calculator, make2d, nbins, constraint):
         if nbins is not None:
             pytest.skip("AsymptoticOld does not support binned")
 
-        class calculator(AsymptoticCalculator):
+        class calculator(AsymptoticCalculator):  # we disable the converter
             UNBINNED_TO_BINNED_LOSS = {}
 
         assert calculator is not AsymptoticCalculator, "Must not be the same"
