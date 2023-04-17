@@ -28,8 +28,8 @@ def create_loss(constraint=False, nbins=None, make2d=False):
     data = zfit.data.Data.from_numpy(obs=obs.with_binning(None), array=array1)
     if nbins[0] is not None:
         data = data.to_binned(obs)
-    mean = zfit.Parameter("mu", true_mu)
-    sigma = zfit.Parameter("sigma", true_sigma)
+    mean = zfit.Parameter("mu", true_mu, true_mu - 2, true_mu + 2)
+    sigma = zfit.Parameter("sigma", true_sigma, 0.01, 1.0)
     model = zfit.pdf.Gauss(obs=obs1.with_binning(None), mu=mean, sigma=sigma)
     if make2d:
         model2 = zfit.pdf.Gauss(obs=obs2.with_binning(None), mu=mean, sigma=sigma)
@@ -57,7 +57,7 @@ def create_loss(constraint=False, nbins=None, make2d=False):
 @pytest.mark.parametrize("make2d", [False, True], ids=["1d", "2d"])
 @pytest.mark.parametrize(
     "nbins",
-    [None, [10, 12], [5, 50]],
+    [None, [10, 13], [9, 50]],
     ids=lambda x: f"Binning {x}" if x is not None else "Unbinned",
 )
 @pytest.mark.parametrize(
