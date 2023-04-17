@@ -1,13 +1,14 @@
 from __future__ import annotations
 
-import numpy as np
-from typing import Any
 import warnings
+from typing import Any
 
-from ..utils import eval_pdf
-from ..utils.fit.api_check import is_valid_pdf
+import numpy as np
+
 from .exceptions import ModelNotFittedToData
 from .warnings import AboveToleranceWarning
+from ..utils import eval_pdf
+from ..utils.fit.api_check import is_valid_pdf
 
 
 def is_sum_of_extended_pdfs(model) -> bool:

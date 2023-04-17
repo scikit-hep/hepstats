@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+
 import numpy as np
 from scipy.stats import norm
-from typing import Union, Optional
 
 from .basecalculator import ToysCalculator
-from ...utils import base_sampler, base_sample
 from ..parameters import POI, POIarray
+from ...utils import base_sampler, base_sample
 
 
 class FrequentistCalculator(ToysCalculator):

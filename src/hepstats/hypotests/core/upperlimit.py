@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from scipy import interpolate
 import numpy as np
-from typing import Union
+from scipy import interpolate
 
 from .basetest import BaseTest
 from ..calculators.basecalculator import BaseCalculator
-from ..parameters import POI, POIarray
 from ..exceptions import POIRangeError
+from ..parameters import POI, POIarray
 
 
 class UpperLimit(BaseTest):

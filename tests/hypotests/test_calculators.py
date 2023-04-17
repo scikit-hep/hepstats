@@ -1,15 +1,13 @@
 #!/usr/bin/python
-import copy
 
-import pytest
 import numpy as np
-
+import pytest
 import zfit
 from zfit.loss import UnbinnedNLL
 from zfit.minimize import Minuit
 
-from hepstats.hypotests.calculators.basecalculator import BaseCalculator
 from hepstats.hypotests.calculators import AsymptoticCalculator, FrequentistCalculator
+from hepstats.hypotests.calculators.basecalculator import BaseCalculator
 from hepstats.hypotests.parameters import POI, POIarray
 from hepstats.utils.fit.api_check import is_valid_loss, is_valid_data
 
@@ -30,25 +28,24 @@ def create_loss(constraint=False, nbins=None, make2d=False):
     data = zfit.data.Data.from_numpy(obs=obs.with_binning(None), array=array1)
     if nbins[0] is not None:
         data = data.to_binned(obs)
-    mean = zfit.Parameter("mu", true_mu)
-    sigma = zfit.Parameter("sigma", true_sigma)
+    mean = zfit.Parameter("mu", true_mu, true_mu - 2, true_mu + 2)
+    sigma = zfit.Parameter("sigma", true_sigma, 0.01, 1.0)
     model = zfit.pdf.Gauss(obs=obs1.with_binning(None), mu=mean, sigma=sigma)
     if make2d:
         model2 = zfit.pdf.Gauss(obs=obs2.with_binning(None), mu=mean, sigma=sigma)
         model = model * model2
     if nbins[0] is not None:
         model = zfit.pdf.BinnedFromUnbinnedPDF(model, space=obs)
-    if nbins[0] is None:
-        loss = UnbinnedNLL(model=model, data=data)
-    else:
-        loss = zfit.loss.BinnedNLL(model=model, data=data)
-
     if constraint:
-        loss.add_constraints(
-            zfit.constraint.GaussianConstraint(
-                params=mean, observation=true_mu, uncertainty=0.01
-            )
+        constraint = zfit.constraint.GaussianConstraint(
+            params=mean, observation=true_mu, uncertainty=0.01
         )
+    else:
+        constraint = None
+    if nbins[0] is None:
+        loss = UnbinnedNLL(model=model, data=data, constraints=constraint)
+    else:
+        loss = zfit.loss.BinnedNLL(model=model, data=data, constraints=constraint)
 
     return loss, (mean, sigma)
 
@@ -60,17 +57,20 @@ def create_loss(constraint=False, nbins=None, make2d=False):
 @pytest.mark.parametrize("make2d", [False, True], ids=["1d", "2d"])
 @pytest.mark.parametrize(
     "nbins",
-    [None, [10, 12], [5, 50]],
+    [None, [10, 13], [9, 50]],
     ids=lambda x: f"Binning {x}" if x is not None else "Unbinned",
 )
-def test_base_calculator(calculator, make2d, nbins):
+@pytest.mark.parametrize(
+    "constraint", [False, True], ids=["No constraint", "With constraint"]
+)
+def test_base_calculator(calculator, make2d, nbins, constraint):
     if calculator == "AsymptoticOld":
         if make2d:
             pytest.skip("AsymptoticOld does not support 2D")
         if nbins is not None:
             pytest.skip("AsymptoticOld does not support binned")
 
-        class calculator(AsymptoticCalculator):
+        class calculator(AsymptoticCalculator):  # we disable the converter
             UNBINNED_TO_BINNED_LOSS = {}
 
         assert calculator is not AsymptoticCalculator, "Must not be the same"
@@ -78,7 +78,7 @@ def test_base_calculator(calculator, make2d, nbins):
     with pytest.raises(TypeError):
         calculator()
 
-    loss, (mean, sigma) = create_loss(make2d=make2d, nbins=nbins)
+    loss, (mean, sigma) = create_loss(constraint=constraint, make2d=make2d, nbins=nbins)
 
     with pytest.raises(ValueError):
         calculator("loss", Minuit())

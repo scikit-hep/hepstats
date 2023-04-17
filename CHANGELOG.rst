@@ -4,6 +4,8 @@ Changelog
 master
 ******
 
+* fix toy generation with constraints
+
 Version 0.6.0
 *************
 
