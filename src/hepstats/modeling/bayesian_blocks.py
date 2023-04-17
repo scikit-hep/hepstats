@@ -14,9 +14,9 @@ bayesian blocks python implementation found in astroML :cite:`VanderPlas_2012`.
 from __future__ import annotations
 
 from collections.abc import Iterable
+
 import numpy as np
 import pandas as pd
-from typing import Optional, Union
 
 
 class Prior:

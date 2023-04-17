@@ -8,8 +8,8 @@ Module defining the parameter of interest classes, currently includes:
 from __future__ import annotations
 
 from collections.abc import Collection
+
 import numpy as np
-from typing import Union
 
 from ..utils.fit.api_check import is_valid_parameter
 

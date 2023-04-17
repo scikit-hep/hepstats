@@ -13,3 +13,5 @@ dist/
 /pip-wheel-metadata
 /docs/_build/*
 /docs/source/*
+/_build/**
+/.idea/**

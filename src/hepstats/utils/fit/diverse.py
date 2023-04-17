@@ -1,7 +1,6 @@
 from contextlib import ExitStack, contextmanager
-import numpy as np
 
-from .api_check import is_valid_pdf
+import numpy as np
 
 
 def get_ndims(dataset):

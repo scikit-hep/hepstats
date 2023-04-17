@@ -1,18 +1,18 @@
 from __future__ import annotations
 
-from collections.abc import Callable
-import asdf
 import os
-import numpy as np
 import warnings
+from collections.abc import Callable
 from contextlib import ExitStack
-from typing import Any
+
+import asdf
+import numpy as np
 from tqdm.auto import tqdm
 
-from .parameters import POI, POIarray
 from .exceptions import ParameterNotFound, FormatError
-from ..utils import pll, base_sampler, base_sample
 from .hypotests_object import ToysObject
+from .parameters import POI, POIarray
+from ..utils import pll, base_sampler, base_sample
 
 """
 Module defining the classes to perform and store the results of toy experiments.
@@ -106,7 +106,7 @@ class ToyResult:
             nll_bestfit: NLL evaluated at the best fitted values of the POI
             nlls: NLL evaluated at the best fitted values of the POI
         """
-        if not all(k in nlls.keys() for k in self.poieval):
+        if any(k not in nlls for k in self.poieval):
             missing_keys = [k for k in self.poieval if k not in nlls.keys()]
             raise ValueError(f"NLLs values for {missing_keys} are missing.")
 
@@ -269,7 +269,7 @@ class ToysManager(ToysObject):
         for i in range(ntoys):
             ntrials += 1
             converged = False
-            while converged is False:
+            while not converged:
                 try:
                     param_dict = next(samples)
                 except StopIteration:
@@ -283,10 +283,10 @@ class ToysManager(ToysObject):
                     param_dict = next(samples)
 
                 with ExitStack() as stack:
-                    for param, value in param_dict:
+                    for param, value in param_dict.items():
                         stack.enter_context(param.set_value(value))
 
-                    for minimize_trial in range(2):
+                    for _ in range(2):
                         try:
                             minimum = minimizer.minimize(loss=toys_loss)
                             converged = minimum.converged
@@ -341,7 +341,7 @@ class ToysManager(ToysObject):
 
     def toyresults_to_dict(self) -> list[dict]:
         """
-        Returns a list of all the toy results converted into dictionnaries.
+        Returns a list of all the toy results converted into dictionaries.
         """
         return [v.to_dict() for v in self.values()]
 
