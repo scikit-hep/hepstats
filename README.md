@@ -19,6 +19,9 @@
 hepstats is a library for statistical inference aiming to cover the needs High Energy Physics.
 It is part of the [Scikit-HEP project](https://scikit-hep.org/).
 
+**Questions**: for usage questions, use [StackOverflow with the hepstats tag](https://stackoverflow.com/questions/ask?tags=hepstats)
+**Bugs and odd behavior**: open [an issue with hepstats](https://github.com/scikit-hep/hepstats/issues/new)
+
 ## Installation
 
 Install `hepstats` like any other Python package:
