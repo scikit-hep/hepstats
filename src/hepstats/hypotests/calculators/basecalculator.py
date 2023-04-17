@@ -454,7 +454,8 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
             hypothesis: `null` or `alternative`.
         """
 
-        assert hypothesis in ["null", "alternative"]
+        if hypothesis not in {"null", "alternative"}:
+            raise ValueError("hypothesis must be 'null' or 'alternative'.")
 
         if hypothesis == "null":
             ntoys = self.ntoysnull
