@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 import math
-from typing import Union, Any, Optional, List
+import warnings
+from typing import Any
+
 import numpy as np
 from scipy.stats import norm
-import warnings
 
 from .basecalculator import BaseCalculator
-from ...utils import eval_pdf, array2dataset, pll, get_value, set_values
 from ..parameters import POI, POIarray
+from ...utils import eval_pdf, array2dataset, pll, get_value, set_values
 from ...utils.fit.api_check import is_valid_fitresult, is_valid_loss
 from ...utils.fit.diverse import get_ndims
 

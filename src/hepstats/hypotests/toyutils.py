@@ -1,18 +1,18 @@
 from __future__ import annotations
 
-from collections.abc import Callable
-import asdf
 import os
-import numpy as np
 import warnings
+from collections.abc import Callable
 from contextlib import ExitStack
-from typing import Any
+
+import asdf
+import numpy as np
 from tqdm.auto import tqdm
 
-from .parameters import POI, POIarray
 from .exceptions import ParameterNotFound, FormatError
-from ..utils import pll, base_sampler, base_sample
 from .hypotests_object import ToysObject
+from .parameters import POI, POIarray
+from ..utils import pll, base_sampler, base_sample
 
 """
 Module defining the classes to perform and store the results of toy experiments.

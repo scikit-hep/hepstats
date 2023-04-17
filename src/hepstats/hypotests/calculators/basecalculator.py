@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from typing import Any
 
-#!/usr/bin/python
-from typing import Union, Optional, Any
 import numpy as np
 
 from ..hypotests_object import HypotestsObject
 from ..parameters import POI, POIarray, asarray
-from ...utils import pll, base_sampler, base_sample
 from ..toyutils import ToysManager, ToyResult
+from ...utils import pll, base_sampler, base_sample
 
 
 class BaseCalculator(HypotestsObject):
