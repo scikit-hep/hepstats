@@ -4,6 +4,11 @@ Changelog
 master
 ******
 
+Version 0.7.0
+*************
+
+* Add support for Python 3.11, drop support for Python 3.7
+
 Version 0.6.1
 *************
 

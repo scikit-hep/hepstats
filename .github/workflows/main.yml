@@ -31,19 +31,19 @@ jobs:
         os:
           - ubuntu-latest
         python-version:
-          - "3.7"
           - "3.8"
           - "3.9"
           - "3.10"
+          - "3.11"
         include:
           - os: windows-latest
-            python-version: "3.7"
+            python-version: "3.8"
           - os: windows-latest
-            python-version: "3.10"
+            python-version: "3.11"
           - os: macos-latest
-            python-version: "3.7"
+            python-version: "3.8"
           - os: macos-latest
-            python-version: "3.10"
+            python-version: "3.11"
     name: Check Python ${{ matrix.python-version }} ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -63,7 +63,7 @@ jobs:
         run: python -m pytest --doctest-modules --cov=hepstats --cov-report=xml -n4
 
       - name: Upload coverage to Codecov
-        if: matrix.python-version == '3.10' && matrix.os == 'ubuntu-latest'
+        if: matrix.python-version == '3.11' && matrix.os == 'ubuntu-latest'
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}  # technically not needed, but prevents failures: https://community.codecov.com/t/upload-issues-unable-to-locate-build-via-github-actions-api/3954
@@ -97,7 +97,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.11"
       - name: Install dependencies
         run: |
           pip install -U -q -e .[docs]
