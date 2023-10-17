@@ -27,7 +27,7 @@ repos:
         args: [ --update, --no-build-isolation ]
         additional_dependencies: [ setuptools-scm ]
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.5.1
+    rev: v1.6.0
     hooks:
       - id: mypy
         files: src
@@ -82,9 +82,10 @@ repos:
         args: [ '--futures=true' ]
 
   - repo: https://github.com/shssoichiro/oxipng
-    rev: v8.0.0
+    rev: v9.0.0
     hooks:
       - id: oxipng
+        args: ["--opt", "max", "--strip", "safe", "-f", "0,1,2,3", "--preserve"]
 
   - repo: https://github.com/dannysepler/rm_unneeded_f_str
     rev: v0.2.0
