@@ -16,6 +16,7 @@ with hepstats.
 The `zfit` API is currently the standard fitting API in hepstats.
 
 """
+
 import warnings
 
 import uhi.typing.plottable
