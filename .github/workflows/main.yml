@@ -60,7 +60,7 @@ jobs:
 
 
       - name: Test package
-        run: python -m pytest --doctest-modules --cov=hepstats --cov-report=xml -n4
+        run: python -m pytest --doctest-modules --cov=hepstats --cov-report=xml -n3
 
       - name: Upload coverage to Codecov
         if: matrix.python-version == '3.11' && matrix.os == 'ubuntu-latest'
