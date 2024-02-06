@@ -72,11 +72,11 @@ jobs:
 
 
       - name: Test package
-        run: python -m pytest --doctest-modules --cov=hepstats --cov-report=xml -n4
+        run: python -m pytest --doctest-modules --cov=hepstats --cov-report=xml -n3
 
       - name: Upload coverage to Codecov
         if: matrix.python-version == '3.11' && matrix.os == 'ubuntu-latest'
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}  # technically not needed, but prevents failures: https://community.codecov.com/t/upload-issues-unable-to-locate-build-via-github-actions-api/3954
           file: ./coverage.xml
