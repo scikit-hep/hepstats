@@ -46,6 +46,7 @@ def eval_pdf(model, x, params=None, allow_extended=False):
 
 def pll(minimizer, loss, pois, init=None) -> float:
     """Compute minimum profile likelihood for fixed given parameters values."""
+    del init  # unused currently
 
     with ExitStack() as stack:
         for p in pois:
