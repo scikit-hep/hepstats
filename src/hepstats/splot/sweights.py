@@ -5,10 +5,10 @@ from typing import Any
 
 import numpy as np
 
-from .exceptions import ModelNotFittedToData
-from .warnings import AboveToleranceWarning
 from ..utils import eval_pdf
 from ..utils.fit.api_check import is_valid_pdf
+from .exceptions import ModelNotFittedToData
+from .warnings import AboveToleranceWarning
 
 
 def is_sum_of_extended_pdfs(model) -> bool:
@@ -93,9 +93,11 @@ def compute_sweights(model, x: np.ndarray) -> dict[Any, np.ndarray]:
     """
 
     if not is_valid_pdf(model):
-        raise ValueError(f"{model} is not a valid pdf!")
+        msg = f"{model} is not a valid pdf!"
+        raise ValueError(msg)
     if not is_sum_of_extended_pdfs(model):
-        raise ValueError(f"Input model, {model}, should be a sum of extended pdfs!")
+        msg = f"Input model, {model}, should be a sum of extended pdfs!"
+        raise ValueError(msg)
 
     models = model.get_models()
     yields = [m.get_yield() for m in models]
@@ -126,7 +128,7 @@ def compute_sweights(model, x: np.ndarray) -> dict[Any, np.ndarray]:
     if not np.allclose(MLSR, 1, atol=atol_warning):
         msg = msg_fn(atol_warning)
         msg += " If the fit to the data is good please ignore this warning."
-        warnings.warn(msg, AboveToleranceWarning)
+        warnings.warn(msg, AboveToleranceWarning, stacklevel=2)
 
     Vinv = (pN).T.dot(pN)
     V = np.linalg.inv(Vinv)

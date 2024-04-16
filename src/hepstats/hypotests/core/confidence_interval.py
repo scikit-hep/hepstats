@@ -5,19 +5,17 @@ import warnings
 import numpy as np
 from scipy import interpolate
 
-from .basetest import BaseTest
 from ..calculators import FrequentistCalculator
 from ..calculators.basecalculator import BaseCalculator
 from ..exceptions import POIRangeError
 from ..parameters import POIarray
+from .basetest import BaseTest
 
 
 class ConfidenceInterval(BaseTest):
     """Class for confidence interval calculation."""
 
-    def __init__(
-        self, calculator: BaseCalculator, poinull: POIarray, qtilde: bool = False
-    ):
+    def __init__(self, calculator: BaseCalculator, poinull: POIarray, qtilde: bool = False):
         """
         Args:
             calculator: calculator to use for computing the pvalues.
@@ -82,9 +80,7 @@ class ConfidenceInterval(BaseTest):
         """
 
         poialt = None
-        return self.calculator.pvalue(
-            poinull=self.poinull, poialt=poialt, qtilde=self.qtilde, onesided=False
-        )[0]
+        return self.calculator.pvalue(poinull=self.poinull, poialt=poialt, qtilde=self.qtilde, onesided=False)[0]
 
     def interval(self, alpha: float = 0.32, printlevel: int = 1) -> dict[str, float]:
         """
@@ -118,7 +114,7 @@ class ConfidenceInterval(BaseTest):
             msg_warn = "Multiple roots have been founds."
             if isinstance(self.calculator, FrequentistCalculator):
                 msg_warn += " Try to increase the number of toys, 'ntoysnull', to reduce fluctuations."
-            warnings.warn(msg_warn)
+            warnings.warn(msg_warn, stacklevel=2)
 
         lower_roots = roots[roots < observed]
         upper_roots = roots[roots > observed]
@@ -126,8 +122,7 @@ class ConfidenceInterval(BaseTest):
         if upper_roots.size == 0:
             msg = "Upper" + msg + " Try to increase the maximum POI value."
             raise POIRangeError(msg)
-        else:
-            bands["upper"] = max(upper_roots)
+        bands["upper"] = max(upper_roots)
 
         if lower_roots.size == 0:
             if self.qtilde:
@@ -144,6 +139,5 @@ class ConfidenceInterval(BaseTest):
         if printlevel > 0:
             msg = f"\nConfidence interval on {poinull.name}:\n"
             msg += f"\t{bands['lower']} < {poinull.name} < {bands['upper']} at {(1 - alpha) * 100:.1f}% C.L."
-            print(msg)
 
         return bands

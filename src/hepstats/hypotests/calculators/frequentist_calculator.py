@@ -5,9 +5,9 @@ from collections.abc import Callable
 import numpy as np
 from scipy.stats import norm
 
-from .basecalculator import ToysCalculator
+from ...utils import base_sample, base_sampler
 from ..parameters import POI, POIarray
-from ...utils import base_sampler, base_sample
+from .basecalculator import ToysCalculator
 
 
 class FrequentistCalculator(ToysCalculator):
@@ -179,8 +179,7 @@ class FrequentistCalculator(ToysCalculator):
 
         def compute_pvalue(qdist, qobs):
             qdist = qdist[~(np.isnan(qdist) | np.isinf(qdist))]
-            p = len(qdist[qdist >= qobs]) / len(qdist)
-            return p
+            return len(qdist[qdist >= qobs]) / len(qdist)
 
         qnulldist = self.qnull(
             poinull=poinull,
@@ -209,13 +208,8 @@ class FrequentistCalculator(ToysCalculator):
 
         return pnull, palt
 
-    def _expected_pvalue_(
-        self, poinull, poialt, nsigma, CLs, onesided, onesideddiscovery, qtilde
-    ):
-        ps = {
-            ns: {"p_clsb": np.empty(len(poinull)), "p_clb": np.empty(len(poinull))}
-            for ns in nsigma
-        }
+    def _expected_pvalue_(self, poinull, poialt, nsigma, CLs, onesided, onesideddiscovery, qtilde):
+        ps = {ns: {"p_clsb": np.empty(len(poinull)), "p_clb": np.empty(len(poinull))} for ns in nsigma}
 
         qnulldist = self.qnull(
             poinull=poinull,

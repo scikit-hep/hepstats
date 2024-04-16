@@ -3,10 +3,10 @@ from __future__ import annotations
 import numpy as np
 from scipy import interpolate
 
-from .basetest import BaseTest
 from ..calculators.basecalculator import BaseCalculator
 from ..exceptions import POIRangeError
 from ..parameters import POI, POIarray
+from .basetest import BaseTest
 
 
 class UpperLimit(BaseTest):
@@ -92,9 +92,7 @@ class UpperLimit(BaseTest):
         """
         pvalue_func = self.calculator.pvalue
 
-        pnull, palt = pvalue_func(
-            poinull=self.poinull, poialt=self.poialt, qtilde=self.qtilde, onesided=True
-        )
+        pnull, palt = pvalue_func(poinull=self.poinull, poialt=self.poialt, qtilde=self.qtilde, onesided=True)
 
         pvalues = {"clsb": pnull, "clb": palt}
 
@@ -121,9 +119,7 @@ class UpperLimit(BaseTest):
 
         return pvalues
 
-    def upperlimit(
-        self, alpha: float = 0.05, CLs: bool = True, printlevel: int = 1
-    ) -> dict[str, float]:
+    def upperlimit(self, alpha: float = 0.05, CLs: bool = True, printlevel: int = 1) -> dict[str, float]:
         """
         Returns the upper limit of the parameter of interest.
 
@@ -144,14 +140,9 @@ class UpperLimit(BaseTest):
         bestfit = self.calculator.bestfit.params[poinull.parameter]["value"]
         filter = poinull.values >= bestfit
 
-        if CLs:
-            observed_key = "cls"
-        else:
-            observed_key = "clsb"
+        observed_key = "cls" if CLs else "clsb"
 
-        to_interpolate = [observed_key] + [
-            f"expected{i}" for i in ["", "_p1", "_m1", "_p2", "_m2"]
-        ]
+        to_interpolate = [observed_key] + [f"expected{i}" for i in ["", "_p1", "_m1", "_p2", "_m2"]]
 
         limits: dict = {}
 
@@ -170,9 +161,9 @@ class UpperLimit(BaseTest):
                     msg = f"The minimum of the scanned p-values is {min(pvalues)} which is larger than the"
                     msg += f" confidence level alpha = {alpha}. Try to increase the maximum POI value."
                     raise POIRangeError(msg)
-                else:
-                    limits[k] = None
-                    continue
+
+                limits[k] = None
+                continue
 
             tck = interpolate.splrep(values, pvalues - alpha, s=0)
             root = interpolate.sproot(tck)
@@ -186,12 +177,7 @@ class UpperLimit(BaseTest):
                 limits[k] = None
 
         if printlevel > 0:
-            print(f"\nObserved upper limit: {poinull.name} = {limits['observed']}")
-            print(f"Expected upper limit: {poinull.name} = {limits['expected']}")
             for sigma in ["+1", "-1", "+2", "-2"]:
-                key = sigma.replace("+", "p").replace("-", "m")
-                print(
-                    f"Expected upper limit {sigma} sigma: {poinull.name} = {limits[f'expected_{key}']}"
-                )
+                sigma.replace("+", "p").replace("-", "m")
 
         return limits

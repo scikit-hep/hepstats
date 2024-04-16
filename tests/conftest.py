@@ -1,4 +1,5 @@
-#!/usr/bin/python
+from __future__ import annotations
+
 import numpy as np
 import pytest
 
@@ -14,7 +15,7 @@ def pytest_addoption(parser):
     )
 
 
-@pytest.fixture
+@pytest.fixture()
 def cmdopt(request):
     return request.config.getoption("--cmdopt")
 
@@ -30,7 +31,7 @@ def data_gen():
 
 # TODO: manually ported, use pre-made: https://github.com/zfit/zfit-development/issues/73
 @pytest.fixture(autouse=True)
-def setup_teardown():
+def _setup_teardown():
     import zfit
 
     old_chunksize = zfit.run.chunking.max_n_points

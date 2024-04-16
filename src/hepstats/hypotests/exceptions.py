@@ -2,6 +2,8 @@
 Specific exceptions for the `hypotests` submodule
 """
 
+from __future__ import annotations
+
 
 class POIRangeError(Exception):
     """Exception class non adequate POI scan range"""

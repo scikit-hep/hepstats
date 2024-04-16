@@ -1,18 +1,18 @@
 from __future__ import annotations
 
-import os
 import warnings
 from collections.abc import Callable
 from contextlib import ExitStack
+from pathlib import Path
 
 import asdf
 import numpy as np
 from tqdm.auto import tqdm
 
-from .exceptions import ParameterNotFound, FormatError
+from ..utils import base_sample, base_sampler, pll
+from .exceptions import FormatError, ParameterNotFound
 from .hypotests_object import ToysObject
 from .parameters import POI, POIarray
-from ..utils import pll, base_sampler, base_sample
 
 """
 Module defining the classes to perform and store the results of toy experiments.
@@ -41,11 +41,11 @@ class ToyResult:
         """
 
         if not isinstance(poigen, POI):
-            raise TypeError("A `hypotests.parameters.POI` is required for poigen.")
+            msg = "A `hypotests.parameters.POI` is required for poigen."
+            raise TypeError(msg)
         if not isinstance(poieval, POIarray):
-            raise TypeError(
-                "A `hypotests.parameters.POIarray` is required for poieval."
-            )
+            msg = "A `hypotests.parameters.POIarray` is required for poieval."
+            raise TypeError(msg)
 
         self._poigen = poigen
         self._bestfit = np.array([])
@@ -95,9 +95,7 @@ class ToyResult:
         """
         return len(self.bestfit)
 
-    def add_entries(
-        self, bestfit: np.ndarray, nll_bestfit: np.ndarray, nlls: dict[POI, np.ndarray]
-    ):
+    def add_entries(self, bestfit: np.ndarray, nll_bestfit: np.ndarray, nlls: dict[POI, np.ndarray]):
         """
         Add new result entries.
 
@@ -107,8 +105,9 @@ class ToyResult:
             nlls: NLL evaluated at the best fitted values of the POI
         """
         if any(k not in nlls for k in self.poieval):
-            missing_keys = [k for k in self.poieval if k not in nlls.keys()]
-            raise ValueError(f"NLLs values for {missing_keys} are missing.")
+            missing_keys = [k for k in self.poieval if k not in nlls]
+            msg = f"NLLs values for {missing_keys} are missing."
+            raise ValueError(msg)
 
         nentries = bestfit.size
         assert nll_bestfit.size == nentries
@@ -164,9 +163,7 @@ class ToysManager(ToysObject):
                :func:`hepstats.utils.fit.sampling.base_sample`.
         """
 
-        super().__init__(
-            input=input, minimizer=minimizer, sampler=sampler, sample=sample
-        )
+        super().__init__(input=input, minimizer=minimizer, sampler=sampler, sample=sample)
         self._toys = {}
 
     def get_toyresult(self, poigen: POI, poieval: POIarray) -> ToyResult:
@@ -199,7 +196,8 @@ class ToysManager(ToysObject):
             toy: the toy result to add
         """
         if not isinstance(toy, ToyResult):
-            raise TypeError("A `hypotests.toyutils.ToyResult` is required for toy.")
+            msg = "A `hypotests.toyutils.ToyResult` is required for toy."
+            raise TypeError(msg)
 
         index = (toy.poigen, toy.poieval)
 
@@ -301,7 +299,7 @@ class ToysManager(ToysObject):
                     nfailures += 1
                     if nfailures > 0.15 * ntrials and ntrials > 10:
                         msg = f"{nfailures} out of {ntrials} fits failed or didn't converge."
-                        warnings.warn(msg, FitFailuresWarning)
+                        warnings.warn(msg, FitFailuresWarning, stacklevel=2)
                     continue
 
                 bestfit[i] = minimum.params[param]["value"]
@@ -352,10 +350,7 @@ class ToysManager(ToysObject):
         Args:
             filename: the yaml file name.
         """
-        if os.path.isfile(filename):
-            tree = asdf.open(filename).tree
-        else:
-            tree = {}
+        tree = asdf.open(filename).tree if Path(filename).is_file() else {}
 
         tree["toys"] = self.toyresults_to_dict()
         af = asdf.AsdfFile(tree)
@@ -374,9 +369,8 @@ class ToysManager(ToysObject):
             try:
                 toys = asdf_file.tree["toys"]
             except KeyError as error:
-                raise FormatError(
-                    f"The key `toys` is not found in {filename}, not a valid toy file."
-                ) from error
+                msg = f"The key `toys` is not found in {filename}, not a valid toy file."
+                raise FormatError(msg) from error
 
             for t in toys:
                 poiparam = None
@@ -385,9 +379,8 @@ class ToysManager(ToysObject):
                         poiparam = p
 
                 if poiparam is None:
-                    raise ParameterNotFound(
-                        f"Parameter with name {t['poi']} is not found."
-                    )
+                    msg = f"Parameter with name {t['poi']} is not found."
+                    raise ParameterNotFound(msg)
 
                 poigen = POI(poiparam, t["genvalue"])
                 poieval = POIarray(poiparam, np.asarray(t["evalvalues"]))
