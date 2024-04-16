@@ -2,7 +2,10 @@ Changelog
 =========
 
 main
-******
+**************
+
+Version 0.8.0
+**************
 
 * Add support for Python 3.12, drop support for Python 3.8
 * Improved support for zfit 0.20+
