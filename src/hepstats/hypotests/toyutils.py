@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import warnings
 from collections.abc import Callable
-from contextlib import ExitStack
 from pathlib import Path
 
 import asdf
@@ -283,7 +282,6 @@ class ToysManager(ToysObject):
                     param_dict = next(samples)
 
                 with zfit.param.set_values(param_dict):
-
                     for _ in range(2):
                         try:
                             minimum = minimizer.minimize(
@@ -304,7 +302,8 @@ class ToysManager(ToysObject):
                         warnings.warn(msg, FitFailuresWarning, stacklevel=2)
                     continue
                 if minimum is None:
-                    raise RuntimeError("No minimum found.")
+                    msg = "No minimum found."
+                    raise RuntimeError(msg)
                 bestfit[i] = minimum.params[param]["value"]
                 nll_bestfit[i] = pll(minimizer, toys_loss, POI(param, bestfit[i]))
 

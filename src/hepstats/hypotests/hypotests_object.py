@@ -4,10 +4,9 @@ import warnings
 
 import numpy as np
 
-from .parameters import POI
 from ..utils.fit import get_nevents, set_values_once
-from ..utils.fit.api_check import is_valid_data, is_valid_pdf
-from ..utils.fit.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
+from ..utils.fit.api_check import is_valid_data, is_valid_fitresult, is_valid_loss, is_valid_minimizer, is_valid_pdf
+from .parameters import POI
 
 
 class HypotestsObject:

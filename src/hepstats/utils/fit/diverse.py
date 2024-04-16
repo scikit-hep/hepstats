@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from contextlib import ExitStack, contextmanager, suppress
 
 import numpy as np
@@ -20,6 +22,7 @@ def set_values_once(params, values):
 
     for p, v in zip(params, values):
         p.set_value(v)
+    return None
 
 
 def eval_pdf(model, x, params=None, allow_extended=False):

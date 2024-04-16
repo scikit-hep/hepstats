@@ -57,10 +57,7 @@ def base_sample(samplers, ntoys, parameter=None, value=None, constraints=None):
                 continue
 
     for i in range(ntoys):
-        if parameter is None or value is None:
-            params = None
-        else:
-            params = {parameter: value}
+        params = None if parameter is None or value is None else {parameter: value}
 
         for s in samplers:
             s.resample(params=params)
