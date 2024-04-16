@@ -142,3 +142,46 @@ def test_counting_with_frequentist_calculator():
     pnull, significance = discovery_test.result()
 
     assert significance < 2
+
+
+def test_likelihood_ratio_fmin():
+    import numpy as np
+    import zfit
+    from zfit.loss import UnbinnedNLL
+    from zfit.minimize import Minuit
+    from hepstats.hypotests import Discovery, UpperLimit
+    from hepstats.hypotests.calculators import (AsymptoticCalculator,
+                                                FrequentistCalculator)
+    from hepstats.hypotests.parameters import POI, POIarray
+
+    Nsig = zfit.Parameter("Nsig", 40, -100., 100)
+    Nbkg = zfit.Parameter("Nbkg", 340, 0, 500)
+    Nobs = zfit.ComposedParameter("Nobs", lambda a, b: a + b, params=[Nsig, Nbkg])
+
+    from collections import OrderedDict
+    import tensorflow_probability as tfp
+    from zfit.models.dist_tfp import WrapDistribution
+    from zfit.util import ztyping
+
+
+    obs = zfit.Space('N', limits=(0, 800))
+    model = zfit.pdf.Poisson(obs=obs, lamb=Nobs)
+
+    n = 370
+    nbkg = 340
+
+    data = zfit.data.Data.from_numpy(obs=obs, array=np.array([n]))
+    Nbkg.set_value(nbkg)
+    Nbkg.floating = False
+
+    nll = UnbinnedNLL(model=model, data=data)
+    minimizer = Minuit(verbosity=0)
+    minimum = minimizer.minimize(loss=nll)
+
+    calculator = AsymptoticCalculator(nll, minimizer)
+    calculator.bestfit = minimum
+
+    discovery_test = Discovery(calculator, POI(Nsig, 0))
+    pnull, significance = discovery_test.result()
+    assert pytest.approx(pnull, abs=0.01) == 0.05
+    assert pytest.approx(significance, abs=0.1) == 1.6
