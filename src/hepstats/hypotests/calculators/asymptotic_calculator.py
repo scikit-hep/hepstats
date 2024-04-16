@@ -138,10 +138,8 @@ class AsymptoticCalculator(BaseCalculator):
         """
         if is_valid_fitresult(input):
             loss = input.loss
-            result = input
         elif is_valid_loss(input):
             loss = input
-            result = None
         else:
             raise ValueError("input must be a fitresult or a loss")
 

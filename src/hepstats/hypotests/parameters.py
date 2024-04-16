@@ -5,6 +5,7 @@ Module defining the parameter of interest classes, currently includes:
 * **POIarray**
 * **POI**
 """
+
 from __future__ import annotations
 
 from collections.abc import Collection

@@ -232,7 +232,8 @@ class FrequentistCalculator(ToysCalculator):
             qtilde=qtilde,
         )
 
-        filter_nan = lambda q: q[~(np.isnan(q) | np.isinf(q))]
+        def filter_nan(q):
+            return q[~(np.isnan(q) | np.isinf(q))]
 
         for i, p in enumerate(poinull):
             qaltdist_p = filter_nan(qaltdist[p])

@@ -1,9 +1,8 @@
 import os
 import pytest
 import numpy as np
-import tqdm
 import zfit
-from zfit.loss import ExtendedUnbinnedNLL, UnbinnedNLL
+from zfit.loss import UnbinnedNLL
 from zfit.minimize import Minuit
 
 from zfit.models.dist_tfp import WrapDistribution
@@ -115,7 +114,10 @@ class Poisson(WrapDistribution):
         """
         (lamb,) = self._check_input_params(lamb)
         params = OrderedDict((("lamb", lamb),))
-        dist_params = lambda: dict(rate=lamb.value())
+
+        def dist_params():
+            return dict(rate=lamb.value())
+
         distribution = tfp.distributions.Poisson
         super().__init__(
             distribution=distribution,

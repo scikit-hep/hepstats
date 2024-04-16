@@ -11,6 +11,7 @@ bayesian blocks python implementation found in astroML :cite:`VanderPlas_2012`.
 * Initial Examination in HEP context :cite:`Pollack:2017srh`
 
 """
+
 from __future__ import annotations
 
 from collections.abc import Iterable

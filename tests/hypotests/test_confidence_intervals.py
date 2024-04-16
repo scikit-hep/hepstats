@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import zfit
 import os
-from zfit.loss import ExtendedUnbinnedNLL, UnbinnedNLL, ExtendedBinnedNLL, BinnedNLL
+from zfit.loss import UnbinnedNLL
 from zfit.minimize import Minuit
 
 import hepstats

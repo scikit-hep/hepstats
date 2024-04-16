@@ -73,7 +73,7 @@ The background plus signal can then be fitted to the data.
 Parameters
 
 +--------+--------+---------------+-----------+
-| name   |  value |  minuit_hesse |  at limit |
+| name   |  value |  hesse |  at limit |
 +========+========+===============+===========+
 | Nsig   |  4.518 |  +/-     5.8  |  False    |
 +--------+--------+---------------+-----------+

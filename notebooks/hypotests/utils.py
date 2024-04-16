@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import zfit
 
 
 def pltdist(data, bins, bounds):
