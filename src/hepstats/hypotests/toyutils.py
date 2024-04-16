@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import warnings
 from collections.abc import Callable
-from contextlib import ExitStack
 from pathlib import Path
 
 import asdf
 import numpy as np
+import zfit.param
 from tqdm.auto import tqdm
 
 from ..utils import base_sample, base_sampler, pll
@@ -217,7 +217,7 @@ class ToysManager(ToysObject):
         except KeyError:
             return 0
 
-    def generate_and_fit_toys(
+    def generate_and_fit_toys(  # TODO PROFILE THIS
         self,
         ntoys: int,
         poigen: POI,
@@ -263,6 +263,7 @@ class ToysManager(ToysObject):
         ntrials = 0
 
         progressbar = tqdm(total=ntoys)
+        minimum = None
 
         for i in range(ntoys):
             ntrials += 1
@@ -280,13 +281,12 @@ class ToysManager(ToysObject):
                     )
                     param_dict = next(samples)
 
-                with ExitStack() as stack:
-                    for param, value in param_dict.items():
-                        stack.enter_context(param.set_value(value))
-
+                with zfit.param.set_values(param_dict):
                     for _ in range(2):
                         try:
-                            minimum = minimizer.minimize(loss=toys_loss)
+                            minimum = minimizer.minimize(
+                                loss=toys_loss
+                            )  # TODO: , init=minimum use previous minimum as starting point for parameter uncertainties
                             converged = minimum.converged
                             if converged:
                                 break
@@ -301,7 +301,9 @@ class ToysManager(ToysObject):
                         msg = f"{nfailures} out of {ntrials} fits failed or didn't converge."
                         warnings.warn(msg, FitFailuresWarning, stacklevel=2)
                     continue
-
+                if minimum is None:
+                    msg = "No minimum found."
+                    raise RuntimeError(msg)
                 bestfit[i] = minimum.params[param]["value"]
                 nll_bestfit[i] = pll(minimizer, toys_loss, POI(param, bestfit[i]))
 
