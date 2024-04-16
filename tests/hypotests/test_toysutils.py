@@ -127,7 +127,7 @@ def test_toymanager_attributes():
         == tmc.get_toyresult(poigen, poieval).ntoys
     )
 
-    samplers = tm.sampler(floating_params=[poigen.parameter])
+    samplers = tm.sampler()
     assert all(is_valid_data(s) for s in samplers)
     loss = tm.toys_loss(poigen.name)
     assert is_valid_loss(loss)

@@ -3,7 +3,7 @@ import warnings
 import numpy as np
 
 from .parameters import POI
-from ..utils.fit import get_nevents
+from ..utils.fit import get_nevents, set_values_once
 from ..utils.fit.api_check import is_valid_data, is_valid_pdf
 from ..utils.fit.api_check import is_valid_loss, is_valid_fitresult, is_valid_minimizer
 
@@ -117,8 +117,7 @@ class HypotestsObject:
         """
         Set the values of the parameters in the models to the best fit values
         """
-        for param in self.parameters:
-            param.set_value(self.bestfit.params[param]["value"])
+        set_values_once(self.parameters, self.bestfit)
 
     def lossbuilder(self, model, data, weights=None, oldloss=None):
         """Method to build a new loss function.
@@ -156,7 +155,7 @@ class HypotestsObject:
 
         if weights is not None:
             for d, w in zip(data, weights):
-                d.set_weights(w)
+                d = d.with_weights(w)
 
         if hasattr(oldloss, "create_new"):
             loss = oldloss.create_new(
@@ -193,15 +192,11 @@ class ToysObject(HypotestsObject):
         self._sample = sample
         self._toys_loss = {}
 
-    def sampler(self, floating_params=None):
+    def sampler(self):
         """
         Create sampler with models.
 
-        Args:
-            floating_params: floating parameters in the sampler
-
-        Example with `zfit`:
-            >>> sampler = calc.sampler(floating_params=[zfit.Parameter("mean")])
+        >>> sampler = calc.sampler()
         """
         self.set_params_to_bestfit()
         nevents = []
@@ -214,7 +209,7 @@ class ToysObject(HypotestsObject):
             else:
                 nevents.append(nevents_data)
 
-        return self._sampler(self.loss.model, nevents, floating_params)
+        return self._sampler(self.loss.model, nevents)
 
     def sample(self, sampler, ntoys, poi: POI, constraints=None):
         """
@@ -229,7 +224,7 @@ class ToysObject(HypotestsObject):
 
         Example with `zfit`:
             >>> mean = zfit.Parameter("mean")
-            >>> sampler = calc.sampler(floating_params=[mean])
+            >>> sampler = calc.sampler()
             >>> sample = calc.sample(sampler, 1000, POI(mean, 1.2))
 
         Returns:
@@ -257,6 +252,6 @@ class ToysObject(HypotestsObject):
         """
         if parameter_name not in self._toys_loss:
             parameter = self.get_parameter(parameter_name)
-            sampler = self.sampler(floating_params=[parameter])
+            sampler = self.sampler()
             self._toys_loss[parameter.name] = self.lossbuilder(self.model, sampler)
         return self._toys_loss[parameter_name]

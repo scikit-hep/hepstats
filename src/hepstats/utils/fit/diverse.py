@@ -1,4 +1,4 @@
-from contextlib import ExitStack, contextmanager
+from contextlib import ExitStack, contextmanager, suppress
 
 import numpy as np
 
@@ -10,6 +10,16 @@ def get_ndims(dataset):
 
 def get_value(value):
     return np.array(value)
+
+
+def set_values_once(params, values):
+    with suppress(ImportError):
+        import zfit
+
+        return zfit.param.set_values(params, values)  # more efficient
+
+    for p, v in zip(params, values):
+        p.set_value(v)
 
 
 def eval_pdf(model, x, params=None, allow_extended=False):
@@ -34,7 +44,7 @@ def eval_pdf(model, x, params=None, allow_extended=False):
         return pdf(model, x)
 
 
-def pll(minimizer, loss, pois) -> float:
+def pll(minimizer, loss, pois, init=None) -> float:
     """Compute minimum profile likelihood for fixed given parameters values."""
 
     with ExitStack() as stack:
@@ -44,7 +54,7 @@ def pll(minimizer, loss, pois) -> float:
             param.floating = False
 
         if any(param_loss.floating for param_loss in loss.get_params()):
-            minimum = minimizer.minimize(loss=loss)
+            minimum = minimizer.minimize(loss=loss)  # TODO: add init?
             value = minimum.fmin
         else:
             value = get_value(loss.value())
