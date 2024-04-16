@@ -11,6 +11,7 @@ bayesian blocks python implementation found in astroML :cite:`VanderPlas_2012`.
 * Initial Examination in HEP context :cite:`Pollack:2017srh`
 
 """
+
 from __future__ import annotations
 
 from collections.abc import Iterable
@@ -106,11 +107,8 @@ def bayesian_blocks(
     assert data.ndim == 1
 
     # validate input weights
-    if weights is not None:
-        weights = np.asarray(weights)
-    else:
-        # set them to 1 if not given
-        weights = np.ones_like(data)
+    # set them to 1 if not given
+    weights = np.asarray(weights) if weights is not None else np.ones_like(data)
 
     # initialize the prior
     prior = Prior(p0, gamma)

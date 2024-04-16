@@ -17,6 +17,8 @@ The `zfit` API is currently the standard fitting API in hepstats.
 
 """
 
+from __future__ import annotations
+
 import warnings
 
 import uhi.typing.plottable
@@ -59,9 +61,7 @@ def is_valid_data(object):
     has_set_weights = hasattr(object, "set_weights")
     has_space = hasattr(object, "space")
     is_histlike = isinstance(object, uhi.typing.plottable.PlottableHistogram)
-    return (
-        has_nevents and has_weights and has_set_weights and has_space
-    ) or is_histlike
+    return (has_nevents and has_weights and has_set_weights and has_space) or is_histlike
 
 
 def is_valid_pdf(object):
@@ -89,14 +89,7 @@ def is_valid_pdf(object):
     has_space = hasattr(object, "space")
     has_get_yield = hasattr(object, "get_yield")
 
-    return (
-        all_valid_params
-        and has_pdf
-        and has_integrate
-        and has_sample
-        and has_space
-        and has_get_yield
-    )
+    return all_valid_params and has_pdf and has_integrate and has_sample and has_space and has_get_yield
 
 
 def is_valid_loss(object):
@@ -126,20 +119,12 @@ def is_valid_loss(object):
     has_constraints = hasattr(object, "constraints")
     has_create_new = hasattr(object, "create_new")
     if not has_create_new:
-        warnings.warn(
-            "Loss should have a `create_new` method.", FutureWarning, stacklevel=3
-        )
+        warnings.warn("Loss should have a `create_new` method.", FutureWarning, stacklevel=3)
         has_create_new = True  # TODO: allowed now, will be dropped in the future
     all_valid_pdfs = all(is_valid_pdf(m) for m in model)
     all_valid_datasets = all(is_valid_data(d) for d in data)
 
-    return (
-        all_valid_pdfs
-        and all_valid_datasets
-        and has_constraints
-        and has_create_new
-        and has_get_params
-    )
+    return all_valid_pdfs and all_valid_datasets and has_constraints and has_create_new and has_get_params
 
 
 def is_valid_fitresult(object):
@@ -167,5 +152,4 @@ def is_valid_minimizer(object):
     Checks if the minimzer object has the following attributes/methods:
         * minimize
     """
-    has_minimize = hasattr(object, "minimize")
-    return has_minimize
+    return hasattr(object, "minimize")

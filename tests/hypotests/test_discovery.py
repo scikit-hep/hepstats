@@ -1,20 +1,15 @@
 import os
-import pytest
+
 import numpy as np
-import tqdm
+import pytest
 import zfit
-from zfit.loss import ExtendedUnbinnedNLL, UnbinnedNLL
+from zfit.loss import UnbinnedNLL
 from zfit.minimize import Minuit
 
-from zfit.models.dist_tfp import WrapDistribution
-import tensorflow_probability as tfp
-from zfit.util import ztyping
-from collections import OrderedDict
-
 import hepstats
-from hepstats.hypotests.calculators.basecalculator import BaseCalculator
-from hepstats.hypotests.calculators import AsymptoticCalculator, FrequentistCalculator
 from hepstats.hypotests import Discovery
+from hepstats.hypotests.calculators import AsymptoticCalculator, FrequentistCalculator
+from hepstats.hypotests.calculators.basecalculator import BaseCalculator
 from hepstats.hypotests.parameters import POI
 
 notebooks_dir = f"{os.path.dirname(hepstats.__file__)}/../../notebooks/hypotests"
@@ -101,31 +96,6 @@ def test_with_frequentist_calculator(create_loss, nbins):
     assert significance >= 3
 
 
-class Poisson(WrapDistribution):
-    _N_OBS = 1
-
-    def __init__(
-        self,
-        lamb: ztyping.ParamTypeInput,
-        obs: ztyping.ObsTypeInput,
-        name: str = "Poisson",
-    ):
-        """
-        Temporary class
-        """
-        (lamb,) = self._check_input_params(lamb)
-        params = OrderedDict((("lamb", lamb),))
-        dist_params = lambda: dict(rate=lamb.value())
-        distribution = tfp.distributions.Poisson
-        super().__init__(
-            distribution=distribution,
-            dist_params=dist_params,
-            obs=obs,
-            params=params,
-            name=name,
-        )
-
-
 def create_loss_counting():
     n = 370
     nbkg = 340
@@ -135,7 +105,7 @@ def create_loss_counting():
     Nobs = zfit.ComposedParameter("Nobs", lambda a, b: a + b, params=[Nsig, Nbkg])
 
     obs = zfit.Space("N", limits=(0, 800))
-    model = Poisson(obs=obs, lamb=Nobs)
+    model = zfit.pdf.Poisson(obs=obs, lamb=Nobs)
 
     data = zfit.data.Data.from_numpy(obs=obs, array=np.array([n]))
 
@@ -172,3 +142,46 @@ def test_counting_with_frequentist_calculator():
     pnull, significance = discovery_test.result()
 
     assert significance < 2
+
+
+def test_likelihood_ratio_fmin():
+    import numpy as np
+    import zfit
+    from zfit.loss import UnbinnedNLL
+    from zfit.minimize import Minuit
+    from hepstats.hypotests import Discovery, UpperLimit
+    from hepstats.hypotests.calculators import (AsymptoticCalculator,
+                                                FrequentistCalculator)
+    from hepstats.hypotests.parameters import POI, POIarray
+
+    Nsig = zfit.Parameter("Nsig", 40, -100., 100)
+    Nbkg = zfit.Parameter("Nbkg", 340, 0, 500)
+    Nobs = zfit.ComposedParameter("Nobs", lambda a, b: a + b, params=[Nsig, Nbkg])
+
+    from collections import OrderedDict
+    import tensorflow_probability as tfp
+    from zfit.models.dist_tfp import WrapDistribution
+    from zfit.util import ztyping
+
+
+    obs = zfit.Space('N', limits=(0, 800))
+    model = zfit.pdf.Poisson(obs=obs, lamb=Nobs)
+
+    n = 370
+    nbkg = 340
+
+    data = zfit.data.Data.from_numpy(obs=obs, array=np.array([n]))
+    Nbkg.set_value(nbkg)
+    Nbkg.floating = False
+
+    nll = UnbinnedNLL(model=model, data=data)
+    minimizer = Minuit(verbosity=0)
+    minimum = minimizer.minimize(loss=nll)
+
+    calculator = AsymptoticCalculator(nll, minimizer)
+    calculator.bestfit = minimum
+
+    discovery_test = Discovery(calculator, POI(Nsig, 0))
+    pnull, significance = discovery_test.result()
+    assert pytest.approx(pnull, abs=0.01) == 0.05
+    assert pytest.approx(significance, abs=0.1) == 1.6

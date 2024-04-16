@@ -1,4 +1,6 @@
-from contextlib import ExitStack, contextmanager
+from __future__ import annotations
+
+from contextlib import ExitStack, contextmanager, suppress
 
 import numpy as np
 
@@ -12,6 +14,17 @@ def get_value(value):
     return np.array(value)
 
 
+def set_values_once(params, values):
+    with suppress(ImportError):
+        import zfit
+
+        return zfit.param.set_values(params, values)  # more efficient
+
+    for p, v in zip(params, values):
+        p.set_value(v)
+    return None
+
+
 def eval_pdf(model, x, params=None, allow_extended=False):
     """Compute pdf of model at a given point x and for given parameters values"""
 
@@ -19,10 +32,7 @@ def eval_pdf(model, x, params=None, allow_extended=False):
         params = {}
 
     def pdf(model, x):
-        if model.is_extended and allow_extended:
-            ret = model.ext_pdf(x)
-        else:
-            ret = model.pdf(x)
+        ret = model.ext_pdf(x) if model.is_extended and allow_extended else model.pdf(x)
 
         return get_value(ret)
 
@@ -34,8 +44,9 @@ def eval_pdf(model, x, params=None, allow_extended=False):
         return pdf(model, x)
 
 
-def pll(minimizer, loss, pois) -> float:
+def pll(minimizer, loss, pois, init=None) -> float:
     """Compute minimum profile likelihood for fixed given parameters values."""
+    del init  # unused currently
 
     with ExitStack() as stack:
         for p in pois:
@@ -44,7 +55,7 @@ def pll(minimizer, loss, pois) -> float:
             param.floating = False
 
         if any(param_loss.floating for param_loss in loss.get_params()):
-            minimum = minimizer.minimize(loss=loss)
+            minimum = minimizer.minimize(loss=loss)  # TODO: add init?
             value = minimum.fmin
         else:
             value = get_value(loss.value())

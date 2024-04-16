@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # Copyright (c) 2018-2020. Matthieu Marinangeli
 #
 # Distributed under the 3-clause BSD license, see accompanying file LICENSE
@@ -6,8 +5,9 @@
 
 # to check if setuptools_scm is installed
 # https://scikit-hep.org/developer/packaging#git-tags-official-pypa-method
-import setuptools_scm  # noqa: F401
+from __future__ import annotations
 
+import setuptools_scm  # noqa: F401
 from setuptools import setup
 
 setup()

@@ -1,8 +1,6 @@
 import pytest
 import numpy as np
-import zfit
 import os
-from zfit.loss import ExtendedUnbinnedNLL
 from zfit.minimize import Minuit
 
 import hepstats

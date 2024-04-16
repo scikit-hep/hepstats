@@ -110,13 +110,18 @@ def test_base_calculator(calculator, make2d, nbins, constraint):
 
     mean_poialt = POI(mean, 1.2)
 
-    pvalue = lambda: calc_loss.pvalue(poinull=mean_poi, poialt=mean_poialt)
-    exp_pvalue = lambda: calc_loss.expected_pvalue(
-        poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1)
-    )
-    exp_poi = lambda: calc_loss.expected_poi(
-        poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1)
-    )
+    def pvalue():
+        return calc_loss.pvalue(poinull=mean_poi, poialt=mean_poialt)
+
+    def exp_pvalue():
+        return calc_loss.expected_pvalue(
+            poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1)
+        )
+
+    def exp_poi():
+        return calc_loss.expected_poi(
+            poinull=mean_poi, poialt=mean_poialt, nsigma=np.arange(-2, 3, 1)
+        )
 
     if calculator == BaseCalculator:
         with pytest.raises(NotImplementedError):
@@ -182,7 +187,7 @@ def test_frequentist_calculator_one_poi(constraint):
     assert calc.ntoysnull == 100
     assert calc.ntoysalt == 100
 
-    samplers = calc.sampler(floating_params=[mean])
+    samplers = calc.sampler()
     assert all(is_valid_data(s) for s in samplers)
     loss = calc.toys_loss(mean.name)
     assert is_valid_loss(loss)

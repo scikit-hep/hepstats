@@ -6,11 +6,10 @@ dependencies:
   - numpy
   - scipy
   - iminuit
-  - tensorflow>=2.4
   - tensorflow-probability
-  #- zfit
+  #- zfit  # todo: conda-forge is 0.18.1, we need 0.20.0
   - asdf
   - matplotlib
   - pip:
     - .
-    - zfit >=0.6.4
+    - zfit >=0.20.0

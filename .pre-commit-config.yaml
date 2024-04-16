@@ -1,8 +1,4 @@
 repos:
-  - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.4.0
-    hooks:
-      - id: black
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
@@ -25,7 +21,7 @@ repos:
     hooks:
       - id: check-manifest
         args: [ --update, --no-build-isolation ]
-        additional_dependencies: [ setuptools-scm ]
+        additional_dependencies: [ setuptools-scm, setuptools-scm-git-archive ]
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.9.0
     hooks:
@@ -62,11 +58,9 @@ repos:
   - repo: https://github.com/nbQA-dev/nbQA
     rev: 1.8.5
     hooks:
-      - id: nbqa-isort
-        additional_dependencies: [ isort==5.6.4 ]
 
       - id: nbqa-pyupgrade
-        additional_dependencies: [ pyupgrade==2.7.4 ]
+        additional_dependencies: [ pyupgrade ]
         args: [ --py38-plus ]
 
 
@@ -94,3 +88,18 @@ repos:
       - id: check-github-actions
       - id: check-dependabot
       - id: check-readthedocs
+
+  - repo: https://github.com/MarcoGorelli/auto-walrus
+    rev: 0.3.3
+    hooks:
+      - id: auto-walrus
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: "v0.3.7"
+    hooks:
+      - id: ruff
+        types_or: [ python, pyi, jupyter ]
+        args: [ --fix, --unsafe-fixes, --show-fixes , --line-length=120]
+      # Run the formatter.
+      - id: ruff-format
+        types_or: [ python, pyi, jupyter ]

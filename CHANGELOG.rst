@@ -1,8 +1,13 @@
 Changelog
 =========
 
-master
+main
 ******
+
+* Add support for Python 3.12, drop support for Python 3.8
+* Improved support for zfit 0.20+
+
+Thanks to @MoritzNeuberger for finding and proposing a hypothesis test fix.
 
 Version 0.7.0
 *************
