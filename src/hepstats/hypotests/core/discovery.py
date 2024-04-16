@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from scipy.stats import norm
 
-from .basetest import BaseTest
 from ..calculators.basecalculator import BaseCalculator
 from ..parameters import POI
+from .basetest import BaseTest
 
 
 class Discovery(BaseTest):
@@ -70,7 +70,6 @@ class Discovery(BaseTest):
         significance = norm.ppf(1.0 - pnull)
 
         if printlevel > 0:
-            print(f"\np_value for the Null hypothesis = {pnull}")
-            print(f"Significance (in units of sigma) = {significance}")
+            pass
 
         return pnull, significance

@@ -5,16 +5,16 @@ from typing import Any
 
 import numpy as np
 
+from ...utils import base_sample, base_sampler, pll
 from ..hypotests_object import HypotestsObject
 from ..parameters import POI, POIarray, asarray
-from ..toyutils import ToysManager, ToyResult
-from ...utils import pll, base_sampler, base_sample
+from ..toyutils import ToyResult, ToysManager
 
 
 class BaseCalculator(HypotestsObject):
     """Base class for calculator."""
 
-    def __init__(self, input, minimizer):
+    def __init__(self, input, minimizer, **kwargs):
         """
         Args:
             input: loss or fit result
@@ -34,7 +34,7 @@ class BaseCalculator(HypotestsObject):
             >>>
             >>> calc = BaseCalculator(input=loss, minimizer=Minuit())
         """
-        super().__init__(input, minimizer)
+        super().__init__(input, minimizer, **kwargs)
 
         self._obs_nll = {}
 
@@ -60,7 +60,7 @@ class BaseCalculator(HypotestsObject):
 
         ret = np.empty(pois.shape)
         for i, p in enumerate(pois):
-            if p not in self._obs_nll.keys():
+            if p not in self._obs_nll:
                 nll = pll(minimizer=self.minimizer, loss=self.loss, pois=p)
                 self._obs_nll[p] = nll
             ret[i] = self._obs_nll[p]
@@ -106,7 +106,7 @@ class BaseCalculator(HypotestsObject):
 
         nll_bestfitpoi_obs = self.obs_nll(bestfitpoi)
         nll_poinull_obs = self.obs_nll(poinull)
-        qobs = self.q(
+        return self.q(
             nll1=nll_poinull_obs,
             nll2=nll_bestfitpoi_obs,
             poi1=poinull,
@@ -114,8 +114,6 @@ class BaseCalculator(HypotestsObject):
             onesided=onesided,
             onesideddiscovery=onesideddiscovery,
         )
-
-        return qobs
 
     def pvalue(
         self,
@@ -216,9 +214,7 @@ class BaseCalculator(HypotestsObject):
             onesideddiscovery=onesideddiscovery,
         )
 
-    def _expected_pvalue_(
-        self, poinull, poialt, nsigma, CLs, qtilde, onesided, onesideddiscovery
-    ):
+    def _expected_pvalue_(self, poinull, poialt, nsigma, CLs, qtilde, onesided, onesideddiscovery):
         """
         To be overwritten in `BaseCalculator` subclasses.
         """
@@ -261,11 +257,10 @@ class BaseCalculator(HypotestsObject):
             msg = f"POIs should have the same dimensions, poi1={poi1.ndim}, poi2={poi2.ndim}"
             raise ValueError(msg)
 
-        if poi1.ndim == 1:
-            if poi1.name != poi2.name:
-                msg = "The variables used in the parameters of interest should have the same names,"
-                msg += f" poi1={poi1.name}, poi2={poi2.name}"
-                raise ValueError(msg)
+        if poi1.ndim == 1 and poi1.name != poi2.name:
+            msg = "The variables used in the parameters of interest should have the same names,"
+            msg += f" poi1={poi1.name}, poi2={poi2.name}"
+            raise ValueError(msg)
 
     def q(
         self,
@@ -311,13 +306,11 @@ class BaseCalculator(HypotestsObject):
         else:
             condition = q < 0
 
-        q = np.where(condition, zeros, q)
-
-        return q
+        return np.where(condition, zeros, q)
 
 
 class BaseToysCalculator(BaseCalculator):
-    def __init__(self, input, minimizer, sampler: Callable, sample: Callable):
+    def __init__(self, input, minimizer, **kwargs):
         """Basis for toys calculator class.
 
         Args:
@@ -327,7 +320,7 @@ class BaseToysCalculator(BaseCalculator):
                parameters in the sample.
             sample: function used to get samples from the sampler.
         """
-        super().__init__(input, minimizer)
+        super().__init__(input, minimizer, **kwargs)
 
 
 class ToysCalculator(BaseToysCalculator, ToysManager):
@@ -356,7 +349,7 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
             sample: function used to get samples from the sampler. Default is
                 :func:`hepstats.utils.fit..sampling.base_sample`.
         """
-        super().__init__(input, minimizer, sampler, sample)
+        super().__init__(input, minimizer, sampler=sampler, sample=sample)
 
         self._ntoysnull = ntoysnull
         self._ntoysalt = ntoysalt
@@ -454,12 +447,10 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
         """
 
         if hypothesis not in {"null", "alternative"}:
-            raise ValueError("hypothesis must be 'null' or 'alternative'.")
+            msg = "hypothesis must be 'null' or 'alternative'."
+            raise ValueError(msg)
 
-        if hypothesis == "null":
-            ntoys = self.ntoysnull
-        else:
-            ntoys = self.ntoysalt
+        ntoys = self.ntoysnull if hypothesis == "null" else self.ntoysalt
 
         ret = {}
 
@@ -475,14 +466,9 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
                 poieval_p = poieval_p.append(0.0)
 
             ngenerated = self.ntoys(p, poieval_p)
-            if ngenerated < ntoys:
-                ntogen = ntoys - ngenerated
-            else:
-                ntogen = 0
+            ntogen = ntoys - ngenerated if ngenerated < ntoys else 0
 
             if ntogen > 0:
-                print(f"Generating {hypothesis} hypothesis toys for {p}.")
-
                 self.generate_and_fit_toys(ntoys=ntogen, poigen=p, poieval=poieval_p)
 
             ret[p] = self.get_toyresult(p, poieval_p)
@@ -510,9 +496,7 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
             >>> for p in poinull:
             ...     calc.get_toys_alt(p, poieval=poialt)
         """
-        return self._get_toys(
-            poigen=poigen, poieval=poieval, qtilde=qtilde, hypothesis="null"
-        )
+        return self._get_toys(poigen=poigen, poieval=poieval, qtilde=qtilde, hypothesis="null")
 
     def get_toys_alt(
         self,
@@ -534,6 +518,4 @@ class ToysCalculator(BaseToysCalculator, ToysManager):
             >>> poialt = POI(mean, 1.2)
             >>> calc.get_toys_alt(poialt, poieval=poinull)
         """
-        return self._get_toys(
-            poigen=poigen, poieval=poieval, qtilde=qtilde, hypothesis="alternative"
-        )
+        return self._get_toys(poigen=poigen, poieval=poieval, qtilde=qtilde, hypothesis="alternative")

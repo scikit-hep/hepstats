@@ -5,9 +5,11 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 # -- Path setup --------------------------------------------------------------
+from __future__ import annotations
 
 import sys
 from pathlib import Path
+
 from hepstats import __version__ as version
 
 project_dir = Path(__file__).parents[1]

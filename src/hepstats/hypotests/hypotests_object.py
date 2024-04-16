@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import warnings
 
 import numpy as np
@@ -16,7 +18,8 @@ class HypotestsObject:
         minimizer: minimizer to use to find the minimum of the loss function
     """
 
-    def __init__(self, input, minimizer):
+    def __init__(self, input, minimizer, **kwargs):
+        super().__init__(**kwargs)
         if is_valid_fitresult(input):
             self._loss = input.loss
             self._bestfit = input
@@ -24,10 +27,12 @@ class HypotestsObject:
             self._loss = input
             self._bestfit = None
         else:
-            raise ValueError(f"{input} is not a valid loss function or fit result!")
+            msg = f"{input} is not a valid loss function or fit result!"
+            raise ValueError(msg)
 
         if not is_valid_minimizer(minimizer):
-            raise ValueError(f"{minimizer} is not a valid minimizer !")
+            msg = f"{minimizer} is not a valid minimizer !"
+            raise ValueError(msg)
 
         self._minimizer = minimizer
         self.minimizer.verbosity = 0
@@ -56,7 +61,6 @@ class HypotestsObject:
         if getattr(self, "_bestfit", None):
             return self._bestfit
         else:
-            print("Get fit best values!")
             old_verbosity = self.minimizer.verbosity
             self.minimizer.verbosity = 5
             minimum = self.minimizer.minimize(loss=self.loss)
@@ -73,7 +77,8 @@ class HypotestsObject:
             value: fit result
         """
         if not is_valid_fitresult(value):
-            raise ValueError(f"{input} is not a valid fit result!")
+            msg = f"{input} is not a valid fit result!"
+            raise ValueError(msg)
         self._bestfit = value
 
     @property
@@ -158,14 +163,13 @@ class HypotestsObject:
                 d = d.with_weights(w)
 
         if hasattr(oldloss, "create_new"):
-            loss = oldloss.create_new(
-                model=model, data=data, constraints=self.constraints
-            )
+            loss = oldloss.create_new(model=model, data=data, constraints=self.constraints)
         else:
             warnings.warn(
                 "A loss should have a `create_new` method. If you are using zfit, please make sure to"
                 "upgrade to >= 0.6.4",
                 FutureWarning,
+                stacklevel=2,
             )
             loss = type(oldloss)(model=model, data=data)
             loss.add_constraints(self.constraints)
@@ -203,9 +207,7 @@ class ToysObject(HypotestsObject):
         for m, d in zip(self.loss.model, self.loss.data):
             nevents_data = get_nevents(d)
             if m.is_extended:
-                nevents.append(
-                    np.random.poisson(lam=nevents_data)
-                )  # TODO: handle constraint yields correctly?
+                nevents.append(np.random.poisson(lam=nevents_data))  # TODO: handle constraint yields correctly?
             else:
                 nevents.append(nevents_data)
 

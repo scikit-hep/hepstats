@@ -29,10 +29,7 @@ def eval_pdf(model, x, params=None, allow_extended=False):
         params = {}
 
     def pdf(model, x):
-        if model.is_extended and allow_extended:
-            ret = model.ext_pdf(x)
-        else:
-            ret = model.pdf(x)
+        ret = model.ext_pdf(x) if model.is_extended and allow_extended else model.pdf(x)
 
         return get_value(ret)
 

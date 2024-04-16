@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from scipy.stats import chisquare, ks_2samp
+from scipy.stats import ks_2samp
 
 import zfit
 from zfit.loss import ExtendedUnbinnedNLL
@@ -36,28 +36,17 @@ def get_data_and_loss():
     background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
     tot_model = zfit.pdf.SumPDF([signal, background])
 
-    tau = -2.0
-    beta = -1 / tau
+    bkg = background.sample(nbkg, params={lambda_: -2.1})
 
-    # bkg = np.random.exponential(beta, nbkg * 2)
-    with lambda_.set_value(-2.1):
-        bkg = background.sample(nbkg * 2).numpy()
-    bkg_sel = get_sel(bkg)
-    bkg = bkg[bkg_sel][:nbkg]
+    peak = signal.sample(nsig, params={sigma: 0.2})
 
-    with sigma.set_value(0.2):
-        peak = signal.sample(nsig * 2).numpy()
-    # peak = np.random.normal(1.2, 0.2, nsig * 2)
-
-    peak_sel = get_sel(peak)
-    peak = peak[peak_sel][:nsig]
-    mass = np.concatenate((bkg, peak))
+    mass = np.concatenate((bkg["x"], peak["x"]))
 
     bck_p = np.random.normal(3, 1, size=nbkg)
     sig_p = np.random.normal(5, 1, size=nsig)
     p = np.concatenate([bck_p, sig_p])
 
-    data = zfit.data.Data.from_numpy(obs=obs, array=mass)
+    data = zfit.data.concat([bkg, peak], axis="index")
 
     loss = ExtendedUnbinnedNLL(model=tot_model, data=data)
 

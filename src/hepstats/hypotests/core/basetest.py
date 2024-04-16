@@ -1,4 +1,4 @@
-from typing import Union
+from __future__ import annotations
 
 from ..calculators.basecalculator import BaseCalculator
 from ..parameters import POI, POIarray
@@ -12,8 +12,8 @@ class BaseTest:
     def __init__(
         self,
         calculator: BaseCalculator,
-        poinull: Union[POI, POIarray],
-        poialt: Union[POI, POIarray, None] = None,
+        poinull: POI | POIarray,
+        poialt: POI | POIarray | None = None,
     ):
         """Base class for hypothesis tests.
 

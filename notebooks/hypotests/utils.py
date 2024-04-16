@@ -1,6 +1,7 @@
-import numpy as np
+from __future__ import annotations
+
 import matplotlib.pyplot as plt
-import zfit
+import numpy as np
 
 
 def pltdist(data, bins, bounds):
@@ -144,7 +145,9 @@ def plotlimit(ul, alpha=0.05, CLs=True, ax=None):
     return ax
 
 
-def one_minus_cl_plot(x, pvalues, alpha=[0.32], ax=None):
+def one_minus_cl_plot(x, pvalues, alpha=None, ax=None):
+    if alpha is None:
+        alpha = [0.32]
     if ax is None:
         ax = plt.gca()
 

@@ -5,6 +5,7 @@ Module defining the parameter of interest classes, currently includes:
 * **POIarray**
 * **POI**
 """
+
 from __future__ import annotations
 
 from collections.abc import Collection
@@ -35,10 +36,12 @@ class POIarray:
         """
 
         if not is_valid_parameter(parameter):
-            raise ValueError(f"{parameter} is not a valid parameter!")
+            msg = f"{parameter} is not a valid parameter!"
+            raise ValueError(msg)
 
         if not isinstance(values, Collection):
-            raise TypeError("A list/array of values of the POI is required.")
+            msg = "A list/array of values of the POI is required."
+            raise TypeError(msg)
 
         self.parameter = parameter
         self.name = parameter.name
@@ -129,7 +132,8 @@ class POI(POIarray):
             >>> poi = POI(Nsig, value=0)
         """
         if isinstance(value, Collection):
-            raise TypeError("A single value for the POI is required.")
+            msg = "A single value for the POI is required."
+            raise TypeError(msg)
 
         super().__init__(parameter=parameter, values=[value])
         self._value = value
