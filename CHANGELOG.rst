@@ -4,7 +4,7 @@ Changelog
 main
 **************
 
-Version 0.8.0
+Version 0.8.1
 **************
 
 * Add support for Python 3.12, drop support for Python 3.8
