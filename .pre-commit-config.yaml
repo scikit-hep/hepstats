@@ -3,7 +3,7 @@ ci:
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-added-large-files
         args: [ '--maxkb=1000' ]
@@ -26,7 +26,7 @@ repos:
         args: [ --update, --no-build-isolation ]
         additional_dependencies: [ setuptools-scm, setuptools-scm-git-archive ]
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.10.1
+    rev: v1.11.2
     hooks:
       - id: mypy
         files: src
@@ -46,7 +46,7 @@ repos:
       - id: rst-directive-colons
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.16.0
+    rev: v3.17.0
     hooks:
       - id: pyupgrade
         args: [ --py38-plus ]
@@ -59,7 +59,7 @@ repos:
 
   # Notebook formatting
   - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.8.5
+    rev: 1.8.7
     hooks:
 
       - id: nbqa-pyupgrade
@@ -85,7 +85,7 @@ repos:
       - id: rm-unneeded-f-str
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.28.6
+    rev: 0.29.3
     hooks:
       - id: check-github-workflows
       - id: check-github-actions
@@ -98,7 +98,7 @@ repos:
       - id: auto-walrus
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.5.0"
+    rev: "v0.6.9"
     hooks:
       - id: ruff
         types_or: [ python, pyi, jupyter ]
