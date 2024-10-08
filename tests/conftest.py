@@ -15,7 +15,7 @@ def pytest_addoption(parser):
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def cmdopt(request):
     return request.config.getoption("--cmdopt")
 
@@ -91,6 +91,6 @@ def create_loss_func(npeak, nbins=None):
     return loss, (Nsig, Nbkg, mean, sigma)
 
 
-@pytest.fixture()
+@pytest.fixture
 def create_loss():
     return create_loss_func
