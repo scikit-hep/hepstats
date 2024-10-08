@@ -26,7 +26,7 @@ def is_sum_of_extended_pdfs(model) -> bool:
     return all(m.is_extended for m in model.get_models()) and model.is_extended
 
 
-def compute_sweights(model, x: np.ndarray, atol_exceptions : float | None = None) -> dict[Any, np.ndarray]:
+def compute_sweights(model, x: np.ndarray, atol_exceptions: float | None = None) -> dict[Any, np.ndarray]:
     """Computes sWeights from probability density functions for different components/species in a fit model
     (for instance signal and background) fitted on some data `x`.
 
