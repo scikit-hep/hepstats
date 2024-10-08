@@ -26,7 +26,7 @@ def is_sum_of_extended_pdfs(model) -> bool:
     return all(m.is_extended for m in model.get_models()) and model.is_extended
 
 
-def compute_sweights(model, x: np.ndarray, atol_exceptions: float | None = None) -> dict[Any, np.ndarray]:
+def compute_sweights(model, x: np.ndarray, *,atol_exceptions: float | None = None) -> dict[Any, np.ndarray]:
     """Computes sWeights from probability density functions for different components/species in a fit model
     (for instance signal and background) fitted on some data `x`.
 
@@ -35,6 +35,9 @@ def compute_sweights(model, x: np.ndarray, atol_exceptions: float | None = None)
     Args:
         model: sum of extended pdfs.
         x: data on which `model` is fitted
+        atol_exceptions: absolute tolerance to check if the Maximum Likelihood Sum Rule sanity check,
+            described in equation 17 of arXiv:physics/0402083, failed. Sum of yields should be 1 with
+            an absolute tolerance of `atol_exceptions`.
 
     Returns:
         dictionary with yield parameters as keys, and sWeights for correspoind species as values.
@@ -108,7 +111,7 @@ def compute_sweights(model, x: np.ndarray, atol_exceptions: float | None = None)
 
     MLSR = pN.sum(axis=0)
     atol_warning = 5e-3
-    if not atol_exceptions:
+    if atol_exceptions is None:
         atol_exceptions = 5e-2
 
     def msg_fn(tolerance):
