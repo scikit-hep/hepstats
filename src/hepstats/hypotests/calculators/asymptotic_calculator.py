@@ -160,7 +160,7 @@ class AsymptoticCalculator(BaseCalculator):
         """Converts the loss to binned if necessary."""
 
         for unbinned_loss, binned_loss in self.UNBINNED_TO_BINNED_LOSS.items():
-            if type(loss) == unbinned_loss:
+            if type(loss) is unbinned_loss:
                 datasets = []
                 models = []
                 for d, m, nbins in zip(loss.data, loss.model, asimov_bins):
@@ -171,7 +171,7 @@ class AsymptoticCalculator(BaseCalculator):
                     models.append(model_binned)
                 loss = binned_loss(model=models, data=datasets, constraints=loss.constraints)
                 break
-            if type(loss) == binned_loss:
+            if type(loss) is binned_loss:
                 break
         else:
             loss = False

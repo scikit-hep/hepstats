@@ -20,13 +20,12 @@ repos:
       - id: debug-statements
       - id: end-of-file-fixer
   - repo: https://github.com/mgedmin/check-manifest
-    rev: "0.49"
+    rev: "0.50"
     hooks:
       - id: check-manifest
-        args: [ --update, --no-build-isolation ]
-        additional_dependencies: [ setuptools-scm, setuptools-scm-git-archive ]
+        args: [ --update ]
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.11.2
+    rev: v1.12.0
     hooks:
       - id: mypy
         files: src
@@ -46,13 +45,13 @@ repos:
       - id: rst-directive-colons
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.17.0
+    rev: v3.18.0
     hooks:
       - id: pyupgrade
         args: [ --py38-plus ]
 
   - repo: https://github.com/asottile/setup-cfg-fmt
-    rev: v2.5.0
+    rev: v2.7.0
     hooks:
       - id: setup-cfg-fmt
         args: [ --max-py-version=3.12, --include-version-classifiers ]
@@ -64,7 +63,7 @@ repos:
 
       - id: nbqa-pyupgrade
         additional_dependencies: [ pyupgrade ]
-        args: [ --py38-plus ]
+        args: [ --py39-plus ]
 
 
   - repo: https://github.com/roy-ht/pre-commit-jupyter
@@ -85,7 +84,7 @@ repos:
       - id: rm-unneeded-f-str
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.29.3
+    rev: 0.29.4
     hooks:
       - id: check-github-workflows
       - id: check-github-actions
@@ -102,7 +101,7 @@ repos:
     hooks:
       - id: ruff
         types_or: [ python, pyi, jupyter ]
-        args: [ --fix, --unsafe-fixes, --show-fixes , --line-length=120]
+        args: [ --fix, --unsafe-fixes, --show-fixes , --line-length=120 ]
       # Run the formatter.
       - id: ruff-format
         types_or: [ python, pyi, jupyter ]
