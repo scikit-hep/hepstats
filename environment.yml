@@ -7,9 +7,8 @@ dependencies:
   - scipy
   - iminuit
   - tensorflow-probability
-  #- zfit  # todo: conda-forge is 0.18.1, we need 0.20.0
+  - zfit
   - asdf
   - matplotlib
   - pip:
     - .
-    - zfit >=0.20.0
