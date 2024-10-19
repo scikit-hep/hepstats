@@ -15,3 +15,4 @@ dist/
 /docs/source/*
 /_build/**
 /.idea/**
+/src/hepstats/_version.py
