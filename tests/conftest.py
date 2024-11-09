@@ -32,7 +32,10 @@ def data_gen():
 # TODO: manually ported, use pre-made: https://github.com/zfit/zfit-development/issues/73
 @pytest.fixture(autouse=True)
 def _setup_teardown():
-    import zfit
+    try:
+        import zfit
+    except ImportError:
+        return
 
     old_chunksize = zfit.run.chunking.max_n_points
     old_active = zfit.run.chunking.active
