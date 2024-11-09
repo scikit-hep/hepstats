@@ -35,6 +35,7 @@ def _setup_teardown():
     try:
         import zfit
     except ImportError:
+        yield
         return
 
     old_chunksize = zfit.run.chunking.max_n_points
