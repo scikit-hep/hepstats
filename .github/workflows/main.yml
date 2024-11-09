@@ -54,7 +54,7 @@ jobs:
       - name: Install package
         run: |
           pip install uv
-          uv pip install --system .[test] pytest-xdist   # for multiprocessing
+          uv pip install --system -e .[test] pytest-xdist   # for multiprocessing, -e needed for pathes etc.
 
       - name: Test package
         run: python -m pytest --doctest-modules --cov=hepstats --cov-report=xml -n auto
@@ -101,7 +101,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install uv
-          uv pip install --system .[docs]
+          uv pip install --system -e .[docs]
       - name: build docs
         run: |
           sphinx-build -b html docs docs/_build/html
