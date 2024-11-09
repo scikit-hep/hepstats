@@ -2,7 +2,7 @@ import os
 
 import numpy as np
 import pytest
-import zfit
+zfit = pytest.importorskip("zfit")
 from zfit.loss import UnbinnedNLL
 from zfit.minimize import Minuit
 

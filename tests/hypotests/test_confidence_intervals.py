@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-import zfit
+zfit = pytest.importorskip("zfit")
 import os
 from zfit.loss import UnbinnedNLL
 from zfit.minimize import Minuit
