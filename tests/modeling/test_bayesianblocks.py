@@ -5,7 +5,7 @@ import numpy as np
 import hepstats
 from hepstats.modeling import bayesian_blocks
 
-answer_dir = Path(hepstats.__file__).parent / "data"
+answer_dir = Path(__file__).parent / "data"
 
 
 def test_bayesian_blocks(cmdopt, data_gen):
