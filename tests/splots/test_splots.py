@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from scipy.stats import ks_2samp
 
-import zfit
+zfit = pytest.importorskip("zfit")
 from zfit.loss import ExtendedUnbinnedNLL
 from zfit.minimize import Minuit
 

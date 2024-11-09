@@ -1,12 +1,13 @@
 import pytest
 import numpy as np
-import zfit
+zfit = pytest.importorskip("zfit")
 from zfit.loss import UnbinnedNLL
 from zfit.minimize import Minuit
 
 from hepstats.hypotests.calculators.basecalculator import BaseCalculator
 from hepstats.hypotests.core.basetest import BaseTest
 from hepstats.hypotests.parameters import POI, POIarray
+
 
 
 def create_loss():

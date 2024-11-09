@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import pytest
 import numpy as np
-import zfit
+zfit = pytest.importorskip("zfit")
 
 from hepstats.hypotests.parameters import POI, POIarray
 

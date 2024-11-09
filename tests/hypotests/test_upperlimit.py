@@ -1,6 +1,7 @@
 import pytest
 import numpy as np
 import os
+zfit = pytest.importorskip("zfit")
 from zfit.minimize import Minuit
 
 import hepstats

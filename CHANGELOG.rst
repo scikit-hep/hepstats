@@ -4,6 +4,8 @@ Changelog
 main
 **************
 
+* Add support for Python 3.13
+
 Version 0.8.1
 **************
 
