@@ -39,7 +39,7 @@ jobs:
             python-version: "3.9"
           - os: macos-13
             python-version: "3.9"
-          - os: macos-14
+          - os: macos-latest
             python-version: "3.12"  # old versions not supported
     name: Check Python ${{ matrix.python-version }} ${{ matrix.os }}
     steps:
