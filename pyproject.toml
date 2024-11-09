@@ -39,7 +39,7 @@ dependencies = [
     "asdf",
     "numpy",
     "pandas",
-    "scipy",
+#    "scipy",
     "tqdm",
     "uhi",
 ]
@@ -68,7 +68,8 @@ test = [
     "pytest",
     "pytest-cov",
     "pytest-runner",
-    'hepstats[zfit];python_version<"3.13"',
+    "zfit>=0.20.0;python_version<'3.13'",
+#    'hepstats[zfit];python_version<"3.13"',
 ]
 zfit = ["zfit>=0.20.0"]
 

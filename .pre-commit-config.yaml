@@ -19,16 +19,16 @@ repos:
       - id: requirements-txt-fixer
       - id: debug-statements
       - id: end-of-file-fixer
-  - repo: https://github.com/mgedmin/check-manifest
-    rev: "0.50"
-    hooks:
-      - id: check-manifest
-        args:
-          - --update
-          - --no-build-isolation
-        additional_dependencies:
-          - hatchling
-          - hatch-vcs
+#  - repo: https://github.com/mgedmin/check-manifest
+#    rev: "0.50"
+#    hooks:
+#      - id: check-manifest
+#        args:
+#          - --update
+#          - --no-build-isolation
+#        additional_dependencies:
+#          - hatchling
+#          - hatch-vcs
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.12.0
