@@ -5,7 +5,7 @@ hypotests
 This submodule provides tools to do statistical inferences such as discovery test and computations of
 upper limits or confidence intervals. ``hepstats`` needs a fitting backend to perform computations such as
 `zfit <https://github.com/zfit/zfit>`_. Any fitting library can be used if their API is compatible with hepstats
-(see `api checks <https://github.com/scikit-hep/hepstats/blob/master/hepstats/hypotests/fitutils/api_check.py>`_).
+(see `api checks <https://github.com/scikit-hep/hepstats/blob/main/src/hepstats/utils/fit/api_check.py>`_).
 
 We give here a simple example of an upper limit calculation of the yield of a Gaussian signal with known mean
 and sigma over an exponential background. The fitting backend used is the `zfit <https://github.com/zfit/zfit>`_
