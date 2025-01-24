@@ -56,28 +56,30 @@ def _setup_teardown():
     zfit.run.set_autograd_mode()
 
 
-def create_loss_func(npeak, nbins=None):
+def create_loss_func(npeak, nbins=None, nbkg=None, nameadd="", obs=None):
     import zfit
 
     bounds = (0.1, 3.0)
-    obs = zfit.Space("x", limits=bounds)
+    obs = "x" if obs is None else obs
+    obs = zfit.Space(obs, limits=bounds)
 
     # Data and signal
     np.random.seed(0)
     tau = -2.0
     beta = -1 / tau
-    bkg = np.random.exponential(beta, 300)
+    nbkg = 300 if nbkg is None else nbkg
+    bkg = np.random.exponential(beta, nbkg)
     peak = np.random.normal(1.2, 0.1, npeak)
     data = np.concatenate((bkg, peak))
     data = data[(data > bounds[0]) & (data < bounds[1])]
     N = len(data)
     data = zfit.data.Data.from_numpy(obs=obs, array=data)
 
-    mean = zfit.Parameter("mean", 1.2, 0.5, 2.0)
-    sigma = zfit.Parameter("sigma", 0.1, 0.02, 0.2)
-    lambda_ = zfit.Parameter("lambda", -2.0, -4.0, -1.0)
-    Nsig = zfit.Parameter("Nsig", 20.0, -20.0, N)
-    Nbkg = zfit.Parameter("Nbkg", N, 0.0, N * 1.1)
+    mean = zfit.Parameter("mean" + nameadd, 1.2, 0.5, 2.0)
+    sigma = zfit.Parameter("sigma" + nameadd, 0.1, 0.02, 0.2)
+    lambda_ = zfit.Parameter("lambda" + nameadd, -2.0, -4.0, -1.0)
+    Nsig = zfit.Parameter("Nsig" + nameadd, 20.0, -20.0, N * 3)
+    Nbkg = zfit.Parameter("Nbkg" + nameadd, N, 0.0, N * 3)
 
     signal = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma).create_extended(Nsig)
     background = zfit.pdf.Exponential(obs=obs, lambda_=lambda_).create_extended(Nbkg)
@@ -95,6 +97,19 @@ def create_loss_func(npeak, nbins=None):
     return loss, (Nsig, Nbkg, mean, sigma)
 
 
+def create_sim_loss_func(npeak, nbins=None):
+    loss1, params1 = create_loss_func(npeak, nbins=nbins, nameadd="_1", obs="x1")
+    loss2, params2 = create_loss_func(npeak * 10, nbins=nbins, nameadd="_2", obs="x2", nbkg=500)
+    loss = loss1 + loss2
+
+    return loss, params1
+
+
 @pytest.fixture
 def create_loss():
     return create_loss_func
+
+
+@pytest.fixture
+def create_sim_loss():
+    return create_sim_loss_func

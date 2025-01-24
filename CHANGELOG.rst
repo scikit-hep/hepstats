@@ -2,6 +2,13 @@ Changelog
 =========
 
 main
+*************
+
+* fix dumping of fitresult in test, require ASDF version < 1.6.0 in writing to file
+* fix sampling of model in FrequentistCalculator with simultaneous fits
+
+
+Version 0.9.0
 **************
 
 * Add support for Python 3.13

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
 from contextlib import ExitStack, contextmanager, suppress
 
 import numpy as np
@@ -67,7 +68,14 @@ def pll(minimizer, loss, pois, init=None) -> float:
 
 
 @contextmanager
-def set_values(params, values):
+def set_values(params, values=None):
+    if values is None:
+        if isinstance(params, Mapping):
+            values = tuple(params.values())
+            params = tuple(params.keys())
+        else:
+            msg = "values must be provided if params is not a Mapping (dict-like)"
+            raise ValueError(msg)
     old_values = [p.value() for p in params]
     for p, v in zip(params, values):
         p.set_value(v)

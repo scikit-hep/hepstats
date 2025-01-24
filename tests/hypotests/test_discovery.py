@@ -2,6 +2,9 @@ import os
 
 import numpy as np
 import pytest
+
+from tests.conftest import create_loss_func, create_sim_loss_func
+
 zfit = pytest.importorskip("zfit")
 from zfit.loss import UnbinnedNLL
 from zfit.minimize import Minuit
@@ -71,8 +74,13 @@ def test_with_asymptotic_calculator(create_loss, nbins, Calculator):
 @pytest.mark.parametrize(
     "nbins", [None, 95, 153], ids=lambda x: "unbinned" if x is None else f"nbin={x}"
 )
-def test_with_frequentist_calculator(create_loss, nbins):
-    loss, (Nsig, Nbkg, mean, sigma) = create_loss(npeak=25, nbins=nbins)
+@pytest.mark.parametrize("losscreator", [create_loss_func,
+                                         # create_sim_loss_func
+                                         ], ids=["simple",
+                                                 # "sim"
+                                                 ])
+def test_with_frequentist_calculator(losscreator, nbins):
+    loss, (Nsig, Nbkg, mean, sigma) = losscreator(npeak=25, nbins=nbins)
     mean.floating = False
     sigma.floating = False
     calculator = FrequentistCalculator.from_yaml(

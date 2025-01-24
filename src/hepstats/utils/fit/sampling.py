@@ -5,7 +5,7 @@ Module providing basic sampling methods.
 from __future__ import annotations
 
 from .api_check import is_valid_pdf
-from .diverse import get_value
+from .diverse import get_value, set_values
 
 
 def base_sampler(models, nevents):
@@ -56,11 +56,11 @@ def base_sample(samplers, ntoys, parameter=None, value=None, constraints=None):
             except AttributeError:
                 continue
 
+    params = {} if parameter is None or value is None else {parameter: value}
     for i in range(ntoys):
-        params = None if parameter is None or value is None else {parameter: value}
-
-        for s in samplers:
-            s.resample(params=params)
+        with set_values(params):
+            for s in samplers:
+                s.resample()  # do not pass parameters as arguments as it will fail in simultaneous fits
 
         if constraints is not None:
             yield {param: value[i] for param, value in sampled_constraints.items()}
