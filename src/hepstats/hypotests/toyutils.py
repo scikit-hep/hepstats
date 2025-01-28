@@ -356,7 +356,9 @@ class ToysManager(ToysObject):
 
         tree["toys"] = self.toyresults_to_dict()
         af = asdf.AsdfFile(tree)
-        af.write_to(filename)
+        af.write_to(
+            filename, version="1.5.0"
+        )  # TODO: change the dict layout not to have floats as keys. Fails with new ASDF version
         af.close()
 
     def toysresults_from_yaml(self, filename: str) -> list[ToyResult]:
