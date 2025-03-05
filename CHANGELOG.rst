@@ -4,6 +4,11 @@ Changelog
 main
 *************
 
+Version 0.9.2
+**************
+
+* fix wrong import with optional dependencies
+
 Version 0.9.1
 **************
 

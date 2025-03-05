@@ -3,7 +3,7 @@ import os
 import numpy as np
 import pytest
 
-from tests.conftest import create_loss_func, create_sim_loss_func
+from tests.conftest import create_loss_func
 
 zfit = pytest.importorskip("zfit")
 from zfit.loss import UnbinnedNLL
@@ -157,19 +157,14 @@ def test_likelihood_ratio_fmin():
     import zfit
     from zfit.loss import UnbinnedNLL
     from zfit.minimize import Minuit
-    from hepstats.hypotests import Discovery, UpperLimit
-    from hepstats.hypotests.calculators import (AsymptoticCalculator,
-                                                FrequentistCalculator)
-    from hepstats.hypotests.parameters import POI, POIarray
+    from hepstats.hypotests import Discovery
+    from hepstats.hypotests.calculators import (AsymptoticCalculator)
+    from hepstats.hypotests.parameters import POI
 
     Nsig = zfit.Parameter("Nsig", 40, -100., 100)
     Nbkg = zfit.Parameter("Nbkg", 340, 0, 500)
     Nobs = zfit.ComposedParameter("Nobs", lambda a, b: a + b, params=[Nsig, Nbkg])
 
-    from collections import OrderedDict
-    import tensorflow_probability as tfp
-    from zfit.models.dist_tfp import WrapDistribution
-    from zfit.util import ztyping
 
 
     obs = zfit.Space('N', limits=(0, 800))

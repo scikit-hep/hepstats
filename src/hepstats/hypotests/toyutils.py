@@ -1,3 +1,10 @@
+"""
+Module defining the classes to perform and store the results of toy experiments.
+
+Acronyms used in the code:
+    * nll = negative log-likehood, which is the value of the `loss` attribute of a calculator;
+"""
+
 from __future__ import annotations
 
 import warnings
@@ -6,20 +13,12 @@ from pathlib import Path
 
 import asdf
 import numpy as np
-import zfit.param
 from tqdm.auto import tqdm
 
-from ..utils import base_sample, base_sampler, pll
+from ..utils import base_sample, base_sampler, pll, set_values
 from .exceptions import FormatError, ParameterNotFound
 from .hypotests_object import ToysObject
 from .parameters import POI, POIarray
-
-"""
-Module defining the classes to perform and store the results of toy experiments.
-
-Acronyms used in the code:
-    * nll = negative log-likehood, which is the value of the `loss` attribute of a calculator;
-"""
 
 
 class ToyResult:
@@ -281,7 +280,7 @@ class ToysManager(ToysObject):
                     )
                     param_dict = next(samples)
 
-                with zfit.param.set_values(param_dict):
+                with set_values(param_dict):
                     for _ in range(2):
                         try:
                             minimum = minimizer.minimize(
