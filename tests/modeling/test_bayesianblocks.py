@@ -18,7 +18,7 @@ def test_bayesian_blocks(cmdopt, data_gen):
             np.savez(f, be1=be1, be2=be2, be3=be3)
     elif cmdopt == "test":
         answers = np.load(answer_dir / "answers_bayesian_blocks.npz")
-        assert np.all(be1 == answers["be1"])
-        assert np.all(be2 == answers["be2"])
-        assert np.all(be3 == answers["be3"])
+        np.testing.assert_array_equal(be1, answers["be1"])
+        np.testing.assert_array_equal(be2, answers["be2"])
+        np.testing.assert_array_equal(be3, answers["be3"])
         # assert(np.all(output[1] == answers['be']))
