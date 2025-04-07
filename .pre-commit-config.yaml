@@ -31,7 +31,7 @@ repos:
 #          - hatch-vcs
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.14.1
+    rev: v1.15.0
     hooks:
       - id: mypy
         files: src
@@ -57,7 +57,7 @@ repos:
         args: [ --py39-plus ]
 
   - repo: https://github.com/asottile/setup-cfg-fmt
-    rev: v2.7.0
+    rev: v2.8.0
     hooks:
       - id: setup-cfg-fmt
         args: [ --max-py-version=3.13, --include-version-classifiers ]
@@ -90,7 +90,7 @@ repos:
       - id: rm-unneeded-f-str
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.30.0
+    rev: 0.32.1
     hooks:
       - id: check-github-workflows
       - id: check-github-actions
@@ -103,7 +103,7 @@ repos:
       - id: auto-walrus
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.8.6"
+    rev: "v0.11.4"
     hooks:
       - id: ruff
         types_or: [ python, pyi, jupyter ]
