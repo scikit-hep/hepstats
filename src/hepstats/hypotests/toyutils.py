@@ -238,9 +238,10 @@ class ToysManager(ToysObject):
         # generate toys from best fit at profile point
         param.set_value(poigen.value)
         is_poi_floating = param.floating
-        param.floating=False
+        param.floating = False
         profile_minimum = minimizer.minimize(loss=self.loss)
-        if not profile_minimum.valid: print(poigen, "PROBLEM: profile fit not valid, toys won't be either")
+        if not profile_minimum.valid:
+            print(poigen, "PROBLEM: profile fit not valid, toys won't be either")
         param.floating = is_poi_floating
 
         toys_loss = self.toys_loss(poigen.name)
