@@ -201,7 +201,6 @@ class ToysObject(HypotestsObject):
 
         >>> sampler = calc.sampler()
         """
-        self.set_params_to_bestfit()
         nevents = []
         for m, d in zip(self.loss.model, self.loss.data):
             nevents_data = get_nevents(d)
@@ -251,8 +250,7 @@ class ToysObject(HypotestsObject):
         Example with `zfit`:
             >>> loss = calc.toys_loss(zfit.Parameter("mean"))
         """
-        if parameter_name not in self._toys_loss:
-            parameter = self.get_parameter(parameter_name)
-            sampler = self.sampler()
-            self._toys_loss[parameter.name] = self.lossbuilder(self.model, sampler)
+        parameter = self.get_parameter(parameter_name)
+        sampler = self.sampler()
+        self._toys_loss[parameter.name] = self.lossbuilder(self.model, sampler)
         return self._toys_loss[parameter_name]
