@@ -17,7 +17,7 @@ project_dir = Path(__file__).parents[1]
 # -- Project information -----------------------------------------------------
 
 project = "hepstats"
-copyright = "2020, Matthieu Marinangeli"
+copyright = "2019-2023, The Scikit-HEP Administrators"
 author = "Matthieu Marinangeli"
 
 # The full version, including alpha/beta/rc tags
@@ -98,6 +98,6 @@ html_theme_options = {
 html_context = {
     "github_user": "scikit-hep",
     "github_repo": "hepstats",
-    "github_version": "master",
+    "github_version": "main",
     "doc_path": "docs",
 }
