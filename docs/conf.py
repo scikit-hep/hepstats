@@ -7,13 +7,11 @@
 # -- Path setup --------------------------------------------------------------
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
 from hepstats import __version__ as version
 
 project_dir = Path(__file__).parents[1]
-sys.path.insert(0, str(project_dir))
 
 
 # -- Project information -----------------------------------------------------
@@ -41,7 +39,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.autosummary",
     "sphinx.ext.inheritance_diagram",
-    "sphinxcontrib.bibtex",
+    # "sphinxcontrib.bibtex",
     "matplotlib.sphinxext.plot_directive",
     "sphinx_copybutton",
     "sphinx_autodoc_typehints",
