@@ -19,7 +19,7 @@ sys.path.insert(0, str(project_dir))
 # -- Project information -----------------------------------------------------
 
 project = "hepstats"
-copyright = "2019-2023, The Scikit-HEP Administrators"
+copyright = "2019-2025, The Scikit-HEP Administrators"
 author = "Matthieu Marinangeli"
 
 # The full version, including alpha/beta/rc tags
