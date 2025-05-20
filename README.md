@@ -11,7 +11,6 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3519200.svg)](https://doi.org/10.5281/zenodo.3519200)
 
 [![GitHub Actions Status: CI](https://github.com/scikit-hep/hepstats/workflows/CI/badge.svg)](https://github.com/scikit-hep/hepstats/actions)
-![CI](https://github.com/scikit-hep/hepstats/workflows/CI/badge.svg)
 [![Code Coverage](https://codecov.io/gh/scikit-hep/hepstats/graph/badge.svg?branch=main)](https://codecov.io/gh/scikit-hep/hepstats?branch=main)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
