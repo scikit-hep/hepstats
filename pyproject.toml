@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "hepstats"
-description = "statistics tools and utilities"
+description = "HEP statistics tools and utilities"
 authors = [{ name = "Matthieu Marinangeli", email = "matthieu.marinangeli@gmail.com" }]
 maintainers = [{ name = "Scikit-HEP", email = "scikit-hep-admins@googlegroups.com" }]
 license = { text = "BSD 3-Clause License" }
