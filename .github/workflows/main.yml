@@ -7,7 +7,7 @@ concurrency:
 on:
   pull_request:
   push:
-    branches: [ "master"]
+    branches: [ "main"]
   release:
     types:
       - "published"
@@ -108,7 +108,7 @@ jobs:
           touch docs/_build/html/.nojekyll
 
       - name: Deploy docs to GitHub Pages
-        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
