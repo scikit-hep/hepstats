@@ -137,4 +137,4 @@ In the result you obtain the observed and expected limits. The observed limit is
 of 4.518 +/- 5.8 signal candidates in data. The expected limit is the limit under the background only hypothesis.
 A graphical representation on how the upper limit is computed in shown in the following figure.
 
-.. image:: https://raw.githubusercontent.com/scikit-hep/hepstats/master/notebooks/hypotests/asy_ul.png
+.. image:: https://raw.githubusercontent.com/scikit-hep/hepstats/main/notebooks/hypotests/asy_ul.png

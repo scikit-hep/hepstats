@@ -7,19 +7,17 @@
 # -- Path setup --------------------------------------------------------------
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
 from hepstats import __version__ as version
 
 project_dir = Path(__file__).parents[1]
-sys.path.insert(0, str(project_dir))
 
 
 # -- Project information -----------------------------------------------------
 
 project = "hepstats"
-copyright = "2020, Matthieu Marinangeli"
+copyright = "2019-2025, The Scikit-HEP Administrators"
 author = "Matthieu Marinangeli"
 
 # The full version, including alpha/beta/rc tags
@@ -41,7 +39,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.autosummary",
     "sphinx.ext.inheritance_diagram",
-    "sphinxcontrib.bibtex",
+    # "sphinxcontrib.bibtex",
     "matplotlib.sphinxext.plot_directive",
     "sphinx_copybutton",
     "sphinx_autodoc_typehints",
@@ -100,6 +98,6 @@ html_theme_options = {
 html_context = {
     "github_user": "scikit-hep",
     "github_repo": "hepstats",
-    "github_version": "master",
+    "github_version": "main",
     "doc_path": "docs",
 }

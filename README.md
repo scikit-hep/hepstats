@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/scikit-hep/hepstats/master/docs/images/logo.png" width="450">
+<img src="https://raw.githubusercontent.com/scikit-hep/hepstats/main/docs/images/logo.png" width="450">
 
 
 # `hepstats` package: statistics tools and utilities
@@ -6,15 +6,15 @@
 [![Scikit-HEP][sk-badge]](https://scikit-hep.org/)
 
 [![PyPI](https://img.shields.io/pypi/v/hepstats)](https://pypi.org/project/hepstats/)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hepstats)](https://pypi.org/project/hepstats/)
 [![Conda latest release](https://img.shields.io/conda/vn/conda-forge/hepstats.svg)](https://anaconda.org/conda-forge/hepstats)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hepstats)](https://pypi.org/project/hepstats/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3519200.svg)](https://doi.org/10.5281/zenodo.3519200)
 
-![CI](https://github.com/scikit-hep/hepstats/workflows/CI/badge.svg)
-[![codecov](https://codecov.io/gh/scikit-hep/hepstats/branch/master/graph/badge.svg)](https://codecov.io/gh/scikit-hep/hepstats)
+[![GitHub Actions Status: CI](https://github.com/scikit-hep/hepstats/workflows/CI/badge.svg)](https://github.com/scikit-hep/hepstats/actions)
+[![Code Coverage](https://codecov.io/gh/scikit-hep/hepstats/graph/badge.svg?branch=main)](https://codecov.io/gh/scikit-hep/hepstats?branch=main)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/scikit-hep/hepstats/master)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/scikit-hep/hepstats/main)
 
 hepstats is a library for statistical inference aiming to cover the needs High Energy Physics.
 It is part of the [Scikit-HEP project](https://scikit-hep.org/).
@@ -33,11 +33,11 @@ pip install hepstats
 or similar (use e.g. `virtualenv` if you wish).
 
 ## Changelog
-See the [changelog](https://github.com/scikit-hep/hepstats/blob/master/CHANGELOG.md) for a history of notable changes.
+See the [changelog](https://github.com/scikit-hep/hepstats/blob/main/CHANGELOG.md) for a history of notable changes.
 
 ## Getting Started
 
-The `hepstats` module includes `modeling`, `hypotests` and `splot` submodules. This a quick user guide to each submodule. The [binder](https://mybinder.org/v2/gh/scikit-hep/hepstats/master) examples are also a good way to get started.
+The `hepstats` module includes `modeling`, `hypotests` and `splot` submodules. This a quick user guide to each submodule. The [binder](https://mybinder.org/v2/gh/scikit-hep/hepstats/main) examples are also a good way to get started.
 
 ### modeling
 
@@ -56,13 +56,13 @@ The modeling submodule includes the [Bayesian Block algorithm](https://arxiv.org
 >>> plt.legend(loc=2)
 ```
 
-![bayesian blocks example](https://raw.githubusercontent.com/scikit-hep/hepstats/master/notebooks/modeling/bayesian_blocks_example.png)
+![bayesian blocks example](https://raw.githubusercontent.com/scikit-hep/hepstats/main/notebooks/modeling/bayesian_blocks_example.png)
 
 ### hypotests
 
-This submodule provides tools to do hypothesis tests such as discovery test and computations of upper limits or confidence intervals. hepstats needs a fitting backend to perform computations such as [zfit](https://github.com/zfit/zfit). Any fitting library can be used if their API is compatible  with hepstats (see [api checks](https://github.com/scikit-hep/hepstats/blob/master/hepstats/hypotests/utils/fit/api_check.py)).
+This submodule provides tools to do hypothesis tests such as discovery test and computations of upper limits or confidence intervals. hepstats needs a fitting backend to perform computations such as [zfit](https://github.com/zfit/zfit). Any fitting library can be used if their API is compatible  with hepstats (see [api checks](https://github.com/scikit-hep/hepstats/blob/main/hepstats/hypotests/utils/fit/api_check.py)).
 
-We give here a simple example of an upper limit calculation of the yield of a Gaussian signal with known mean and sigma over an exponential background. The fitting backend used is the [zfit](https://github.com/zfit/zfit) package. An example with a **counting experiment** analysis is also given in the [binder](https://mybinder.org/v2/gh/scikit-hep/hepstats/master) examples.
+We give here a simple example of an upper limit calculation of the yield of a Gaussian signal with known mean and sigma over an exponential background. The fitting backend used is the [zfit](https://github.com/zfit/zfit) package. An example with a **counting experiment** analysis is also given in the [binder](https://mybinder.org/v2/gh/scikit-hep/hepstats/main) examples.
 
 ```python
 >>> import zfit
@@ -105,11 +105,11 @@ Expected upper limit +2 sigma: Nsig = 22.24864429383046
 Expected upper limit -2 sigma: Nsig = 6.400549971360598
 ```
 
-![upper limit example](https://raw.githubusercontent.com/scikit-hep/hepstats/master/notebooks/hypotests/asy_ul.png)
+![upper limit example](https://raw.githubusercontent.com/scikit-hep/hepstats/main/notebooks/hypotests/asy_ul.png)
 
 ### splots
 
-A full example using the **sPlot** algorithm can be found [here](https://github.com/scikit-hep/hepstats/tree/master/notebooks/splots/splot_example.ipynb). **sWeights** for different components in a data sample, modeled with a sum of extended probability density functions, are derived using the `compute_sweights` function:
+A full example using the **sPlot** algorithm can be found [here](https://github.com/scikit-hep/hepstats/tree/main/notebooks/splots/splot_example.ipynb). **sWeights** for different components in a data sample, modeled with a sum of extended probability density functions, are derived using the `compute_sweights` function:
 
 ```python
 >>> from hepstats.splot import compute_sweights

@@ -24,4 +24,4 @@ compared to a histogram of this sample with a fine binning.
     >>>          linewidth=2)
     >>> plt.legend(loc=2)
 
-.. image:: https://raw.githubusercontent.com/scikit-hep/hepstats/master/notebooks/modeling/bayesian_blocks_example.png
+.. image:: https://raw.githubusercontent.com/scikit-hep/hepstats/main/notebooks/modeling/bayesian_blocks_example.png
