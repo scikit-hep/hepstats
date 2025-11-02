@@ -99,7 +99,7 @@ def create_loss_func(npeak, nbins=None, nbkg=None, nameadd="", obs=None):
 
 def create_sim_loss_func(npeak, nbins=None):
     loss1, params1 = create_loss_func(npeak, nbins=nbins, nameadd="_1", obs="x1")
-    loss2, params2 = create_loss_func(npeak * 10, nbins=nbins, nameadd="_2", obs="x2", nbkg=500)
+    loss2, _params2 = create_loss_func(npeak * 10, nbins=nbins, nameadd="_2", obs="x2", nbkg=500)
     loss = loss1 + loss2
 
     return loss, params1
