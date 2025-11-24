@@ -84,7 +84,7 @@ class POIarray:
         return values_equal.all() and name_equal
 
     def __hash__(self):
-        return hash((self.name, self.values.tostring()))
+        return hash((self.name, self.values.data.tobytes()))
 
     @property
     def ndim(self):
