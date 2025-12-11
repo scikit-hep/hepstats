@@ -22,7 +22,6 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -35,7 +34,7 @@ classifiers = [
     "Topic :: Utilities",
 ]
 urls = { Homepage = "https://github.com/scikit-hep/hepstats" }
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "asdf",
     "numpy",
@@ -69,8 +68,7 @@ test = [
     "pytest",
     "pytest-cov",
     "pytest-runner",
-    "zfit>=0.20.0;python_version<'3.13'",
-#    'hepstats[zfit];python_version<"3.13"',  # not working, why?
+    "hepstats[zfit]",
 ]
 zfit = ["zfit>=0.20.0"]
 
@@ -129,7 +127,6 @@ extend-select = [
     "PD", # pandas-vet
 ]
 ignore = [
-    "UP007", # type annotation upgrade, breaks pydantic for Python 3.9 (remove once above)
     "PLR09", # Too many <...>
     "PLR2004", # Magic value used in comparison
     "ISC001", # Conflicts with formatter

@@ -31,16 +31,15 @@ jobs:
         os:
           - ubuntu-latest
         python-version:
-          - "3.9"
-          - "3.12"
+          - "3.10"
           - "3.13"
         include:
           - os: windows-latest
-            python-version: "3.9"
+            python-version: "3.10"
           - os: macos-13
-            python-version: "3.9"
+            python-version: "3.10"
           - os: macos-latest
-            python-version: "3.12"  # old versions not supported
+            python-version: "3.13"  # old versions not supported
     name: Check Python ${{ matrix.python-version }} ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
@@ -60,7 +59,7 @@ jobs:
         run: python -m pytest --doctest-modules --cov=hepstats --cov-report=xml -n auto
 
       - name: Upload coverage to Codecov
-        if: matrix.python-version == '3.9' && matrix.os == 'ubuntu-latest'
+        if: matrix.python-version == '3.10' && matrix.os == 'ubuntu-latest'
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}  # technically not needed, but prevents failures: https://community.codecov.com/t/upload-issues-unable-to-locate-build-via-github-actions-api/3954
@@ -93,10 +92,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Python 3.9
+      - name: Setup Python 3.10
         uses: actions/setup-python@v6
         with:
-          python-version: 3.9
+          python-version: "3.10"
 
       - name: Install dependencies
         run: |
