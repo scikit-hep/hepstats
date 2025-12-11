@@ -3,7 +3,7 @@ ci:
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-added-large-files
         args: [ '--maxkb=1000' ]
@@ -31,7 +31,7 @@ repos:
 #          - hatch-vcs
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.15.0
+    rev: v1.18.2
     hooks:
       - id: mypy
         files: src
@@ -51,7 +51,7 @@ repos:
       - id: rst-directive-colons
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.19.1
+    rev: v3.20.0
     hooks:
       - id: pyupgrade
         args: [ --py39-plus ]
@@ -90,7 +90,7 @@ repos:
       - id: rm-unneeded-f-str
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.32.1
+    rev: 0.34.0
     hooks:
       - id: check-github-workflows
       - id: check-github-actions
@@ -103,7 +103,7 @@ repos:
       - id: auto-walrus
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.11.4"
+    rev: "v0.13.3"
     hooks:
       - id: ruff
         types_or: [ python, pyi, jupyter ]

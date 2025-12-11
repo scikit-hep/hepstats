@@ -191,3 +191,48 @@ def test_frequentist_calculator_one_poi(constraint):
     assert all(is_valid_data(s) for s in samplers)
     loss = calc.toys_loss(mean.name)
     assert is_valid_loss(loss)
+
+
+def test_frequentist_calculator_toys_at_correct_values():
+    """Regression test: toys must be generated at the specified POI value, not data's best fit.
+
+    This test catches the bug where base_sample used set_values() context manager but
+    zfit samplers ignore current parameter values - they need param_values passed directly.
+    """
+    np.random.seed(42)
+
+    obs = zfit.Space("x", limits=(0.1, 3.0))
+    # Data centered at 1.2
+    data_array = np.random.normal(1.2, 0.3, 500)
+    data = zfit.data.Data.from_numpy(obs=obs, array=data_array)
+
+    mean = zfit.Parameter("mu_test", 1.2, 0.0, 3.0)
+    sigma = zfit.Parameter("sigma_test", 0.3)
+    sigma.floating = False
+
+    model = zfit.pdf.Gauss(obs=obs, mu=mean, sigma=sigma)
+    loss = UnbinnedNLL(model=model, data=data)
+
+    calc = FrequentistCalculator(loss, Minuit(), ntoysnull=30, ntoysalt=30)
+
+    # Data best fit should be around 1.2
+    bestfit_val = calc.bestfit.params[mean]['value']
+    assert abs(bestfit_val - 1.2) < 0.1, f"Best fit should be ~1.2, got {bestfit_val}"
+
+    # Generate null toys at mu=1.8 (far from data's best fit of 1.2)
+    poi_null = POIarray(mean, [1.8])
+    poi_alt = POI(mean, 0.5)
+
+    toysresults = calc.get_toys_null(poi_null, poi_alt, qtilde=False)
+    toys = toysresults[POI(mean, 1.8)]
+
+    # Critical check: toys generated at mu=1.8 should have best fits around 1.8
+    # NOT around data's best fit of 1.2
+    mean_bestfit = np.mean(toys.bestfit)
+
+    # If the bug is present, mean would be ~1.2 (data's best fit)
+    # With correct implementation, mean should be ~1.8 (toys generated at mu=1.8)
+    assert abs(mean_bestfit - 1.8) < 0.2, (
+        f"Toys generated at mu=1.8 should have best fits ~1.8, got {mean_bestfit:.3f}. "
+        f"If ~1.2, toys are being generated at data's best fit instead of specified POI."
+    )

@@ -178,7 +178,7 @@ class ToysManager(ToysObject):
 
         if index not in self.keys():
             for k in self.keys():
-                poigen_k, poieval_k = k
+                poigen_k, _poieval_k = k
                 if poigen_k != poigen:
                     continue
                 if np.isin(poieval.values, k[-1].values).all():
