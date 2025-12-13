@@ -108,7 +108,7 @@ def bayesian_blocks(
 
     # validate input weights
     # set them to 1 if not given
-    weights = np.asarray(weights) if weights is not None else np.ones_like(data)
+    weights_array: np.ndarray = np.asarray(weights) if weights is not None else np.ones_like(data)
 
     # initialize the prior
     prior = Prior(p0, gamma)
@@ -117,12 +117,12 @@ def bayesian_blocks(
     # We want to sort the data array (without losing the associated weights), and combine duplicate
     # data points by summing their weights together.  We can accomplish all this with `groupby`
 
-    df = pd.DataFrame({"data": data, "weights": weights})
+    df = pd.DataFrame({"data": data, "weights": weights_array})
     gb = df.groupby("data").sum()
     data = gb.index.values
-    weights = gb.weights.values
+    weights_array = gb.weights.values
 
-    N = weights.size
+    N = weights_array.size
 
     # create length-(N + 1) array of cell edges
     edges = np.concatenate([data[:1], 0.5 * (data[1:] + data[:-1]), data[-1:]])
@@ -143,7 +143,7 @@ def bayesian_blocks(
         T_k = block_length[: R + 1] - block_length[R + 1]
 
         # N_k: number of elements in each block
-        N_k = np.cumsum(weights[: R + 1][::-1])[::-1]
+        N_k = np.cumsum(weights_array[: R + 1][::-1])[::-1]
 
         # evaluate fitness function
         fit_vec = N_k * (np.log(N_k / T_k))

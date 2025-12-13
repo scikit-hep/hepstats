@@ -163,7 +163,7 @@ class AsymptoticCalculator(BaseCalculator):
             if type(loss) is unbinned_loss:
                 datasets = []
                 models = []
-                for d, m, nbins in zip(loss.data, loss.model, asimov_bins):
+                for d, m, nbins in zip(loss.data, loss.model, asimov_bins, strict=True):
                     binnings = m.space.with_binning(nbins)
                     model_binned = m.to_binned(binnings)
                     data_binned = d.to_binned(binnings)
@@ -209,7 +209,7 @@ class AsymptoticCalculator(BaseCalculator):
             msg = f"asimov_bins must be an int or a list of int (or list of list of int), not {type(asimov_bins)}"
             raise TypeError(msg)
 
-        for i, (asimov_bin, ndim) in enumerate(zip(asimov_bins, ndims)):
+        for i, (asimov_bin, ndim) in enumerate(zip(asimov_bins, ndims, strict=True)):
             if isinstance(asimov_bin, int):
                 if ndim == 1:
                     asimov_bins[i] = [asimov_bin]
@@ -231,7 +231,8 @@ class AsymptoticCalculator(BaseCalculator):
                 raise TypeError(msg)
         assert isinstance(asimov_bins, list), "INTERNAL ERROR: Could not correctly convert asimov_bins"
         assert all(
-            isinstance(asimov_bin, list) and len(asimov_bin) == ndim for ndim, asimov_bin in zip(ndims, asimov_bins)
+            isinstance(asimov_bin, list) and len(asimov_bin) == ndim
+            for ndim, asimov_bin in zip(ndims, asimov_bins, strict=True)
         ), "INTERNAL ERROR: Could not correctly convert asimov_bins, dimensions wrong"
         return asimov_bins
 
@@ -323,7 +324,7 @@ class AsymptoticCalculator(BaseCalculator):
             asimov_bins = self._asimov_bins
             assert len(asimov_bins) == len(data)
             is_binned_loss = isinstance(loss, tuple(self.UNBINNED_TO_BINNED_LOSS.values()))
-            for _i, (m, d, nbins) in enumerate(zip(model, data, asimov_bins)):
+            for _i, (m, d, nbins) in enumerate(zip(model, data, asimov_bins, strict=True)):
                 dataset = generate_asimov_dataset(d, m, is_binned_loss, nbins, values)
                 asimov_data.append(dataset)
 

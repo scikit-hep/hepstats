@@ -21,7 +21,7 @@ def set_values_once(params, values):
 
         return zfit.param.set_values(params, values)  # more efficient
 
-    for p, v in zip(params, values):
+    for p, v in zip(params, values, strict=True):
         p.set_value(v)
     return None
 
@@ -77,10 +77,10 @@ def set_values(params, values=None):
             msg = "values must be provided if params is not a Mapping (dict-like)"
             raise ValueError(msg)
     old_values = [p.value() for p in params]
-    for p, v in zip(params, values):
+    for p, v in zip(params, values, strict=True):
         p.set_value(v)
     yield
-    for p, v in zip(params, old_values):
+    for p, v in zip(params, old_values, strict=True):
         p.set_value(v)
 
 
