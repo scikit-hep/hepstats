@@ -1,0 +1,917 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>hepstats.hypotests.toyutils &#8212; hepstats 0.9.3.dev44+g2a4e81b83 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=61762f21"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=4ea706d9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/hepstats/hypotests/toyutils';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.9.3.dev44+g2a4e81b83" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search hepstats..."
+         aria-label="Search hepstats..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.png" class="logo__image only-light" alt="hepstats 0.9.3.dev44+g2a4e81b83 documentation - Home"/>
+    <img src="../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt="hepstats 0.9.3.dev44+g2a4e81b83 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting_started/index.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../whats_new.html">
+    What’s new
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/scikit-hep/hepstats" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting_started/index.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../whats_new.html">
+    What’s new
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/scikit-hep/hepstats" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">hepstats.hypotests.toyutils</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for hepstats.hypotests.toyutils</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module defining the classes to perform and store the results of toy experiments.</span>
+
+<span class="sd">Acronyms used in the code:</span>
+<span class="sd">    * nll = negative log-likehood, which is the value of the `loss` attribute of a calculator;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">asdf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm.auto</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">base_sample</span><span class="p">,</span> <span class="n">base_sampler</span><span class="p">,</span> <span class="n">pll</span><span class="p">,</span> <span class="n">set_values</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">FormatError</span><span class="p">,</span> <span class="n">ParameterNotFound</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.hypotests_object</span><span class="w"> </span><span class="kn">import</span> <span class="n">ToysObject</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.parameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">POI</span><span class="p">,</span> <span class="n">POIarray</span>
+
+
+<div class="viewcode-block" id="ToyResult">
+<a class="viewcode-back" href="../../../api/hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToyResult">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ToyResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to store the results of toys generated for a given value of a POI.</span>
+<span class="sd">    The best fit value of the POI, the NLL evaluate at the best fit, and the NLL evaluated</span>
+<span class="sd">    at several values of the POI are stored. The results can serialized using the **to_dict** method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poigen</span><span class="p">:</span> <span class="n">POI</span><span class="p">,</span> <span class="n">poieval</span><span class="p">:</span> <span class="n">POIarray</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            poigen: POI used to generate the toys.</span>
+<span class="sd">            poieval: POI values to evaluate the loss function.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: if poigen is not a POI instance.</span>
+<span class="sd">            TypeError: if poieval is not a POIarray instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">poigen</span><span class="p">,</span> <span class="n">POI</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;A `hypotests.parameters.POI` is required for poigen.&quot;</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">poieval</span><span class="p">,</span> <span class="n">POIarray</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;A `hypotests.parameters.POIarray` is required for poieval.&quot;</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_poigen</span> <span class="o">=</span> <span class="n">poigen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bestfit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nll_bestfit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_poieval</span> <span class="o">=</span> <span class="n">poieval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nlls</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">poieval</span><span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">poigen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the POI used to generate the toys.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_poigen</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">bestfit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the best fitted values of the POI for each toys.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bestfit</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">poieval</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the scanned POIarray.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_poieval</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">nll_bestfit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the NLL evaluated at the best fitted values of the POI for each toys.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nll_bestfit</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">nlls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the NLL evaluated at the poigeval values of the POI for each toys.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nlls</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ntoys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the number of toys.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bestfit</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ToyResult.add_entries">
+<a class="viewcode-back" href="../../../api/hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToyResult.add_entries">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bestfit</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">nll_bestfit</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">nlls</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">POI</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add new result entries.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            bestfit: best fitted values of the POI</span>
+<span class="sd">            nll_bestfit: NLL evaluated at the best fitted values of the POI</span>
+<span class="sd">            nlls: NLL evaluated at the best fitted values of the POI</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">nlls</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">poieval</span><span class="p">):</span>
+            <span class="n">missing_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">poieval</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">nlls</span><span class="p">]</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;NLLs values for </span><span class="si">{</span><span class="n">missing_keys</span><span class="si">}</span><span class="s2"> are missing.&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">nentries</span> <span class="o">=</span> <span class="n">bestfit</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">assert</span> <span class="n">nll_bestfit</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">nentries</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">nentries</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">nlls</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bestfit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bestfit</span><span class="p">,</span> <span class="n">bestfit</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nll_bestfit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nll_bestfit</span><span class="p">,</span> <span class="n">nll_bestfit</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nlls</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="n">nlls</span><span class="p">[</span><span class="n">p</span><span class="p">]])</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlls</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
+
+
+<div class="viewcode-block" id="ToyResult.to_dict">
+<a class="viewcode-back" href="../../../api/hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToyResult.to_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns dictionary of the toy results.</span>
+
+<span class="sd">        Keys:</span>
+<span class="sd">            poi: name of the parameter of interest</span>
+<span class="sd">            genvalues: fixed vale of the poi used to generate the toys</span>
+<span class="sd">            evalvalues: values to evaluate the NLL</span>
+<span class="sd">            bestfit: array of best fitted values of the poi for each toy</span>
+<span class="sd">            nlls: dictionary of NLL values for each value in `evalvalues` and best fit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;poi&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">poigen</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;bestfit&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">bestfit</span><span class="p">}</span>
+        <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;nlls&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">n</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">nll</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">nll</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlls</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;genvalue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poigen</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;evalvalues&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poieval</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;nlls&quot;</span><span class="p">][</span><span class="s2">&quot;bestfit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nll_bestfit</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="FitFailuresWarning">
+<a class="viewcode-back" href="../../../api/hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.FitFailuresWarning">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FitFailuresWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="ToysManager">
+<a class="viewcode-back" href="../../../api/hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToysManager">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ToysManager</span><span class="p">(</span><span class="n">ToysObject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class handling the toy generation and fit, results are stored in **ToyResult** instances stored</span>
+<span class="sd">    themselves in a dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">input</span><span class="p">,</span>
+        <span class="n">minimizer</span><span class="p">,</span>
+        <span class="n">sampler</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">base_sampler</span><span class="p">,</span>
+        <span class="n">sample</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">base_sample</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            input: loss or fit result</span>
+<span class="sd">            minimizer: minimizer to use to find the minimum of the loss function</span>
+<span class="sd">            sampler: function used to create sampler with models, number of events and floating parameters in the</span>
+<span class="sd">               sample. Default is :func:`hepstats.utils.fit.sampling.base_sampler`.</span>
+<span class="sd">            sample: function used to get samples from the sampler. Default is</span>
+<span class="sd">               :func:`hepstats.utils.fit.sampling.base_sample`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="nb">input</span><span class="p">,</span> <span class="n">minimizer</span><span class="o">=</span><span class="n">minimizer</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">sampler</span><span class="p">,</span> <span class="n">sample</span><span class="o">=</span><span class="n">sample</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_toys</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="ToysManager.get_toyresult">
+<a class="viewcode-back" href="../../../api/hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToysManager.get_toyresult">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_toyresult</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poigen</span><span class="p">:</span> <span class="n">POI</span><span class="p">,</span> <span class="n">poieval</span><span class="p">:</span> <span class="n">POIarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToyResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Getter function.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            poigen: POI used to generate the toys</span>
+<span class="sd">            poieval: POI values to evaluate the loss function</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">poigen</span><span class="p">,</span> <span class="n">poieval</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">poigen_k</span><span class="p">,</span> <span class="n">_poieval_k</span> <span class="o">=</span> <span class="n">k</span>
+                <span class="k">if</span> <span class="n">poigen_k</span> <span class="o">!=</span> <span class="n">poigen</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">poieval</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">k</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                    <span class="n">index</span> <span class="o">=</span> <span class="n">k</span>
+                    <span class="k">break</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_toys</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ToysManager.add_toyresult">
+<a class="viewcode-back" href="../../../api/hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToysManager.add_toyresult">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_toyresult</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toy</span><span class="p">:</span> <span class="n">ToyResult</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add ToyResult to the manager.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            toy: the toy result to add</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">toy</span><span class="p">,</span> <span class="n">ToyResult</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;A `hypotests.toyutils.ToyResult` is required for toy.&quot;</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">toy</span><span class="o">.</span><span class="n">poigen</span><span class="p">,</span> <span class="n">toy</span><span class="o">.</span><span class="n">poieval</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_toys</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">toy</span></div>
+
+
+<div class="viewcode-block" id="ToysManager.ntoys">
+<a class="viewcode-back" href="../../../api/hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToysManager.ntoys">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ntoys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poigen</span><span class="p">:</span> <span class="n">POI</span><span class="p">,</span> <span class="n">poieval</span><span class="p">:</span> <span class="n">POIarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the number of toys generated from given value of a POI, and scanned/evaluated for given values_equal</span>
+<span class="sd">        of the same POI.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            poigen: POI used to generate the toys</span>
+<span class="sd">            poieval: POI values to evaluate the loss function</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_toyresult</span><span class="p">(</span><span class="n">poigen</span><span class="p">,</span> <span class="n">poieval</span><span class="p">)</span><span class="o">.</span><span class="n">ntoys</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="ToysManager.generate_and_fit_toys">
+<a class="viewcode-back" href="../../../api/hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToysManager.generate_and_fit_toys">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_and_fit_toys</span><span class="p">(</span>  <span class="c1"># TODO PROFILE THIS</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ntoys</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">poigen</span><span class="p">:</span> <span class="n">POI</span><span class="p">,</span>
+        <span class="n">poieval</span><span class="p">:</span> <span class="n">POIarray</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate and fit toys for at a given POI (poigen). The toys are then fitted, and the likelihood</span>
+<span class="sd">        is profiled at the values of poigen and poieval.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ntoys: number of toys to generate</span>
+<span class="sd">            poigen: POI used to generate the toys</span>
+<span class="sd">            poieval: POI values to evaluate the loss function</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_params_to_bestfit</span><span class="p">()</span>
+
+        <span class="n">minimizer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">minimizer</span>
+        <span class="n">param</span> <span class="o">=</span> <span class="n">poigen</span><span class="o">.</span><span class="n">parameter</span>
+
+        <span class="n">toys_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toys_loss</span><span class="p">(</span><span class="n">poigen</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">sampler</span> <span class="o">=</span> <span class="n">toys_loss</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="n">bestfit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">ntoys</span><span class="p">)</span>
+        <span class="n">nll_bestfit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">ntoys</span><span class="p">)</span>
+        <span class="n">nlls</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">ntoys</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">poieval</span><span class="p">}</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+            <span class="n">sampler</span><span class="o">=</span><span class="n">sampler</span><span class="p">,</span>
+            <span class="n">ntoys</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">ntoys</span> <span class="o">*</span> <span class="mf">1.2</span><span class="p">),</span>
+            <span class="n">poi</span><span class="o">=</span><span class="n">poigen</span><span class="p">,</span>
+            <span class="n">constraints</span><span class="o">=</span><span class="n">toys_loss</span><span class="o">.</span><span class="n">constraints</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">toysresult</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_toyresult</span><span class="p">(</span><span class="n">poigen</span><span class="p">,</span> <span class="n">poieval</span><span class="p">)</span>
+            <span class="n">poieval</span> <span class="o">=</span> <span class="n">toysresult</span><span class="o">.</span><span class="n">poieval</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">toysresult</span> <span class="o">=</span> <span class="n">ToyResult</span><span class="p">(</span><span class="n">poigen</span><span class="p">,</span> <span class="n">poieval</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_toyresult</span><span class="p">(</span><span class="n">toysresult</span><span class="p">)</span>
+
+        <span class="n">nfailures</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">ntrials</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">progressbar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">ntoys</span><span class="p">)</span>
+        <span class="n">minimum</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ntoys</span><span class="p">):</span>
+            <span class="n">ntrials</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">converged</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">converged</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">param_dict</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+                    <span class="n">to_gen</span> <span class="o">=</span> <span class="n">ntoys</span> <span class="o">-</span> <span class="n">i</span>
+                    <span class="n">samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+                        <span class="n">sampler</span><span class="o">=</span><span class="n">sampler</span><span class="p">,</span>
+                        <span class="n">ntoys</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">to_gen</span> <span class="o">*</span> <span class="mf">1.2</span><span class="p">),</span>
+                        <span class="n">poi</span><span class="o">=</span><span class="n">poigen</span><span class="p">,</span>
+                        <span class="n">constraints</span><span class="o">=</span><span class="n">toys_loss</span><span class="o">.</span><span class="n">constraints</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">param_dict</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+
+                <span class="k">with</span> <span class="n">set_values</span><span class="p">(</span><span class="n">param_dict</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">minimum</span> <span class="o">=</span> <span class="n">minimizer</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span>
+                                <span class="n">loss</span><span class="o">=</span><span class="n">toys_loss</span>
+                            <span class="p">)</span>  <span class="c1"># TODO: , init=minimum use previous minimum as starting point for parameter uncertainties</span>
+                            <span class="n">converged</span> <span class="o">=</span> <span class="n">minimum</span><span class="o">.</span><span class="n">converged</span>
+                            <span class="k">if</span> <span class="n">converged</span><span class="p">:</span>
+                                <span class="k">break</span>
+                        <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+                            <span class="n">converged</span> <span class="o">=</span> <span class="kc">False</span>
+                            <span class="k">break</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">converged</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">set_params_to_bestfit</span><span class="p">()</span>
+                    <span class="n">nfailures</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">nfailures</span> <span class="o">&gt;</span> <span class="mf">0.15</span> <span class="o">*</span> <span class="n">ntrials</span> <span class="ow">and</span> <span class="n">ntrials</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+                        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nfailures</span><span class="si">}</span><span class="s2"> out of </span><span class="si">{</span><span class="n">ntrials</span><span class="si">}</span><span class="s2"> fits failed or didn&#39;t converge.&quot;</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">FitFailuresWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">minimum</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;No minimum found.&quot;</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                <span class="n">bestfit</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">minimum</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">param</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+                <span class="n">nll_bestfit</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pll</span><span class="p">(</span><span class="n">minimizer</span><span class="p">,</span> <span class="n">toys_loss</span><span class="p">,</span> <span class="n">POI</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">bestfit</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">poieval</span><span class="p">:</span>
+                    <span class="n">nlls</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pll</span><span class="p">(</span><span class="n">minimizer</span><span class="p">,</span> <span class="n">toys_loss</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+
+            <span class="n">progressbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">ntoys</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">progressbar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">poigen</span><span class="p">,</span> <span class="n">poieval</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">toysresult</span> <span class="o">=</span> <span class="n">ToyResult</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">poieval</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_toyresult</span><span class="p">(</span><span class="n">toysresult</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">toysresult</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_toyresult</span><span class="p">(</span><span class="n">poigen</span><span class="p">,</span> <span class="n">poieval</span><span class="p">)</span>
+
+        <span class="n">toysresult</span><span class="o">.</span><span class="n">add_entries</span><span class="p">(</span><span class="n">bestfit</span><span class="o">=</span><span class="n">bestfit</span><span class="p">,</span> <span class="n">nll_bestfit</span><span class="o">=</span><span class="n">nll_bestfit</span><span class="p">,</span> <span class="n">nlls</span><span class="o">=</span><span class="n">nlls</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ToysManager.keys">
+<a class="viewcode-back" href="../../../api/hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToysManager.keys">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns keys of the **ToysManager** instance defined as **key = (toy.poigen, toy.poieval)** for a</span>
+<span class="sd">        given **ToyResult** instance `toy`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_toys</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ToysManager.values">
+<a class="viewcode-back" href="../../../api/hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToysManager.values">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns values of **ToysManager** instance that are **ToyResult** instances.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_toys</span><span class="o">.</span><span class="n">values</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ToysManager.toyresults_to_dict">
+<a class="viewcode-back" href="../../../api/hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToysManager.toyresults_to_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">toyresults_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of all the toy results converted into dictionaries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span></div>
+
+
+<div class="viewcode-block" id="ToysManager.to_yaml">
+<a class="viewcode-back" href="../../../api/hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToysManager.to_yaml">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save the toys into a yaml file under the key **toys**.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filename: the yaml file name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">asdf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">tree</span> <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="k">else</span> <span class="p">{}</span>
+
+        <span class="n">tree</span><span class="p">[</span><span class="s2">&quot;toys&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toyresults_to_dict</span><span class="p">()</span>
+        <span class="n">af</span> <span class="o">=</span> <span class="n">asdf</span><span class="o">.</span><span class="n">AsdfFile</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+        <span class="n">af</span><span class="o">.</span><span class="n">write_to</span><span class="p">(</span>
+            <span class="n">filename</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5.0&quot;</span>
+        <span class="p">)</span>  <span class="c1"># TODO: change the dict layout not to have floats as keys. Fails with new ASDF version</span>
+        <span class="n">af</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ToysManager.toysresults_from_yaml">
+<a class="viewcode-back" href="../../../api/hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToysManager.toysresults_from_yaml">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">toysresults_from_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ToyResult</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract toy results from a yaml file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filename: the yaml file name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">with</span> <span class="n">asdf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">asdf_file</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">toys</span> <span class="o">=</span> <span class="n">asdf_file</span><span class="o">.</span><span class="n">tree</span><span class="p">[</span><span class="s2">&quot;toys&quot;</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The key `toys` is not found in </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">, not a valid toy file.&quot;</span>
+                <span class="k">raise</span> <span class="n">FormatError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">toys</span><span class="p">:</span>
+                <span class="n">poiparam</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="o">.</span><span class="n">get_params</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;poi&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                        <span class="n">poiparam</span> <span class="o">=</span> <span class="n">p</span>
+
+                <span class="k">if</span> <span class="n">poiparam</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Parameter with name </span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;poi&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> is not found.&quot;</span>
+                    <span class="k">raise</span> <span class="n">ParameterNotFound</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+                <span class="n">poigen</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">poiparam</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;genvalue&quot;</span><span class="p">])</span>
+                <span class="n">poieval</span> <span class="o">=</span> <span class="n">POIarray</span><span class="p">(</span><span class="n">poiparam</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s2">&quot;evalvalues&quot;</span><span class="p">]))</span>
+
+                <span class="n">bestfit</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;bestfit&quot;</span><span class="p">]</span>
+                <span class="n">nll_bestfit</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;nlls&quot;</span><span class="p">][</span><span class="s2">&quot;bestfit&quot;</span><span class="p">]</span>
+                <span class="n">nlls</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;nlls&quot;</span><span class="p">][</span><span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">poieval</span><span class="p">}</span>
+
+                <span class="n">t</span> <span class="o">=</span> <span class="n">ToyResult</span><span class="p">(</span><span class="n">poigen</span><span class="p">,</span> <span class="n">poieval</span><span class="p">)</span>
+                <span class="n">t</span><span class="o">.</span><span class="n">add_entries</span><span class="p">(</span><span class="n">bestfit</span><span class="o">=</span><span class="n">bestfit</span><span class="p">,</span> <span class="n">nll_bestfit</span><span class="o">=</span><span class="n">nll_bestfit</span><span class="p">,</span> <span class="n">nlls</span><span class="o">=</span><span class="n">nlls</span><span class="p">)</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+
+<div class="viewcode-block" id="ToysManager.from_yaml">
+<a class="viewcode-back" href="../../../api/hepstats.hypotests.toyutils.html#hepstats.hypotests.toyutils.ToysManager.from_yaml">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_yaml</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="nb">input</span><span class="p">,</span>
+        <span class="n">minimizer</span><span class="p">,</span>
+        <span class="n">sampler</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">base_sampler</span><span class="p">,</span>
+        <span class="n">sample</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">base_sample</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read the toys from a yaml file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filename: the yaml file name.</span>
+<span class="sd">            input: loss or fit result</span>
+<span class="sd">            minimizer: minimizer to use to find the minimum of the loss function</span>
+<span class="sd">            sampler: function used to create sampler with models, number of events and floating parameters in the</span>
+<span class="sd">               sample. Default is :func:`hepstats.utils.fit.sampling.base_sampler`.</span>
+<span class="sd">            sample: function used to get samples from the sampler. Default is</span>
+<span class="sd">               :func:`hepstats.utils.fit.sampling.base_sample`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">toyscollection</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">minimizer</span><span class="p">,</span> <span class="n">sampler</span><span class="p">,</span> <span class="n">sample</span><span class="p">)</span>
+        <span class="n">toysresults</span> <span class="o">=</span> <span class="n">toyscollection</span><span class="o">.</span><span class="n">toysresults_from_yaml</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">toysresults</span><span class="p">:</span>
+            <span class="n">toyscollection</span><span class="o">.</span><span class="n">add_toyresult</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">toyscollection</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2019-2025, The Scikit-HEP Administrators.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,635 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>hepstats.hypotests.core.upperlimit &#8212; hepstats 0.9.3.dev44+g2a4e81b83 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../../_static/documentation_options.js?v=61762f21"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=4ea706d9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/hepstats/hypotests/core/upperlimit';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.9.3.dev44+g2a4e81b83" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search hepstats..."
+         aria-label="Search hepstats..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../_static/logo.png" class="logo__image only-light" alt="hepstats 0.9.3.dev44+g2a4e81b83 documentation - Home"/>
+    <img src="../../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt="hepstats 0.9.3.dev44+g2a4e81b83 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../getting_started/index.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../whats_new.html">
+    What’s new
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/scikit-hep/hepstats" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../getting_started/index.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../whats_new.html">
+    What’s new
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/scikit-hep/hepstats" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">hepstats.hypotests.core.upperlimit</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for hepstats.hypotests.core.upperlimit</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">interpolate</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..calculators.basecalculator</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseCalculator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">POIRangeError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..parameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">POI</span><span class="p">,</span> <span class="n">POIarray</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.basetest</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseTest</span>
+
+
+<div class="viewcode-block" id="UpperLimit">
+<a class="viewcode-back" href="../../../../api/hepstats.hypotests.core.upperlimit.html#hepstats.hypotests.core.upperlimit.UpperLimit">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UpperLimit</span><span class="p">(</span><span class="n">BaseTest</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for upper limit calculation.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">calculator</span><span class="p">:</span> <span class="n">BaseCalculator</span><span class="p">,</span>
+        <span class="n">poinull</span><span class="p">:</span> <span class="n">POI</span> <span class="o">|</span> <span class="n">POIarray</span><span class="p">,</span>
+        <span class="n">poialt</span><span class="p">:</span> <span class="n">POI</span><span class="p">,</span>
+        <span class="n">qtilde</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            calculator: calculator to use for computing the pvalues.</span>
+<span class="sd">            poinull: parameters of interest for the null hypothesis.</span>
+<span class="sd">            poialt: parameters of interest for the alternative hypothesis.</span>
+<span class="sd">            qtilde: if `True` use the :math:`\\widetilde{q}` test statistics else (default) use the :math:`q`</span>
+<span class="sd">               test statistic.</span>
+
+<span class="sd">        Example with **zfit**:</span>
+<span class="sd">            &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">            &gt;&gt;&gt; import zfit</span>
+<span class="sd">            &gt;&gt;&gt; from zfit.loss import ExtendedUnbinnedNLL</span>
+<span class="sd">            &gt;&gt;&gt; from zfit.minimize import Minuit</span>
+<span class="sd">            &gt;&gt;&gt;</span>
+<span class="sd">            &gt;&gt;&gt; bounds = (0.1, 3.0)</span>
+<span class="sd">            &gt;&gt;&gt; zfit.Space(&#39;x&#39;, limits=bounds)</span>
+<span class="sd">            &gt;&gt;&gt;</span>
+<span class="sd">            &gt;&gt;&gt; bkg = np.random.exponential(0.5, 300)</span>
+<span class="sd">            &gt;&gt;&gt; peak = np.random.normal(1.2, 0.1, 10)</span>
+<span class="sd">            &gt;&gt;&gt; data = np.concatenate((bkg, peak))</span>
+<span class="sd">            &gt;&gt;&gt; data = data[(data &gt; bounds[0]) &amp; (data &lt; bounds[1])]</span>
+<span class="sd">            &gt;&gt;&gt; N = data.size</span>
+<span class="sd">            &gt;&gt;&gt; data = zfit.data.Data.from_numpy(obs=obs, array=data)</span>
+<span class="sd">            &gt;&gt;&gt;</span>
+<span class="sd">            &gt;&gt;&gt; lambda_ = zfit.Parameter(&quot;lambda&quot;, -2.0, -4.0, -1.0)</span>
+<span class="sd">            &gt;&gt;&gt; Nsig = zfit.Parameter(&quot;Ns&quot;, 20., -20., N)</span>
+<span class="sd">            &gt;&gt;&gt; Nbkg = zfit.Parameter(&quot;Nbkg&quot;, N, 0., N*1.1)</span>
+<span class="sd">            &gt;&gt;&gt; signal = Nsig * zfit.pdf.Gauss(obs=obs, mu=1.2, sigma=0.1)</span>
+<span class="sd">            &gt;&gt;&gt; background = Nbkg * zfit.pdf.Exponential(obs=obs, lambda_=lambda_)</span>
+<span class="sd">            &gt;&gt;&gt; loss = ExtendedUnbinnedNLL(model=signal + background, data=data)</span>
+<span class="sd">            &gt;&gt;&gt;</span>
+<span class="sd">            &gt;&gt;&gt; from hepstats.hypotests.calculators import AsymptoticCalculator</span>
+<span class="sd">            &gt;&gt;&gt; from hepstats.hypotests import UpperLimit</span>
+<span class="sd">            &gt;&gt;&gt; from hepstats.hypotests.parameters import POI, POIarray</span>
+<span class="sd">            &gt;&gt;&gt;</span>
+<span class="sd">            &gt;&gt;&gt; calculator = AsymptoticCalculator(loss, Minuit())</span>
+<span class="sd">            &gt;&gt;&gt; poinull = POIarray(Nsig, np.linspace(0.0, 25, 20))</span>
+<span class="sd">            &gt;&gt;&gt; poialt = POI(Nsig, 0)</span>
+<span class="sd">            &gt;&gt;&gt; ul = UpperLimit(calculator, poinull, poialt)</span>
+<span class="sd">            &gt;&gt;&gt; ul.upperlimit(alpha=0.05, CLs=True)</span>
+<span class="sd">            Observed upper limit: Nsig = 15.725784747406346</span>
+<span class="sd">            Expected upper limit: Nsig = 11.927442041887158</span>
+<span class="sd">            Expected upper limit +1 sigma: Nsig = 16.596396280677116</span>
+<span class="sd">            Expected upper limit -1 sigma: Nsig = 8.592750403611896</span>
+<span class="sd">            Expected upper limit +2 sigma: Nsig = 22.24864429383046</span>
+<span class="sd">            Expected upper limit -2 sigma: Nsig = 6.400549971360598</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">calculator</span><span class="p">,</span> <span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_qtilde</span> <span class="o">=</span> <span class="n">qtilde</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">qtilde</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns True if qtilde test statistic is used, else False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qtilde</span>
+
+<div class="viewcode-block" id="UpperLimit.pvalues">
+<a class="viewcode-back" href="../../../../api/hepstats.hypotests.core.upperlimit.html#hepstats.hypotests.core.upperlimit.UpperLimit.pvalues">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pvalues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">CLs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns p-values scanned for the values of the parameters of interest</span>
+<span class="sd">        in the null hypothesis.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            CLs: if `True` uses pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}`</span>
+<span class="sd">               else as :math:`p_{clsb} = p_{null}`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary of p-values for CLsb, CLs, expected (+/- sigma bands).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pvalue_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">pvalue</span>
+
+        <span class="n">pnull</span><span class="p">,</span> <span class="n">palt</span> <span class="o">=</span> <span class="n">pvalue_func</span><span class="p">(</span><span class="n">poinull</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">poialt</span><span class="p">,</span> <span class="n">qtilde</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">qtilde</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">pvalues</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;clsb&quot;</span><span class="p">:</span> <span class="n">pnull</span><span class="p">,</span> <span class="s2">&quot;clb&quot;</span><span class="p">:</span> <span class="n">palt</span><span class="p">}</span>
+
+        <span class="n">sigmas</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">]</span>
+
+        <span class="n">exppvalue_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">expected_pvalue</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">exppvalue_func</span><span class="p">(</span>
+            <span class="n">poinull</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">poinull</span><span class="p">,</span>
+            <span class="n">poialt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">poialt</span><span class="p">,</span>
+            <span class="n">nsigma</span><span class="o">=</span><span class="n">sigmas</span><span class="p">,</span>
+            <span class="n">CLs</span><span class="o">=</span><span class="n">CLs</span><span class="p">,</span>
+            <span class="n">qtilde</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">qtilde</span><span class="p">,</span>
+            <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">pvalues</span><span class="p">[</span><span class="s2">&quot;expected&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">pvalues</span><span class="p">[</span><span class="s2">&quot;expected_p1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">pvalues</span><span class="p">[</span><span class="s2">&quot;expected_p2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">pvalues</span><span class="p">[</span><span class="s2">&quot;expected_m1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">pvalues</span><span class="p">[</span><span class="s2">&quot;expected_m2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+
+        <span class="n">pvalues</span><span class="p">[</span><span class="s2">&quot;cls&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pnull</span> <span class="o">/</span> <span class="n">palt</span>
+
+        <span class="k">return</span> <span class="n">pvalues</span></div>
+
+
+<div class="viewcode-block" id="UpperLimit.upperlimit">
+<a class="viewcode-back" href="../../../../api/hepstats.hypotests.core.upperlimit.html#hepstats.hypotests.core.upperlimit.UpperLimit.upperlimit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">upperlimit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">CLs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">printlevel</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the upper limit of the parameter of interest.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha: significance level.</span>
+<span class="sd">            CLs: if `True` uses pvalues as :math:`p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}` else as</span>
+<span class="sd">               :math:`p_{clsb} = p_{null}`.</span>
+<span class="sd">            printlevel: if &gt; 0 print the result.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionnary of upper limits for observed, expected (+/- sigma bands).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">poinull</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poinull</span>
+
+        <span class="c1"># create a filter for -1 and -2 sigma expected limits</span>
+        <span class="n">bestfit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">bestfit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">poinull</span><span class="o">.</span><span class="n">parameter</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="nb">filter</span> <span class="o">=</span> <span class="n">poinull</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;=</span> <span class="n">bestfit</span>
+
+        <span class="n">observed_key</span> <span class="o">=</span> <span class="s2">&quot;cls&quot;</span> <span class="k">if</span> <span class="n">CLs</span> <span class="k">else</span> <span class="s2">&quot;clsb&quot;</span>
+
+        <span class="n">to_interpolate</span> <span class="o">=</span> <span class="p">[</span><span class="n">observed_key</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;expected</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;_p1&quot;</span><span class="p">,</span> <span class="s2">&quot;_m1&quot;</span><span class="p">,</span> <span class="s2">&quot;_p2&quot;</span><span class="p">,</span> <span class="s2">&quot;_m2&quot;</span><span class="p">]]</span>
+
+        <span class="n">limits</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">all_pvalues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pvalues</span><span class="p">(</span><span class="n">CLs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">to_interpolate</span><span class="p">:</span>
+            <span class="n">pvalues</span> <span class="o">=</span> <span class="n">all_pvalues</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">poinull</span><span class="o">.</span><span class="n">values</span>
+
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">observed_key</span><span class="p">:</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="s2">&quot;observed&quot;</span>
+                <span class="n">pvalues</span> <span class="o">=</span> <span class="n">pvalues</span><span class="p">[</span><span class="nb">filter</span><span class="p">]</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="nb">filter</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">pvalues</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">alpha</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;expected&quot;</span><span class="p">,</span> <span class="s2">&quot;observed&quot;</span><span class="p">]:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The minimum of the scanned p-values is </span><span class="si">{</span><span class="nb">min</span><span class="p">(</span><span class="n">pvalues</span><span class="p">)</span><span class="si">}</span><span class="s2"> which is larger than the&quot;</span>
+                    <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; confidence level alpha = </span><span class="si">{</span><span class="n">alpha</span><span class="si">}</span><span class="s2">. Try to increase the maximum POI value.&quot;</span>
+                    <span class="k">raise</span> <span class="n">POIRangeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+                <span class="n">limits</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">continue</span>
+
+            <span class="n">tck</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">splrep</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">pvalues</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">sproot</span><span class="p">(</span><span class="n">tck</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">limits</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="n">limits</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">printlevel</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">sigma</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;+1&quot;</span><span class="p">,</span> <span class="s2">&quot;-1&quot;</span><span class="p">,</span> <span class="s2">&quot;+2&quot;</span><span class="p">,</span> <span class="s2">&quot;-2&quot;</span><span class="p">]:</span>
+                <span class="n">sigma</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">limits</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2019-2025, The Scikit-HEP Administrators.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

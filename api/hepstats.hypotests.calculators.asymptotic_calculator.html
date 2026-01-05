@@ -1,0 +1,1092 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>hepstats.hypotests.calculators.asymptotic_calculator module &#8212; hepstats 0.9.3.dev44+g2a4e81b83 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=61762f21"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=4ea706d9"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/hepstats.hypotests.calculators.asymptotic_calculator';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.9.3.dev44+g2a4e81b83" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search hepstats..."
+         aria-label="Search hepstats..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="hepstats 0.9.3.dev44+g2a4e81b83 documentation - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="hepstats 0.9.3.dev44+g2a4e81b83 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../whats_new.html">
+    What’s new
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/scikit-hep/hepstats" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../whats_new.html">
+    What’s new
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/scikit-hep/hepstats" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="hepstats.hypotests.html">hepstats.hypotests package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="hepstats.hypotests.calculators.html">hepstats.hypotests.calculators package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">hepstats.hypotests.calculators.asymptotic_calculator module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hepstats.hypotests.calculators.basecalculator.html">hepstats.hypotests.calculators.basecalculator module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hepstats.hypotests.calculators.frequentist_calculator.html">hepstats.hypotests.calculators.frequentist_calculator module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="hepstats.hypotests.core.html">hepstats.hypotests.core package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="hepstats.hypotests.core.basetest.html">hepstats.hypotests.core.basetest module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hepstats.hypotests.core.confidence_interval.html">hepstats.hypotests.core.confidence_interval module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hepstats.hypotests.core.discovery.html">hepstats.hypotests.core.discovery module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hepstats.hypotests.core.upperlimit.html">hepstats.hypotests.core.upperlimit module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="hepstats.hypotests.exceptions.html">hepstats.hypotests.exceptions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hepstats.hypotests.hypotests_object.html">hepstats.hypotests.hypotests_object module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hepstats.hypotests.parameters.html">hepstats.hypotests.parameters module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hepstats.hypotests.toyutils.html">hepstats.hypotests.toyutils module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="hepstats.modeling.html">hepstats.modeling package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="hepstats.modeling.bayesian_blocks.html">hepstats.modeling.bayesian_blocks module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="hepstats.splot.html">hepstats.splot package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="hepstats.splot.exceptions.html">hepstats.splot.exceptions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hepstats.splot.sweights.html">hepstats.splot.sweights module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hepstats.splot.warnings.html">hepstats.splot.warnings module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="hepstats.utils.html">hepstats.utils package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="hepstats.utils.fit.html">hepstats.utils.fit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="hepstats.utils.fit.api_check.html">hepstats.utils.fit.api_check module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hepstats.utils.fit.diverse.html">hepstats.utils.fit.diverse module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hepstats.utils.fit.sampling.html">hepstats.utils.fit.sampling module</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hepstats.version.html">hepstats.version module</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">hepstats.hypotests.calculators.asymptotic_calculator module</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-hepstats.hypotests.calculators.asymptotic_calculator">
+<span id="hepstats-hypotests-calculators-asymptotic-calculator-module"></span><h1>hepstats.hypotests.calculators.asymptotic_calculator module<a class="headerlink" href="#module-hepstats.hypotests.calculators.asymptotic_calculator" title="Link to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.generate_asimov_hist">
+<span class="sig-prename descclassname"><span class="pre">hepstats.hypotests.calculators.asymptotic_calculator.</span></span><span class="sig-name descname"><span class="pre">generate_asimov_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/asymptotic_calculator.html#generate_asimov_hist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.generate_asimov_hist" title="Link to this definition">#</a></dt>
+<dd><p>Generate the Asimov histogram using a model and dictionary of parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – model used to generate the dataset.</p></li>
+<li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type">dict[Any, dict[str, Any]]</span>) – values of the parameters of the models.</p></li>
+<li><p><strong>nbins</strong> (<span class="sphinx_autodoc_typehints-type">int | None</span>) – number of bins.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type">tuple[np.ndarray, np.ndarray]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple of hist and bin_edges.</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obs</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Space</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sigma</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">pdf</span><span class="o">.</span><span class="n">Gauss</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">generate_asimov_hist</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="mf">1.2</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.generate_asimov_dataset">
+<span class="sig-prename descclassname"><span class="pre">hepstats.hypotests.calculators.asymptotic_calculator.</span></span><span class="sig-name descname"><span class="pre">generate_asimov_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_binned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/asymptotic_calculator.html#generate_asimov_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.generate_asimov_dataset" title="Link to this definition">#</a></dt>
+<dd><p>Generate the Asimov dataset using a model and dictionary of parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Data, the same class should be used for the generated dataset.</p></li>
+<li><p><strong>model</strong> – Model to use for the generation. Can be binned or unbinned.</p></li>
+<li><p><strong>is_binned</strong> – If the model is binned.</p></li>
+<li><p><strong>nbins</strong> – Number of bins for the asimov dataset.</p></li>
+<li><p><strong>values</strong> – Dictionary of parameters values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dataset with the asimov dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hepstats.hypotests.calculators.asymptotic_calculator.</span></span><span class="sig-name descname"><span class="pre">AsymptoticCalculator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asimov_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/asymptotic_calculator.html#AsymptoticCalculator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="hepstats.hypotests.calculators.basecalculator.html#hepstats.hypotests.calculators.basecalculator.BaseCalculator" title="hepstats.hypotests.calculators.basecalculator.BaseCalculator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseCalculator</span></code></a></p>
+<p>Class for asymptotic calculators, using asymptotic formulae of the likelihood ratio described in
+<a href="#id1"><span class="problematic" id="id2">:cite:`Cowan:2010js`</span></a>. Can be used only with one parameter of interest.</p>
+<p>Asymptotic calculator class using Wilk’s and Wald’s asymptotic formulae.</p>
+<p>The asympotic formula is significantly faster than the Frequentist calculator, as it does not
+require the calculation of the frequentist p-value, which involves the calculation of toys (sample-and-fit).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – loss or fit result.</p></li>
+<li><p><strong>minimizer</strong> – minimizer to use to find the minimum of the loss function.</p></li>
+<li><p><strong>asimov_bins</strong> (<span class="sphinx_autodoc_typehints-type">int | list[int] | None</span>) – number of bins of the Asimov dataset.</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">zfit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">zfit.loss</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnbinnedNLL</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">zfit.minimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">Minuit</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obs</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Space</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sigma</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">pdf</span><span class="o">.</span><span class="n">Gauss</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">UnbinnedNLL</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc</span> <span class="o">=</span> <span class="n">AsymptoticCalculator</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span> <span class="n">minimizer</span><span class="o">=</span><span class="n">Minuit</span><span class="p">(),</span> <span class="n">asimov_bins</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.UNBINNED_TO_BINNED_LOSS">
+<span class="sig-name descname"><span class="pre">UNBINNED_TO_BINNED_LOSS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">typing.ClassVar</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.UNBINNED_TO_BINNED_LOSS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.check_pois">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_pois</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pois</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/asymptotic_calculator.html#AsymptoticCalculator.check_pois"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.check_pois" title="Link to this definition">#</a></dt>
+<dd><p>Checks if the parameter of interest is a <code class="xref py py-class docutils literal notranslate"><span class="pre">hepstats.parameters.POIarray</span></code> instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pois</strong> (<span class="sphinx_autodoc_typehints-type">POI | POIarray</span>) – the parameter of interest to check.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – if pois is not an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">hepstats.parameters.POIarray</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.asimov_dataset">
+<span class="sig-name descname"><span class="pre">asimov_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ntrials_fit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/asymptotic_calculator.html#AsymptoticCalculator.asimov_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.asimov_dataset" title="Link to this definition">#</a></dt>
+<dd><p>Gets the Asimov dataset for a given alternative hypothesis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poi</strong> (<span class="sphinx_autodoc_typehints-type">POI</span>) – parameter of interest of the alternative hypothesis.</p></li>
+<li><p><strong>ntrials_fit</strong> (<span class="sphinx_autodoc_typehints-type">int | None</span>) – (default: 5) maximum number of fits to perform</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The asymov dataset.</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">poialt</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">asimov_dataset</span><span class="p">(</span><span class="n">poialt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.asimov_loss">
+<span class="sig-name descname"><span class="pre">asimov_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/asymptotic_calculator.html#AsymptoticCalculator.asimov_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.asimov_loss" title="Link to this definition">#</a></dt>
+<dd><p>Constructs a loss function using the Asimov dataset for a given alternative hypothesis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>poi</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a></span>) – parameter of interest of the alternative hypothesis.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Loss function.</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">poialt</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">asimov_loss</span><span class="p">(</span><span class="n">poialt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.asimov_nll">
+<span class="sig-name descname"><span class="pre">asimov_nll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pois</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poialt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/asymptotic_calculator.html#AsymptoticCalculator.asimov_nll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.asimov_nll" title="Link to this definition">#</a></dt>
+<dd><p>Computes negative log-likelihood values for given parameters of interest using the Asimov dataset
+generated with a given alternative hypothesis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pois</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a></span>) – parameters of interest.</p></li>
+<li><p><strong>poialt</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a></span>) – parameter of interest of the alternative hypothesis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Array of nll values for the alternative hypothesis.</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poinull</span> <span class="o">=</span> <span class="n">POIarray</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poialt</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nll</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">asimov_nll</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.pnull">
+<span class="sig-name descname"><span class="pre">pnull</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qobs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qalt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onesided</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onesideddiscovery</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qtilde</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/asymptotic_calculator.html#AsymptoticCalculator.pnull"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.pnull" title="Link to this definition">#</a></dt>
+<dd><p>Computes the pvalue for the null hypothesis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qobs</strong> (<span class="sphinx_autodoc_typehints-type">np.ndarray</span>) – observed values of the test-statistic q.</p></li>
+<li><p><strong>qalt</strong> (<span class="sphinx_autodoc_typehints-type">np.ndarray | None</span>) – alternative values of the test-statistic q using the asimov dataset.</p></li>
+<li><p><strong>onesided</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>) – if <cite>True</cite> (default) computes onesided pvalues for a discovery.</p></li>
+<li><p><strong>qtilde</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>) – if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+<li><p><strong>nsigma</strong> (<span class="sphinx_autodoc_typehints-type">int</span>) – significance shift.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type">np.ndarray</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Array of the pvalues for the null hypothesis.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.qalt">
+<span class="sig-name descname"><span class="pre">qalt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poinull</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poialt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onesided</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onesideddiscovery</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qtilde</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/asymptotic_calculator.html#AsymptoticCalculator.qalt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.qalt" title="Link to this definition">#</a></dt>
+<dd><p>Computes alternative hypothesis values of the <span class="math notranslate nohighlight">\(\Delta\)</span> log-likelihood test statistic using the asimov
+dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poinull</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a></span>) – parameters of interest for the null hypothesis.</p></li>
+<li><p><strong>poialt</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a></span>) – parameters of interest for the alternative hypothesis.</p></li>
+<li><p><strong>onesided</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – if <cite>True</cite> (default) computes onesided pvalues for a
+discovery test.</p></li>
+<li><p><strong>qtilde</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Q values for the alternative hypothesis.</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poinull</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poialt</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">qalt</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.palt">
+<span class="sig-name descname"><span class="pre">palt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qobs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qalt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onesided</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onesideddiscovery</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qtilde</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hepstats/hypotests/calculators/asymptotic_calculator.html#AsymptoticCalculator.palt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.palt" title="Link to this definition">#</a></dt>
+<dd><p>Computes the pvalue for the alternative hypothesis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qobs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span>) – observed values of the test-statistic q.</p></li>
+<li><p><strong>qalt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span>) – alternative values of the test-statistic q using the Asimov dataset.</p></li>
+<li><p><strong>onesided</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – if <cite>True</cite> (default) computes onesided pvalues for a discovery.</p></li>
+<li><p><strong>qtilde</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Array of the pvalues for the alternative hypothesis.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.bestfit">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bestfit</span></span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.bestfit" title="Link to this definition">#</a></dt>
+<dd><p>Returns the best fit values of the model parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.check_pois_compatibility">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_pois_compatibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poi2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.check_pois_compatibility" title="Link to this definition">#</a></dt>
+<dd><p>Checks compatibility between two lists of <code class="xref py py-func docutils literal notranslate"><span class="pre">hepstats.parameters.POIarray()</span></code> instances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poi1</strong> (<span class="sphinx_autodoc_typehints-type">POI | POIarray</span>) – the first parameter of interest.</p></li>
+<li><p><strong>poi2</strong> (<span class="sphinx_autodoc_typehints-type">POI | POIarray</span>) – the second parameter of interest.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – if the two parameters of interests don’t have the same parameters, check by their
+    names.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.constraints">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">constraints</span></span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.constraints" title="Link to this definition">#</a></dt>
+<dd><p>Returns the constraints on the loss / likehood function.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.data" title="Link to this definition">#</a></dt>
+<dd><p>Returns the data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.expected_pvalue">
+<span class="sig-name descname"><span class="pre">expected_pvalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poinull</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poialt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CLs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qtilde</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onesided</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onesideddiscovery</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.expected_pvalue" title="Link to this definition">#</a></dt>
+<dd><p>Computes the expected pvalues and error bands for different values of <span class="math notranslate nohighlight">\(\sigma\)</span> (0=expected/median)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poinull</strong> (<span class="sphinx_autodoc_typehints-type">POI | POIarray</span>) – parameters of interest for the null hypothesis.</p></li>
+<li><p><strong>poialt</strong> (<span class="sphinx_autodoc_typehints-type">POI | POIarray</span>) – parameters of interest for the alternative hypothesis.</p></li>
+<li><p><strong>nsigma</strong> (<span class="sphinx_autodoc_typehints-type">list[int]</span>) – list of values of <span class="math notranslate nohighlight">\(\sigma\)</span> to compute the expected pvalue.</p></li>
+<li><p><strong>CLs</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>) – if <cite>True</cite> computes pvalues as <span class="math notranslate nohighlight">\(p_{cls}=p_{null}/p_{alt}=p_{clsb}/p_{clb}\)</span>
+else as <span class="math notranslate nohighlight">\(p_{clsb} = p_{null}\)</span>.</p></li>
+<li><p><strong>qtilde</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>) – if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+<li><p><strong>onesided</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>) – if <cite>True</cite> (default) computes onesided pvalues for a discovery.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type">list[np.array]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Array of expected pvalues for each <span class="math notranslate nohighlight">\(\sigma\)</span> value</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poinull</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poialt</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nll</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">expected_pvalue</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.get_parameter">
+<span class="sig-name descname"><span class="pre">get_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.get_parameter" title="Link to this definition">#</a></dt>
+<dd><p>Returns the parameter in loss function with given input name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – name of the parameter to return</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.loss">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">loss</span></span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.loss" title="Link to this definition">#</a></dt>
+<dd><p>Returns the loss / likelihood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.lossbuilder">
+<span class="sig-name descname"><span class="pre">lossbuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oldloss</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.lossbuilder" title="Link to this definition">#</a></dt>
+<dd><p>Method to build a new loss function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>*</em>) – The model or models to evaluate the data on</p></li>
+<li><p><strong>data</strong> (<em>*</em>) – Data to use</p></li>
+<li><p><strong>weights</strong> (<em>*</em>) – the data weights</p></li>
+<li><p><strong>oldloss</strong> (<em>*</em>) – Previous loss that has data, models, type</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>Example with <cite>zfit</cite>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sigma</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">pdf</span><span class="o">.</span><span class="n">Gauss</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">lossbuilder</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Loss function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.minimizer">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimizer</span></span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.minimizer" title="Link to this definition">#</a></dt>
+<dd><p>Returns the minimizer.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.model">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.model" title="Link to this definition">#</a></dt>
+<dd><p>Returns the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.obs_nll">
+<span class="sig-name descname"><span class="pre">obs_nll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pois</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.obs_nll" title="Link to this definition">#</a></dt>
+<dd><p>Compute observed negative log-likelihood values for given parameters of interest.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pois</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a></span>) – parameters of interest.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Observed nll values.</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poi</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nll</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">obs_nll</span><span class="p">(</span><span class="n">poi</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.parameters">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameters</span></span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.parameters" title="Link to this definition">#</a></dt>
+<dd><p>Returns the list of free parameters in loss / likelihood function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.pvalue">
+<span class="sig-name descname"><span class="pre">pvalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poinull</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poialt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qtilde</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onesided</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onesideddiscovery</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.pvalue" title="Link to this definition">#</a></dt>
+<dd><p>Computes pvalues for the null and alternative hypothesis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poinull</strong> (<span class="sphinx_autodoc_typehints-type">POI | POIarray</span>) – parameters of interest for the null hypothesis.</p></li>
+<li><p><strong>poialt</strong> (<span class="sphinx_autodoc_typehints-type">POI | None</span>) – parameters of interest for the alternative hypothesis.</p></li>
+<li><p><strong>qtilde</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>) – if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\widetilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+<li><p><strong>onesided</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>) – if <cite>True</cite> (default) computes onesided pvalues for a discovery test.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type">tuple[np.ndarray, np.ndarray]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple of arrays for pnull, palt</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poinull</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poialt</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pvalues</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">pavalue</span><span class="p">(</span><span class="n">poinull</span><span class="p">,</span> <span class="n">poialt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.q">
+<span class="sig-name descname"><span class="pre">q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nll1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nll2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onesided</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onesideddiscovery</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.q" title="Link to this definition">#</a></dt>
+<dd><p>Compute values of the test statistic q defined as the difference between negative log-likelihood
+values <span class="math notranslate nohighlight">\(q = nll1 - nll2\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nll1</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></span>) – array of nll values #1, evaluated with poi1.</p></li>
+<li><p><strong>nll2</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></span>) – array of nll values #2, evaluated with poi2.</p></li>
+<li><p><strong>poi1</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a></span>) – POI’s #1.</p></li>
+<li><p><strong>poi2</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POIarray" title="hepstats.hypotests.parameters.POIarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">POIarray</span></code></a></span>) – POI’s #2.</p></li>
+<li><p><strong>onesided</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – if <cite>True</cite> (default) computes onesided pvalues for a discovery.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Array of <span class="math notranslate nohighlight">\(q\)</span> values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.qobs">
+<span class="sig-name descname"><span class="pre">qobs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poinull</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onesided</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onesideddiscovery</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qtilde</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.qobs" title="Link to this definition">#</a></dt>
+<dd><p>Computes observed values of the <span class="math notranslate nohighlight">\(\Delta\)</span> log-likelihood test statistic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poinull</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hepstats.hypotests.parameters.html#hepstats.hypotests.parameters.POI" title="hepstats.hypotests.parameters.POI"><code class="xref py py-class docutils literal notranslate"><span class="pre">POI</span></code></a></span>) – parameters of interest for the null hypothesis.</p></li>
+<li><p><strong>qtilde</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – if <cite>True</cite> use the <span class="math notranslate nohighlight">\(\tilde{q}\)</span> test statistics else (default)
+use the <span class="math notranslate nohighlight">\(q\)</span> test statistic.</p></li>
+<li><p><strong>onesided</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – if <cite>True</cite> (default) computes onesided pvalues.</p></li>
+<li><p><strong>onesideddiscovery</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – if <cite>True</cite> (default) computes onesided pvalues for a
+discovery test.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Observed values of q.</p>
+</dd>
+</dl>
+<dl>
+<dt>Example with <strong>zfit</strong>:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span> <span class="o">=</span> <span class="n">zfit</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poi</span> <span class="o">=</span> <span class="n">POI</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">qobs</span><span class="p">(</span><span class="n">poi</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.set_params_to_bestfit">
+<span class="sig-name descname"><span class="pre">set_params_to_bestfit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.set_params_to_bestfit" title="Link to this definition">#</a></dt>
+<dd><p>Set the values of the parameters in the models to the best fit values</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.generate_asimov_hist"><code class="docutils literal notranslate"><span class="pre">generate_asimov_hist()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.generate_asimov_dataset"><code class="docutils literal notranslate"><span class="pre">generate_asimov_dataset()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.UNBINNED_TO_BINNED_LOSS"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.UNBINNED_TO_BINNED_LOSS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.check_pois"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.check_pois()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.asimov_dataset"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.asimov_dataset()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.asimov_loss"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.asimov_loss()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.asimov_nll"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.asimov_nll()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.pnull"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.pnull()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.qalt"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.qalt()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.palt"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.palt()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.bestfit"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.bestfit</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.check_pois_compatibility"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.check_pois_compatibility()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.constraints"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.constraints</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.data"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.data</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.expected_pvalue"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.expected_pvalue()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.get_parameter"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.get_parameter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.loss"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.loss</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.lossbuilder"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.lossbuilder()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.minimizer"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.minimizer</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.model"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.model</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.obs_nll"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.obs_nll()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.parameters"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.parameters</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.pvalue"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.pvalue()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.q"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.q()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.qobs"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.qobs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hepstats.hypotests.calculators.asymptotic_calculator.AsymptoticCalculator.set_params_to_bestfit"><code class="docutils literal notranslate"><span class="pre">AsymptoticCalculator.set_params_to_bestfit()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/scikit-hep/hepstats/edit/main/docs/api/hepstats.hypotests.calculators.asymptotic_calculator.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/hepstats.hypotests.calculators.asymptotic_calculator.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2019-2025, The Scikit-HEP Administrators.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
