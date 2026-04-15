@@ -61,7 +61,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         if: matrix.python-version == '3.9' && matrix.os == 'ubuntu-latest'
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}  # technically not needed, but prevents failures: https://community.codecov.com/t/upload-issues-unable-to-locate-build-via-github-actions-api/3954
           file: ./coverage.xml
@@ -79,7 +79,7 @@ jobs:
       - name: Build
         run: pipx run build
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         with:
           path: dist/*
 
@@ -126,7 +126,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'release' && github.event.action == 'published'
     steps:
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v8
         with:
           name: artifact
           path: dist
