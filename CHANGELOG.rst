@@ -4,6 +4,8 @@ Changelog
 main
 *************
 
+* Drop support for Python 3.9.
+
 Version 0.9.2
 **************
 
