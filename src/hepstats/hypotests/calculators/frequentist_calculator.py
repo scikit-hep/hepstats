@@ -83,7 +83,7 @@ class FrequentistCalculator(ToysCalculator):
             >>> poialt = POI(mean, 1.2)
             >>> q = calc.qnull(poinull, poialt)
         """
-        toysresults = self.get_toys_null(poinull, poialt, qtilde)
+        toysresults = self.get_toys_null(poinull, poinull, qtilde)
         ret = {}
 
         for p in poinull:
