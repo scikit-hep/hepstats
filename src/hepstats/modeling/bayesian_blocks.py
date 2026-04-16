@@ -122,7 +122,7 @@ def bayesian_blocks(
     data = gb.index.values
     weights = gb.weights.values
 
-    N = weights.size
+    N = weights.size  # type: ignore[union-attr]
 
     # create length-(N + 1) array of cell edges
     edges = np.concatenate([data[:1], 0.5 * (data[1:] + data[:-1]), data[-1:]])
@@ -143,7 +143,7 @@ def bayesian_blocks(
         T_k = block_length[: R + 1] - block_length[R + 1]
 
         # N_k: number of elements in each block
-        N_k = np.cumsum(weights[: R + 1][::-1])[::-1]
+        N_k = np.cumsum(weights[: R + 1][::-1])[::-1]  # type: ignore[index]
 
         # evaluate fitness function
         fit_vec = N_k * (np.log(N_k / T_k))

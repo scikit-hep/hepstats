@@ -158,7 +158,7 @@ class HypotestsObject:
             raise ValueError(msg.format("weights", "`self.data`"))
 
         if weights is not None:
-            for d, w in zip(data, weights):
+            for d, w in zip(data, weights, strict=False):
                 d = d.with_weights(w)
 
         if hasattr(oldloss, "create_new"):
@@ -202,7 +202,7 @@ class ToysObject(HypotestsObject):
         >>> sampler = calc.sampler()
         """
         nevents = []
-        for m, d in zip(self.loss.model, self.loss.data):
+        for m, d in zip(self.loss.model, self.loss.data, strict=False):
             nevents_data = get_nevents(d)
             if m.is_extended:
                 nevents.append(np.random.poisson(lam=nevents_data))  # TODO: handle constraint yields correctly?

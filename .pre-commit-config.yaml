@@ -31,7 +31,7 @@ repos:
 #          - hatch-vcs
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.20.0
+    rev: v1.20.1
     hooks:
       - id: mypy
         files: src
@@ -54,7 +54,7 @@ repos:
     rev: v3.21.2
     hooks:
       - id: pyupgrade
-        args: [ --py39-plus ]
+        args: [ --py310-plus ]
 
   - repo: https://github.com/asottile/setup-cfg-fmt
     rev: v3.2.0
@@ -69,7 +69,7 @@ repos:
 
       - id: nbqa-pyupgrade
         additional_dependencies: [ pyupgrade ]
-        args: [ --py39-plus ]
+        args: [ --py310-plus ]
 
 
   - repo: https://github.com/roy-ht/pre-commit-jupyter
@@ -103,7 +103,7 @@ repos:
       - id: auto-walrus
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.15.9"
+    rev: "v0.15.10"
     hooks:
       - id: ruff
         types_or: [ python, pyi, jupyter ]
