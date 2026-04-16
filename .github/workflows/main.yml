@@ -32,6 +32,7 @@ jobs:
           - ubuntu-latest
         python-version:
           - "3.10"
+          - "3.11"
           - "3.12"
           - "3.13"
         include:
@@ -60,7 +61,7 @@ jobs:
         run: python -m pytest --doctest-modules --cov=hepstats --cov-report=xml -n auto
 
       - name: Upload coverage to Codecov
-        if: matrix.python-version == '3.10' && matrix.os == 'ubuntu-latest'
+        if: matrix.python-version == '3.13' && matrix.os == 'ubuntu-latest'
         uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}  # technically not needed, but prevents failures: https://community.codecov.com/t/upload-issues-unable-to-locate-build-via-github-actions-api/3954
