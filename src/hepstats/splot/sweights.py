@@ -109,7 +109,7 @@ def compute_sweights(model, x: np.ndarray, *, atol_exceptions: float | None = No
     Nx = eval_pdf(model, x, allow_extended=True)
     pN = p / Nx[:, None]
 
-    MLSR = pN.sum(axis=0)
+    MLSR = np.sum(sample_weight[:, None] * pN, axis=0)
     atol_warning = 5e-3
     if atol_exceptions is None:
         atol_exceptions = 5e-2
@@ -134,7 +134,7 @@ def compute_sweights(model, x: np.ndarray, *, atol_exceptions: float | None = No
         msg += " If the fit to the data is good please ignore this warning."
         warnings.warn(msg, AboveToleranceWarning, stacklevel=2)
 
-    Vinv = (pN).T.dot(pN)
+    Vinv = pN.T @ (sample_weight[:, None] * pN)
     V = np.linalg.inv(Vinv)
 
     sweights = p.dot(V) / Nx[:, None]
