@@ -26,7 +26,13 @@ def is_sum_of_extended_pdfs(model) -> bool:
     return all(m.is_extended for m in model.get_models()) and model.is_extended
 
 
-def compute_sweights(model, x: np.ndarray, *, atol_exceptions: float | None = None) -> dict[Any, np.ndarray]:
+def compute_sweights(
+    model,
+    x: np.ndarray,
+    *,
+    sample_weight: np.ndarray | None = None,
+    atol_exceptions: float | None = None,
+) -> dict[Any, np.ndarray]:
     """Computes sWeights from probability density functions for different components/species in a fit model
     (for instance signal and background) fitted on some data `x`.
 
@@ -108,7 +114,16 @@ def compute_sweights(model, x: np.ndarray, *, atol_exceptions: float | None = No
     p = np.vstack([eval_pdf(m, x) for m in models]).T
     Nx = eval_pdf(model, x, allow_extended=True)
     pN = p / Nx[:, None]
+    if sample_weight is None:
+        sample_weight = np.ones(pN.shape[0], dtype=float)
+    else:
+        sample_weight = np.asarray(sample_weight, dtype=float)
 
+    if sample_weight.ndim != 1:
+        raise ValueError("sample_weight must be a 1D array.")
+
+    if len(sample_weight) != pN.shape[0]:
+        raise ValueError("sample_weight must have the same length as x.")
     MLSR = np.sum(sample_weight[:, None] * pN, axis=0)
     atol_warning = 5e-3
     if atol_exceptions is None:
