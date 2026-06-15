@@ -120,10 +120,12 @@ def compute_sweights(
         sample_weight = np.asarray(sample_weight, dtype=float)
 
     if sample_weight.ndim != 1:
-        raise ValueError("sample_weight must be a 1D array.")
+        msg_0 = "sample_weight must be a 1D array."
+        raise ValueError(msg_0)
 
     if len(sample_weight) != pN.shape[0]:
-        raise ValueError("sample_weight must have the same length as x.")
+        msg_0 = "sample_weight must have the same length as x."
+        raise ValueError(msg_0)
     MLSR = np.sum(sample_weight[:, None] * pN, axis=0)
     atol_warning = 5e-3
     if atol_exceptions is None:
