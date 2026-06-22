@@ -549,7 +549,6 @@ class AsymptoticCalculator(BaseCalculator):
 
         pnull = self.pnull(
             qobs=qobs,
-            qalt=qalt,
             onesided=onesided,
             qtilde=qtilde,
             onesideddiscovery=onesideddiscovery,
@@ -565,7 +564,6 @@ class AsymptoticCalculator(BaseCalculator):
         for ns in nsigma:
             p_clsb = self.pnull(
                 qobs=qalt,
-                qalt=None,
                 onesided=onesided,
                 qtilde=qtilde,
                 onesideddiscovery=onesideddiscovery,

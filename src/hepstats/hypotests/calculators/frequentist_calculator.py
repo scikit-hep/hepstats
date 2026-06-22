@@ -67,7 +67,6 @@ class FrequentistCalculator(ToysCalculator):
 
         Args:
             poinull: parameters of interest for the null hypothesis.
-            poialt: parameters of interest for the alternative hypothesis.
             onesided: if `True` computes onesided pvalues.
             onesideddiscovery: if `True` computes onesided pvalues for a discovery test.
             qtilde: if `True` use the :math:`\\widetilde{q}` test statistics else use the :math:`q`
@@ -79,7 +78,7 @@ class FrequentistCalculator(ToysCalculator):
         Example with **zfit**:
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
-            >>> q = calc.qnull(poinull, poialt)
+            >>> q = calc.qnull(poinull)
         """
         toysresults = self.get_toys_null(poinull, poinull, qtilde)
         ret = {}
