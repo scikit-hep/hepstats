@@ -59,7 +59,6 @@ class FrequentistCalculator(ToysCalculator):
     def qnull(
         self,
         poinull: POI | POIarray,
-        poialt: POI | None = None,
         onesided: bool = True,
         onesideddiscovery: bool = False,
         qtilde: bool = False,
@@ -80,7 +79,6 @@ class FrequentistCalculator(ToysCalculator):
         Example with **zfit**:
             >>> mean = zfit.Parameter("mu", 1.2)
             >>> poinull = POIarray(mean, [1.1, 1.2, 1.0])
-            >>> poialt = POI(mean, 1.2)
             >>> q = calc.qnull(poinull, poialt)
         """
         toysresults = self.get_toys_null(poinull, poinull, qtilde)
