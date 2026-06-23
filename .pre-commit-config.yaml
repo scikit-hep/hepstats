@@ -77,12 +77,6 @@ repos:
     hooks:
       - id: jupyter-notebook-cleanup
 
-  - repo: https://github.com/sondrelg/pep585-upgrade
-    rev: 'v1.0'
-    hooks:
-      - id: upgrade-type-hints
-        args: [ '--futures=true' ]
-
 
   - repo: https://github.com/dannysepler/rm_unneeded_f_str
     rev: v0.2.0
