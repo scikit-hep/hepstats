@@ -58,7 +58,10 @@ jobs:
           uv pip install --system -e .[test] pytest-xdist   # for multiprocessing, -e needed for pathes etc.
 
       - name: Test package
-        run: python -m pytest ./tests --doctest-modules --cov=src/hepstats --cov-report=xml -n auto
+        run: python -m pytest ./tests --doctest-modules
+
+      - name: Test coverage with Codecov
+        run: python -m pytest ./tests --cov=src/hepstats --cov-report=xml
         if: matrix.python-version == '3.13' && matrix.os == 'ubuntu-latest'
 
       - name: Upload coverage to Codecov
