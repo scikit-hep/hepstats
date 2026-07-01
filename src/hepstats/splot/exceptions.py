@@ -1,5 +1,6 @@
+# Licensed under a 3-clause BSD style license, see LICENSES folder.
 """
-Specific exceptions for the `splot` submodule
+Specific exceptions for the `splot` submodule.
 """
 
 from __future__ import annotations

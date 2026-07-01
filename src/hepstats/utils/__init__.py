@@ -1,3 +1,5 @@
+# Licensed under a 3-clause BSD style license, see LICENSES folder.
+
 from .fit import (
     eval_pdf,
     array2dataset,

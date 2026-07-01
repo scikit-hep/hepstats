@@ -1,4 +1,4 @@
-# Licensed under a 3-clause BSD style license, see LICENSE and LICENSE_ASTROML
+# Licensed under a 3-clause BSD style license, see LICENSES folder and LICENSE_ASTROML
 """
 Bayesian Block implementation
 =============================
