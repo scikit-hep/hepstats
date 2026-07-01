@@ -1,4 +1,4 @@
-# Licensed under a 3-clause BSD style license, see LICENSE.
+# Licensed under a 3-clause BSD style license, see LICENSES folder.
 from __future__ import annotations
 
 import warnings
