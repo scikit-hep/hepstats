@@ -68,8 +68,8 @@ test = [
     "pytest",
     "pytest-cov",
     "pytest-runner",
-    "zfit>=0.20.0;python_version<'3.13'",
-#    'hepstats[zfit];python_version<"3.13"',  # not working, why?
+    # Only run the full set of tests for coverage, as it requires zfit in many places
+    "zfit>=0.20.0;python_version=='3.13'",
 ]
 zfit = ["zfit>=0.20.0"]
 
