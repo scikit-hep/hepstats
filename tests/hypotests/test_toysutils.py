@@ -1,3 +1,5 @@
+# Licensed under a 3-clause BSD style license, see LICENSES folder.
+
 import pytest
 import numpy as np
 zfit = pytest.importorskip("zfit")

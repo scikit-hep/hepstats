@@ -18,7 +18,7 @@ jobs:
     name: Format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - uses: actions/setup-python@v6
@@ -42,7 +42,7 @@ jobs:
             python-version: "3.12"
     name: Check Python ${{ matrix.python-version }} ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Setup Python ${{ matrix.python-version }}
@@ -60,7 +60,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         if: matrix.python-version == '3.13' && matrix.os == 'ubuntu-latest'
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}  # technically not needed, but prevents failures: https://community.codecov.com/t/upload-issues-unable-to-locate-build-via-github-actions-api/3954
           file: ./coverage.xml
@@ -71,7 +71,7 @@ jobs:
   dist:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -88,7 +88,7 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 

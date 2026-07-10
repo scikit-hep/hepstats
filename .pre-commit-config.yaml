@@ -31,7 +31,7 @@ repos:
 #          - hatch-vcs
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.20.1
+    rev: v2.1.0
     hooks:
       - id: mypy
         files: src
@@ -84,7 +84,7 @@ repos:
       - id: rm-unneeded-f-str
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.37.1
+    rev: 0.37.4
     hooks:
       - id: check-github-workflows
       - id: check-github-actions
@@ -97,7 +97,7 @@ repos:
       - id: auto-walrus
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.15.10"
+    rev: "v0.15.20"
     hooks:
       - id: ruff
         types_or: [ python, pyi, jupyter ]
