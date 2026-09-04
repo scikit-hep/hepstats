@@ -1,3 +1,5 @@
+# Licensed under a 3-clause BSD style license, see LICENSES folder.
+
 import numpy as np
 import pytest
 from scipy.stats import ks_2samp

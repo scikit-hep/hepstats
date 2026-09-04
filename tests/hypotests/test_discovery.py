@@ -1,3 +1,5 @@
+# Licensed under a 3-clause BSD style license, see LICENSES folder.
+
 import os
 
 import numpy as np

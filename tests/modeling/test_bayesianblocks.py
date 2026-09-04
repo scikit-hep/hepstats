@@ -1,8 +1,9 @@
+# Licensed under a 3-clause BSD style license, see LICENSES folder.
+
 from pathlib import Path
 
 import numpy as np
 
-import hepstats
 from hepstats.modeling import bayesian_blocks
 
 answer_dir = Path(__file__).parent / "data"
