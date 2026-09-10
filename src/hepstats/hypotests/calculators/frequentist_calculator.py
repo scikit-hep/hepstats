@@ -59,7 +59,7 @@ class FrequentistCalculator(ToysCalculator):
     def qnull(
         self,
         poinull: POI | POIarray,
-        poialt: POI | None = None,
+        poialt: POI | None = None,  # noqa: ARG002
         onesided: bool = True,
         onesideddiscovery: bool = False,
         qtilde: bool = False,

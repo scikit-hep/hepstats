@@ -27,7 +27,13 @@ def is_sum_of_extended_pdfs(model) -> bool:
     return all(m.is_extended for m in model.get_models()) and model.is_extended
 
 
-def compute_sweights(model, x: np.ndarray, *, atol_exceptions: float | None = None) -> dict[Any, np.ndarray]:
+def compute_sweights(
+    model,
+    x: np.ndarray,
+    *,
+    sample_weight: np.ndarray | None = None,
+    atol_exceptions: float | None = None,
+) -> dict[Any, np.ndarray]:
     """Computes sWeights from probability density functions for different components/species in a fit model
     (for instance signal and background) fitted on some data `x`.
 
@@ -36,6 +42,16 @@ def compute_sweights(model, x: np.ndarray, *, atol_exceptions: float | None = No
     Args:
         model: sum of extended pdfs.
         x: data on which `model` is fitted
+        sample_weight: Optional per-event weights used in the evaluation of the
+            Maximum Likelihood Sum Rule and inverse covariance matrix. If
+            provided, the inverse covariance matrix is computed as
+
+                Vinv = pN.T @ (sample_weight[:, None] * pN)
+
+            where ``pN`` contains the component PDFs divided by the total
+            extended PDF. If ``None``, the original unweighted calculation is
+            used. This can be useful when the fitted sample represents a
+            weighted distribution, for example in efficiency-corrected studies.
         atol_exceptions: absolute tolerance to check if the Maximum Likelihood Sum Rule sanity check,
             described in equation 17 of arXiv:physics/0402083, failed. Sum of yields should be 1 with
             an absolute tolerance of `atol_exceptions`.
@@ -109,8 +125,22 @@ def compute_sweights(model, x: np.ndarray, *, atol_exceptions: float | None = No
     p = np.vstack([eval_pdf(m, x) for m in models]).T
     Nx = eval_pdf(model, x, allow_extended=True)
     pN = p / Nx[:, None]
+    if sample_weight is None:
+        MLSR = np.sum(pN, axis=0)
+        Vinv = pN.T.dot(pN)
+    else:
+        sample_weight = np.asarray(sample_weight, dtype=float)
 
-    MLSR = pN.sum(axis=0)
+        if sample_weight.ndim != 1:
+            msg_0 = "sample_weight must be a 1D array."
+            raise ValueError(msg_0)
+
+        if len(sample_weight) != pN.shape[0]:
+            msg_0 = "sample_weight must have the same length as x."
+            raise ValueError(msg_0)
+
+        MLSR = np.sum(sample_weight[:, None] * pN, axis=0)
+        Vinv = pN.T @ (sample_weight[:, None] * pN)
     atol_warning = 5e-3
     if atol_exceptions is None:
         atol_exceptions = 5e-2
@@ -135,7 +165,6 @@ def compute_sweights(model, x: np.ndarray, *, atol_exceptions: float | None = No
         msg += " If the fit to the data is good please ignore this warning."
         warnings.warn(msg, AboveToleranceWarning, stacklevel=2)
 
-    Vinv = (pN).T.dot(pN)
     V = np.linalg.inv(Vinv)
 
     sweights = p.dot(V) / Nx[:, None]

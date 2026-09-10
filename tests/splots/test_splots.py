@@ -112,3 +112,30 @@ def test_sweights():
         compute_sweights(
             loss.model[0], np.concatenate([mass, np.random.normal(0.8, 0.1, 1000)])
         )
+
+def test_sweights_sample_weight_ones_matches_unweighted():
+    minimizer = Minuit()
+    mass, _, loss, Nsig, Nbkg, _, _ = get_data_and_loss()
+
+    result = minimizer.minimize(loss)
+    assert result.valid
+
+    model = loss.model[0]
+    sample_weight = np.ones_like(mass, dtype=float)
+
+    sweights_unweighted = compute_sweights(model, mass)
+    sweights_weighted = compute_sweights(model, mass, sample_weight=sample_weight)
+
+    for y in [Nsig, Nbkg]:
+        assert np.allclose(sweights_weighted[y], sweights_unweighted[y])
+
+
+def test_sweights_sample_weight_validation():
+    mass, _, loss, _, _, _, _ = get_data_and_loss()
+    model = loss.model[0]
+
+    with pytest.raises(ValueError, match="1D array"):
+        compute_sweights(model, mass, sample_weight=np.ones((mass.size, 1)))
+
+    with pytest.raises(ValueError, match="same length"):
+        compute_sweights(model, mass, sample_weight=np.ones(mass.size + 1))
