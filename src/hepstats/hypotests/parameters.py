@@ -100,7 +100,7 @@ class POIarray:
         """
         return self._shape
 
-    def append(self, values: int | float | Collection | np.ndarray):
+    def append(self, values: float | Collection | np.ndarray):
         """
         Append values in the **POIarray**.
 
@@ -118,7 +118,7 @@ class POI(POIarray):
     Class for single value parameter of interest:
     """
 
-    def __init__(self, parameter, value: int | float):
+    def __init__(self, parameter, value: float):
         """
         Args:
             parameter: the parameter of interest

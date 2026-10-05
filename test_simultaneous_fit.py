@@ -14,11 +14,11 @@ import numpy as np
 import pytest
 
 zfit = pytest.importorskip("zfit")
-from zfit.loss import UnbinnedNLL  # noqa: E402
-from zfit.minimize import Minuit  # noqa: E402
+from zfit.loss import UnbinnedNLL
+from zfit.minimize import Minuit
 
-from hepstats.hypotests.calculators import FrequentistCalculator  # noqa: E402
-from hepstats.hypotests.parameters import POI, POIarray  # noqa: E402
+from hepstats.hypotests.calculators import FrequentistCalculator
+from hepstats.hypotests.parameters import POI, POIarray
 
 
 def create_no_shared_params_loss():
