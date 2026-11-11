@@ -5,6 +5,7 @@ main
 *************
 
 * Drop support for Python 3.9.
+* Fix the generation of toys with the FrequentistCalculator if the parameter of interest is the only floating parameter of the loss.
 
 Version 0.9.2
 **************

@@ -239,9 +239,11 @@ class ToysManager(ToysObject):
         param.set_value(poigen.value)
         is_poi_floating = param.floating
         param.floating = False
-        profile_minimum = minimizer.minimize(loss=self.loss)
-        if not profile_minimum.valid:
-            print(poigen, "PROBLEM: profile fit not valid, toys won't be either")
+        # without any other floating parameter there is nothing to profile, and zfit refuses to minimize
+        if any(param_loss.floating for param_loss in self.loss.get_params()):
+            profile_minimum = minimizer.minimize(loss=self.loss)
+            if not profile_minimum.valid:
+                print(poigen, "PROBLEM: profile fit not valid, toys won't be either")
         param.floating = is_poi_floating
 
         toys_loss = self.toys_loss(poigen.name)
